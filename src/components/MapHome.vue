@@ -167,10 +167,12 @@ function draw() {
 }
 
 onMounted(() => {
-  map = L.map(mapEl.value, { zoomControl: false, attributionControl: true, minZoom: 11, maxZoom: 16, zoomSnap: 0.5 })
+  map = L.map(mapEl.value, { zoomControl: false, attributionControl: true, minZoom: 11, maxZoom: 18, zoomSnap: 0.5 })
   L.control.zoom({ position: 'bottomright' }).addTo(map)
-  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 16, attribution: 'Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap contributors',
+  // Esri 회색 타일은 울산 일대가 13단계까지만 있어서 그 이상 확대하면 "Map data not yet available"이 뜬다.
+  // console(BerthDesk)과 같은 OSM 타일로 바꾸고, 표식이 묻히지 않게 채도만 낮춘다(.base-tiles).
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18, className: 'base-tiles', attribution: '© OpenStreetMap contributors',
   }).addTo(map)
   // SK 부두부터 E3 정박지까지 한 화면에 담는다.
   map.fitBounds([[35.402, 129.372], [35.505, 129.474]], { paddingTopLeft: [16, 16], paddingBottomRight: [16, 80] })
@@ -405,6 +407,7 @@ function pick(vid) {
 :deep(.vmk .lbl) { position: absolute; left: 20px; top: 3px; white-space: nowrap; font-size: 10.5px; font-weight: 700; color: #1e2a3a; text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff; pointer-events: none; }
 :deep(.vmk .lbl em) { font-style: normal; color: var(--bad); }
 :deep(.vmk .lbl.sel) { color: var(--accent); }
+:deep(.base-tiles) { filter: saturate(0.55) brightness(1.03); }
 :deep(.leaflet-bottom) { bottom: 66px; }
 :deep(.leaflet-control-zoom) { border: 1px solid #cfd2d6 !important; border-radius: 2px !important; }
 :deep(.leaflet-control-zoom a) { color: #333; border-radius: 0 !important; }

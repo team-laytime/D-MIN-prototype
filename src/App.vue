@@ -200,7 +200,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
       <div>
         <p class="foot-links"><span class="red">개인정보처리방침</span><span>이용안내</span><span>관련 사이트</span><span>사이트맵</span></p>
         <p>울산 CLX 액체부두 접안 계획 · 체선료 비교 (프로토타입) — 선박명·계약·조석·기상 값은 가상 데이터이며, 화면의 금액은 의사결정 보조용 예상값입니다.</p>
-        <p>부두 위치·제원: 공개 자료 수준 · 지도 © Esri, © OpenStreetMap contributors</p>
+        <p>부두 위치·제원: 공개 자료 수준 · 지도 © OpenStreetMap contributors</p>
       </div>
     </div>
   </footer>
