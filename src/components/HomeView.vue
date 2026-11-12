@@ -5,13 +5,6 @@ import { fmt, fmtDur, money } from '../lib/time.js'
 
 const props = defineProps({ result: Object, scen: Object, current: Object, version: Number })
 const emit = defineEmits(['go', 'focus', 'tour'])
-const USAGE = [
-  { tab: 'input', title: '조건 넣기', desc: '도착 시각·계약·기상을 넣거나 고쳐요' },
-  { tab: 'compare', title: '후보 비교', desc: '총 체선료와 타임라인을 나란히 봐요' },
-  { tab: 'compare', title: '근거 보기', desc: '선박을 누르면 계산 과정이 열려요' },
-  { tab: 'risk', title: '리스크 확인·선택', desc: '남은 리스크를 확인하고 후보를 골라요' },
-  { tab: 'report', title: '초안 받기', desc: '메일·보고서 초안을 복사해요' },
-]
 
 const fcfs = computed(() => props.result.fcfs)
 const best = computed(() => props.result.candidates[0])
@@ -179,27 +172,6 @@ const longest = computed(() => best.value.placements.reduce((a, b) => (b.waitMin
         </div>
       </section>
     </div>
-
-    <section class="panel how">
-      <div class="panel-head">
-        <div>
-          <h2>이렇게 써요</h2>
-          <p class="muted small">단계를 누르면 그 화면으로 가요. 처음이면 사용법 둘러보기로 화면을 하나씩 짚어 볼 수 있어요.</p>
-        </div>
-        <div class="row">
-          <button class="btn primary" @click="emit('tour')">사용법 둘러보기</button>
-          <button class="btn ghost" @click="emit('go', 'workflow')">부록: Agent 워크플로우 →</button>
-        </div>
-      </div>
-      <div class="panel-body flow">
-        <template v-for="(u, i) in USAGE" :key="u.title">
-          <span v-if="i" class="arrow">→</span>
-          <button class="flow-step" @click="emit('go', u.tab)">
-            <span class="n">{{ i + 1 }}</span><b>{{ u.title }}</b><span class="small muted">{{ u.desc }}</span>
-          </button>
-        </template>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -248,9 +220,4 @@ const longest = computed(() => best.value.placements.reduce((a, b) => (b.waitMin
 .unknown-text { color: var(--unknown); }
 .warn-text { color: var(--warn); font-weight: 650; }
 .chip.tag { margin-right: 4px; }
-.flow { display: flex; align-items: stretch; gap: 8px; }
-.flow-step { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; background: var(--panel); text-align: left; }
-.flow-step:hover { border-color: var(--accent); background: #f7fafb; }
-.flow-step .n { font-size: 11px; font-weight: 700; color: var(--accent); }
-.arrow { align-self: center; color: var(--faint); }
 </style>
