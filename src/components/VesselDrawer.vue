@@ -227,29 +227,29 @@ const flow = computed(() => {
 .drawer.wide { width: 600px; }
 .dh { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 2px solid #3d4a5c; }
 .star { color: #b9bdc3; flex: none; }
-.dh h2 { margin: 0; font-size: 17px; color: #1f4f8f; font-weight: 800; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dh h2 { margin: 0; font-size: 17px; color: var(--accent); font-weight: 800; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .x { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #b9bdc3; background: #fff; color: #555; display: grid; place-items: center; flex: none; }
 .db { flex: 1; overflow-y: auto; padding: 12px 16px 20px; }
 .df { border-top: 1px solid var(--line); padding: 10px 16px; font-size: 11.5px; color: #888; line-height: 1.5; }
 
 .vc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.vc-two > div { border: 1px solid #b9d0ea; border-top: 2px solid #1f4f8f; border-radius: 0 0 6px 6px; padding: 9px 11px; font-size: 12px; color: #555; }
-.vc-two b { display: block; color: #1f4f8f; font-size: 14px; margin: 3px 0; }
+.vc-two > div { border: 1px solid #b5d6d8; border-top: 2px solid var(--accent); border-radius: 0 0 6px 6px; padding: 9px 11px; font-size: 12px; color: #555; }
+.vc-two b { display: block; color: var(--accent); font-size: 14px; margin: 3px 0; }
 .vc-upd { text-align: right; font-size: 12px; font-weight: 700; color: #333; margin: 2px 0 6px; }
 .vc-ship { background: #1f2b4f; color: #fff; border-radius: 4px 4px 0 0; position: relative; height: 128px; overflow: hidden; }
 .vc-ship .d { position: absolute; font-size: 12.5px; font-weight: 700; }
 .vc-ship svg { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; }
 .vc-act { display: flex; justify-content: space-between; align-items: center; gap: 8px; border: 1px solid #c9d3df; border-top: 0; padding: 6px 8px; margin-bottom: 10px; font-size: 12px; }
 .btn.sm { height: 24px; padding: 0 8px; font-size: 11.5px; }
-.vc-route { display: flex; justify-content: space-between; align-items: center; border: 1px solid #b9d0ea; border-radius: 6px; padding: 9px 12px; margin: 10px 0 8px; font-size: 12px; color: #555; }
+.vc-route { display: flex; justify-content: space-between; align-items: center; border: 1px solid #b5d6d8; border-radius: 6px; padding: 9px 12px; margin: 10px 0 8px; font-size: 12px; color: #555; }
 .vc-route b { display: block; color: #222; font-size: 13px; }
 .vc-route .rt { text-align: right; }
-.vc-route .arr { color: #6aa9e9; }
-.vc-three { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #b9d0ea; border-radius: 6px; padding: 9px 0; margin-bottom: 12px; text-align: center; font-size: 12px; color: #555; }
-.vc-three > div + div { border-left: 1px solid #d5e2f0; }
+.vc-route .arr { color: #23a3a8; }
+.vc-three { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #b5d6d8; border-radius: 6px; padding: 9px 0; margin-bottom: 12px; text-align: center; font-size: 12px; color: #555; }
+.vc-three > div + div { border-left: 1px solid #d3e7e8; }
 .vc-three b { display: block; color: #222; font-size: 13.5px; margin-top: 4px; }
-.vc-btn { width: 100%; height: 40px; border: 0; border-radius: 4px; background: #1f4f8f; color: #fff; font-size: 14px; font-weight: 700; }
-.vc-btn:hover { background: #173d70; }
+.vc-btn { width: 100%; height: 40px; border: 0; border-radius: 4px; background: var(--accent); color: #fff; font-size: 14px; font-weight: 700; }
+.vc-btn:hover { background: var(--accent-hover); }
 .vc-sec { font-size: 13px; font-weight: 700; color: #222; margin: 16px 0 6px; display: flex; justify-content: space-between; align-items: baseline; }
 .vc-sec small { font-weight: 400; color: #999; font-size: 11px; }
 .back { margin-bottom: 10px; }

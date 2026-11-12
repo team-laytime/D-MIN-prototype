@@ -76,10 +76,10 @@ const cols = computed(() =>
 /* 열이 넓어도 그림은 원래 비율(140×100)로 가운데 두고, 양옆은 같은 안벽·바다 색으로 잇는다. */
 .pic { padding: 0 !important; display: flex !important; justify-content: center; background: linear-gradient(#c4cad2 0 13.4px, #8e96a1 13.4px 14.6px, #3a8edb 14.6px 52px, #2f80cc 52px); }
 .pic :deep(svg) { display: block; height: 100%; width: auto; aspect-ratio: 140 / 100; }
-.code { background: #2f6db5; color: #fff; letter-spacing: 0.3px; }
+.code { background: var(--accent); color: #fff; letter-spacing: 0.3px; }
 .code.dim { background: #7b8796; }
 .vname { font-weight: 700; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-.etb { color: #1f4f8f; font-weight: 700; }
+.etb { color: var(--accent); font-weight: 700; }
 .split { padding: 0 !important; }
 .split span { flex: 1; align-self: stretch; display: grid; place-items: center; }
 .split span + span { border-left: 1px solid var(--line); }
