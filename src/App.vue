@@ -14,6 +14,7 @@ import Tour from './components/Tour.vue'
 import WorkflowView from './components/WorkflowView.vue'
 import AdminApprovals from './components/AdminApprovals.vue'
 import AdminHistory from './components/AdminHistory.vue'
+import LoginDialog from './components/LoginDialog.vue'
 
 const scenarioId = ref('S1')
 const scen = ref(SCENARIOS.S1())
@@ -35,13 +36,18 @@ const drawer = ref(null)
 const openVessel = (simId, vid, opts = {}) => { drawer.value = { simId, vid, at: opts.at ?? null, mode: opts.mode ?? 'card' } }
 const drawerSim = computed(() => drawer.value && all.value.find((s) => s.id === drawer.value.simId))
 
-// 시연용 사용자. 실제로는 로그인 계정이 정한다. 승인권자만 관리자메뉴를 쓴다.
+// 시연용 계정. 처음에는 스케줄러로 들어와 있고, 관리자메뉴는 승인권자로 로그인해야 열린다(실제 인증 아님).
 const ROLES = {
   scheduler: { id: 'scheduler', name: '스케줄러 A', title: '접안 계획 담당', approve: false },
-  approver: { id: 'approver', name: '승인권자 B', title: '생산조정 팀장', approve: true },
+  approver: { id: 'approver', name: '승인권자 B', title: '생산조정 팀장', approve: true, loginId: 'approver', password: '1234' },
 }
 const roleId = ref('scheduler')
 const role = computed(() => ROLES[roleId.value])
+const loginOpen = ref(false)
+const afterLogin = ref('approvals')
+function askLogin(next = 'approvals') { afterLogin.value = next; loginOpen.value = true }
+function login() { roleId.value = 'approver'; loginOpen.value = false; tab.value = afterLogin.value }
+function logout() { roleId.value = 'scheduler' }
 
 // 처리 기록. 추가만 하고 고치지 않는다(선택·요청 취소·승인·반려·현업 반영 완료).
 // 스케줄러가 후보를 고르면 승인 요청 문서(RPT)가 생기고, 승인권자가 승인해야 접안 계획 버전이 올라간다.
@@ -52,7 +58,7 @@ const current = computed(() => {
   for (const d of decisions.value) {
     if (d.action === '선택') state = { ...d, status: '승인 대기' }
     else if (d.action === '요청 취소') state = null
-    else if (d.action === '승인' && state?.reqId === d.reqId) state = { ...state, candId: d.candId, label: d.label, total: d.total, status: '승인 완료', planNo: d.planNo, approval: d }
+    else if (d.action === '승인' && state?.reqId === d.reqId) state = { ...state, candId: d.candId, label: d.label, total: d.total, status: '승인 완료', planNo: d.planNo, approval: d, version: d.version }
     else if (d.action === '반려' && state?.reqId === d.reqId) state = { ...state, status: '반려', rejection: d }
     else if (d.action === '현업 반영 완료' && state?.status === '승인 완료') state = { ...state, status: '현업 반영 완료' }
   }
@@ -105,10 +111,13 @@ const group = computed(() => NAV.find((g) => g.items.some((i) => i.id === tab.va
 const open = reactive(Object.fromEntries(NAV.map((g) => [g.key, false])))
 // 화면을 옮기면 그 묶음만 펼친다(펼침 버튼으로 다른 묶음도 열 수 있다).
 watch(group, (g) => { for (const k of Object.keys(open)) open[k] = k === g?.key }, { immediate: true })
+// 시연 초기화: 처리 기록·리스크 확인·입력을 처음 값으로 되돌리고 스케줄러로 돌아간다.
 function resetDemo() {
   decisions.value = []
   for (const k of Object.keys(checks)) delete checks[k]
   scen.value = SCENARIOS[scenarioId.value]()
+  roleId.value = 'scheduler'
+  drawer.value = null
   tab.value = 'home'
 }
 
@@ -144,7 +153,7 @@ const TOUR = [
     body: '날씨 급변, 설비, 탱크, 긴급 출하, 현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고 대안을 붙입니다.',
     try: '「해당」 항목을 읽고 「확인」 체크' },
   { section: '리스크·선택', tab: 'risk', target: '.decide', title: '선택 · 승인 요청',
-    body: '사유를 적고 선택하면 승인 요청이 올라갑니다. 확인하지 않은 리스크가 있으면 한 번 더 묻습니다. 승인은 오른쪽 위 사용자를 「승인권자 B」로 바꾸면 열리는 관리자메뉴에서 합니다. Agent는 계획을 확정하지 않습니다.' },
+    body: '사유를 적고 선택하면 승인 요청이 올라갑니다. 확인하지 않은 리스크가 있으면 한 번 더 묻습니다. 승인은 왼쪽 관리자메뉴(또는 맨 위 「승인권자 로그인」)로 승인권자 로그인 후 합니다. Agent는 계획을 확정하지 않습니다.' },
   { section: '보고서', tab: 'report', target: '.cols > .panel:first-child', title: '메일·보고서 초안',
     body: '선택한 후보로 초안을 만듭니다. 금액은 계산 결과를 그대로 넣고 자동 대조합니다.' },
   { section: '검증', tab: 'verify', target: '.answer-set', title: '계산 검증',
@@ -170,8 +179,10 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 <template>
   <div class="util">
     <span><b>{{ role.name }}</b>({{ role.title }})님</span>
+    <button v-if="role.approve" class="util-link" @click="logout">로그아웃</button>
+    <button v-else class="util-link" @click="askLogin()">승인권자 로그인</button>
     <span class="sep" />
-    <button class="util-link" @click="resetDemo">시연 초기화</button>
+    <button class="util-link" title="처리 기록·입력을 처음 상태로 돌리고 스케줄러로 돌아갑니다" @click="resetDemo">시연 초기화</button>
     <button class="util-link" @click="tab = 'home'">Home</button>
   </div>
   <header class="gnb">
@@ -180,12 +191,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
       <button v-for="g in NAV.filter(canSee)" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
     </nav>
     <div class="gnb-right">
-      <label class="scen-pill" title="사용자 (시연용 · 실제로는 로그인 계정)">
-        <UserRound :size="14" />
-        <select id="role" v-model="roleId" aria-label="사용자">
-          <option v-for="r in ROLES" :key="r.id" :value="r.id">{{ r.name }}</option>
-        </select>
-      </label>
+      <span class="scen-pill who-pill" title="현재 로그인 계정 (시연용)"><UserRound :size="14" />{{ role.name }}</span>
       <label class="scen-pill">
         <Layers :size="14" />
         <select id="scen" v-model="scenarioId" aria-label="시나리오">
@@ -202,7 +208,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
   <div class="body">
     <aside class="lnb" aria-label="하위 메뉴">
       <div v-for="g in NAV" :key="g.key" :class="['lnb-group', { on: group?.key === g.key, off: !canSee(g) }]">
-        <button v-if="!canSee(g)" class="lnb-head" disabled title="승인권자만 사용할 수 있습니다">
+        <button v-if="!canSee(g)" class="lnb-head" title="승인권자 로그인이 필요합니다" @click="askLogin(g.items[0].id)">
           <span>{{ g.key }}</span>
           <span class="tog"><Plus :size="10" :stroke-width="3" /></span>
         </button>
@@ -263,6 +269,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
   <VesselDrawer v-if="drawer && drawerSim" :key="`${drawer.simId}-${drawer.vid}-${drawer.mode}`" :sim="drawerSim" :vid="drawer.vid" :scen="plain" :fcfs="result.fcfs"
     :at="drawer.at" :mode="drawer.mode" @close="drawer = null" />
   <Tour v-if="tourIdx !== null" :steps="TOUR" :index="tourIdx" @next="tourNext" @prev="tourPrev" @close="endTour" />
+  <LoginDialog v-if="loginOpen" :account="ROLES.approver" @login="login" @close="loginOpen = false" />
 </template>
 
 <style scoped>
@@ -281,6 +288,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .gnb-nav button.on { color: var(--accent); }
 .gnb-right { display: flex; align-items: center; gap: 8px; }
 .scen-pill { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 14px; border-radius: 15px; background: #888c92; color: #fff; }
+.who-pill { padding: 0 14px; font-size: 12px; }
 .scen-pill select { border: 0; background: transparent; color: #fff; font-size: 12px; height: 28px; cursor: pointer; }
 .scen-pill select option { color: var(--text); }
 .map-btn { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #cfd2d6; background: #fff; font-size: 12px; color: #444; }
@@ -292,7 +300,8 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .lnb-group.on .lnb-head { color: var(--accent); }
 .tog { width: 14px; height: 14px; display: grid; place-items: center; background: #c8cbd0; color: #fff; }
 .lnb-group.on .tog { background: var(--accent); }
-.lnb-group.off .lnb-head { color: #aaa; cursor: not-allowed; }
+.lnb-group.off .lnb-head { color: #aaa; }
+.lnb-group.off .lnb-head:hover { color: #777; }
 .lnb-group.off .tog { background: #d5d8dc; }
 .lnb-sub { list-style: none; margin: 2px 0 12px -14px; padding: 4px 0 6px 14px; background: #fff; border-left: 2px solid var(--accent); }
 .lnb-sub button { width: 100%; border: 0; background: none; text-align: left; padding: 3px 0 3px 12px; font-size: 12px; color: #777; }
