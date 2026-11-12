@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="966" viewBox="0 0 680 966" role="img"><title>작업 지시자 첫 화면 목업</title><desc>확정본만 시간순 할 일 목록으로 보여 주는 작업 지시자 화면. 확정본 판 표시, 본 뒤 바뀐 것, 앞으로 2시간, 도선 신청 마감 카운트다운, 주의 배지, 인쇄를 번호로 표시한다.</desc><rect x="0.0" y="0.0" width="680.0" height="966.0" rx="14" fill="#F6F8FB"/>
+<text x="24.0" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:17px;font-weight:700;fill:#0E1726">작업 지시자 첫 화면 — 확정본 할 일 목록</text>
+<text x="24.0" y="56.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#667085">가상 예시 · 금액 없이 '언제 무엇을 준비하나'만</text>
+<rect x="556.8" y="22.0" width="99.2" height="22.0" rx="11" fill="#FFF4DF"/>
+<text x="566.8" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#B26A00">제안 · 팀 확인 전</text>
+<rect x="16.0" y="74.0" width="648.0" height="628.0" rx="12" fill="#101828" opacity="0.06"/>
+<rect x="16.0" y="72.0" width="648.0" height="628.0" rx="12" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<path d="M16 84 a12 12 0 0 1 12 -12 h624 a12 12 0 0 1 12 12 v26 h-648 Z" fill="#0B1F33"/>
+<text x="32.0" y="96.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;font-weight:700;fill:#FFFFFF">오늘 할 일</text>
+<text x="97.2" y="96.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#9FB3C8">11/12 (목) 14:05 · 울산 CLX · 가상 데이터</text>
+<rect x="440.0" y="80.0" width="210.0" height="22.0" rx="11" fill="#16314D"/>
+<text x="474.1" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#C9D6E3;text-anchor:middle">스케줄러</text>
+<rect x="505.2" y="82.5" width="76.4" height="17.0" rx="8.5" fill="#FFFFFF"/>
+<text x="543.4" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#0B1F33;text-anchor:middle">작업 지시자</text>
+<text x="614.3" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#C9D6E3;text-anchor:middle">지불 부서</text>
+<rect x="28.0" y="120.0" width="624.0" height="28.0" rx="7" fill="#EEF3FB" stroke="#D5E0F2" stroke-width="1"/>
+<text x="44.0" y="138.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#1B3D61">확정본 v3 · 11/12 09:40 확정 · 확정자: 스케줄러 계정</text>
+<text x="640.0" y="138.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#667085;text-anchor:end">요율·금액은 이 화면에 없어요</text>
+<circle cx="28.0" cy="121.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="28.0" y="125.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">7</text>
+<circle cx="484.5" cy="134.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="484.5" y="138.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">6</text>
+<rect x="28.0" y="158.0" width="624.0" height="74.0" rx="9" fill="#FFF8EB" stroke="#F2D29B" stroke-width="1"/>
+<text x="44.0" y="179.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#7A4A00">마지막으로 본 뒤 바뀐 것 2건 · 11:30 이후</text>
+<rect x="44.0" y="190.0" width="32.2" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="50.0" y="202.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">변경</text>
+<text x="84.2" y="202.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#344054">B호 접안 11/12 11:00 → 17:00 · ETA 10:30 → 16:30 (대리점 연락)</text>
+<rect x="44.0" y="210.0" width="32.2" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="50.0" y="222.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">변경</text>
+<text x="84.2" y="222.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#344054">C호 부두 #6 → #3 · 접안 11/13 12:00 → 09:00</text>
+<circle cx="28.0" cy="159.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="28.0" y="163.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">5</text>
+<rect x="28.0" y="242.0" width="414.0" height="120.0" rx="9" fill="#F5F8FF" stroke="#9DB5E8" stroke-width="1"/>
+<text x="44.0" y="264.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">앞으로 2시간 · 14:05 ~ 16:05</text>
+<line x1="44.0" y1="280.0" x2="426.0" y2="280.0" stroke="#E3E9F6" stroke-width="1"/>
+<text x="44.0" y="301.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;font-weight:700;fill:#0E1726">14:30</text>
+<text x="98.0" y="297.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">K호 · #1 · 이안</text>
+<text x="98.0" y="313.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">예선 2척 · 확정된 FIX 일정</text>
+<rect x="393.2" y="289.0" width="32.8" height="17.0" rx="8.5" fill="#EEF1F5"/>
+<text x="399.2" y="301.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#344054">FIX</text>
+<line x1="44.0" y1="320.0" x2="426.0" y2="320.0" stroke="#E3E9F6" stroke-width="1"/>
+<text x="44.0" y="341.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;font-weight:700;fill:#0E1726">15:40</text>
+<text x="98.0" y="337.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">D호 · #6 · 작업 완료 예상</text>
+<text x="98.0" y="353.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">16:10 호스분리 · 17:40 이안</text>
+<rect x="380.8" y="329.0" width="45.2" height="17.0" rx="8.5" fill="#E8F0FE"/>
+<text x="386.8" y="341.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#1B5FD9">작업 중</text>
+<circle cx="28.0" cy="243.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="28.0" y="247.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">2</text>
+<rect x="452.0" y="242.0" width="200.0" height="120.0" rx="9" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="466.0" y="264.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">도선 신청 마감</text>
+<text x="466.0" y="304.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:30px;font-weight:700;fill:#B26A00">1:50</text>
+<text x="531.4" y="304.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:600;fill:#B26A00">남음</text>
+<text x="466.0" y="326.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#344054">Last POB 15:55 · 일몰 17:25 − 1.5h</text>
+<text x="466.0" y="344.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#C13A32">넘기면 A호 접안은 내일 08:00 이후</text>
+<circle cx="452.0" cy="243.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="452.0" y="247.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">3</text>
+<rect x="28.0" y="372.0" width="624.0" height="282.0" rx="9" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="44.0" y="394.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">오늘 · 내일 할 일 (시간순)</text>
+<rect x="592.3" y="381.0" width="47.7" height="20.0" rx="6" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1"/>
+<text x="616.2" y="395.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#667085;text-anchor:middle">부두별</text>
+<rect x="540.6" y="381.0" width="47.7" height="20.0" rx="6" fill="#E8F0FE" stroke="#9DB5E8" stroke-width="1"/>
+<text x="564.5" y="395.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#1B5FD9;text-anchor:middle">시간순</text>
+<line x1="44.0" y1="412.0" x2="636.0" y2="412.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="433.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">14:30</text>
+<text x="132.0" y="433.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">K호 · #1</text>
+<text x="206.0" y="433.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">이안 · 예선 2척</text>
+<rect x="603.2" y="421.0" width="32.8" height="17.0" rx="8.5" fill="#EEF1F5"/>
+<text x="609.2" y="433.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#344054">FIX</text>
+<line x1="44.0" y1="446.0" x2="636.0" y2="446.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="467.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">15:40</text>
+<text x="132.0" y="467.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">D호 · #6</text>
+<text x="206.0" y="467.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">작업 완료 → 16:10 호스분리</text>
+<rect x="590.8" y="455.0" width="45.2" height="17.0" rx="8.5" fill="#E8F0FE"/>
+<text x="596.8" y="467.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#1B5FD9">작업 중</text>
+<line x1="44.0" y1="480.0" x2="636.0" y2="480.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="501.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">17:00</text>
+<text x="132.0" y="501.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">B호 · #3</text>
+<text x="206.0" y="501.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">접안 · 도선 승선 16:00</text>
+<rect x="580.7" y="489.0" width="55.3" height="17.0" rx="8.5" fill="#EEF1F5"/>
+<text x="586.7" y="501.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#344054">야간 직전</text>
+<rect x="544.6" y="489.0" width="32.2" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="550.6" y="501.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">변경</text>
+<line x1="44.0" y1="514.0" x2="636.0" y2="514.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="535.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">18:00</text>
+<text x="132.0" y="535.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">E호 · #6</text>
+<text x="206.0" y="535.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">접안</text>
+<rect x="509.6" y="523.0" width="126.5" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="515.5" y="535.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">동일 화물 그룹 #6·#7·#8</text>
+<line x1="44.0" y1="548.0" x2="636.0" y2="548.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="569.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">11/13 03:00</text>
+<text x="132.0" y="569.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">전 부두</text>
+<text x="206.0" y="569.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">강풍 제한 시작 · 하역 중단 대비</text>
+<rect x="567.9" y="557.0" width="68.1" height="17.0" rx="8.5" fill="#FDECEC"/>
+<text x="573.9" y="569.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#C13A32">강풍 03~09</text>
+<line x1="44.0" y1="582.0" x2="636.0" y2="582.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="603.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">11/13 09:00</text>
+<text x="132.0" y="603.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">A호 · #1</text>
+<text x="206.0" y="603.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">접안 (강풍 해제 뒤)</text>
+<rect x="583.3" y="591.0" width="52.7" height="17.0" rx="8.5" fill="#EEF1F5"/>
+<text x="589.3" y="603.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#344054">대기 18h</text>
+<line x1="44.0" y1="616.0" x2="636.0" y2="616.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="44.0" y="637.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">11/13 09:00</text>
+<text x="132.0" y="637.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">C호 · #3</text>
+<text x="206.0" y="637.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#344054">접안</text>
+<rect x="603.8" y="625.0" width="32.2" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="609.8" y="637.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">변경</text>
+<circle cx="28.0" cy="373.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="28.0" y="377.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">1</text>
+<circle cx="499.5" cy="531.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="499.5" y="535.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">4</text>
+<rect x="28.0" y="664.0" width="125.7" height="22.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="90.8" y="679.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#344054;text-anchor:middle">오늘·내일 한 장 인쇄</text>
+<circle cx="167.7" cy="675.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="167.7" y="679.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">8</text>
+<rect x="544.3" y="664.0" width="107.7" height="22.0" rx="6" fill="#1B5FD9"/>
+<text x="598.1" y="679.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">준비 완료 알리기</text>
+<rect x="420.7" y="664.0" width="115.5" height="22.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="478.5" y="679.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#344054;text-anchor:middle">타임라인에서 보기</text>
+<text x="24.0" y="730.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">번호 설명 · 오른쪽 ID는 15-hidden-nfr-ux-500.md의 UX 항목</text>
+<rect x="24.0" y="743.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="742.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="763.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="767.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">1</text>
+<text x="60.0" y="759.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">시간순 할 일 목록</text>
+<text x="324.0" y="759.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-191</text>
+<text x="60.0" y="775.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">계획과 주의점을 보고 준비한다 (원문 2절)</text>
+<rect x="346.0" y="743.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="742.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="763.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="767.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">2</text>
+<text x="382.0" y="759.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">2시간 안의 일 강조</text>
+<text x="646.0" y="759.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-192</text>
+<text x="382.0" y="775.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">당장 할 일이 먼저다</text>
+<rect x="24.0" y="793.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="792.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="813.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="817.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">3</text>
+<text x="60.0" y="809.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">도선 신청 마감 카운트다운</text>
+<text x="324.0" y="809.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-193</text>
+<text x="60.0" y="825.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">놓치면 하루를 기다린다</text>
+<rect x="346.0" y="793.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="792.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="813.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="817.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">4</text>
+<text x="382.0" y="809.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">주의 배지</text>
+<text x="646.0" y="809.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-194</text>
+<text x="382.0" y="825.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">반영 못 한 변수를 같이 받는다 (원문 3절)</text>
+<rect x="24.0" y="843.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="842.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="863.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="867.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">5</text>
+<text x="60.0" y="859.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">본 뒤 바뀐 것 먼저</text>
+<text x="324.0" y="859.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-195</text>
+<text x="60.0" y="875.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">놓치면 틀린 배를 준비한다</text>
+<rect x="346.0" y="843.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="842.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="863.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="867.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">6</text>
+<text x="382.0" y="859.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">요율·금액 숨김</text>
+<text x="646.0" y="859.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-196</text>
+<text x="382.0" y="875.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">작업에 필요 없고 상업적으로 민감하다</text>
+<rect x="24.0" y="893.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="892.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="913.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="917.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">7</text>
+<text x="60.0" y="909.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">확정본 판·시각·확정자</text>
+<text x="324.0" y="909.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-201</text>
+<text x="60.0" y="925.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">어떤 판을 보는지 알아야 한다</text>
+<rect x="346.0" y="893.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="892.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="913.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="917.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">8</text>
+<text x="382.0" y="909.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">오늘·내일 한 장 인쇄</text>
+<text x="646.0" y="909.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-198</text>
+<text x="382.0" y="925.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">현장에 붙여 둔다 [추정]</text></svg>

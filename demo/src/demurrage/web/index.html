@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demurrage Planner · 울산 CLX</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="side-brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="#1B5FD9"/>
+        <path d="M8 19.5h16l-2.6 4.5H10.6z" fill="#fff"/>
+        <path d="M12 17.5V10h5.5l3.5 3.6v3.9" fill="none" stroke="#fff" stroke-width="1.9" stroke-linejoin="round"/>
+        <path d="M6 26.5h20" stroke="#8FB6FF" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Demurrage Planner</div>
+        <div class="wordsub">Ship Berthing 확장 모듈 · 개선 컨셉</div>
+      </div>
+    </div>
+    <div class="side-port"><span class="dot"></span>울산 CLX 해상 출하·입고<small>KST</small></div>
+    <nav class="side-nav" id="sideNav"></nav>
+    <div class="side-foot">팀 척화비 · SEAGATE 체선 관리 개선 제안 데모입니다. 선박·계약·예보는 모두 가상 데이터이며, 실제 SEAGATE·SK에너지 화면이 아닙니다.</div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="crumbs" id="crumbs"></div>
+      <button class="scenario-pick" id="scenarioPick" title="시나리오 바꾸기"></button>
+      <div class="top-right">
+        <span class="pill pill-amber">가상 데이터</span>
+        <span class="pill">결정 보조 · 확정은 담당자</span>
+        <div class="user"><span class="avatar">김</span><div><b>선박 스케줄러</b><small>해상출하팀(예시)</small></div></div>
+      </div>
+    </header>
+    <main class="page" id="page"></main>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true"></aside>
+<div class="modal" id="modal"></div>
+<div class="pop" id="pop"></div>
+<div class="toast" id="toast"></div>
+<div class="tip" id="tip"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

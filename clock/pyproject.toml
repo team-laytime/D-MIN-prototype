@@ -1,0 +1,14 @@
+[project]
+name = "laytime-clock"
+version = "0.1.0"
+description = "CLOCK — 체선료 Agent의 레이타임·체선료 계산 엔진 (결정론, 표준 라이브러리만)"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-p no:cacheprovider"

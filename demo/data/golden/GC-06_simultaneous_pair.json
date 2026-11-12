@@ -1,0 +1,147 @@
+{
+  "id": "GC-06",
+  "title": "#4-1·#4-2 부두 동시 접안 제한 (GRT 3,000톤 예외)",
+  "requirements": [
+    "FR-14"
+  ],
+  "rule_ids": [
+    "ETB-06"
+  ],
+  "hand_calc": "P(FIX, #4-1): ETB 07:00, 작업 08:00~14:00, ETU 16:00 → 배타 구간 [07:00, 14:00). Q(#4-2): ETA 07:00 → 08:00",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-12 00:00"
+      },
+      "berths": [
+        "#4-2"
+      ]
+    },
+    "vessel": {
+      "vessel_type": "CHEMICAL",
+      "grt": 5000,
+      "dwt": 4000,
+      "loa": 90,
+      "pbl": 30,
+      "draft": 6,
+      "direction": "IMPORT",
+      "material_code": "CH-PX",
+      "qty": 3000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 12000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-11"
+      },
+      "work": {
+        "hours": 6,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "일반 선박 쌍 → Q ETB = P ETU − 2h = 14:00",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "P",
+            "eta": "2026-11-10 05:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#4-1",
+              "etb": "2026-11-10 07:00"
+            }
+          },
+          {
+            "id": "Q",
+            "eta": "2026-11-10 07:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "berth": "#4-2",
+            "etb": "2026-11-10 14:00"
+          }
+        },
+        "pushes": {
+          "Q": [
+            "ETB-06"
+          ]
+        }
+      }
+    },
+    {
+      "name": "소형선 쌍(2,500·3,000, 경계 포함) → 제한 없음",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "P",
+            "grt": 2500,
+            "eta": "2026-11-10 05:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#4-1",
+              "etb": "2026-11-10 07:00"
+            }
+          },
+          {
+            "id": "Q",
+            "grt": 3000,
+            "eta": "2026-11-10 07:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "etb": "2026-11-10 08:00"
+          }
+        },
+        "pushes": {
+          "Q": []
+        }
+      }
+    },
+    {
+      "name": "한 척이라도 3,000 초과(3,001) → 제한",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "P",
+            "grt": 2500,
+            "eta": "2026-11-10 05:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#4-1",
+              "etb": "2026-11-10 07:00"
+            }
+          },
+          {
+            "id": "Q",
+            "grt": 3001,
+            "eta": "2026-11-10 07:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "etb": "2026-11-10 14:00"
+          }
+        },
+        "pushes": {
+          "Q": [
+            "ETB-06"
+          ]
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

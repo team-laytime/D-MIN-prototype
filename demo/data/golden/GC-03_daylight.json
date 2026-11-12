@@ -1,0 +1,232 @@
+{
+  "id": "GC-03",
+  "title": "정박개시 Daylight 적용 (원유선·제품선)",
+  "requirements": [
+    "FR-25"
+  ],
+  "rule_ids": [
+    "LAY-06",
+    "LAY-05",
+    "ETB-07"
+  ],
+  "hand_calc": "공통: #1-1(Direction 1h), 일출 07:00·일몰 17:30(시나리오 입력), Laytime 18h, 시간당 1,000, 작업 20h, 호스분리 1h → 호스분리 = ETB + 22h. 일출·일몰 경계는 '사이'에 포함(가정)",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-14 00:00"
+      },
+      "berths": [
+        "#1-1"
+      ],
+      "sun": {
+        "2026-11-10": [
+          "07:00",
+          "17:30"
+        ],
+        "2026-11-11": [
+          "07:00",
+          "17:30"
+        ],
+        "2026-11-12": [
+          "07:00",
+          "17:30"
+        ]
+      }
+    },
+    "vessel": {
+      "id": "P",
+      "vessel_type": "PRODUCT",
+      "grt": 5000,
+      "dwt": 20000,
+      "loa": 150,
+      "pbl": 60,
+      "draft": 9,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 20000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 18,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 20,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "일출~일몰 사이 → ETANR + 6h",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00"
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#1-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-10 20:00",
+            "reason": "MAINTENANCE"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "P": {
+            "etb": "2026-11-10 21:00",
+            "laytime_start": "2026-11-10 16:00",
+            "laytime_start_rule": "LAY-06",
+            "laytime_end": "2026-11-11 10:00",
+            "hose_off": "2026-11-11 19:00",
+            "demurrage_hours": "9",
+            "amount_usd": "9000"
+          }
+        }
+      }
+    },
+    {
+      "name": "일출 전 → 당일 07:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 05:00"
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#1-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-10 20:00",
+            "reason": "MAINTENANCE"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "P": {
+            "etb": "2026-11-10 21:00",
+            "laytime_start": "2026-11-10 07:00",
+            "laytime_start_rule": "LAY-06",
+            "laytime_end": "2026-11-11 01:00",
+            "demurrage_hours": "18",
+            "amount_usd": "18000"
+          }
+        }
+      }
+    },
+    {
+      "name": "일몰 후 → 다음 날 07:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 18:00"
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#1-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-11 10:00",
+            "reason": "MAINTENANCE"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "P": {
+            "etb": "2026-11-11 11:00",
+            "laytime_start": "2026-11-11 07:00",
+            "laytime_start_rule": "LAY-06",
+            "laytime_end": "2026-11-12 01:00",
+            "hose_off": "2026-11-12 09:00",
+            "demurrage_hours": "8",
+            "amount_usd": "8000"
+          }
+        }
+      }
+    },
+    {
+      "name": "경계: ETANR = 일몰(17:30) → 사이로 봄 → 23:30",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 17:30"
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#1-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-11 00:00",
+            "reason": "MAINTENANCE"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "P": {
+            "etb": "2026-11-11 01:00",
+            "laytime_start": "2026-11-10 23:30",
+            "laytime_start_rule": "LAY-06",
+            "laytime_end": "2026-11-11 17:30",
+            "hose_off": "2026-11-11 23:00",
+            "demurrage_hours": "5.5",
+            "amount_usd": "5500"
+          }
+        }
+      }
+    },
+    {
+      "name": "선종별 적용 여부: 특수제품선은 Daylight 미적용 → ETANR + 6h",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 05:00",
+            "vessel_type": "SPECIAL_PRODUCT"
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#1-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-10 20:00",
+            "reason": "MAINTENANCE"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "P": {
+            "laytime_start": "2026-11-10 11:00",
+            "laytime_start_rule": "LAY-05",
+            "demurrage_hours": "14",
+            "amount_usd": "14000"
+          }
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

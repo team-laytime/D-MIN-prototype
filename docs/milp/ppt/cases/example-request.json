@@ -1,0 +1,127 @@
+{
+ "request_id": "REQ-20261112-001",
+ "id": "EXAMPLE-3",
+ "title": "API 예시 — #6·#7·#8 석유제품선 3척 + FIX 1척 + 기상 악화 [가상]",
+ "plan": {
+  "start": "2026-11-10T00:00",
+  "end": "2026-11-16T00:00"
+ },
+ "arrivals": [
+  {
+   "id": "A",
+   "vessel": "MR-DSL (4만~5만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 300000,
+   "eta": "2026-11-10T06:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "rate_per_h": 11145
+   }
+  },
+  {
+   "id": "B",
+   "vessel": "MR-RG (4만~5만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "R-G",
+   "qty": 300000,
+   "eta": "2026-11-10T09:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "rate_per_h": 11145
+   }
+  },
+  {
+   "id": "C",
+   "vessel": "LR1-JET (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "JET",
+   "qty": 450000,
+   "eta": "2026-11-10T07:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "rate_per_h": 12319
+   }
+  },
+  {
+   "id": "F",
+   "vessel": "LR1-DSL (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 500000,
+   "eta": "2026-11-11T20:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-12T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "rate_per_h": 12319
+   },
+   "status": "FIX",
+   "fix": {
+    "berth": "#8",
+    "etb": "2026-11-12T08:00"
+   }
+  }
+ ],
+ "restrictions": [
+  {
+   "id": "WX-1",
+   "reason": "WEATHER",
+   "berths": [
+    "*"
+   ],
+   "start": "2026-11-10T10:00",
+   "end": "2026-11-10T16:00"
+  }
+ ],
+ "inventory": [],
+ "options": {
+  "generation": "auto"
+ }
+}

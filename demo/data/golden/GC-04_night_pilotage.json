@@ -1,0 +1,298 @@
+{
+  "id": "GC-04",
+  "title": "야간 도선 제한 — Last POB와 새벽 02~08시",
+  "requirements": [
+    "FR-12"
+  ],
+  "rule_ids": [
+    "ETB-03",
+    "ETB-04"
+  ],
+  "hand_calc": "#6(Direction 1.5h), 일몰 17:30. Last POB = 일몰 − 2h(GRT 5만 초과) 또는 − 1.5h(5만 이하). 대상: GRT 7.5만 이상, 또는 3만 이하·수입·Draft 10.5 이상",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-14 00:00"
+      },
+      "berths": [
+        "#6"
+      ],
+      "sun": {
+        "2026-11-09": [
+          "07:00",
+          "17:30"
+        ],
+        "2026-11-10": [
+          "07:00",
+          "17:30"
+        ],
+        "2026-11-11": [
+          "07:00",
+          "17:30"
+        ]
+      }
+    },
+    "vessel": {
+      "id": "N",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 80000,
+      "dwt": 150000,
+      "loa": 250,
+      "pbl": 120,
+      "draft": 14,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 90000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 48,
+        "demurrage_rate_usd_day": 30000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 20,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "GRT 8만, ETA 16:00 ≥ Last POB 15:30 → 다음 날 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 16:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-03"
+          ]
+        }
+      }
+    },
+    {
+      "name": "경계: ETA = Last POB 15:30 → 제한",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 15:30"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-03"
+          ]
+        }
+      }
+    },
+    {
+      "name": "ETA 15:00 < Last POB → 제한 없음",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 15:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-10 16:30"
+          }
+        },
+        "pushes": {
+          "N": []
+        }
+      }
+    },
+    {
+      "name": "자정 넘어 도착(ETA 03:00)도 전날 밤 제한 → 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-11 03:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-03"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GRT 4만: ETA + Direction = 02:30 → 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-11 01:00",
+            "grt": 40000,
+            "dwt": 70000
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-04"
+          ]
+        }
+      }
+    },
+    {
+      "name": "경계: ETA + Direction = 02:00 → 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-11 00:30",
+            "grt": 40000,
+            "dwt": 70000
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-04"
+          ]
+        }
+      }
+    },
+    {
+      "name": "경계: ETA + Direction = 08:00 → 그대로 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-11 06:30",
+            "grt": 40000,
+            "dwt": 70000
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": []
+        }
+      }
+    },
+    {
+      "name": "GRT 2만 수출선은 대상 아님 → ETA + Direction",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 16:00",
+            "grt": 20000,
+            "dwt": 30000,
+            "loa": 180,
+            "pbl": 90
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-10 17:30"
+          }
+        },
+        "pushes": {
+          "N": []
+        }
+      }
+    },
+    {
+      "name": "GRT 2만 수입선·Draft 11.0 → Last POB(일몰 − 1.5h = 16:00) 이후 → 08:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 16:00",
+            "grt": 20000,
+            "dwt": 30000,
+            "loa": 180,
+            "pbl": 90,
+            "direction": "IMPORT",
+            "draft": 11.0
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-11 08:00"
+          }
+        },
+        "pushes": {
+          "N": [
+            "ETB-03"
+          ]
+        }
+      }
+    },
+    {
+      "name": "GRT 2만 수입선·Draft 10.4 → 대상 아님",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 16:00",
+            "grt": 20000,
+            "dwt": 30000,
+            "loa": 180,
+            "pbl": 90,
+            "direction": "IMPORT",
+            "draft": 10.4
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "N": {
+            "etb": "2026-11-10 17:30"
+          }
+        },
+        "pushes": {
+          "N": []
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

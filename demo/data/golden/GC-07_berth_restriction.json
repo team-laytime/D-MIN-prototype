@@ -1,0 +1,171 @@
+{
+  "id": "GC-07",
+  "title": "부두 사용 제한 — 제한 종료 + Direction, 하역 중인 선박은 계속 작업",
+  "requirements": [
+    "FR-15",
+    "FR-20"
+  ],
+  "rule_ids": [
+    "ETB-07",
+    "ETB-01",
+    "ETB-10"
+  ],
+  "hand_calc": "#7(Direction 1.5h, Switching 2.5h), 정비 제한 11/10 10:00~22:00 → 금지 구간 [10:00, 23:30)",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      },
+      "berths": [
+        "#7"
+      ],
+      "restrictions": [
+        {
+          "id": "M7",
+          "berths": [
+            "#7"
+          ],
+          "start": "2026-11-10 10:00",
+          "end": "2026-11-10 22:00",
+          "reason": "MAINTENANCE",
+          "note": "7번 로딩암 정비"
+        }
+      ]
+    },
+    "vessel": {
+      "id": "R",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 20000,
+      "dwt": 30000,
+      "loa": 180,
+      "pbl": 90,
+      "draft": 10,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 30000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "ETA + Direction = 10:30 → 22:00 + 1.5h = 23:30",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 09:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "R": {
+            "etb": "2026-11-10 23:30"
+          }
+        },
+        "pushes": {
+          "R": [
+            "ETB-07"
+          ]
+        }
+      }
+    },
+    {
+      "name": "작업 중 선박 W(ETU 22:00)와 겹침 → max(23:30, 22:00 + 2.5h) = 00:30",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "W",
+            "eta": "2026-11-10 04:00",
+            "status": "WORKING",
+            "working": {
+              "berth": "#7",
+              "etb": "2026-11-10 06:00",
+              "work_start": "2026-11-10 07:00"
+            },
+            "work": {
+              "hours": 13,
+              "hose_term_h": 1
+            }
+          },
+          {
+            "eta": "2026-11-10 09:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "R": {
+            "etb": "2026-11-11 00:30"
+          },
+          "W": {
+            "etb": "2026-11-10 06:00",
+            "work_end": "2026-11-10 20:00",
+            "etu": "2026-11-10 22:00"
+          }
+        },
+        "pushes": {
+          "R": [
+            "ETB-07",
+            "ETB-01"
+          ]
+        }
+      }
+    },
+    {
+      "name": "경계: ETA + Direction = 제한 시작 10:00 → 제한",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 08:30"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "R": {
+            "etb": "2026-11-10 23:30"
+          }
+        },
+        "pushes": {
+          "R": [
+            "ETB-07"
+          ]
+        }
+      }
+    },
+    {
+      "name": "제한 시작 전 접안(09:30)은 허용 — 작업은 제한 중에도 계속",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 08:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "R": {
+            "etb": "2026-11-10 09:30",
+            "work_end": "2026-11-10 20:30"
+          }
+        },
+        "pushes": {
+          "R": []
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

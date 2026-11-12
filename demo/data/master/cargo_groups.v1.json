@@ -1,0 +1,30 @@
+{
+  "version": "cargo-groups/v1",
+  "label": "자재코드 → 화물 그룹 매핑표 (가상 자재코드)",
+  "requirement": ["FR-08"],
+  "rule_id": "ELG-02",
+  "map": {
+    "CR-ARL": "CRUDE",
+    "CR-ARM": "CRUDE",
+    "CR-BSR": "CRUDE",
+    "CR-MRB": "CRUDE",
+    "PG-RG92": "GASOLINE",
+    "PG-PG95": "GASOLINE",
+    "NP-FR": "NAPHTHA",
+    "DS-ULSD": "DIESEL",
+    "DS-MGO": "DIESEL",
+    "KR-JETA1": "KEROSENE",
+    "BC-HSFO": "BUNKER",
+    "BC-VLSFO": "BUNKER",
+    "BO-G3": "BASE_OIL",
+    "CH-PX": "CHEMICAL",
+    "CH-BZ": "CHEMICAL",
+    "SV-MX": "SOLVENT",
+    "LP-PROP": "LPG",
+    "LP-BUT": "LPG"
+  },
+  "group_names": {
+    "CRUDE": "원유", "GASOLINE": "휘발유", "NAPHTHA": "나프타", "DIESEL": "경유", "KEROSENE": "등유·항공유",
+    "BUNKER": "벙커C", "BASE_OIL": "기유", "CHEMICAL": "화학제품", "SOLVENT": "용제", "LPG": "LPG"
+  }
+}

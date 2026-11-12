@@ -1,0 +1,111 @@
+{
+  "case_id": "SC-01-B-X",
+  "title": "순서 B (Y 먼저) — X선",
+  "source": "docs/requirements/09-first-steps.md SC-01 (손계산 정답 세트 씨앗)",
+  "assumptions": [
+    "단순화: 접안 전 이동(shifting)·반액·펌핑 공제가 없고, 접안·이안에 시간 제약이 없는 소형선이라고 본다.",
+    "부두 SK7 하나를 쓰고, 앞 배는 D1 06:00에 비운다. 호스 분리 1시간 뒤 이안이 끝나 다음 배가 들어간다."
+  ],
+  "base_date": "2026-11-03",
+  "port_call": {
+    "call_id": "SC-01-B-X",
+    "vessel_name": "SEORAK STAR (가상)",
+    "vessel_type": "MR",
+    "dwt": 48000,
+    "operation": "DISCHARGE",
+    "cargo": "CHEMICALS",
+    "berth_id": "SK7"
+  },
+  "contract_terms": {
+    "form": "ASBATANKVOY",
+    "layer": "CHARTER_PARTY",
+    "laytime_this_port_hours": 24,
+    "notice_hours": 6,
+    "demurrage_rate_usd_day": 48000,
+    "half_rate_events": [
+      "FIRE",
+      "EXPLOSION",
+      "STORM",
+      "STRIKE",
+      "PLANT_BREAKDOWN"
+    ],
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK7",
+    "berth_type": "PIER",
+    "berthing_rules": [],
+    "daytime": {
+      "start": "07:00",
+      "end": "17:30"
+    },
+    "berth_ready_at": null,
+    "berth_ready_ref": "SC-01은 단순화 사례라 선석 가용 시각을 따로 두지 않는다"
+  },
+  "sof_events": [
+    {
+      "event_id": "SC-01-B-X-R01-ANCHORED",
+      "row": 1,
+      "event_type": "ANCHORED",
+      "ts_local": "D1 02:00",
+      "remarks": "묘박지 도착"
+    },
+    {
+      "event_id": "SC-01-B-X-R01-NOR_TENDERED",
+      "row": 1,
+      "event_type": "NOR_TENDERED",
+      "ts_local": "D1 02:00",
+      "remarks": "NOR 제출"
+    },
+    {
+      "event_id": "SC-01-B-X-R01-NOR_RECEIVED",
+      "row": 1,
+      "event_type": "NOR_RECEIVED",
+      "ts_local": "D1 02:00",
+      "remarks": "NOR 수령"
+    },
+    {
+      "event_id": "SC-01-B-X-R02-ALL_FAST",
+      "row": 2,
+      "event_type": "ALL_FAST",
+      "ts_local": "D1 19:00",
+      "remarks": "접안 완료"
+    },
+    {
+      "event_id": "SC-01-B-X-R03-HOSES_CONNECTED",
+      "row": 3,
+      "event_type": "HOSES_CONNECTED",
+      "ts_local": "D1 20:00",
+      "remarks": "호스 연결"
+    },
+    {
+      "event_id": "SC-01-B-X-R04-OPS_COMMENCED",
+      "row": 4,
+      "event_type": "OPS_COMMENCED",
+      "ts_local": "D1 20:00",
+      "remarks": "양하 개시"
+    },
+    {
+      "event_id": "SC-01-B-X-R05-OPS_COMPLETED",
+      "row": 5,
+      "event_type": "OPS_COMPLETED",
+      "ts_local": "D2 10:00",
+      "remarks": "양하 완료"
+    },
+    {
+      "event_id": "SC-01-B-X-R06-HOSES_DISCONNECTED",
+      "row": 6,
+      "event_type": "HOSES_DISCONNECTED",
+      "ts_local": "D2 11:00",
+      "remarks": "호스 분리"
+    }
+  ],
+  "expected": {
+    "laytime_start_at": "D1 08:00",
+    "laytime_end_at": "D2 11:00",
+    "elapsed_hours": "27",
+    "used_hours": "27",
+    "demurrage_hours": "3",
+    "amount_usd": "6000"
+  }
+}

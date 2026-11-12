@@ -1,0 +1,328 @@
+{
+  "id": "GC-02",
+  "title": "정박개시 4분기와 경계값 (Daylight 미적용 화학선)",
+  "requirements": [
+    "FR-24",
+    "FR-26",
+    "FR-29"
+  ],
+  "rule_ids": [
+    "LAY-01",
+    "LAY-02",
+    "LAY-03",
+    "LAY-04",
+    "LAY-05",
+    "LAY-07",
+    "DEM-01",
+    "DEM-03",
+    "ETB-07"
+  ],
+  "hand_calc": "공통: #4-1(Direction 1h), Laytime 18h, 하루 24,000(시간당 1,000), 작업 20h, 호스분리 1h → 호스분리 = ETB + 22h",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-14 00:00"
+      },
+      "berths": [
+        "#4-1"
+      ]
+    },
+    "vessel": {
+      "id": "A",
+      "vessel_type": "CHEMICAL",
+      "grt": 5000,
+      "dwt": 8000,
+      "loa": 110,
+      "pbl": 50,
+      "draft": 7,
+      "direction": "IMPORT",
+      "material_code": "CH-PX",
+      "qty": 7000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 18,
+        "demurrage_rate_usd_day": 24000
+      },
+      "work": {
+        "hours": 20,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "① Early Loading: ETANR·ETB 모두 Laycan From 이전 → ETB",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "contract": {
+              "laycan_from": "2026-11-12",
+              "laycan_to": "2026-11-13"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "etb": "2026-11-10 11:00",
+            "laytime_start": "2026-11-10 11:00",
+            "laytime_start_rule": "LAY-02",
+            "laytime_end": "2026-11-11 05:00",
+            "hose_off": "2026-11-11 09:00",
+            "demurrage_hours": "4",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "② Laycan Miss: ETANR > Laycan To → ETB",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "contract": {
+              "laycan_from": "2026-11-08",
+              "laycan_to": "2026-11-09"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "laytime_start": "2026-11-10 11:00",
+            "laytime_start_rule": "LAY-03",
+            "demurrage_hours": "4",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "③ 조기 도착: ETANR < Laycan From ≤ ETB → Laycan From 당일 06:00",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "contract": {
+              "laycan_from": "2026-11-11",
+              "laycan_to": "2026-11-12"
+            }
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#4-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-11 02:00",
+            "reason": "MAINTENANCE",
+            "note": "정비"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "etb": "2026-11-11 03:00",
+            "laytime_start": "2026-11-11 06:00",
+            "laytime_start_rule": "LAY-04",
+            "laytime_end": "2026-11-12 00:00",
+            "hose_off": "2026-11-12 01:00",
+            "demurrage_hours": "1",
+            "amount_usd": "1000"
+          }
+        },
+        "pushes": {
+          "A": [
+            "ETB-07"
+          ]
+        }
+      }
+    },
+    {
+      "name": "④-a Laycan 안: ETB가 ETANR + 6h보다 이름 → ETB",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "contract": {
+              "laycan_from": "2026-11-09",
+              "laycan_to": "2026-11-11"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "laytime_start": "2026-11-10 11:00",
+            "laytime_start_rule": "LAY-05",
+            "demurrage_hours": "4",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "④-b Laycan 안: ETB가 늦음 → ETANR + 6h",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "contract": {
+              "laycan_from": "2026-11-09",
+              "laycan_to": "2026-11-11"
+            }
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#4-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-10 20:00",
+            "reason": "MAINTENANCE",
+            "note": "정비"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "etb": "2026-11-10 21:00",
+            "laytime_start": "2026-11-10 16:00",
+            "laytime_start_rule": "LAY-05",
+            "laytime_end": "2026-11-11 10:00",
+            "hose_off": "2026-11-11 19:00",
+            "demurrage_hours": "9",
+            "amount_usd": "9000"
+          }
+        }
+      }
+    },
+    {
+      "name": "경계 ETANR = Laycan From(00:00) → ④ (③ 아님)",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 00:00",
+            "contract": {
+              "laycan_from": "2026-11-10",
+              "laycan_to": "2026-11-11"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "etb": "2026-11-10 01:00",
+            "laytime_start": "2026-11-10 01:00",
+            "laytime_start_rule": "LAY-05",
+            "laytime_end": "2026-11-10 19:00",
+            "hose_off": "2026-11-10 23:00",
+            "demurrage_hours": "4",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "경계 ETANR = Laycan To → ④ (② 아님)",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 12:00",
+            "contract": {
+              "laycan_from": "2026-11-08",
+              "laycan_to": "2026-11-10 12:00"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "laytime_start": "2026-11-10 13:00",
+            "laytime_start_rule": "LAY-05",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "경계 ETANR = Laycan To + 1분 → ② Laycan Miss",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 12:01",
+            "contract": {
+              "laycan_from": "2026-11-08",
+              "laycan_to": "2026-11-10 12:00"
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "laytime_start": "2026-11-10 13:01",
+            "laytime_start_rule": "LAY-03",
+            "amount_usd": "4000"
+          }
+        }
+      }
+    },
+    {
+      "name": "NOR Tender가 있으면 ETANR = NOR (LAY-01)",
+      "scenario": {
+        "vessels": [
+          {
+            "eta": "2026-11-10 10:00",
+            "nor_tender": "2026-11-10 14:00",
+            "contract": {
+              "laycan_from": "2026-11-09",
+              "laycan_to": "2026-11-11"
+            }
+          }
+        ],
+        "restrictions": [
+          {
+            "id": "R1",
+            "berths": [
+              "#4-1"
+            ],
+            "start": "2026-11-10 00:00",
+            "end": "2026-11-10 20:00",
+            "reason": "MAINTENANCE",
+            "note": "정비"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "A": {
+            "etanr": "2026-11-10 14:00",
+            "laytime_start": "2026-11-10 20:00",
+            "laytime_start_rule": "LAY-05",
+            "laytime_end": "2026-11-11 14:00",
+            "hose_off": "2026-11-11 19:00",
+            "demurrage_hours": "5",
+            "amount_usd": "5000"
+          }
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

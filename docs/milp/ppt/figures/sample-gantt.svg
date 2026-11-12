@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="988" viewBox="0 0 1520 988" role="img">
+<title>샘플 주간 현행 계획 vs 1안</title><desc>샘플 엑셀의 접안계획 예시를 PPT 식으로 계산한 현행 계획과 수리계획법 1안을 대형 부두 7곳에서 비교한다.</desc>
+<defs><marker id="mk" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0E1726"/></marker><marker id="mg" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#667085"/></marker><marker id="mo" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#D9620B"/></marker><marker id="mb" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#1B5FD9"/></marker><marker id="mt" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0B8B7B"/></marker><marker id="mp" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#5B4BC4"/></marker></defs>
+<rect x="0" y="0" width="1520" height="988" rx="14" fill="#F6F8FB"/>
+<text x="28.0" y="40.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="700" fill="#0E1726" text-anchor="start">샘플 주간 (11/09~11/17) — 현행 계획 vs 1안, 대형 부두 7곳</text>
+<text x="28.0" y="63.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="400" fill="#667085" text-anchor="start">막대 = 접안(ETB) ~ 이안(ETU) · 색 = 그 배의 예상 체선료 · 빨간 테두리 = PPT 규칙과 맞지 않는 배 · 전체 54건 합계: 현행 $479,697 → 기준안 $246,270 → 1안 $216,986</text>
+<rect x="24.0" y="93.5" width="1472.0" height="390.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="92.0" width="1472.0" height="390.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="42.0" y="120.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#C8102E" text-anchor="start">현행 계획 — 샘플 &#x27;접안계획 예시&#x27;의 부두·ETB를 PPT 식으로 계산</text>
+<text x="1476.0" y="120.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#C8102E" text-anchor="end">이 7개 부두 합계 $309,997 · 규칙 위반 14건 (54건 전체)</text>
+<line x1="120.0" y1="138" x2="120.0" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="124.0" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/09</text>
+<line x1="271.1" y1="138" x2="271.1" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="275.1" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/10</text>
+<line x1="422.2" y1="138" x2="422.2" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="426.2" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/11</text>
+<line x1="573.3" y1="138" x2="573.3" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="577.3" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/12</text>
+<line x1="724.4" y1="138" x2="724.4" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="728.4" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/13</text>
+<line x1="875.6" y1="138" x2="875.6" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="879.6" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/14</text>
+<line x1="1026.7" y1="138" x2="1026.7" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1030.7" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/15</text>
+<line x1="1177.8" y1="138" x2="1177.8" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1181.8" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/16</text>
+<line x1="1328.9" y1="138" x2="1328.9" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1332.9" y="134.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/17</text>
+<line x1="1480.0" y1="138" x2="1480.0" y2="470" stroke="#E7ECF2" stroke-width="1"/>
+<rect x="116.0" y="142.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="163.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#3</text>
+<rect x="120.0" y="147.0" width="110.2" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="126.0" y="162.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S32</text>
+<rect x="245.9" y="147.0" width="151.1" height="24.0" rx="5" fill="#C8501A" stroke="#C8102E" stroke-width="2"/>
+<text x="251.9" y="162.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S33 $57.9k</text>
+<rect x="403.3" y="147.0" width="94.4" height="24.0" rx="5" fill="#C8501A" stroke="#C8102E" stroke-width="2"/>
+<text x="409.3" y="162.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S34 $37.3k</text>
+<rect x="1001.5" y="147.0" width="135.4" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="1007.5" y="162.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S35</text>
+<rect x="116.0" y="182.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="203.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#5-5</text>
+<rect x="195.6" y="187.0" width="138.5" height="24.0" rx="5" fill="#F6C79E" stroke="none" stroke-width="0"/>
+<text x="201.6" y="202.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S41 $0.9k</text>
+<rect x="340.4" y="187.0" width="107.0" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="346.4" y="202.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S43 $26.5k</text>
+<rect x="730.7" y="187.0" width="75.6" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="736.7" y="202.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S44</text>
+<rect x="116.0" y="222.0" width="1368.0" height="64.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="258.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#6</text>
+<rect x="400.2" y="227.0" width="185.7" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="406.2" y="242.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S45</text>
+<rect x="623.7" y="227.0" width="261.3" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="629.7" y="242.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S46 $48.1k</text>
+<rect x="925.9" y="227.0" width="148.0" height="24.0" rx="5" fill="#F6C79E" stroke="none" stroke-width="0"/>
+<text x="931.9" y="242.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S47 $2.2k</text>
+<rect x="1089.6" y="227.0" width="135.4" height="24.0" rx="5" fill="#C8501A" stroke="#C8102E" stroke-width="2"/>
+<text x="1095.6" y="242.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S48 $64.5k</text>
+<rect x="1089.6" y="257.0" width="182.6" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="1095.6" y="272.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S49</text>
+<rect x="116.0" y="292.0" width="1368.0" height="64.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="328.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#7</text>
+<rect x="412.8" y="297.0" width="129.1" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="418.8" y="312.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S50 $22.8k</text>
+<rect x="645.7" y="297.0" width="132.2" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="651.7" y="312.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S51</text>
+<rect x="658.3" y="327.0" width="138.5" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="664.3" y="342.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S52</text>
+<rect x="812.6" y="297.0" width="185.7" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="818.6" y="312.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S53</text>
+<rect x="863.0" y="327.0" width="132.2" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="869.0" y="342.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S54</text>
+<rect x="116.0" y="362.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="383.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#8</text>
+<rect x="409.6" y="367.0" width="37.8" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="415.6" y="382.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S55</text>
+<rect x="576.5" y="367.0" width="138.5" height="24.0" rx="5" fill="#C9D3E0" stroke="#C8102E" stroke-width="2"/>
+<text x="582.5" y="382.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S56</text>
+<rect x="781.1" y="367.0" width="198.3" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="787.1" y="382.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S57</text>
+<rect x="1111.7" y="367.0" width="352.6" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="1117.7" y="382.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S58 $23.2k</text>
+<rect x="116.0" y="402.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="423.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">BUOY2</text>
+<rect x="636.3" y="407.0" width="163.7" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="642.3" y="422.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S59</text>
+<rect x="116.0" y="442.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="463.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">BUOY3</text>
+<rect x="485.2" y="447.0" width="148.0" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="491.2" y="462.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S60</text>
+<rect x="960.6" y="447.0" width="305.4" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="966.6" y="462.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S61 $26.6k</text>
+<rect x="24.0" y="493.5" width="1472.0" height="330.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="492.0" width="1472.0" height="330.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="42.0" y="520.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#0B8B7B" text-anchor="start">1안 — 수리계획법 (본체 식 (1)~(8) · PPT 식으로 재계산)</text>
+<text x="1476.0" y="520.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="end">이 7개 부두 합계 $139,286 · 규칙 위반 0건</text>
+<line x1="120.0" y1="538" x2="120.0" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="124.0" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/09</text>
+<line x1="271.1" y1="538" x2="271.1" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="275.1" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/10</text>
+<line x1="422.2" y1="538" x2="422.2" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="426.2" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/11</text>
+<line x1="573.3" y1="538" x2="573.3" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="577.3" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/12</text>
+<line x1="724.4" y1="538" x2="724.4" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="728.4" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/13</text>
+<line x1="875.6" y1="538" x2="875.6" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="879.6" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/14</text>
+<line x1="1026.7" y1="538" x2="1026.7" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1030.7" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/15</text>
+<line x1="1177.8" y1="538" x2="1177.8" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1181.8" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/16</text>
+<line x1="1328.9" y1="538" x2="1328.9" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<text x="1332.9" y="534.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11/17</text>
+<line x1="1480.0" y1="538" x2="1480.0" y2="810" stroke="#E7ECF2" stroke-width="1"/>
+<rect x="116.0" y="542.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="563.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#3</text>
+<rect x="120.0" y="547.0" width="110.2" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="126.0" y="562.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S32</text>
+<rect x="239.6" y="547.0" width="94.4" height="24.0" rx="5" fill="#EE9450" stroke="none" stroke-width="0"/>
+<text x="245.6" y="562.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S34 $9.2k</text>
+<rect x="434.8" y="547.0" width="182.6" height="24.0" rx="5" fill="#F6C79E" stroke="none" stroke-width="0"/>
+<text x="440.8" y="562.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S37 $2.1k</text>
+<rect x="116.0" y="582.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="603.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#5-5</text>
+<rect x="120.0" y="587.0" width="107.0" height="24.0" rx="5" fill="#EE9450" stroke="none" stroke-width="0"/>
+<text x="126.0" y="602.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S43 $5.2k</text>
+<rect x="239.6" y="587.0" width="113.3" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="245.6" y="602.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S11</text>
+<rect x="428.5" y="587.0" width="56.7" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="434.5" y="602.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S68</text>
+<rect x="652.0" y="587.0" width="63.0" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="658.0" y="602.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S14</text>
+<rect x="730.7" y="587.0" width="75.6" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="736.7" y="602.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S44</text>
+<rect x="116.0" y="622.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="643.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#6</text>
+<rect x="123.1" y="627.0" width="138.5" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="129.1" y="642.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S41</text>
+<rect x="343.5" y="627.0" width="261.3" height="24.0" rx="5" fill="#F6C79E" stroke="none" stroke-width="0"/>
+<text x="349.5" y="642.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S46 $4.4k</text>
+<rect x="623.7" y="627.0" width="135.4" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="629.7" y="642.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S48</text>
+<rect x="796.9" y="627.0" width="148.0" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="802.9" y="642.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S47</text>
+<rect x="1036.1" y="627.0" width="182.6" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="1042.1" y="642.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S49</text>
+<rect x="116.0" y="662.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="683.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#7</text>
+<rect x="120.0" y="667.0" width="151.1" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="126.0" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S33 $36.2k</text>
+<rect x="375.0" y="667.0" width="185.7" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="381.0" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S45</text>
+<rect x="582.9" y="667.0" width="138.5" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="588.9" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S56</text>
+<rect x="774.8" y="667.0" width="138.5" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="780.8" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S52</text>
+<rect x="929.1" y="667.0" width="132.2" height="24.0" rx="5" fill="#F6C79E" stroke="none" stroke-width="0"/>
+<text x="935.1" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S54 $2.0k</text>
+<rect x="1077.0" y="667.0" width="135.4" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="1083.0" y="682.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S35</text>
+<rect x="116.0" y="702.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="723.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">#8</text>
+<rect x="129.5" y="707.0" width="129.1" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="135.5" y="722.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S50</text>
+<rect x="472.6" y="707.0" width="37.8" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="478.6" y="722.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S55</text>
+<rect x="645.7" y="707.0" width="132.2" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="651.7" y="722.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S51</text>
+<rect x="793.7" y="707.0" width="198.3" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="799.7" y="722.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S57</text>
+<rect x="1007.8" y="707.0" width="185.7" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="1013.8" y="722.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S53 $30.4k</text>
+<rect x="116.0" y="742.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="763.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">BUOY2</text>
+<rect x="623.7" y="747.0" width="163.7" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="629.7" y="762.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S59</text>
+<rect x="1111.6" y="747.0" width="352.6" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="1117.6" y="762.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S58 $23.2k</text>
+<rect x="116.0" y="782.0" width="1368.0" height="34.0" rx="6" fill="#F8FAFC" stroke="none" stroke-width="1"/>
+<text x="106.0" y="803.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#344054" text-anchor="end">BUOY3</text>
+<rect x="472.6" y="787.0" width="148.0" height="24.0" rx="5" fill="#C9D3E0" stroke="none" stroke-width="0"/>
+<text x="478.6" y="802.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#0E1726" text-anchor="start">S60</text>
+<rect x="960.6" y="787.0" width="305.4" height="24.0" rx="5" fill="#C8501A" stroke="none" stroke-width="0"/>
+<text x="966.6" y="802.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="start">S61 $26.6k</text>
+<rect x="24.0" y="839.5" width="1472.0" height="136.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="838.0" width="1472.0" height="136.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="42.0" y="854.0" width="22.0" height="14.0" rx="4" fill="#C9D3E0" stroke="none" stroke-width="1"/>
+<text x="72.0" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">체선료 0</text>
+<rect x="152.3" y="854.0" width="22.0" height="14.0" rx="4" fill="#F6C79E" stroke="none" stroke-width="1"/>
+<text x="182.3" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">5천 달러 미만</text>
+<rect x="288.9" y="854.0" width="22.0" height="14.0" rx="4" fill="#EE9450" stroke="none" stroke-width="1"/>
+<text x="318.9" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">5천~2만</text>
+<rect x="397.4" y="854.0" width="22.0" height="14.0" rx="4" fill="#C8501A" stroke="none" stroke-width="1"/>
+<text x="427.4" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">2만 이상</text>
+<rect x="507.7" y="854.0" width="22.0" height="14.0" rx="4" fill="#FFFFFF" stroke="#C8102E" stroke-width="2"/>
+<text x="537.7" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">현행 계획에서 PPT 규칙과 맞지 않는 배 (같은 부두 겹침 · 야간 도선 등)</text>
+<text x="42.0" y="898.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.6" font-weight="500" fill="#344054" text-anchor="start">1안이 한 일: S57(LR1 DSL)을 #7에서 #8로 옮기고 S54(R-G, #7만 가능)를 11/15 18:30 → 11/14 08:30으로 앞당겼다 (−$54,196)</text>
+<text x="42.0" y="920.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.6" font-weight="500" fill="#344054" text-anchor="start">그 대신 S53(JET)은 #8에서 S57 뒤로 50시간 기다린다 (+$30,390). S41은 #5-5 대신 #6에 바로 댄다 (−$5,479) → 기준안 대비 합계 −$29,284</text>
+<text x="42.0" y="942.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.6" font-weight="400" fill="#667085" text-anchor="start">현행 계획은 같은 부두 충돌이 10쌍이다: 시간이 실제로 겹치는 곳 4쌍(예: #7 S51·S52) + 앞 배 이안 뒤 Switching 시간을 못 채운 곳 6쌍. 한 부두에 한 척씩이라는 PPT 07쪽 규칙으로는 실행할 수 없는 일정 — 두 척을 대는 부두인지 확인 필요</text>
+</svg>

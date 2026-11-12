@@ -1,0 +1,22 @@
+# 복사: cp terraform.tfvars.example terraform.tfvars
+# 받기 전 자리표시자다. 실제 계정/자원 이름으로 모두 바꾼 후 plan을 실행한다.
+aws_account_id      = "000000000000"
+aws_region          = "ap-northeast-2"
+environment         = "dev"
+eks_cluster_name    = "REPLACE_WITH_PROVIDED_CLUSTER"
+namespace           = "demurrage"
+reports_bucket_name = "replace-with-provided-reports-bucket"
+reports_prefix      = "reports"
+ecr_repository_name = "demurrage"
+
+# 기본: EKS·S3·ECR·IAM을 제공자가 관리하고, 여기서는 기존 자원을 조회한다.
+create_reports_bucket = false
+create_ecr_repository = false
+manage_batch_identity = false
+
+# IAM 생성·PassRole·Pod Identity 연결 권한이 있으면 manage_batch_identity = true.
+# 기존 배치 역할이 있으면 ARN을 넣어 연결만 관리한다. 없으면 역할/정책을 새로 만든다.
+# existing_batch_role_arn = "arn:aws:iam::123456789012:role/provided-batch-role"
+
+# 기존 버킷이 고객 관리 KMS 키를 사용하면 추가한다. 키 정책도 이 역할을 허용해야 한다.
+# reports_kms_key_arn = "arn:aws:kms:ap-northeast-2:123456789012:key/REPLACE_ME"

@@ -1,0 +1,49 @@
+{
+  "case_id": "TC-02",
+  "title": "선석 점유 대기 후 체선, 이동 시간 공제",
+  "source": "docs/domain/04-worked-examples.md 예제 2 (TC-02)",
+  "base_date": "2026-11-03",
+  "port_call": {"call_id": "TC-02", "vessel_name": "DONGHAE PIONEER (가상)", "vessel_type": "AFRAMAX", "dwt": 105000,
+                "operation": "DISCHARGE", "cargo": "CRUDE", "berth_id": "SK8"},
+  "contract_terms": {
+    "form": "ASBATANKVOY", "layer": "CHARTER_PARTY",
+    "laytime_this_port_hours": 30, "notice_hours": 6,
+    "demurrage_rate_usd_day": 55000,
+    "half_rate_events": ["FIRE", "EXPLOSION", "STORM", "STRIKE", "PLANT_BREAKDOWN"],
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK8", "berth_type": "PIER", "berthing_rules": ["ULS-SK38-DAYTIME"],
+    "daytime": {"start": "07:00", "end": "17:30"},
+    "berth_ready_at": "D2 06:00",
+    "berth_ready_ref": "예제 2 조건 'SK8은 앞 선박이 D2 06:00까지 점유' (SOF 행 아님)"
+  },
+  "sof_events": [
+    {"event_id": "TC02-R01-ANCHORED", "row": 1, "event_type": "ANCHORED", "ts_local": "D1 14:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC02-R01-NOR_TENDERED", "row": 1, "event_type": "NOR_TENDERED", "ts_local": "D1 14:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC02-R01-NOR_RECEIVED", "row": 1, "event_type": "NOR_RECEIVED", "ts_local": "D1 14:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC02-R03-PILOT_ON_BOARD", "row": 3, "event_type": "PILOT_ON_BOARD", "ts_local": "D2 06:30", "remarks": "도선사 승선, 양묘, 이동 시작"},
+    {"event_id": "TC02-R03-ANCHOR_AWEIGH", "row": 3, "event_type": "ANCHOR_AWEIGH", "ts_local": "D2 06:30", "remarks": "도선사 승선, 양묘, 이동 시작"},
+    {"event_id": "TC02-R04-ALL_FAST", "row": 4, "event_type": "ALL_FAST", "ts_local": "D2 08:00", "remarks": "접안 완료 (all fast, 주간)"},
+    {"event_id": "TC02-R05-HOSES_CONNECTED", "row": 5, "event_type": "HOSES_CONNECTED", "ts_local": "D2 09:00", "remarks": "호스 연결"},
+    {"event_id": "TC02-R06-OPS_COMMENCED", "row": 6, "event_type": "OPS_COMMENCED", "ts_local": "D2 09:30", "remarks": "양하 개시"},
+    {"event_id": "TC02-R07-OPS_COMPLETED", "row": 7, "event_type": "OPS_COMPLETED", "ts_local": "D3 05:30", "remarks": "양하 완료 (20h)"},
+    {"event_id": "TC02-R08-HOSES_DISCONNECTED", "row": 8, "event_type": "HOSES_DISCONNECTED", "ts_local": "D3 06:30", "remarks": "호스 분리"}
+  ],
+  "doc_rows_not_events": [
+    {"row": 2, "text": "D1 20:00 (계산) 통지시간 만료 → 레이타임 개시 (선석 점유 중)", "why": "계산 결과 — expected.notice_expiry_at·laytime_start_at"}
+  ],
+  "expected": {
+    "doc_ref": "04 예제 2 계산표, TC 요약표 TC-02",
+    "notice_expiry_at": "D1 20:00",
+    "laytime_start_at": "D1 20:00",
+    "laytime_end_at": "D3 06:30",
+    "elapsed_hours": "34.5",
+    "deduction_hours": {"SHIFTING": "1.5"},
+    "used_hours": "33",
+    "demurrage_hours": "3",
+    "amount_usd": "6875",
+    "issues": [],
+    "no_review_issues": true
+  }
+}

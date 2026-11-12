@@ -1,0 +1,27 @@
+<section id="m3-calc" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M3 · 계산 절차 표준</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">열 단계면 어떤 SOF도 계산서가 된다</h2>
+</div>
+<div style="display:flex;gap:40px">
+<ol style="flex:1;font-size:27px;color:#3A4654;line-height:1.55">
+<li>계약 조건 확정: 허용·가역·통지시간·요율·제외·반액·시효</li>
+<li>SOF를 표준 이벤트와 현지시각으로 정규화</li>
+<li>NOR 유효성 판정 → 개시 시각</li>
+<li>구간 분할: 대기 · 이동 · 접안 · 하역 · 중단 · 분리</li>
+<li>구간별 산입 · 제외 · 반액 태깅, 체선 전환 시각</li>
+</ol>
+<ol start="6" style="flex:1;font-size:27px;color:#3A4654;line-height:1.55">
+<li>사용 시간 = 산입 합, 체선 = max(0, 사용 − 허용)</li>
+<li>금액 = 전액 × 요율/24 + 반액 × 요율/48, 분 단위 비례</li>
+<li>선주 귀책 공제(펌핑 워런티 등) 적용</li>
+<li>쟁점 플래그와 대안 계산 첨부, 시효 카운트다운</li>
+<li>모든 줄에 룰 ID + SOF 행 + 조항</li>
+</ol>
+</div>
+<div style="background:#E9EEF3;padding:26px 32px;border-radius:16px;display:flex;gap:40px;align-items:center">
+<p style="font-size:26px;color:#3A4654;line-height:1.45">이 열 단계가 CLOCK 룰 엔진의 뼈대이고, 사람의 손계산과 Agent의 계산이 같은 절차를 따르기 때문에 결과를 서로 검증할 수 있다.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M3 · 22 · 양식: 04-worked-examples.md §0</p>
+<aside>이 절차를 참가자에게 외우게 하기보다 계산서 양식에 그대로 적용하게 하세요. 연습 7-4부터 7-8까지 같은 순서로 풀면 체선 전환 시각과 반액 구간을 빠뜨리지 않습니다. M6에서 이 절차가 코드가 됩니다.</aside>
+</section>

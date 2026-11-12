@@ -1,0 +1,37 @@
+<section id="m2-gtc" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M2 · 매매계약의 레이타임 조항</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">체선료는 두 계약을 타고 흐르고, 조건이 어긋나면 갭이 남는다</h2>
+</div>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#E9EEF3;padding:30px;border-radius:16px;align-items:center">
+<p style="font-size:24px;color:#5B6775">Owner</p>
+<h3 style="font-size:40px;font-weight:600;color:#0F1A26">선주</h3>
+</div>
+<div style="width:220px;display:flex;flex-direction:column;gap:6px;align-items:center">
+<x-shape kind="arrow-right" style="width:160px;height:56px;background:#0F6E73"></x-shape>
+<p style="font-size:24px;color:#0F6E73;font-weight:600;text-align:center">용선계약 CP<br>체선료 청구</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#0F6E73;padding:30px;border-radius:16px;align-items:center">
+<p style="font-size:24px;color:#D8EEEE">Charterer</p>
+<h3 style="font-size:40px;font-weight:600;color:#F5F7F9">용선주</h3>
+</div>
+<div style="width:220px;display:flex;flex-direction:column;gap:6px;align-items:center">
+<x-shape kind="arrow-right" style="width:160px;height:56px;background:#0F6E73"></x-shape>
+<p style="font-size:24px;color:#0F6E73;font-weight:600;text-align:center">매매계약 GTC<br>같은 조건으로 전가</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#E9EEF3;padding:30px;border-radius:16px;align-items:center">
+<p style="font-size:24px;color:#5B6775">Counterparty</p>
+<h3 style="font-size:40px;font-weight:600;color:#0F1A26">거래 상대방</h3>
+</div>
+</div>
+<table style="font-size:26px;color:#3A4654;width:1664px">
+<tr style="background:#E9EEF3"><th style="width:22%;text-align:left;color:#0F1A26">갭이 생기는 곳</th><th style="width:39%;text-align:left;color:#0F1A26">용선계약</th><th style="width:39%;text-align:left;color:#0F1A26">매매계약(전형, 수치는 예시)</th></tr>
+<tr><td style="font-weight:600;color:#0F1A26">허용 시간</td><td>총 72h 가역</td><td>항구별 36h 등</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">요율</td><td>recap 요율</td><td>CP 요율 또는 시장 지표, 상한 있음</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">시효</td><td>90일(Rider)</td><td>60~90일, 더 짧을 수 있음</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">제외·서류</td><td>이동 제외, 선주 서류</td><td>서식별 제외, 상대가 요구하는 서류</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M2 · 11</p>
+<aside>back-to-back는 두 계약의 조건을 맞춰 손실 없이 넘기는 구조입니다. 네 곳에서 갭이 생깁니다. 특히 시효가 매매계약 쪽이 더 짧으면 선주 청구를 받기도 전에 전가 권리를 잃을 수 있어, 청구를 받은 날 상대에게 체선 발생 통지부터 보내는 운영 원칙이 M5에서 나옵니다.</aside>
+</section>

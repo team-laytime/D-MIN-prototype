@@ -1,0 +1,157 @@
+{
+  "id": "GC-08",
+  "title": "FIX 선박 보호 — 예상 ETU + Switching이 FIX ETB 이상이면 접안 불가",
+  "requirements": [
+    "FR-10"
+  ],
+  "rule_ids": [
+    "ETB-02",
+    "ETB-01"
+  ],
+  "hand_calc": "#6(Direction 1.5h, Switching 2.5h). F(FIX): ETB 11/10 20:00, 작업 8h → ETU 11/11 07:00. M: ETA 06:00 → 07:30. PPT: 'FIX 선박의 ETB <= 예상 ETU + SWITCHING → 접안불가'(같은 시각도 불가)",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      },
+      "berths": [
+        "#6"
+      ]
+    },
+    "vessel": {
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 20000,
+      "dwt": 30000,
+      "loa": 180,
+      "pbl": 90,
+      "draft": 10,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 30000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 8,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "작업 8h: 18:30 + 2.5h = 21:00 ≥ 20:00 → FIX 뒤 11/11 09:30",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "F",
+            "material_code": "PG-RG92",
+            "eta": "2026-11-10 12:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 20:00"
+            }
+          },
+          {
+            "id": "M",
+            "eta": "2026-11-10 06:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "M": {
+            "etb": "2026-11-11 09:30"
+          },
+          "F": {
+            "etb": "2026-11-10 20:00",
+            "etu": "2026-11-11 07:00"
+          }
+        },
+        "pushes": {
+          "M": [
+            "ETB-02"
+          ]
+        }
+      }
+    },
+    {
+      "name": "경계 작업 7h: 17:30 + 2.5h = 20:00 = FIX ETB → 불가",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "F",
+            "material_code": "PG-RG92",
+            "eta": "2026-11-10 12:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 20:00"
+            }
+          },
+          {
+            "id": "M",
+            "eta": "2026-11-10 06:00",
+            "work": {
+              "hours": 7
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "M": {
+            "etb": "2026-11-11 09:30"
+          }
+        },
+        "pushes": {
+          "M": [
+            "ETB-02"
+          ]
+        }
+      }
+    },
+    {
+      "name": "작업 6.5h: 17:00 + 2.5h = 19:30 < 20:00 → 앞에 접안 07:30",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "F",
+            "material_code": "PG-RG92",
+            "eta": "2026-11-10 12:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 20:00"
+            }
+          },
+          {
+            "id": "M",
+            "eta": "2026-11-10 06:00",
+            "work": {
+              "hours": 6.5
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "M": {
+            "etb": "2026-11-10 07:30",
+            "etu": "2026-11-10 17:00"
+          }
+        },
+        "pushes": {
+          "M": []
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

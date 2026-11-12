@@ -1,0 +1,33 @@
+<section id="m4-sof" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M4 · SOF 읽기</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">여덟 개 이벤트가 계산서의 모든 줄을 만든다</h2>
+</div>
+<div style="display:flex;gap:36px;align-items:flex-start">
+<table style="width:900px;font-size:24px;color:#3A4654">
+<tr style="background:#E9EEF3"><th style="width:42%;text-align:left;color:#0F1A26">이벤트 코드</th><th style="width:58%;text-align:left;color:#0F1A26">레이타임 역할</th></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">ANCHORED</td><td>도착선 판정, 조기 NOR 대조</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">NOR_RECEIVED</td><td>개시 계산의 기준 시각</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">ANCHOR_AWEIGH</td><td>이동 시작(제외 구간 시작)</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">ALL_FAST</td><td>개시 대안, 이동 종료</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">OPS_COMMENCED</td><td>무효 NOR 시 개시 대안</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">OPS_STOPPED / RESUMED</td><td>사유 코드 필수: 공제·반액 후보</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">OPS_COMPLETED</td><td>펌핑 시간 계산</td></tr>
+<tr><td style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">HOSES_DISCONNECTED</td><td>종료</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1A26;padding:32px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600;color:#4FCFC3">흔한 기록 오류</h3>
+<ul style="font-size:25px;color:#BFD0DC;line-height:1.5">
+<li>UTC와 KST 혼용</li>
+<li>"24:00" 표기</li>
+<li>제출(tendered)과 수령(received) 혼동</li>
+<li>"stopped"만 있고 사유 없음</li>
+<li>터미널 서명 누락</li>
+<li>묘박 시각 미기록 → 조기 NOR 판정 불가</li>
+</ul>
+</div>
+</div>
+<p style="font-size:26px;color:#5B6775">사유 코드: WEATHER · SHORE_TANK · SHIP_EQUIPMENT · SHORE_EQUIPMENT · DOCUMENTS · SAFETY · OTHER</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M4 · 26 · 전체 목록: 06-data-dictionary.md §6 · 연습 7-9</p>
+<aside>SOF는 체선료의 원재료입니다. 왼쪽 여덟 코드만 정확하면 계산서가 나오고, 오른쪽 오류 중 하나라도 있으면 금액이 틀립니다. 연습 7-9의 엉망인 SOF를 조별로 고치게 하세요. Agent의 INTAKE가 이 정규화를 맡고, 사유 코드가 비면 사람에게 묻습니다.</aside>
+</section>

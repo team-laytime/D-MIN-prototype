@@ -1,0 +1,78 @@
+{
+  "version": "terminal-ulsan-clx/v1",
+  "label": "울산 CLX 부두 기준 정보 (가상 제원)",
+  "source": "부두 이름·Shifting 소요시간 표·동시 접안 제약·야간 도선 기준은 현업 멘토링 PPT 06~08쪽. 제원(DWT·LOA·PBL·Draft)과 취급 화물 그룹은 가상 값.",
+  "requirement": ["FR-03", "FR-07", "FR-08", "FR-09", "FR-10", "FR-12", "FR-13", "FR-14", "FR-15"],
+  "berths": [
+    {"id": "#1-1", "shift_group": "#1~2", "type": "PIER", "max_dwt": 50000, "min_loa": 80, "max_loa": 200, "min_pbl": 40, "max_draft": 11.5,
+     "cargo_groups": ["GASOLINE", "NAPHTHA", "DIESEL", "KEROSENE"]},
+    {"id": "#1-2", "shift_group": "#1~2", "type": "PIER", "max_dwt": 50000, "min_loa": 80, "max_loa": 200, "min_pbl": 40, "max_draft": 11.5,
+     "cargo_groups": ["GASOLINE", "NAPHTHA", "DIESEL", "KEROSENE"]},
+    {"id": "#2-7", "shift_group": "#1~2", "type": "PIER", "max_dwt": 30000, "min_loa": 60, "max_loa": 180, "min_pbl": 30, "max_draft": 10.0,
+     "cargo_groups": ["GASOLINE", "NAPHTHA", "CHEMICAL"]},
+    {"id": "#4-1", "shift_group": "#4", "type": "PIER", "max_dwt": 15000, "min_loa": 50, "max_loa": 140, "min_pbl": 20, "max_draft": 8.5,
+     "cargo_groups": ["CHEMICAL", "SOLVENT", "LPG"]},
+    {"id": "#4-2", "shift_group": "#4", "type": "PIER", "max_dwt": 15000, "min_loa": 50, "max_loa": 140, "min_pbl": 20, "max_draft": 8.5,
+     "cargo_groups": ["CHEMICAL", "SOLVENT", "LPG"]},
+    {"id": "#6", "shift_group": "#6", "type": "PIER", "max_dwt": 160000, "min_loa": 120, "max_loa": 280, "min_pbl": 80, "max_draft": 16.0,
+     "cargo_groups": ["DIESEL", "GASOLINE", "KEROSENE", "NAPHTHA"]},
+    {"id": "#7", "shift_group": "#7", "type": "PIER", "max_dwt": 160000, "min_loa": 120, "max_loa": 280, "min_pbl": 80, "max_draft": 16.0,
+     "cargo_groups": ["DIESEL", "GASOLINE", "KEROSENE", "NAPHTHA"]},
+    {"id": "#8", "shift_group": "#8", "type": "PIER", "max_dwt": 120000, "min_loa": 120, "max_loa": 260, "min_pbl": 70, "max_draft": 15.0,
+     "cargo_groups": ["DIESEL", "BUNKER", "BASE_OIL"]},
+    {"id": "Buoy", "shift_group": "Buoy", "type": "BUOY", "max_dwt": 330000, "min_loa": 200, "max_loa": 340, "min_pbl": 0, "max_draft": 23.0,
+     "cargo_groups": ["CRUDE"], "tide_draft_threshold": 20.0}
+  ],
+  "shifting_hours": {
+    "_rule_id": "ETB-01",
+    "_source": "멘토링 PPT 06쪽 'Shifting 소요시간(hr)' 표. 부두가 비어 있을 때 Direction, 부두에 선박이 있을 때 Switching",
+    "#1~2": {"switching": 1.5, "direction": 1},
+    "#3": {"switching": 1.5, "direction": 1},
+    "#4": {"switching": 1, "direction": 1},
+    "#5-5": {"switching": 1, "direction": 1},
+    "GAS1/2": {"switching": 1, "direction": 1},
+    "#6": {"switching": 2.5, "direction": 1.5},
+    "#7": {"switching": 2.5, "direction": 1.5},
+    "#8": {"switching": 2.5, "direction": 1.5},
+    "Buoy": {"switching": 1, "direction": 1.5}
+  },
+  "same_cargo_group_combos": {
+    "_rule_id": "ETB-05",
+    "_source": "멘토링 PPT 08쪽 '동일화물그룹 제약'",
+    "combos": [["#6", "#7", "#8"], ["#1-1", "#1-2", "#2-7"]]
+  },
+  "simultaneous_berthing_pairs": {
+    "_rule_id": "ETB-06",
+    "_source": "멘토링 PPT 08쪽 '부두 동시 접안 제약' — 두 선박 모두 GRT 3천톤 이하면 가능",
+    "pairs": [{"berths": ["#4-1", "#4-2"], "exempt_if_all_grt_le": 3000}]
+  },
+  "overlap_release_before_etu_h": 2,
+  "night_pilotage": {
+    "_rule_id": "ETB-03, ETB-04",
+    "_source": "멘토링 PPT 07쪽 '야간 도선 제한', 'LAST POB 시간'",
+    "_status": "확인 필요 — PPT의 대상 조건 '(3만톤 이하 AND 수입선 AND Draft >= 10.5)'와 'GRT 3만 이하는 야간 도선 제한X'가 서로 맞지 않는다. 적힌 대로 두고 질문 Q-02로 올림",
+    "last_pob": {
+      "subject_any": [
+        {"grt_min": 75000},
+        {"grt_max": 30000, "direction": "IMPORT", "draft_min": 10.5}
+      ],
+      "offsets": [
+        {"grt_max": 50000, "sunset_minus_h": 1.5},
+        {"grt_min_exclusive": 50000, "sunset_minus_h": 2.0}
+      ],
+      "release_hour": 8
+    },
+    "dawn_window": {"grt_min": 30000, "from_hour": 2, "to_hour": 8, "release_hour": 8}
+  },
+  "weather_limits": {
+    "_rule_id": "WX-01",
+    "_status": "가정 — 팀 규칙표 ULS-WEATHER-LIMIT(풍속 15 m/s 이상 접·계류 불가)",
+    "berthing_wind_ms": {"PIER": 15, "BUOY": 15}
+  },
+  "daylight_vessel_types": {
+    "_rule_id": "LAY-06",
+    "_source": "멘토링 PPT 09쪽 'Daylight 적용: 원유선, 제품선 / 미적용: 특수제품선, 기유선, 화학선'",
+    "apply": ["CRUDE", "PRODUCT"]
+  },
+  "location": {"name": "울산", "lat": 35.5384, "lon": 129.3114, "tz_hours": 9}
+}

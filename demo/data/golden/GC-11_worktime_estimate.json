@@ -1,0 +1,55 @@
+{
+  "id": "GC-11",
+  "title": "작업시간 추정 — 과거 실적 1차·2차 매칭, 실적 없음",
+  "requirements": [
+    "FR-04",
+    "FR-23"
+  ],
+  "rule_ids": [
+    "WRK-02",
+    "WRK-03"
+  ],
+  "hand_calc": "실적(DS-MGO, #1-1): V-TEST1 10h/20,000·8h/20,000(호스 60분·60분), H-MG01 12h/18,000(90분), H-MG02 10h/15,000(60분). 1차(V-TEST1): 40,000 ÷ 18h = 2,222.2/h → 20,000 ÷ 2,222.2 = 9h = 540분. 2차(전체): 73,000 ÷ 40h = 1,825/h → 20,000 ÷ 1,825 = 10.959h = 657.53분 → 658분. 호스분리 최빈값 60분(3건)",
+  "work_checks": [
+    {
+      "name": "1차 매칭(선박·자재·부두)",
+      "berth": "#1-1",
+      "vessel": {
+        "id": "T1",
+        "vessel_code": "V-TEST1",
+        "material_code": "DS-MGO",
+        "qty": 20000
+      },
+      "work_min": 540,
+      "hose_min": 60,
+      "stage": "1차 매칭(선박·자재·부두)",
+      "records": 2
+    },
+    {
+      "name": "2차 매칭(자재·부두)",
+      "berth": "#1-1",
+      "vessel": {
+        "id": "T2",
+        "vessel_code": "V-NEW",
+        "material_code": "DS-MGO",
+        "qty": 20000
+      },
+      "work_min": 658,
+      "hose_min": 60,
+      "stage": "2차 매칭(자재·부두)",
+      "records": 4
+    },
+    {
+      "name": "실적 없음(#1-2) → 입력 오류",
+      "berth": "#1-2",
+      "vessel": {
+        "id": "T3",
+        "vessel_code": "V-NEW",
+        "material_code": "DS-MGO",
+        "qty": 20000
+      },
+      "work_min": null
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

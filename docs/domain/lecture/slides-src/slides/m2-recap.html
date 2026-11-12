@@ -1,0 +1,24 @@
+<section id="m2-recap" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M2 · 실습 — recap 읽기</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">약어 한 줄이 룰 엔진의 입력값 하나다</h2>
+</div>
+<div style="display:flex;gap:32px;align-items:flex-start">
+<div style="width:760px;background:#0F1A26;padding:32px;border-radius:16px;display:flex;flex-direction:column;gap:4px">
+<p style="font-size:24px;color:#BFD0DC;font-family:'IBM Plex Mono', 'Courier New', monospace;line-height:1.6">M/T DONGHAE PIONEER (가상) AFRAMAX 105,000 DWT<br>ACCT SK ENERGY (CHARTERERS)<br>LOAD 1SP RAS TANURA  DISCH 1SP ULSAN<br>LAYCAN 20-22 NOV 2026<br>LAYTIME 72 HRS SHINC TOTAL, REVERSIBLE<br>DEMURRAGE USD 55,000 PDPR<br>NOR ATDNSHINC, 6 HRS NOTICE<br>PUMPING WARRANTY 24 HRS / 100 PSI<br>TIME BAR 90 DAYS FULLY DOCUMENTED<br>CP FORM ASBATANKVOY + RIDER CL 1-25<br>LAW/ARB ENGLISH LAW, LONDON LMAA</p>
+</div>
+<table style="flex:1;font-size:24px;color:#3A4654">
+<tr style="background:#E9EEF3"><th style="width:36%;text-align:left;color:#0F1A26">약어</th><th style="width:64%;text-align:left;color:#0F1A26">뜻 → 필드</th></tr>
+<tr><td style="font-weight:600;color:#0F1A26">SHINC TOTAL REVERSIBLE</td><td>일·공휴일 포함, 선적+양하 합산 가역 → laytime_total_hours=72, reversible</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">PDPR</td><td>per day pro rata → demurrage_rate_usd_day=55000, 시간 비례</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">ATDNSHINC</td><td>NOR 주야·일·공휴일 무관 제출 → NOR 방식</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">6 HRS NOTICE</td><td>통지시간 → notice_hours=6</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">PUMPING WARRANTY</td><td>24h 또는 100 psi → pumping_warranty_hours/psi</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">TIME BAR 90 DAYS</td><td>서류 완비 90일 → time_bar_docs_days=90</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">1SP</td><td>1 safe port → 항구 안전 보증</td></tr>
+</table>
+</div>
+<p style="font-size:26px;color:#5B6775">함정: 총 72h 가역이므로 양하항 허용은 선적항 사용분을 알아야 정해진다. 선적항 SOF가 없으면 가정값으로 두고 플래그한다(LOAD_PORT_UNKNOWN).</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M2 · 13 · 연습 7-1</p>
+<aside>참가자에게 왼쪽 recap을 읽고 오른쪽 표를 가리고 필드를 채우게 하세요. 가장 많이 놓치는 것이 REVERSIBLE의 의미입니다. 양하항 허용 시간이 고정값이 아니라 선적항 사용분에 따라 달라진다는 점을 짚고, 연습 7-1과 7-8로 이어 갑니다.</aside>
+</section>

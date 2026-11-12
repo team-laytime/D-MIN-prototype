@@ -1,0 +1,54 @@
+{
+  "id": "GC-01",
+  "title": "두 척·한 부두 — 기준안 52,000 vs Y 먼저 6,000 (SC-01을 멘토링 PPT 규칙으로 옮김)",
+  "requirements": ["FR-29", "FR-34", "FR-35", "FR-38"],
+  "rule_ids": ["ETB-01", "LAY-05", "LAY-07", "DEM-01", "DEM-03", "WRK-01", "WRK-04", "OPT-01", "OPT-02"],
+  "hand_calc": "docs/requirements/09-first-steps.md 3-3절 SC-01과 같은 숫자. PPT 규칙에서 Switching 1h(#4 부두), 작업시작 = ETB + 1h, 호스분리 = 작업완료 + 1h, ETU = 작업완료 + 2h로 두면 SC-01의 시각이 그대로 나온다. 풀이는 demo/docs/06-rules-and-golden-set.md GC-01",
+  "cases": [
+    {
+      "name": "X(허용 24h·시간당 2,000) / Y(허용 12h·시간당 4,000), 부두 #4-1 하나",
+      "scenario": {
+        "id": "GC-01",
+        "horizon": {"start": "2026-11-10 00:00", "end": "2026-11-13 00:00"},
+        "berths": ["#4-1"],
+        "vessels": [
+          {"id": "W0", "name": "앞 배(작업 중)", "vessel_type": "CHEMICAL", "grt": 5000, "dwt": 8000, "loa": 110, "pbl": 50, "draft": 7,
+           "direction": "IMPORT", "material_code": "CH-PX", "qty": 7000, "eta": "2026-11-09 14:00", "status": "WORKING",
+           "working": {"berth": "#4-1", "etb": "2026-11-09 18:00", "work_start": "2026-11-09 19:00"},
+           "contract": {"type": "CP", "laytime_h": 36, "demurrage_rate_usd_day": 24000, "laycan_from": "2026-11-08", "laycan_to": "2026-11-10"},
+           "work": {"hours": 9, "hose_term_h": 1}},
+          {"id": "X", "name": "X선", "vessel_type": "CHEMICAL", "grt": 5000, "dwt": 8000, "loa": 110, "pbl": 50, "draft": 7,
+           "direction": "IMPORT", "material_code": "CH-PX", "qty": 7000, "eta": "2026-11-10 02:00", "status": "PLANNED",
+           "contract": {"type": "CP", "laytime_h": 24, "demurrage_rate_usd_day": 48000, "laycan_from": "2026-11-09", "laycan_to": "2026-11-11"},
+           "work": {"hours": 14, "hose_term_h": 1}},
+          {"id": "Y", "name": "Y선", "vessel_type": "CHEMICAL", "grt": 5000, "dwt": 8000, "loa": 110, "pbl": 50, "draft": 7,
+           "direction": "IMPORT", "material_code": "CH-BZ", "qty": 5000, "eta": "2026-11-10 04:00", "status": "PLANNED",
+           "contract": {"type": "CP", "laytime_h": 12, "demurrage_rate_usd_day": 96000, "laycan_from": "2026-11-09", "laycan_to": "2026-11-11"},
+           "work": {"hours": 8, "hose_term_h": 1}}
+        ]
+      },
+      "expect": {
+        "plans": {
+          "FCFS": {
+            "total_usd": "52000",
+            "vessels": {
+              "X": {"berth": "#4-1", "etb": "2026-11-10 07:00", "work_start": "2026-11-10 08:00", "work_end": "2026-11-10 22:00", "hose_off": "2026-11-10 23:00", "etu": "2026-11-11 00:00",
+                    "laytime_start": "2026-11-10 07:00", "laytime_start_rule": "LAY-05", "laytime_end": "2026-11-11 07:00", "demurrage_hours": "0", "amount_usd": "0"},
+              "Y": {"berth": "#4-1", "etb": "2026-11-11 01:00", "work_start": "2026-11-11 02:00", "work_end": "2026-11-11 10:00", "hose_off": "2026-11-11 11:00",
+                    "laytime_start": "2026-11-10 10:00", "laytime_start_rule": "LAY-05", "laytime_end": "2026-11-10 22:00", "demurrage_hours": "13", "amount_usd": "52000"}
+            }
+          },
+          "Y_FIRST": {
+            "order": [["Y", "#4-1"], ["X", "#4-1"]],
+            "total_usd": "6000",
+            "vessels": {
+              "Y": {"etb": "2026-11-10 07:00", "hose_off": "2026-11-10 17:00", "etu": "2026-11-10 18:00", "laytime_start": "2026-11-10 07:00", "laytime_end": "2026-11-10 19:00", "demurrage_hours": "0", "amount_usd": "0"},
+              "X": {"etb": "2026-11-10 19:00", "hose_off": "2026-11-11 11:00", "laytime_start": "2026-11-10 08:00", "laytime_end": "2026-11-11 08:00", "demurrage_hours": "3", "amount_usd": "6000"}
+            }
+          }
+        },
+        "optimizer": {"best_total_usd": "6000", "baseline_total_usd": "52000", "savings_usd": "46000", "violations": 0}
+      }
+    }
+  ]
+}

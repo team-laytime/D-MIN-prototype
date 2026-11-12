@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 336" width="100%" font-family="Noto Sans KR, Apple SD Gothic Neo, sans-serif" font-size="11" role="img" aria-label="기준안(도착 순서·FCFS) — 비교용, 현행 실적 아님 부두별 타임라인">
+<defs><pattern id="hatchW" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="6" fill="#f6a03c" fill-opacity="0.45"/></pattern><pattern id="hatchM" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="6" fill="#c0392b" fill-opacity="0.35"/></pattern><pattern id="hatchU" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="6" fill="#7d3cc0" fill-opacity="0.35"/></pattern></defs>
+<text x="74" y="16" font-size="13" font-weight="700" fill="#1d2433">기준안(도착 순서·FCFS) — 비교용, 현행 실적 아님</text>
+<rect x="74.0" y="34" width="62.4" height="232" fill="#eef1f7"/>
+<rect x="231.7" y="34" width="122.8" height="232" fill="#eef1f7"/>
+<rect x="449.6" y="34" width="123.1" height="232" fill="#eef1f7"/>
+<rect x="667.4" y="34" width="123.4" height="232" fill="#eef1f7"/>
+<rect x="885.3" y="34" width="123.7" height="232" fill="#eef1f7"/>
+<rect x="1103.3" y="34" width="60.7" height="232" fill="#eef1f7"/>
+<line x1="74.0" y1="30" x2="74.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="76.0" y="27" fill="#5b6475" font-weight="700">11/09</text>
+<line x1="128.5" y1="30" x2="128.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="130.5" y="27" fill="#5b6475" font-weight="400">06시</text>
+<line x1="183.0" y1="30" x2="183.0" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="185.0" y="27" fill="#5b6475" font-weight="400">12시</text>
+<line x1="237.5" y1="30" x2="237.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="239.5" y="27" fill="#5b6475" font-weight="400">18시</text>
+<line x1="292.0" y1="30" x2="292.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="294.0" y="27" fill="#5b6475" font-weight="700">11/10</text>
+<line x1="346.5" y1="30" x2="346.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="348.5" y="27" fill="#5b6475" font-weight="400">06시</text>
+<line x1="401.0" y1="30" x2="401.0" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="403.0" y="27" fill="#5b6475" font-weight="400">12시</text>
+<line x1="455.5" y1="30" x2="455.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="457.5" y="27" fill="#5b6475" font-weight="400">18시</text>
+<line x1="510.0" y1="30" x2="510.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="512.0" y="27" fill="#5b6475" font-weight="700">11/11</text>
+<line x1="564.5" y1="30" x2="564.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="566.5" y="27" fill="#5b6475" font-weight="400">06시</text>
+<line x1="619.0" y1="30" x2="619.0" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="621.0" y="27" fill="#5b6475" font-weight="400">12시</text>
+<line x1="673.5" y1="30" x2="673.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="675.5" y="27" fill="#5b6475" font-weight="400">18시</text>
+<line x1="728.0" y1="30" x2="728.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="730.0" y="27" fill="#5b6475" font-weight="700">11/12</text>
+<line x1="782.5" y1="30" x2="782.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="784.5" y="27" fill="#5b6475" font-weight="400">06시</text>
+<line x1="837.0" y1="30" x2="837.0" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="839.0" y="27" fill="#5b6475" font-weight="400">12시</text>
+<line x1="891.5" y1="30" x2="891.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="893.5" y="27" fill="#5b6475" font-weight="400">18시</text>
+<line x1="946.0" y1="30" x2="946.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="948.0" y="27" fill="#5b6475" font-weight="700">11/13</text>
+<line x1="1000.5" y1="30" x2="1000.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="1002.5" y="27" fill="#5b6475" font-weight="400">06시</text>
+<line x1="1055.0" y1="30" x2="1055.0" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="1057.0" y="27" fill="#5b6475" font-weight="400">12시</text>
+<line x1="1109.5" y1="30" x2="1109.5" y2="266" stroke="#e1e6ef" stroke-width="0.8"/>
+<text x="1111.5" y="27" fill="#5b6475" font-weight="400">18시</text>
+<line x1="1164.0" y1="30" x2="1164.0" y2="266" stroke="#b8c2d3" stroke-width="1.2"/>
+<text x="1166.0" y="27" fill="#5b6475" font-weight="700">11/14</text>
+<line x1="74" y1="92" x2="1164" y2="92" stroke="#d5dbe6"/>
+<text x="8" y="58" font-weight="700" fill="#1d2433">#6</text>
+<text x="8" y="73" fill="#6b7385" font-size="9.5">D1.5·S2.5h</text>
+<rect x="591.8" y="35" width="163.5" height="56" fill="url(#hatchW)"><title>기상 제한 11/11 09:00~11/12 03:00 예보 풍속 17 m/s ≥ 접안 한계 15 m/s (WX-01)</title></rect>
+<text x="594.8" y="88" font-size="9" fill="#f6a03c">기상 제한</text>
+<line x1="74" y1="150" x2="1164" y2="150" stroke="#d5dbe6"/>
+<text x="8" y="116" font-weight="700" fill="#1d2433">#7</text>
+<text x="8" y="131" fill="#6b7385" font-size="9.5">D1.5·S2.5h</text>
+<rect x="591.8" y="93" width="163.5" height="56" fill="url(#hatchW)"><title>기상 제한 11/11 09:00~11/12 03:00 예보 풍속 17 m/s ≥ 접안 한계 15 m/s (WX-01)</title></rect>
+<text x="594.8" y="146" font-size="9" fill="#f6a03c">기상 제한</text>
+<line x1="74" y1="208" x2="1164" y2="208" stroke="#d5dbe6"/>
+<text x="8" y="174" font-weight="700" fill="#1d2433">#8</text>
+<text x="8" y="189" fill="#6b7385" font-size="9.5">D1.5·S2.5h</text>
+<rect x="591.8" y="151" width="163.5" height="56" fill="url(#hatchW)"><title>기상 제한 11/11 09:00~11/12 03:00 예보 풍속 17 m/s ≥ 접안 한계 15 m/s (WX-01)</title></rect>
+<text x="594.8" y="204" font-size="9" fill="#f6a03c">기상 제한</text>
+<line x1="74" y1="266" x2="1164" y2="266" stroke="#d5dbe6"/>
+<text x="8" y="232" font-weight="700" fill="#1d2433">Buoy</text>
+<text x="8" y="247" fill="#6b7385" font-size="9.5">D1.5·S1h</text>
+<rect x="591.8" y="209" width="163.5" height="56" fill="url(#hatchW)"><title>기상 제한 11/11 09:00~11/12 03:00 예보 풍속 17 m/s ≥ 접안 한계 15 m/s (WX-01)</title></rect>
+<text x="594.8" y="262" font-size="9" fill="#f6a03c">기상 제한</text>
+<g class="vessel" data-vessel="W1" style="cursor:pointer"><title>W1 MT ULSAN ARIRANG | #6 | ETA 11/09 18:00 ETB 11/09 22:00 작업 11/09 23:00~11/10 13:00 호스분리 11/10 14:00 ETU 11/10 15:00 | 체선료 $0</title>
+<line x1="237.5" y1="45" x2="273.8" y2="45" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="237.5" cy="45" r="2.6" fill="#8a94a6"/>
+<text x="241.5" y="42" font-size="9" fill="#5b6475">대기</text>
+<rect x="273.8" y="50" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="282.9" y="50" width="127.2" height="22" fill="#6b7a90" rx="2"/>
+<rect x="410.1" y="50" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="419.2" y="50" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="286.9" y="65" fill="#ffffff" font-weight="700">W1 작업중</text>
+</g>
+<g class="vessel" data-vessel="V03" style="cursor:pointer"><title>V03 MT SEORAK GLORY | #7 | ETA 11/10 07:00 ETB 11/10 13:00 작업 11/10 14:00~11/11 02:08 호스분리 11/11 03:08 ETU 11/11 04:08 | 체선료 $0</title>
+<line x1="355.6" y1="103" x2="410.1" y2="103" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="355.6" cy="103" r="2.6" fill="#8a94a6"/>
+<text x="359.6" y="100" font-size="9" fill="#5b6475">대기</text>
+<rect x="410.1" y="108" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="419.2" y="108" width="110.2" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="529.4" y="108" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="538.5" y="108" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="423.2" y="123" fill="#ffffff" font-weight="700">V03</text>
+</g>
+<g class="vessel" data-vessel="V01" style="cursor:pointer"><title>V01 MT HANBADA | Buoy | ETA 11/10 04:00 ETB 11/10 15:35 작업 11/10 16:35~11/11 23:10 호스분리 11/12 00:10 ETU 11/12 01:10 | 체선료 $11,194</title>
+<line x1="328.3" y1="219" x2="433.5" y2="219" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="328.3" cy="219" r="2.6" fill="#8a94a6"/>
+<text x="332.3" y="216" font-size="9" fill="#5b6475">대기</text>
+<rect x="433.5" y="224" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="442.6" y="224" width="277.8" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="720.4" y="224" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="729.5" y="224" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="446.6" y="239" fill="#ffffff" font-weight="700">V01 $11,194</text>
+<rect x="682.6" y="249" width="46.9" height="4" fill="#d93a3a"/>
+</g>
+<g class="vessel" data-vessel="V04" style="cursor:pointer"><title>V04 MT HALLA SPIRIT | #6 | ETA 11/10 09:00 ETB 11/10 17:30 작업 11/10 18:30~11/11 05:37 호스분리 11/11 06:37 ETU 11/11 07:37 | 체선료 $0</title>
+<line x1="373.8" y1="45" x2="451.0" y2="45" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="373.8" cy="45" r="2.6" fill="#8a94a6"/>
+<text x="377.8" y="42" font-size="9" fill="#5b6475">대기</text>
+<rect x="451.0" y="50" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="460.0" y="50" width="101.0" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="561.0" y="50" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="570.1" y="50" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="464.0" y="65" fill="#ffffff" font-weight="700">V04</text>
+</g>
+<g class="vessel" data-vessel="V06" style="cursor:pointer"><title>V06 MT TAEBAEK | #8 | ETA 11/10 22:00 ETB 11/11 02:08 작업 11/11 03:08~11/11 18:08 호스분리 11/11 19:38 ETU 11/11 20:08 | 체선료 $0</title>
+<line x1="491.8" y1="161" x2="529.4" y2="161" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="491.8" cy="161" r="2.6" fill="#8a94a6"/>
+<text x="495.8" y="158" font-size="9" fill="#5b6475">대기</text>
+<rect x="529.4" y="166" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="538.5" y="166" width="136.2" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="674.7" y="166" width="13.6" height="22" fill="#14a3a3" rx="2"/>
+<rect x="688.3" y="166" width="4.5" height="22" fill="#c9d3e0" rx="2"/>
+<text x="542.5" y="181" fill="#ffffff" font-weight="700">V06</text>
+</g>
+<g class="vessel" data-vessel="F1" style="cursor:pointer"><title>F1 MT MUSAN | #7 | ETA 11/11 10:00 ETB 11/11 14:00 작업 11/11 15:00~11/12 03:00 호스분리 11/12 04:00 ETU 11/12 05:00 | 체선료 $0</title>
+<line x1="600.8" y1="103" x2="637.2" y2="103" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="600.8" cy="103" r="2.6" fill="#8a94a6"/>
+<text x="604.8" y="100" font-size="9" fill="#5b6475">대기</text>
+<rect x="637.2" y="108" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="646.2" y="108" width="109.0" height="22" fill="#6b7a90" rx="2"/>
+<rect x="755.2" y="108" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="764.3" y="108" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="650.2" y="123" fill="#ffffff" font-weight="700">F1 FIX</text>
+</g>
+<g class="vessel" data-vessel="V05" style="cursor:pointer"><title>V05 MT JIRI PEARL | #6 | ETA 11/11 01:00 ETB 11/12 04:30 작업 11/12 05:30~11/12 15:11 호스분리 11/12 16:11 ETU 11/12 17:11 | 체선료 $24,650</title>
+<line x1="519.1" y1="45" x2="768.9" y2="45" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="519.1" cy="45" r="2.6" fill="#8a94a6"/>
+<text x="523.1" y="42" font-size="9" fill="#5b6475">대기</text>
+<rect x="768.9" y="50" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="778.0" y="50" width="88.0" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="865.9" y="50" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="875.0" y="50" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="782.0" y="65" fill="#ffffff" font-weight="700">V05 $24,650</text>
+<rect x="682.6" y="75" width="192.4" height="4" fill="#d93a3a"/>
+</g>
+<g class="vessel" data-vessel="V07" style="cursor:pointer"><title>V07 MT GAYA BRIDGE | #8 | ETA 11/11 06:00 ETB 11/12 04:30 작업 11/12 05:30~11/12 19:30 호스분리 11/12 21:00 ETU 11/12 21:30 | 체선료 $11,250</title>
+<line x1="564.5" y1="161" x2="768.9" y2="161" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="564.5" cy="161" r="2.6" fill="#8a94a6"/>
+<text x="568.5" y="158" font-size="9" fill="#5b6475">대기</text>
+<rect x="768.9" y="166" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="778.0" y="166" width="127.2" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="905.1" y="166" width="13.6" height="22" fill="#14a3a3" rx="2"/>
+<rect x="918.8" y="166" width="4.5" height="22" fill="#c9d3e0" rx="2"/>
+<text x="782.0" y="181" fill="#ffffff" font-weight="700">V07 $11,250</text>
+<rect x="782.5" y="191" width="136.2" height="4" fill="#d93a3a"/>
+</g>
+<g class="vessel" data-vessel="V02" style="cursor:pointer"><title>V02 MT DONGHAE STAR | Buoy | ETA 11/10 14:00 ETB 11/12 08:00 작업 11/12 09:00~11/13 03:34 호스분리 11/13 05:04 ETU 11/13 05:34 | 체선료 $42,856</title>
+<line x1="419.2" y1="219" x2="800.7" y2="219" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="419.2" cy="219" r="2.6" fill="#8a94a6"/>
+<text x="423.2" y="216" font-size="9" fill="#5b6475">대기</text>
+<rect x="800.7" y="224" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="809.8" y="224" width="168.6" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="978.4" y="224" width="13.6" height="22" fill="#14a3a3" rx="2"/>
+<rect x="992.0" y="224" width="4.5" height="22" fill="#c9d3e0" rx="2"/>
+<text x="813.8" y="239" fill="#ffffff" font-weight="700">V02 $42,856</text>
+<rect x="746.2" y="249" width="245.9" height="4" fill="#d93a3a"/>
+</g>
+<g class="vessel" data-vessel="V08" style="cursor:pointer"><title>V08 MT NAMSAN DAWN | #7 | ETA 11/11 08:00 ETB 11/12 08:00 작업 11/12 09:00~11/13 03:00 호스분리 11/13 04:00 ETU 11/13 05:00 | 체선료 $10,000</title>
+<line x1="582.7" y1="103" x2="800.7" y2="103" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="582.7" cy="103" r="2.6" fill="#8a94a6"/>
+<text x="586.7" y="100" font-size="9" fill="#5b6475">대기</text>
+<rect x="800.7" y="108" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="809.8" y="108" width="163.5" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="973.2" y="108" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="982.3" y="108" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="813.8" y="123" fill="#ffffff" font-weight="700">V08 $10,000</text>
+<rect x="909.7" y="133" width="72.7" height="4" fill="#d93a3a"/>
+</g>
+<g class="vessel" data-vessel="V09" style="cursor:pointer"><title>V09 MT BUKHAN RIVER | #6 | ETA 11/11 13:00 ETB 11/12 19:41 작업 11/12 20:41~11/13 07:32 호스분리 11/13 08:32 ETU 11/13 09:32 | 체선료 $12,969</title>
+<line x1="628.1" y1="45" x2="906.8" y2="45" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<circle cx="628.1" cy="45" r="2.6" fill="#8a94a6"/>
+<text x="632.1" y="42" font-size="9" fill="#5b6475">대기</text>
+<rect x="906.8" y="50" width="9.1" height="22" fill="#a9c4f2" rx="2"/>
+<rect x="915.9" y="50" width="98.6" height="22" fill="#2f6fd6" rx="2"/>
+<rect x="1014.4" y="50" width="9.1" height="22" fill="#14a3a3" rx="2"/>
+<rect x="1023.5" y="50" width="9.1" height="22" fill="#c9d3e0" rx="2"/>
+<text x="919.9" y="65" fill="#ffffff" font-weight="700">V09 $12,969</text>
+<rect x="900.6" y="75" width="122.9" height="4" fill="#d93a3a"/>
+</g>
+<line x1="74" y1="288" x2="92" y2="288" stroke="#8a94a6" stroke-width="1.6" stroke-dasharray="4 3"/>
+<text x="96" y="292" fill="#3b4354">대기(ETA→ETB)</text>
+<rect x="213.5" y="282" width="18" height="12" fill="#a9c4f2" stroke="#c9d0dc"/>
+<text x="235.5" y="292" fill="#3b4354">접안·준비</text>
+<rect x="290.0" y="282" width="18" height="12" fill="#2f6fd6" stroke="#c9d0dc"/>
+<text x="312.0" y="292" fill="#3b4354">작업</text>
+<rect x="335.0" y="282" width="18" height="12" fill="#6b7a90" stroke="#c9d0dc"/>
+<text x="357.0" y="292" fill="#3b4354">고정·작업 중 선박</text>
+<rect x="464.0" y="282" width="18" height="12" fill="#14a3a3" stroke="#c9d0dc"/>
+<text x="486.0" y="292" fill="#3b4354">호스분리</text>
+<rect x="530.0" y="282" width="18" height="12" fill="#c9d3e0" stroke="#c9d0dc"/>
+<text x="552.0" y="292" fill="#3b4354">이안 준비</text>
+<rect x="606.5" y="282" width="18" height="12" fill="#d93a3a" stroke="#c9d0dc"/>
+<text x="628.5" y="292" fill="#3b4354">체선 구간</text>
+<rect x="683.0" y="282" width="18" height="12" fill="#eef1f7" stroke="#c9d0dc"/>
+<text x="705.0" y="292" fill="#3b4354">야간</text>
+<rect x="728.0" y="282" width="18" height="12" fill="url(#hatchW)" stroke="#c9d0dc"/>
+<text x="750.0" y="292" fill="#3b4354">기상 제한</text>
+<rect x="804.5" y="282" width="18" height="12" fill="url(#hatchM)" stroke="#c9d0dc"/>
+<text x="826.5" y="292" fill="#3b4354">정비 제한</text>
+<text x="74" y="312" fill="#6b7385" font-size="10">D = Direction, S = Switching(시간). 막대에 마우스를 올리면 시각, 누르면 산출 근거. 가상 데이터 · 의사결정 보조용</text>
+</svg>

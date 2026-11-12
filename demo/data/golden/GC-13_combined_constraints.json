@@ -1,0 +1,116 @@
+{
+  "id": "GC-13",
+  "title": "제약 두 개가 겹칠 때 — 강풍 제한 뒤 새벽 02~08시 (ETB 통합 산정)",
+  "requirements": [
+    "FR-20",
+    "FR-28"
+  ],
+  "rule_ids": [
+    "ETB-07",
+    "ETB-04",
+    "ETB-10",
+    "DEM-02"
+  ],
+  "hand_calc": "#7(Direction 1.5h). 강풍 11/10 20:00~11/11 01:00 → 금지 [20:00, 02:30). GRT 4만. ETA 21:00 → 22:30 → 02:30 → 새벽창 → 08:00. 기상이 없었다면 22:30(새벽창 아님) → 기상 대기 9.5h. 정박개시 = ETANR + 6h = 03:00",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      },
+      "berths": [
+        "#7"
+      ],
+      "weather_forecast": {
+        "source": "가상 예보",
+        "issued_at": "2026-11-10 05:00",
+        "segments": [
+          {
+            "from": "2026-11-10 20:00",
+            "to": "2026-11-11 01:00",
+            "wind_ms": 18
+          }
+        ]
+      }
+    },
+    "vessel": {
+      "id": "G",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 40000,
+      "dwt": 70000,
+      "loa": 228,
+      "pbl": 110,
+      "draft": 12,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 60000,
+      "status": "PLANNED",
+      "eta": "2026-11-10 21:00",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 12,
+        "demurrage_rate_usd_day": 48000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "기상 대기가 허용 시간 안에 끝남 → 공제 0, 5h·10,000",
+      "scenario": {
+        "vessels": [
+          {}
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "G": {
+            "etb": "2026-11-11 08:00",
+            "etb_without_weather": "2026-11-10 22:30",
+            "laytime_start": "2026-11-11 03:00",
+            "laytime_end": "2026-11-11 15:00",
+            "hose_off": "2026-11-11 20:00",
+            "weather_hours": "0",
+            "demurrage_hours": "5",
+            "amount_usd": "10000"
+          }
+        },
+        "pushes": {
+          "G": [
+            "ETB-07",
+            "ETB-04"
+          ]
+        }
+      }
+    },
+    {
+      "name": "허용 2h면 기상 대기 3h가 체선 기간에 듦 → 공제 1.5h, 13.5h·27,000",
+      "scenario": {
+        "vessels": [
+          {
+            "contract": {
+              "laytime_h": 2
+            }
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "G": {
+            "laytime_end": "2026-11-11 05:00",
+            "demurrage_raw_hours": "15",
+            "weather_hours": "3",
+            "demurrage_hours": "13.5",
+            "amount_usd": "27000"
+          }
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

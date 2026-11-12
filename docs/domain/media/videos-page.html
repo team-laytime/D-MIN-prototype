@@ -1,0 +1,34 @@
+<title>체선료 입문 영상</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a single column of three video cards with a short header; dark console look shared with the simulator */
+:root{--bg:#f3f6f9;--surface:#ffffff;--fg:#111a26;--muted:#5b6977;--line:#d6dee8;--accent:#0f6e73;--chip:#e9eef4}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0d1218;--surface:#151c25;--fg:#e6ecf3;--muted:#97a5b4;--line:#293441;--accent:#4fcfc3;--chip:#1d2631;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1218;--surface:#151c25;--fg:#e6ecf3;--muted:#97a5b4;--line:#293441;--accent:#4fcfc3;--chip:#1d2631;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding-block:24px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1{font-size:clamp(22px,3vw,28px);margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px}
+.chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted)}
+.grid{display:grid;gap:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card h2{font-size:17px;margin:0 0 4px}
+.card p{margin:0 0 12px;color:var(--muted);font-size:14px}
+video{width:100%;max-width:100%;aspect-ratio:16/9;background:#000;border-radius:8px;display:block}
+.pending{aspect-ratio:16/9;border-radius:8px;background:var(--chip);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px}
+.foot{margin-top:26px;font-size:13px;color:var(--muted);line-height:1.6}
+a{color:var(--accent)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--chip);padding:1px 5px;border-radius:4px}
+</style>
+<div class="wrap">
+  <h1>체선료 입문 영상 3편</h1>
+  <p class="sub">SKALA 최종 프로젝트 도메인 학습용. 한국어 나레이션과 자막이 들어 있고, 데이터는 전부 가상이며 규칙값은 가정이다. 재생 버튼(▶)을 눌러 시작한다. 휴대폰에서는 소리를 켜고 전체화면으로 보는 편이 좋다.</p>
+  <div class="chips"><span class="chip">1280×720 · 30fps</span><span class="chip">Asbatankvoy 기준</span><span class="chip">예제 TC-02</span><span class="chip">재생성 소스: docs/domain/media/src</span></div>
+  <div class="grid">
+    <div class="card"><h2>1편 · 레이타임 101 <span style="color:var(--muted);font-weight:400">2:09</span></h2><p>레이타임·체선료·조출료 개념, 요율 감각, 두 겹 계약(back-to-back), SK 비용 경로</p><video controls playsinline preload="metadata" src="/_blob/0b5bfc2fa630d66afeb8913c6d5854a6" aria-label="1편 레이타임 101"></video></div>
+    <div class="card"><h2>2편 · NOR과 시계가 도는 순간 <span style="color:var(--muted);font-weight:400">2:48</span></h2><p>NOR, 통지시간, 개시 규칙, 대기 산입, 이동 제외, 야간 접안 제한, 종료, 체선, 반액</p><video controls playsinline preload="metadata" src="/_blob/9b76c4f8f5263a9cfa343dabe8d33bfc" aria-label="2편 NOR과 시계가 도는 순간"></video></div>
+    <div class="card"><h2>3편 · 체선료 계산 따라하기 <span style="color:var(--muted);font-weight:400">2:41</span></h2><p>예제 TC-02를 SOF → 개시 → 종료 → 공제 → 체선료 → 계산서 순으로 손계산, Agent의 역할</p><video controls playsinline preload="metadata" src="/_blob/e3130de3339acafc1e28816f9856244a" aria-label="3편 체선료 계산 따라하기"></video></div>
+  </div>
+  <p class="foot">권장 순서: 1편 → <a href="https://claude.ai/artifact/7PhLxNEJVw29z2gycxX61c" target="_blank" rel="noopener">시뮬레이터</a> 체험 → 2편 → 3편 → 문서 <code>docs/domain/04-worked-examples.md</code>로 직접 계산. 대본·그림 수정과 재생성 방법은 <code>docs/domain/media/README.md</code>.</p>
+</div>

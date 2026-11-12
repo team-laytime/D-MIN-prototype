@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demurrage-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: local-postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: local-postgres
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: demurrage
+            - name: POSTGRES_USER
+              value: demurrage
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: demurrage-secrets
+                  key: POSTGRES_PASSWORD
+          readinessProbe:
+            exec:
+              command: [pg_isready, -h, 127.0.0.1, -U, demurrage, -d, demurrage]
+            periodSeconds: 2
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demurrage-postgres
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/component: local-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

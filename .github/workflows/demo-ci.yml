@@ -1,0 +1,78 @@
+# CI — 정답 사례가 배포의 문지기 (NFR-19, 인프라 가이드 4-5)
+# 저장소 루트의 워크플로. demo/에서 앱·배포 설정을 함께 검증한다.
+name: demo-ci
+on:
+  pull_request:
+    paths: ["demo/**", ".github/workflows/demo-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["demo/**", ".github/workflows/demo-ci.yml"]
+
+defaults:
+  run:
+    working-directory: demo
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: v1.34.1
+      - run: pip install -e ".[dev,llm,aws]"
+      - name: 단위·통합 테스트
+        run: python -m pytest tests
+      - name: 정답 세트·검증 시나리오·최적성 (하나라도 틀리면 merge 차단)
+        run: python -m demurrage verify --strict --json verify-result.json
+      - name: 성능 측정(기록용)
+        run: python -m demurrage bench --sizes 8 12 --repeat 3 --json bench.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verification
+          path: |
+            demo/verify-result.json
+            demo/bench.json
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  container:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 이미지 빌드 + 앱·DB 기동
+        run: docker compose up -d --build --wait
+      - name: 컨테이너 안에서 검증
+        run: docker compose --profile verify run --rm verify
+      - name: 배포 직후 정답 검문(살아 있는 서비스에 GC-01 질의)
+        run: python3 scripts/smoke.py http://localhost:8000
+      - if: always()
+        run: docker compose logs app && docker compose down -v
+
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.0
+      - uses: azure/setup-kubectl@v4
+        with:
+          version: v1.34.1
+      - name: AWS 없이 YAML·Terraform·모의 plan 검사
+        run: make infra-check
+
+  # 배포 단계는 클라우드가 정해지면 붙인다(ADR-006):
+  # 이미지 푸시 → 스테이징 배포 → smoke.py 검문 → 사람 승인(규칙 변경이면 필수) → 운영 배포

@@ -1,0 +1,49 @@
+{
+  "case_id": "TC-05b",
+  "title": "TC-05 변형 — 도착 직후 NOR 재제출",
+  "source": "docs/domain/04-worked-examples.md 예제 5 용선주 검토 표 2행 (TC-05b)",
+  "assumptions": [
+    "문서는 'SOF는 TC-05와 같고 도착 행에 재제출을 더함'이라고만 적었다. TC-05 SOF 2행(도착)에 재제출·수령을 같은 시각으로 더했다. 첫 NOR 수령 시각은 TC-05와 같이 D1 11:00으로 둔다 [가정]."
+  ],
+  "base_date": "2026-11-03",
+  "port_call": {"call_id": "TC-05b", "vessel_name": "GEOJE SPIRIT (가상)", "vessel_type": "MR", "dwt": 48000,
+                "operation": "DISCHARGE", "cargo": "CHEMICALS", "berth_id": "SK7"},
+  "contract_terms": {
+    "form": "ASBATANKVOY", "layer": "CHARTER_PARTY",
+    "laytime_this_port_hours": 24, "notice_hours": 6,
+    "demurrage_rate_usd_day": 26000,
+    "half_rate_events": ["FIRE", "EXPLOSION", "STORM", "STRIKE", "PLANT_BREAKDOWN"],
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK7", "berth_type": "PIER", "berthing_rules": ["ULS-SK38-DAYTIME"],
+    "daytime": {"start": "07:00", "end": "17:30"},
+    "berth_ready_at": null,
+    "berth_ready_ref": "문서에 선석 상태가 없어 대기 사유 미상"
+  },
+  "sof_events": [
+    {"event_id": "TC05b-R01-NOR_TENDERED", "row": 1, "event_type": "NOR_TENDERED", "ts_local": "D1 11:00", "source": "MASTER", "remarks": "NOR 송신 (항해 중, 항계 밖)"},
+    {"event_id": "TC05b-R01-NOR_RECEIVED", "row": 1, "event_type": "NOR_RECEIVED", "ts_local": "D1 11:00", "source": "AGENT", "remarks": "대리점 수령, 유효성 언급 없음 [수령 시각 가정]"},
+    {"event_id": "TC05b-R02-ANCHORED", "row": 2, "event_type": "ANCHORED", "ts_local": "D1 13:00", "remarks": "묘박지 도착, 투묘"},
+    {"event_id": "TC05b-R02-NOR_TENDERED", "row": 2, "event_type": "NOR_TENDERED", "ts_local": "D1 13:00", "source": "MASTER", "remarks": "NOR 재제출 (TC-05b)"},
+    {"event_id": "TC05b-R02-NOR_RECEIVED", "row": 2, "event_type": "NOR_RECEIVED", "ts_local": "D1 13:00", "source": "AGENT", "remarks": "재제출 NOR 수령 (TC-05b)"},
+    {"event_id": "TC05b-R03-ANCHOR_AWEIGH", "row": 3, "event_type": "ANCHOR_AWEIGH", "ts_local": "D2 06:00", "remarks": "양묘, 이동"},
+    {"event_id": "TC05b-R04-ALL_FAST", "row": 4, "event_type": "ALL_FAST", "ts_local": "D2 07:30", "remarks": "접안 완료 (주간)"},
+    {"event_id": "TC05b-R05-HOSES_CONNECTED", "row": 5, "event_type": "HOSES_CONNECTED", "ts_local": "D2 08:30", "remarks": "호스 연결"},
+    {"event_id": "TC05b-R06-OPS_COMMENCED", "row": 6, "event_type": "OPS_COMMENCED", "ts_local": "D2 09:00", "remarks": "양하 개시"},
+    {"event_id": "TC05b-R07-OPS_COMPLETED", "row": 7, "event_type": "OPS_COMPLETED", "ts_local": "D2 21:00", "remarks": "양하 완료 (12h)"},
+    {"event_id": "TC05b-R08-HOSES_DISCONNECTED", "row": 8, "event_type": "HOSES_DISCONNECTED", "ts_local": "D2 22:00", "remarks": "호스 분리"}
+  ],
+  "expected": {
+    "doc_ref": "04 예제 5 용선주 검토 표 2행 (TC-05b), TC 요약표 TC-05b",
+    "notice_expiry_at": "D1 19:00",
+    "laytime_start_at": "D1 19:00",
+    "laytime_end_at": "D2 22:00",
+    "elapsed_hours": "27",
+    "deduction_hours": {"SHIFTING": "1.5"},
+    "used_hours": "25.5",
+    "demurrage_hours": "1.5",
+    "amount_usd": "1625",
+    "issues": ["NOR-EARLY", "DISPUTE-NOR-WAIVER"]
+  }
+}

@@ -1,0 +1,62 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: demurrage
+resources:
+  - ../base
+  - postgres.yaml
+  - reports-pvc.yaml
+images:
+  - name: demurrage-app
+    newTag: local-rehearsal
+configMapGenerator:
+  - name: demurrage-config
+    behavior: merge
+    literals:
+      - RELEASE_ID=local-rehearsal
+      - AWS_ACCOUNT_ID=
+      - REPORTS_BUCKET=
+patches:
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: demurrage-api
+      spec:
+        template:
+          spec:
+            containers:
+              - name: api
+                imagePullPolicy: Never
+                volumeMounts:
+                  - mountPath: /app/certs
+                    $patch: delete
+                  - name: local-reports
+                    mountPath: /reports
+                    readOnly: true
+            volumes:
+              - name: db-ca
+                $patch: delete
+              - name: local-reports
+                persistentVolumeClaim:
+                  claimName: demurrage-local-reports
+  - patch: |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: demurrage-daily-report
+      spec:
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: daily-report
+                    imagePullPolicy: Never
+                    args: [--output-dir, /reports]
+                    volumeMounts:
+                      - name: local-reports
+                        mountPath: /reports
+                volumes:
+                  - name: local-reports
+                    persistentVolumeClaim:
+                      claimName: demurrage-local-reports

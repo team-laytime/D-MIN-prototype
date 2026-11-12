@@ -1,0 +1,235 @@
+{
+  "id": "VAL-01-combo",
+  "title": "검증: 동일 화물 그룹 조합",
+  "description": "경유 3척 + 휘발유 1척 + 등유 1척이 #6·#7·#8을 나눠 씀",
+  "data_label": "가상 데이터",
+  "card": {
+    "category": "검증",
+    "situation": "경유 3척 + 휘발유 1척 + 등유 1척이 #6·#7·#8을 나눠 씀",
+    "question": "완전 탐색과 1안이 같은가",
+    "rules": [
+      "ETB-05"
+    ],
+    "clauses": [],
+    "watch": [],
+    "order": 90
+  },
+  "horizon": {
+    "start": "2026-11-10 00:00",
+    "end": "2026-11-14 00:00"
+  },
+  "berths": [
+    "#6",
+    "#7",
+    "#8",
+    "Buoy"
+  ],
+  "vessels": [
+    {
+      "id": "V03",
+      "name": "MT SEORAK GLORY",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 28000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 42000,
+      "eta": "2026-11-10 07:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-03"
+    },
+    {
+      "id": "V04",
+      "name": "MT HALLA SPIRIT",
+      "vessel_type": "PRODUCT",
+      "grt": 42000,
+      "dwt": 75000,
+      "loa": 228,
+      "pbl": 110,
+      "draft": 12.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 40000,
+      "eta": "2026-11-10 09:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-04"
+    },
+    {
+      "id": "V05",
+      "name": "MT JIRI PEARL",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 26000,
+      "dwt": 45000,
+      "loa": 180,
+      "pbl": 90,
+      "draft": 10.5,
+      "direction": "EXPORT",
+      "material_code": "KR-JETA1",
+      "qty": 30000,
+      "eta": "2026-11-11 01:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-05",
+      "priority": "URGENT",
+      "remarks": "항공유 긴급 출하 — 부분 화물이라 허용 시간 12시간"
+    },
+    {
+      "id": "V06",
+      "name": "MT TAEBAEK",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 29000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 40000,
+      "eta": "2026-11-10 22:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-06",
+      "remarks": "허용 36시간·하루 $16,000 — 기다려도 비용이 작은 배"
+    },
+    {
+      "id": "V09",
+      "name": "MT BUKHAN RIVER",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 27000,
+      "dwt": 48000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 38000,
+      "eta": "2026-11-11 13:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-09"
+    },
+    {
+      "id": "W1",
+      "name": "MT ULSAN ARIRANG",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 28000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 40000,
+      "eta": "2026-11-09 18:00",
+      "status": "WORKING",
+      "contract_id": "CT-2611-10",
+      "working": {
+        "berth": "#6",
+        "etb": "2026-11-09 22:00",
+        "work_start": "2026-11-09 23:00"
+      },
+      "work": {
+        "hours": 14,
+        "hose_term_h": 1
+      },
+      "remarks": "11/09 22:00부터 #6에서 선적 중"
+    },
+    {
+      "id": "F1",
+      "name": "MT MUSAN",
+      "vessel_type": "PRODUCT",
+      "grt": 40000,
+      "dwt": 72000,
+      "loa": 228,
+      "pbl": 110,
+      "draft": 12.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 38000,
+      "eta": "2026-11-11 10:00",
+      "status": "FIX",
+      "contract_id": "CT-2611-11",
+      "fixed": {
+        "berth": "#7",
+        "etb": "2026-11-11 14:00"
+      },
+      "work": {
+        "hours": 12,
+        "hose_term_h": 1
+      },
+      "remarks": "매수인 요청으로 11/11 14:00 #7 접안 확정(FIX)"
+    }
+  ],
+  "restrictions": [],
+  "tide_windows": {
+    "_note": "가상 조석 시간창(고조 ±2시간). 공공데이터포털 조석예보 형식을 대신하는 값",
+    "Buoy": [
+      [
+        "2026-11-10 03:10",
+        "2026-11-10 07:10"
+      ],
+      [
+        "2026-11-10 15:35",
+        "2026-11-10 19:35"
+      ],
+      [
+        "2026-11-11 04:00",
+        "2026-11-11 08:00"
+      ],
+      [
+        "2026-11-11 16:25",
+        "2026-11-11 20:25"
+      ],
+      [
+        "2026-11-12 04:50",
+        "2026-11-12 08:50"
+      ],
+      [
+        "2026-11-12 17:15",
+        "2026-11-12 21:15"
+      ],
+      [
+        "2026-11-13 05:40",
+        "2026-11-13 09:40"
+      ],
+      [
+        "2026-11-13 18:05",
+        "2026-11-13 22:05"
+      ],
+      [
+        "2026-11-14 06:30",
+        "2026-11-14 10:30"
+      ],
+      [
+        "2026-11-14 18:55",
+        "2026-11-14 22:55"
+      ],
+      [
+        "2026-11-15 07:20",
+        "2026-11-15 11:20"
+      ],
+      [
+        "2026-11-15 19:45",
+        "2026-11-15 23:45"
+      ],
+      [
+        "2026-11-16 08:10",
+        "2026-11-16 12:10"
+      ],
+      [
+        "2026-11-16 20:35",
+        "2026-11-17 00:35"
+      ]
+    ]
+  },
+  "inventory": [
+    {
+      "group": "CRUDE",
+      "unit": "kl",
+      "capacity": 850000,
+      "opening": 600000,
+      "daily_net": -120000,
+      "minimum": 0
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>체선료 Agent 일정 v0 — 요구사항 분석 이후</title>
+<style>
+:root{--bg:#fff;--fg:#1f2328;--muted:#656d76;--line:#d8dee4;--panel:#f6f8fa;--card:#fff;--teal:#0f766e;--teal-bg:#d1f5ec;--purple:#6d28d9;--purple-bg:#ece6fd;--gate:#57606a;--today:#d1242f;--crit:#c2410c;--ok:#1a7f37}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--muted:#8b949e;--line:#30363d;--panel:#161b22;--card:#0d1117;--teal:#3dd5c0;--teal-bg:#12423d;--purple:#b197fc;--purple-bg:#2f2557;--gate:#9da7b3;--today:#ff7b72;--crit:#ffa657;--ok:#3fb950}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif}
+header,main,footer{max-width:1240px;margin:0 auto;padding:0 20px}
+h1{font-size:22px;margin:24px 0 4px;font-weight:600}
+h2{font-size:16px;font-weight:600;margin:28px 0 10px}
+.sub{color:var(--muted);margin:0 0 12px}
+.banner{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--crit);padding:8px 12px;border-radius:6px;margin:8px 0 12px;font-size:13px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:8px 0 12px;font-size:13px}
+.ctl button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:4px 12px;cursor:pointer}
+.seg{display:inline-flex}
+.seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0}.seg button+button{border-left:0}
+.seg button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+#bPrint{border-radius:6px}
+.chart{border:1px solid var(--line);border-radius:8px;background:var(--card);overflow:hidden}
+svg text{font-family:inherit}
+.lh{fill:var(--panel)}.ll{font-size:13px;font-weight:600;fill:var(--fg)}.ln{font-weight:400;fill:var(--muted);font-size:12px}
+.tl{font-size:12px;fill:var(--fg)}.tid{fill:var(--muted);font-family:ui-monospace,Menlo,monospace;font-size:11px}
+.dt{font-size:11px;fill:var(--muted)}.grid{stroke:var(--line);stroke-width:1}.rowline{stroke:var(--line);stroke-width:.5;opacity:.7}
+.gl{stroke:var(--gate);stroke-width:1;stroke-dasharray:4 4;opacity:.7}
+.today{stroke:var(--today);stroke-width:1.6}.todaytxt{fill:var(--today);font-size:11px;font-weight:600}
+.ph{fill:var(--panel);stroke:var(--line)}.pht{font-size:12px;fill:var(--fg)}.wk{font-size:11px;fill:var(--muted)}
+.gd{fill:var(--gate);stroke:var(--card);stroke-width:1.5}.gd.k{fill:var(--crit)}
+.gt{font-size:12px;font-weight:600;fill:var(--fg)}.gn{font-size:11px;fill:var(--muted)}
+.bar{stroke-width:1.2}.bar.t{fill:var(--teal-bg);stroke:var(--teal)}.bar.p{fill:var(--purple-bg);stroke:var(--purple)}
+.bar.c{stroke-dasharray:5 3}.bar.k{stroke:var(--crit);stroke-width:2.2}.act{fill:var(--ok)}
+.dep{fill:none;stroke:var(--muted);stroke-width:1;opacity:.5}.dep.k{stroke:var(--crit);opacity:.9;stroke-width:1.4}
+.mk{fill:var(--muted)}.mkk{fill:var(--crit)}
+.task{cursor:default}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+.sw{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1.2px solid}
+.sw.t{background:var(--teal-bg);border-color:var(--teal)}.sw.p{background:var(--purple-bg);border-color:var(--purple)}
+.sw.c{border-style:dashed}.sw.k{border:2.2px solid var(--crit);background:var(--panel)}
+.dia{display:inline-block;width:9px;height:9px;background:var(--gate);transform:rotate(45deg);margin:0 9px 0 4px}
+.tdot{display:inline-block;width:16px;border-top:2px solid var(--today);margin-right:6px;vertical-align:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px}
+.card{border:1px solid var(--line);border-radius:8px;padding:8px 12px;background:var(--panel);font-size:13px}
+.card b{color:var(--ok);margin-right:4px}.card .meta{color:var(--muted);font-size:12px}
+details{margin-top:24px}summary{cursor:pointer;font-size:16px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:12.5px;margin-top:10px}
+th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:var(--panel)}td.id{font-family:ui-monospace,Menlo,monospace;color:var(--muted);white-space:nowrap}
+#tip{position:fixed;z-index:10;display:none;max-width:380px;background:var(--fg);color:var(--bg);padding:8px 10px;border-radius:6px;font-size:12.5px;line-height:1.5;pointer-events:none;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+footer{padding-bottom:40px}
+@media print{.ctl,#tip{display:none}body{font-size:11px}@page{size:A3 landscape;margin:10mm}}
+</style>
+</head>
+<body>
+<header>
+<h1 id="ttl"></h1>
+<p class="sub" id="sub"></p>
+<div class="banner" id="ban"></div>
+<div class="ctl">
+<span id="lblV">범위</span>
+<span class="seg" id="segV"><button class="on" data-view="starter" id="bvS">시작용</button><button data-view="all" id="bvA">전체</button></span>
+<span>분기 보기</span>
+<span class="seg"><button class="on" data-br="both">A·B 둘 다</button><button data-br="A">A 코어</button><button data-br="B">B 코어</button></span>
+<label><input type="checkbox" id="cCond" checked> 조건부 작업</label>
+<label><input type="checkbox" id="cDeps" checked> 의존선</label>
+<button id="bPrint">인쇄</button>
+</div>
+</header>
+<main>
+<div class="chart" id="host"></div>
+<div class="legend">
+<span><i class="sw t"></i>답과 무관, 지금 가능</span>
+<span><i class="sw p"></i>멘토 답에 달림</span>
+<span><i class="sw t c"></i>조건부(자료를 받을 때만)</span>
+<span><i class="sw k"></i>임계 경로</span>
+<span><i class="dia"></i>게이트</span>
+<span><i class="tdot"></i>오늘</span>
+</div>
+<h2>이미 끝난 것 <span class="sub" id="doneN"></span></h2>
+<div class="cards" id="done"></div>
+<details><summary>작업 표 (날짜 포함)</summary><div id="table"></div></details>
+</main>
+<footer><p class="sub" id="foot"></p></footer>
+<div id="tip"></div>
+<script id="data" type="application/json">{"config": {"title": "체선료 Agent 일정 v0 — 요구사항 분석 이후", "subtitle": "날짜는 가정입니다. 마감일이 확정되면 deadline을 고치고 make_gantt.py를 다시 실행하세요.", "project_start": "2026-11-04", "deadline": "2026-12-16", "deadline_status": "가정 (시작일부터 6주)", "today": null, "owner_note": "owner는 역할 제안입니다 [가정]. 팀 인원과 역할이 확정되면 이름으로 바꾸세요."}, "lanes": [{"id": "L1", "name": "현업 확인"}, {"id": "L2", "name": "요구분석·문서"}, {"id": "L3", "name": "CLOCK·규칙"}, {"id": "L4", "name": "INTAKE"}, {"id": "L5", "name": "A 청구 검증"}, {"id": "L6", "name": "B 노출 설명"}, {"id": "L7", "name": "HITL 승인"}, {"id": "L8", "name": "평가"}, {"id": "L9", "name": "발표·전달"}], "phases": [{"name": "① 결정 전", "from": "2026-11-04", "to": "2026-11-17"}, {"name": "② 분기 구현", "from": "2026-11-17", "to": "2026-11-30"}, {"name": "③ 통합·평가", "from": "2026-11-30", "to": "2026-12-10"}, {"name": "④ 마무리", "from": "2026-12-10", "to": "2026-12-16"}], "tasks": [{"id": "T-101", "lane": "L1", "lane_name": "현업 확인", "name": "질문지 메일 발송", "type": "task", "start": "2026-11-04", "end": "2026-11-06", "depends": [], "branch": "공통", "dep": true, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": ["D-01", "D-04"], "note": "2026-11-04 기준 아직 발송 전 [사용자 확인] · 메일 초안의 성함·팀명·연락처 칸을 채운다 · 답이 늦으면 전체가 밀리는 장기 리드 항목"}, {"id": "T-102", "lane": "L1", "lane_name": "현업 확인", "name": "멘토 인터뷰 Q1~Q6", "type": "task", "start": "2026-11-06", "end": "2026-11-13", "depends": ["T-101"], "branch": "공통", "dep": true, "cond": false, "crit": true, "status": "todo", "owner": "PM, 전원", "req": ["D-01", "D-02", "D-03", "D-04"], "note": "Q1~Q3이 코어를 정한다 · 답은 하루 안에 문서에 반영"}, {"id": "T-103", "lane": "L1", "lane_name": "현업 확인", "name": "답 반영 → 코어 확정", "type": "task", "start": "2026-11-13", "end": "2026-11-17", "depends": ["T-102"], "branch": "공통", "dep": true, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": ["D-01", "D-02", "D-03"], "note": "정의서·진단·PRD·rules.json·Discovery 상태를 같이 갱신"}, {"id": "T-104", "lane": "L1", "lane_name": "현업 확인", "name": "후속 질문·자료 수령(Q7~Q14)", "type": "task", "start": "2026-11-17", "end": "2026-11-28", "depends": ["T-103"], "branch": "공통", "dep": true, "cond": true, "crit": false, "status": "todo", "owner": "PM", "req": ["INT-03", "CLK-05"], "note": "비식별 샘플을 받을 수 있을 때만 · 못 받으면 합성 데이터로 진행"}, {"id": "T-201", "lane": "L2", "lane_name": "요구분석·문서", "name": "입력 확정: 마감·팀 역할·평가 기준", "type": "task", "start": "2026-11-04", "end": "2026-11-05", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": ["D-04"], "note": "마감일·평가 기준은 아직 모름 (2026-11-04) · 팀 5~6명은 확인 · 모르면 [확인 필요]로 두고 담당·기한을 정한다"}, {"id": "T-202", "lane": "L2", "lane_name": "요구분석·문서", "name": "도메인 학습 D1~D10 마무리", "type": "task", "start": "2026-11-04", "end": "2026-11-14", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "active", "owner": "전원", "req": [], "note": "학습 플랜 2주(11/02 시작 가정) · 진행 상태 확인 필요"}, {"id": "T-203", "lane": "L2", "lane_name": "요구분석·문서", "name": "현행(AS-IS) 흐름 확인", "type": "task", "start": "2026-11-04", "end": "2026-11-08", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "도메인", "req": [], "note": "04 §1 흐름도를 아는 만큼 고친다 · 확정은 인터뷰 뒤"}, {"id": "T-204", "lane": "L2", "lane_name": "요구분석·문서", "name": "PRD v0 팀 리뷰·합의", "type": "task", "start": "2026-11-05", "end": "2026-11-09", "depends": ["T-201"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "전원", "req": ["D-02", "D-05", "D-06"], "note": "팀 리뷰 30분 · 이견은 결정 로그에 기록"}, {"id": "T-205", "lane": "L2", "lane_name": "요구분석·문서", "name": "시나리오 리뷰·보완", "type": "task", "start": "2026-11-05", "end": "2026-11-10", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "전원", "req": ["S-C0~S-X2"], "note": "예외 흐름이 빠진 곳을 보완"}, {"id": "T-206", "lane": "L2", "lane_name": "요구분석·문서", "name": "PRD v1 (코어 확정 반영)", "type": "task", "start": "2026-11-17", "end": "2026-11-19", "depends": ["T-103"], "branch": "공통", "dep": true, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": ["D-01"], "note": "안 고른 분기는 부록으로 내린다"}, {"id": "T-207", "lane": "L2", "lane_name": "요구분석·문서", "name": "PRD v2 (범위 동결)", "type": "task", "start": "2026-11-27", "end": "2026-11-30", "depends": ["T-206"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": [], "note": "동결 뒤 변경은 변경 요청으로만"}, {"id": "T-301", "lane": "L3", "lane_name": "CLOCK·규칙", "name": "CLOCK 구현 통합", "type": "task", "start": "2026-11-04", "end": "2026-11-09", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["CLK-06", "D-05"], "note": "clock/ 를 정본으로 · prototype 쪽은 같은 값 교차 검증으로 유지하거나 어댑터로 교체"}, {"id": "T-302", "lane": "L3", "lane_name": "CLOCK·규칙", "name": "조항·판례 원문 대조", "type": "task", "start": "2026-11-05", "end": "2026-11-13", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "도메인", "req": ["CLK-01", "CLK-02"], "note": "Asbatankvoy cl.6~11 · 판례 13건 · '원문 대조 전' 표시 해소"}, {"id": "T-303", "lane": "L3", "lane_name": "CLOCK·규칙", "name": "쟁점 6종 중 빠진 1종 추가·전수 확인", "type": "task", "start": "2026-11-09", "end": "2026-11-15", "depends": ["T-301"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["CLK-04"], "note": "clock/ 에 5종(이동·야간 대기·반액 범위·NOR waiver·서류 대기) 플래그가 있고 매매·용선계약 갭 1종이 없다 · 6종 모두 케이스로 확인"}, {"id": "T-304", "lane": "L3", "lane_name": "CLOCK·규칙", "name": "[가정] 규칙값을 현업 값으로 교체", "type": "task", "start": "2026-11-17", "end": "2026-11-25", "depends": ["T-103"], "branch": "공통", "dep": true, "cond": true, "crit": false, "status": "todo", "owner": "도메인", "req": ["CLK-05"], "note": "rules.json의 assumed 29개와 verify 11개 중 인터뷰로 확인된 것"}, {"id": "T-401", "lane": "L4", "lane_name": "INTAKE", "name": "SOF 텍스트 변환·되묻기 규칙", "type": "task", "start": "2026-11-08", "end": "2026-11-17", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["INT-02", "COM-04"], "note": "불확실 필드 표시와 보류 규칙"}, {"id": "T-402", "lane": "L4", "lane_name": "INTAKE", "name": "기록 간 충돌 감지 점검", "type": "task", "start": "2026-11-09", "end": "2026-11-17", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["INT-04"], "note": "SOF와 터미널 기록의 시각 차이 기준(ENG-RECONCILE) 확인"}, {"id": "T-403", "lane": "L4", "lane_name": "INTAKE", "name": "실제 양식 파서", "type": "task", "start": "2026-11-17", "end": "2026-11-26", "depends": ["T-103"], "branch": "공통", "dep": true, "cond": true, "crit": false, "status": "todo", "owner": "에이전트", "req": ["INT-03"], "note": "실제 SOF·NOR 샘플을 받을 때만 · 못 받으면 하지 않음"}, {"id": "T-501", "lane": "L5", "lane_name": "A 청구 검증", "name": "ULSAN GLORY 모의 청구 입력·재계산 대조", "type": "task", "start": "2026-11-09", "end": "2026-11-16", "depends": ["T-301"], "branch": "A", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "평가", "req": ["CLM-01", "EVL-02"], "note": "기본값이 A일 때를 대비한 사전 작업 · 정답 USD 187500"}, {"id": "T-502", "lane": "L5", "lane_name": "A 청구 검증", "name": "청구 대조·차이 분해·사유 코드 정합", "type": "task", "start": "2026-11-17", "end": "2026-11-23", "depends": ["T-103"], "branch": "A", "dep": true, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["CLM-01", "CLM-02"], "note": ""}, {"id": "T-503", "lane": "L5", "lane_name": "A 청구 검증", "name": "회신 초안·시효·서류 경고", "type": "task", "start": "2026-11-23", "end": "2026-11-30", "depends": ["T-502"], "branch": "A", "dep": true, "cond": false, "crit": false, "status": "todo", "owner": "에이전트", "req": ["CLM-03", "CLM-04"], "note": ""}, {"id": "T-601", "lane": "L6", "lane_name": "B 노출 설명", "name": "기상청 해양기상 API 신청", "type": "task", "start": "2026-11-04", "end": "2026-11-06", "depends": [], "branch": "B", "dep": false, "cond": true, "crit": false, "status": "todo", "owner": "PM", "req": ["EXP-05"], "note": "B가 될 가능성에 대비 · 개발계정도 심의 승인이라 일찍 신청"}, {"id": "T-602", "lane": "L6", "lane_name": "B 노출 설명", "name": "ETB 변경 영향 설명 정합", "type": "task", "start": "2026-11-17", "end": "2026-11-23", "depends": ["T-103"], "branch": "B", "dep": true, "cond": false, "crit": false, "status": "todo", "owner": "엔진", "req": ["EXP-01", "EXP-02"], "note": ""}, {"id": "T-603", "lane": "L6", "lane_name": "B 노출 설명", "name": "대안 비교·통보 초안", "type": "task", "start": "2026-11-23", "end": "2026-11-30", "depends": ["T-602"], "branch": "B", "dep": true, "cond": false, "crit": false, "status": "todo", "owner": "에이전트", "req": ["EXP-03", "EXP-04"], "note": ""}, {"id": "T-701", "lane": "L7", "lane_name": "HITL 승인", "name": "승인 흐름·근거 표기·감사 로그 점검", "type": "task", "start": "2026-11-08", "end": "2026-11-20", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "에이전트", "req": ["COM-01", "COM-02", "COM-03"], "note": "프로토타입 기능을 요구 기준으로 대조하고 빠진 것을 채운다"}, {"id": "T-702", "lane": "L7", "lane_name": "HITL 승인", "name": "에이전트 구성 확정과 시연 프롬프트 세트", "type": "task", "start": "2026-11-12", "end": "2026-11-23", "depends": ["T-204"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "에이전트", "req": ["D-06", "NFR-05"], "note": "MCP 도구 + 외부 LLM 클라이언트 유지 여부 결정 · 시연용 질문 세트"}, {"id": "T-801", "lane": "L8", "lane_name": "평가", "name": "평가셋 설계", "type": "task", "start": "2026-11-09", "end": "2026-11-17", "depends": ["T-204"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "평가", "req": ["EVL-01", "EVL-02", "EVL-03"], "note": "골든 TC + 청구 30건(심은 오류) 또는 시나리오 20건"}, {"id": "T-802", "lane": "L8", "lane_name": "평가", "name": "평가 실행·결과 정리", "type": "task", "start": "2026-11-30", "end": "2026-12-08", "depends": ["T-207"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "평가", "req": ["EVL-01", "EVL-02", "EVL-03"], "note": ""}, {"id": "T-803", "lane": "L8", "lane_name": "평가", "name": "검토 시간 직접 측정", "type": "task", "start": "2026-12-02", "end": "2026-12-08", "depends": ["T-207"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "평가", "req": ["EVL-04"], "note": "팀원이 수작업과 에이전트 보조로 같은 건을 처리해 잰다 · 직접 잰 값만 쓴다"}, {"id": "T-804", "lane": "L8", "lane_name": "평가", "name": "실패 사례 분석·한계 정리", "type": "task", "start": "2026-12-08", "end": "2026-12-11", "depends": ["T-802"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "평가", "req": ["EVL-05"], "note": "가상 데이터의 한계를 명시"}, {"id": "T-901", "lane": "L9", "lane_name": "발표·전달", "name": "발표 스토리라인 초안", "type": "task", "start": "2026-11-09", "end": "2026-11-15", "depends": ["T-204"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "발표", "req": [], "note": "SEAGATE에 있는 것·없는 것 → 우리 자리 순서"}, {"id": "T-902", "lane": "L9", "lane_name": "발표·전달", "name": "데모 시나리오·대본", "type": "task", "start": "2026-11-23", "end": "2026-11-30", "depends": ["T-206"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "발표", "req": ["S-A1", "S-B1"], "note": ""}, {"id": "T-903", "lane": "L9", "lane_name": "발표·전달", "name": "발표 자료·영상", "type": "task", "start": "2026-11-30", "end": "2026-12-10", "depends": ["T-902"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "발표", "req": [], "note": ""}, {"id": "T-904", "lane": "L9", "lane_name": "발표·전달", "name": "리허설·백업 녹화", "type": "task", "start": "2026-12-10", "end": "2026-12-15", "depends": ["T-903"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "전원", "req": [], "note": ""}], "gates": [{"id": "G-M0", "lane": "G", "lane_name": "게이트", "name": "M0 PRD v0 합의", "type": "gate", "start": "2026-11-09", "end": "2026-11-09", "depends": ["T-204"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "전원", "req": [], "note": ""}, {"id": "G-G1", "lane": "G", "lane_name": "게이트", "name": "G1 코어 확정", "type": "gate", "start": "2026-11-17", "end": "2026-11-17", "depends": ["T-103"], "branch": "공통", "dep": true, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": ["D-01"], "note": "멘토 답 수령 또는 기한 도달 중 먼저 · 무응답이면 A를 기본값으로 제안"}, {"id": "G-F", "lane": "G", "lane_name": "게이트", "name": "F 범위 동결", "type": "gate", "start": "2026-11-30", "end": "2026-11-30", "depends": ["T-207"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "PM", "req": [], "note": "이후 신규 작업 금지 · 변경은 변경 요청으로"}, {"id": "G-M3", "lane": "G", "lane_name": "게이트", "name": "M3 평가 확정", "type": "gate", "start": "2026-12-11", "end": "2026-12-11", "depends": ["T-804"], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "todo", "owner": "평가", "req": [], "note": ""}, {"id": "G-DL", "lane": "G", "lane_name": "게이트", "name": "마감", "type": "gate", "start": "2026-12-16", "end": "2026-12-16", "depends": ["T-904"], "branch": "공통", "dep": false, "cond": false, "crit": true, "status": "todo", "owner": "전원", "req": [], "note": "마감일은 가정"}], "done": [{"id": "C-01", "lane": "L3", "lane_name": "CLOCK·규칙", "name": "CLOCK 엔진 TC-01~05(+01b·05b) 통과 · 테스트 122개", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "엔진", "req": ["CLK-01", "CLK-02", "CLK-03", "CLK-04"], "note": "clock/ 폴더"}, {"id": "C-02", "lane": "L2", "lane_name": "요구분석·문서", "name": "도메인 문서 00~09 · 시뮬레이터", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "도메인", "req": [], "note": "docs/domain/"}, {"id": "C-03", "lane": "L2", "lane_name": "요구분석·문서", "name": "SEAGATE 진단 · 목표 정의서 · 인터뷰 질문지 · 학습 로드맵", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "PM", "req": [], "note": "Claude Doc과 아티팩트 (팀 확정 전 초안)"}, {"id": "C-04", "lane": "L5", "lane_name": "A 청구 검증", "name": "프로토타입 v3 클레임 5건 검토", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "A", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "엔진", "req": ["CLM-01"], "note": "prototype/ · 테스트 183개 통과"}, {"id": "C-05", "lane": "L6", "lane_name": "B 노출 설명", "name": "프로토타입 v3 시나리오 S01~S17 계산", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "B", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "엔진", "req": ["EXP-01"], "note": "가상 데이터"}, {"id": "C-06", "lane": "L7", "lane_name": "HITL 승인", "name": "작업함 · 승인 화면 · 감사 로그 (프로토타입)", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "에이전트", "req": ["COM-01", "COM-03"], "note": ""}, {"id": "C-07", "lane": "L4", "lane_name": "INTAKE", "name": "표준 SOF 이벤트 입력 · 검증", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "엔진", "req": ["INT-01"], "note": ""}, {"id": "C-08", "lane": "L9", "lane_name": "발표·전달", "name": "강의 덱 36장 · 설명 영상 3편", "type": "task", "start": "2026-11-02", "end": "2026-11-02", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "발표", "req": [], "note": ""}, {"id": "C-09", "lane": "L2", "lane_name": "요구분석·문서", "name": "요구사항 문서 세트 v0 (이 폴더)", "type": "task", "start": "2026-11-04", "end": "2026-11-04", "depends": [], "branch": "공통", "dep": false, "cond": false, "crit": false, "status": "done", "owner": "PM", "req": [], "note": "PRD 가이드 · 작업계획 · PRD v0 · 시나리오 · 간트 · 레퍼런스"}], "starter": ["T-201", "T-101", "T-301", "T-204", "T-102", "T-801", "T-103", "T-206", "T-502", "T-902", "T-503", "T-207", "T-802", "T-903", "T-804", "T-904"], "generated": "2026-11-04"}</script>
+<script>
+(function(){
+var DATA=JSON.parse(document.getElementById('data').textContent);
+var cfg=DATA.config,lanes=DATA.lanes,phases=DATA.phases,ONE=86400000,WD=['일','월','화','수','목','금','토'];
+function parse(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+function addDays(d,n){return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);}
+var start=parse(cfg.project_start),end=parse(cfg.deadline),total=Math.round((end-start)/ONE);
+function dayOf(d){return Math.round((d-start)/ONE);}
+function fmt(d){return (d.getMonth()+1)+'/'+d.getDate();}
+function fmtW(d){return fmt(d)+'('+WD[d.getDay()]+')';}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function strW(s,px){var w=0;for(var i=0;i<s.length;i++){w+=s.charCodeAt(i)>=0x1100?px*1.05:px*0.56;}return w;}
+function clip(s,max,px){if(strW(s,px)<=max)return s;var o='';for(var i=0;i<s.length;i++){if(strW(o+s[i]+'…',px)>max)break;o+=s[i];}return o+'…';}
+var tasks=DATA.tasks.map(function(t){t._s=dayOf(parse(t.start));t._e=dayOf(parse(t.end));return t;});
+var gates=DATA.gates.map(function(g){g._d=dayOf(parse(g.start));return g;}).sort(function(a,b){return a._d-b._d;});
+var byId={};tasks.forEach(function(t){byId[t.id]=t;});gates.forEach(function(g){byId[g.id]=g;});
+var STARTER=DATA.starter||[];
+var state={branch:'both',cond:true,deps:true,view:STARTER.length?'starter':'all'};
+function visible(t){if(state.view==='starter'&&STARTER.indexOf(t.id)<0)return false;if(state.branch==='A'&&t.branch==='B')return false;if(state.branch==='B'&&t.branch==='A')return false;if(!state.cond&&t.cond)return false;return true;}
+
+function render(){
+var W=1180,LEFT=360,RIGHT=28,HEAD=114,ROW=28,LH=28,CW=W-LEFT-RIGHT;
+function X(d){return LEFT+CW*d/total;}
+var rows=[];
+lanes.forEach(function(ln){
+var ts=tasks.filter(function(t){return t.lane===ln.id&&visible(t);}).sort(function(a,b){return a._s-b._s||(a.id<b.id?-1:1);});
+if(!ts.length)return;
+rows.push({k:'lane',ln:ln,n:ts.length});
+ts.forEach(function(t){rows.push({k:'task',t:t});});
+});
+var y=HEAD;rows.forEach(function(r){r.y=y;y+=(r.k==='lane'?LH:ROW);});
+var H=y+26,B=[],pos={};
+rows.forEach(function(r){if(r.k==='task')pos[r.t.id]=r;});
+B.push('<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="'+esc(cfg.title)+' 간트 차트"><title>'+esc(cfg.title)+'</title>');
+B.push('<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="mk" d="M1 1L9 5L1 9z"/></marker><marker id="ahk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="mkk" d="M1 1L9 5L1 9z"/></marker></defs>');
+phases.forEach(function(p){var x0=X(dayOf(parse(p.from))),x1=X(dayOf(parse(p.to)));
+B.push('<rect class="ph" x="'+(x0+1)+'" y="8" width="'+Math.max(x1-x0-2,2)+'" height="22" rx="4"/>');
+B.push('<text class="pht" x="'+((x0+x1)/2)+'" y="23" text-anchor="middle">'+esc(p.name)+'</text>');});
+for(var d=0;d<=total;d+=7){var gx=X(d);
+B.push('<line class="grid" x1="'+gx+'" x2="'+gx+'" y1="36" y2="'+(H-14)+'"/>');
+var wl='W'+(d/7+1)+' '+fmt(addDays(start,d));
+if(gx+4+strW(wl,11)<W-4)B.push('<text class="wk" x="'+(gx+4)+'" y="50">'+wl+'</text>');}
+gates.forEach(function(g){var gx=X(g._d);B.push('<line class="gl" x1="'+gx+'" x2="'+gx+'" y1="64" y2="'+(H-14)+'"/>');});
+rows.forEach(function(r){
+if(r.k==='lane'){B.push('<rect class="lh" x="0" y="'+r.y+'" width="'+W+'" height="'+LH+'"/>');
+B.push('<text class="ll" x="12" y="'+(r.y+LH/2+4.5)+'">'+esc(r.ln.name)+' <tspan class="ln">'+r.n+'개</tspan></text>');}
+else{B.push('<line class="rowline" x1="0" x2="'+W+'" y1="'+(r.y+ROW)+'" y2="'+(r.y+ROW)+'"/>');}});
+if(state.deps){rows.forEach(function(r){if(r.k!=='task')return;var t=r.t;t.depends.forEach(function(pid){var pr=pos[pid];if(!pr)return;
+var p=pr.t,x1=X(p._e),y1=pr.y+ROW/2,x2=X(t._s),y2=r.y+ROW/2,k=p.crit&&t.crit,path;
+if(x2>=x1+14){var xm=x1+7;path='M'+x1+' '+y1+' H'+xm+' V'+y2+' H'+(x2-1);}
+else{path='M'+x1+' '+(y1+8)+' L'+(x2+2)+' '+(y2-9);}
+B.push('<path class="dep'+(k?' k':'')+'" d="'+path+'" marker-end="url(#'+(k?'ahk':'ah')+')"/>');});});}
+rows.forEach(function(r){if(r.k!=='task')return;var t=r.t,x0=X(t._s),x1=X(t._e),w=Math.max(x1-x0,6);
+var cls='bar '+(t.dep?'p':'t')+(t.cond?' c':'')+(t.crit?' k':'');
+B.push('<g class="task" data-id="'+esc(t.id)+'"><rect x="0" y="'+r.y+'" width="'+W+'" height="'+ROW+'" fill="transparent"/>');
+B.push('<text class="tl" x="12" y="'+(r.y+ROW/2+4)+'"><tspan class="tid">'+esc(t.id)+'</tspan><tspan dx="8">'+esc(clip(t.name,LEFT-24-50,12))+'</tspan></text>');
+B.push('<rect class="'+cls+'" x="'+x0+'" y="'+(r.y+5)+'" width="'+w+'" height="'+(ROW-10)+'" rx="4"/>');
+if(t.status==='active')B.push('<circle class="act" cx="'+(x0+8)+'" cy="'+(r.y+ROW/2)+'" r="3.5"/>');
+var dl=fmt(parse(t.start))+'–'+fmt(parse(t.end));
+if(x1+8+strW(dl,11)>W-6)B.push('<text class="dt" x="'+(x0-6)+'" y="'+(r.y+ROW/2+4)+'" text-anchor="end">'+dl+'</text>');
+else B.push('<text class="dt" x="'+(x1+6)+'" y="'+(r.y+ROW/2+4)+'">'+dl+'</text>');
+B.push('</g>');});
+gates.forEach(function(g,i){var gx=X(g._d),gy=80;
+B.push('<g class="task" data-id="'+esc(g.id)+'"><path class="gd'+(g.crit?' k':'')+'" d="M'+(gx-8)+' '+gy+' L'+gx+' '+(gy-8)+' L'+(gx+8)+' '+gy+' L'+gx+' '+(gy+8)+'Z"/>');
+var nx=gates[i+1],avail=(nx?X(nx._d):W)-gx-20;
+if(gx+16+strW(g.name,12)>W-4){B.push('<text class="gt" x="'+Math.min(gx+8,W-6)+'" y="'+(gy+22)+'" text-anchor="end">'+esc(g.name)+'</text>');}
+else{B.push('<text class="gt" x="'+(gx+14)+'" y="'+(gy+4)+'">'+esc(g.name)+'</text>');
+var nt=(g.note||'').split(' · ')[0];
+if(nt)B.push('<text class="gn" x="'+(gx+14)+'" y="'+(gy+20)+'">'+esc(clip(nt,avail,11))+'</text>');}
+B.push('</g>');});
+var td=cfg.today?parse(cfg.today):new Date();td=new Date(td.getFullYear(),td.getMonth(),td.getDate());
+var tdd=dayOf(td);
+if(tdd>=0&&tdd<=total){var tx=X(tdd);B.push('<line class="today" x1="'+tx+'" x2="'+tx+'" y1="60" y2="'+(H-14)+'"/><text class="todaytxt" x="'+(tx+4)+'" y="108">오늘 '+fmt(td)+'</text>');}
+B.push('</svg>');
+document.getElementById('host').innerHTML=B.join('');
+}
+
+var tip=document.getElementById('tip'),host=document.getElementById('host');
+var ST={todo:'예정',active:'진행 중',done:'완료'};
+function tipHtml(id){var t=byId[id];if(!t)return '';var s=parse(t.start),e=parse(t.end);
+var h='<b>'+esc(t.id)+' '+esc(t.name)+'</b><br>'+fmtW(s)+(t.type==='gate'?'':' → '+fmtW(e)+' ('+(dayOf(e)-dayOf(s))+'일)')+' · W'+(Math.floor(dayOf(s)/7)+1);
+var m=[];if(t.depends.length)m.push('선행 '+t.depends.join(', '));m.push('분기 '+t.branch);m.push('담당 '+(t.owner||'미정'));if(t.type!=='gate')m.push('상태 '+ST[t.status]);
+h+='<br>'+esc(m.join(' · '));
+if(t.req.length)h+='<br>요구 '+esc(t.req.join(', '));
+if(t.note)h+='<br>'+esc(t.note);
+var f=[];if(t.dep)f.push('멘토 답에 달림');if(t.cond)f.push('조건부');if(t.crit)f.push('임계 경로');
+if(f.length)h+='<br><i>'+esc(f.join(' · '))+'</i>';return h;}
+host.addEventListener('mousemove',function(e){var g=e.target.closest?e.target.closest('[data-id]'):null;
+if(!g){tip.style.display='none';return;}
+tip.innerHTML=tipHtml(g.getAttribute('data-id'));tip.style.display='block';
+var x=e.clientX+14,y=e.clientY+14;if(x+390>window.innerWidth)x=e.clientX-390;if(y+tip.offsetHeight>window.innerHeight)y=e.clientY-tip.offsetHeight-8;
+tip.style.left=Math.max(x,4)+'px';tip.style.top=Math.max(y,4)+'px';});
+host.addEventListener('mouseleave',function(){tip.style.display='none';});
+
+document.getElementById('ttl').textContent=cfg.title;
+document.getElementById('sub').textContent=cfg.subtitle||'';
+var assumed=(cfg.deadline_status||'').indexOf('가정')>=0;
+document.getElementById('ban').innerHTML=(assumed?'<b>날짜는 가정입니다.</b> ':'')+'시작 '+fmtW(start)+' · 마감 '+fmtW(end)+' ('+esc(cfg.deadline_status||'')+'). 막대 위치는 남은 기간 대비 비율에서 환산했습니다. '+esc(cfg.owner_note||'');
+document.getElementById('doneN').textContent='('+DATA.done.length+'건, 타임라인 밖)';
+document.getElementById('done').innerHTML=DATA.done.map(function(d){var s=parse(d.start);
+return '<div class="card"><b>✓</b>'+esc(d.name)+'<div class="meta">'+esc(d.lane_name)+' · '+fmt(s)+(d.req.length?' · '+esc(d.req.join(', ')):'')+(d.note?' · '+esc(d.note):'')+'</div></div>';}).join('');
+var rowsT=gates.concat(tasks);
+document.getElementById('table').innerHTML='<table><thead><tr><th>ID</th><th>레인</th><th>작업</th><th>시작</th><th>끝</th><th>주</th><th>선행</th><th>분기</th><th>담당</th><th>요구</th><th>상태</th></tr></thead><tbody>'+
+rowsT.map(function(t){var s=parse(t.start),e=parse(t.end);
+return '<tr><td class="id">'+esc(t.id)+'</td><td>'+esc(t.lane_name)+'</td><td>'+esc(t.name)+'</td><td>'+fmtW(s)+'</td><td>'+(t.type==='gate'?'—':fmtW(e))+'</td><td>W'+(Math.floor(dayOf(s)/7)+1)+'</td><td>'+esc(t.depends.join(', ')||'—')+'</td><td>'+esc(t.branch)+'</td><td>'+esc(t.owner||'미정')+'</td><td>'+esc(t.req.join(', ')||'—')+'</td><td>'+(t.type==='gate'?'게이트':ST[t.status])+'</td></tr>';}).join('')+'</tbody></table>';
+document.getElementById('foot').textContent='생성: '+DATA.generated+' · 원본: tasks.csv, gantt.config.json · 다시 만들기: python3 make_gantt.py';
+Array.prototype.forEach.call(document.querySelectorAll('.seg button'),function(b){b.addEventListener('click',function(){
+if(b.hasAttribute('data-br'))state.branch=b.getAttribute('data-br');
+if(b.hasAttribute('data-view'))state.view=b.getAttribute('data-view');
+Array.prototype.forEach.call(b.parentNode.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);});render();});});
+var segV=document.getElementById('segV'),lblV=document.getElementById('lblV');
+if(!STARTER.length){segV.style.display='none';lblV.style.display='none';}
+else{document.getElementById('bvS').textContent='시작용 '+STARTER.length+'개';document.getElementById('bvA').textContent='전체 '+tasks.length+'개';}
+document.getElementById('cCond').addEventListener('change',function(e){state.cond=e.target.checked;render();});
+document.getElementById('cDeps').addEventListener('change',function(e){state.deps=e.target.checked;render();});
+document.getElementById('bPrint').addEventListener('click',function(){window.print();});
+render();
+})();
+</script>
+</body>
+</html>

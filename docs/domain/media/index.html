@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>체선료 입문 영상</title>
+<style>
+  :root{--bg:#0d1218;--surface:#151c25;--fg:#e6ecf3;--muted:#97a5b4;--line:#293441;--accent:#4fcfc3}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 16px 60px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 24px}
+  .grid{display:grid;gap:28px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h2{font-size:18px;margin:0 0 4px}
+  .card p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  video{width:100%;max-height:70vh;background:#000;border-radius:8px;display:block}
+  a{color:var(--accent)}
+  .links{margin-top:28px;font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>체선료 입문 영상 4편</h1>
+  <p class="sub">한국어 나레이션·자막 포함 · 가상 데이터 · 규칙값은 가정. 재생이 안 되면 파일을 직접 열어도 됩니다.</p>
+  <div class="grid">
+    <div class="card"><h2>1편 · 레이타임 101 (2:09)</h2><p>레이타임·체선료·조출료 개념, 요율 감각, 두 겹 계약(back-to-back), SK 비용 경로</p>
+      <video controls preload="metadata" src="01-laytime-101.mp4"></video></div>
+    <div class="card"><h2>2편 · NOR과 시계가 도는 순간 (2:48)</h2><p>NOR, 통지시간, 개시 규칙, 대기 산입, 이동 제외, 야간 접안 제한, 종료, 체선, 반액</p>
+      <video controls preload="metadata" src="02-nor-clock.mp4"></video></div>
+    <div class="card"><h2>3편 · 체선료 계산 따라하기 (2:41)</h2><p>예제 TC-02를 SOF → 개시 → 종료 → 공제 → 체선료 → 계산서 순으로 손계산</p>
+      <video controls preload="metadata" src="03-calc-walkthrough.mp4"></video></div>
+    <div class="card"><h2>4편 · 배의 여정에서 후보 비교까지 (5:46)</h2><p>배 한 척의 여정과 시계, 순서가 돈(52,000달러 대 6,000달러), 기준안(베이스라인), 제약으로 후보 거르기, 도우미의 7단계, 후보 카드, 검증, 전체 대 한 선박</p>
+      <video controls preload="metadata" src="04-optimization-flow.mp4"></video></div>
+  </div>
+  <div class="links">문서 세트: <code>docs/domain/00-README.md</code> · 시뮬레이터: <a href="https://claude.ai/artifact/7PhLxNEJVw29z2gycxX61c" target="_blank" rel="noopener">claude.ai 아티팩트</a> · 영상 다시 만들기: <code>media/README.md</code></div>
+</div>
+</body>
+</html>

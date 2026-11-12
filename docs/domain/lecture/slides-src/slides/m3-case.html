@@ -1,0 +1,32 @@
+<section id="m3-case" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M3 · 예제 TC-02 · DONGHAE PIONEER</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">계산서 한 장: 대기 10.5시간이 체선 3시간이 되는 과정</h2>
+</div>
+<div style="display:flex;gap:36px;align-items:flex-start">
+<table style="width:1040px;font-size:24px;color:#3A4654">
+<tr style="background:#E9EEF3"><th style="width:40%;text-align:left;color:#0F1A26">항목</th><th style="width:30%;text-align:right;color:#0F1A26">값</th><th style="width:30%;text-align:left;color:#0F1A26">근거</th></tr>
+<tr><td>NOR 수령</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">D1 14:00</td><td>SOF</td></tr>
+<tr><td>통지시간 만료 (NOR+6h)</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">D1 20:00</td><td>ASB-06-NOR-START</td></tr>
+<tr><td>접안 완료 (all fast)</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">D2 08:00</td><td>SOF</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">레이타임 개시 = min</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">D1 20:00</td><td>ASB-06-NOR-START</td></tr>
+<tr><td>종료 = 호스 분리</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">D3 06:30</td><td>ASB-11-END-HOSES</td></tr>
+<tr><td>경과</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">34h 30m</td><td></td></tr>
+<tr><td>(−) 이동 D2 06:30~08:00</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace">1h 30m</td><td>ASB-07-SHIFTING-EXCL</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">사용 / 허용</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#0F1A26">33h 00m / 30h</td><td>계약 Part I</td></tr>
+<tr><td style="font-weight:600;color:#B5501C">체선 · 금액</td><td style="text-align:right;font-family:'IBM Plex Mono', 'Courier New', monospace;font-weight:600;color:#B5501C">3h 00m · USD 6,875</td><td>3 × 55,000 / 24</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#0F1A26;padding:32px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600;color:#4FCFC3">읽는 법</h3>
+<ul style="font-size:25px;color:#BFD0DC;line-height:1.5">
+<li>선석이 차 있어 통지시간 쪽이 먼저 → 개시 D1 20:00</li>
+<li>대기 10h 30m이 그대로 산입</li>
+<li>이동은 레이타임 중이라 공제</li>
+<li>허용 30h를 3h 넘김</li>
+<li>D1 20:00에 "앞 선박 종료 D2 06:00 + 주간 접안 → 체선 3h 예상" 경고 가능</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M3 · 23 · 영상 3편, 04-worked-examples.md 예제 2</p>
+<aside>영상 3편과 같은 예제입니다. 참가자에게 표를 가리고 SOF 여덟 줄만 주어 직접 계산서를 채우게 한 뒤 비교하세요. 마지막 줄의 경고 문장이 EXPLAIN 모듈의 존재 이유입니다. 이어서 연습 7-5, 7-6, 7-7로 대기·체선 중 이동·반액을 확장합니다.</aside>
+</section>

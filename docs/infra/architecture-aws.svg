@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="918" viewBox="0 0 680 918" role="img">
+<title>체선료 플래너 목표 아키텍처 (AWS)</title>
+<desc>사용자 브라우저가 CloudFront에 접속하고, 화면 파일은 S3에서, API 요청은 ALB를 거쳐 프라이빗 서브넷의 Spring Boot로 간다. Spring Boot는 내부 전용 LangGraph Agent를 REST로 부르고, Agent는 NAT 게이트웨이를 거쳐 LLM API를 호출한다. 두 서비스는 RDS PostgreSQL 하나를 스키마를 나눠 쓴다. CloudWatch, Secrets Manager, ECR이 공통으로 붙고, GitHub Actions가 이미지를 ECR에 올리고 Terraform이 AWS 리소스를 만든다.</desc>
+<defs><marker id="mr" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0E1726"/></marker><marker id="mo" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#667085"/></marker><marker id="md" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#D9620B"/></marker></defs>
+<rect x="0" y="0" width="680" height="918" rx="14" fill="#F6F8FB"/>
+<text x="24" y="37" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="17" font-weight="700" fill="#0E1726">체선료 플래너 목표 아키텍처</text>
+<text x="24" y="56" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#667085">Spring Boot + LangGraph, AWS 서울 리전 · 요청 한 건은 번호 순서로 흐른다</text>
+<rect x="566.047" y="22" width="89.9531" height="22" rx="11" fill="#FFF4DF"/>
+<text x="576.047" y="36.96" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#B26A00">제안 · 팀 확인 전</text>
+<rect x="48" y="73.5" width="190" height="44" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="48" y="72" width="190" height="44" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(58 80) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#344054" stroke="none"/><circle cx="14" cy="10.4" r="3.6"/><path d="M6.5 22 C6.5 16.4 21.5 16.4 21.5 22"/></g>
+<text x="95" y="91.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">스케줄러 · 지불 부서</text>
+<text x="95" y="106.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">브라우저</text>
+<rect x="274" y="78" width="262.047" height="32" rx="16" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<path d="M290 94 L316 94" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<text x="324" y="98" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">요청</text>
+<path d="M364.906 94 L390.906 94" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mo)"/>
+<text x="398.906" y="98" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">로그 · 설정</text>
+<path d="M467.141 94 L493.141 94" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<text x="501.141" y="98" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">배포</text>
+<rect x="12" y="128" width="656" height="556" rx="14" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1"/>
+<rect x="524.047" y="136" width="131.953" height="20" rx="10" fill="#EEF2F7"/>
+<text x="533.047" y="149.96" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#344054">AWS 클라우드 · 서울 리전</text>
+<rect x="48" y="157.5" width="190" height="52" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="48" y="156" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(58 168) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#1B5FD9" stroke="none"/><circle cx="14" cy="14" r="7.5"/><ellipse cx="14" cy="14" rx="3.2" ry="7.5"/><path d="M6.5 14 H21.5"/></g>
+<text x="95" y="179.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">CloudFront</text>
+<text x="95" y="194.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">HTTPS · 캐시</text>
+<rect x="274" y="157.5" width="190" height="52" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="274" y="156" width="190" height="52" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(284 168) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#B26A00" stroke="none"/><ellipse cx="14" cy="9" rx="6.5" ry="2.3"/><path d="M7.5 9 L9.3 20 Q14 22.6 18.7 20 L20.5 9"/></g>
+<text x="321" y="179.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">S3</text>
+<text x="321" y="194.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">화면 파일 · 업로드 문서</text>
+<rect x="24" y="226" width="464" height="442" rx="12" fill="#FAFBFD" stroke="#98A2B3" stroke-width="1"/>
+<rect x="358.25" y="233" width="117.75" height="18" rx="9" fill="#EEF2F7"/>
+<text x="366.25" y="245.96" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#344054">VPC · 팀 전용 네트워크</text>
+<rect x="36" y="254" width="440" height="80" rx="10" fill="#E7F6EE"/>
+<text x="48" y="268" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#1E8E5A">퍼블릭 서브넷</text>
+<rect x="48" y="275.5" width="190" height="50" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="48" y="274" width="190" height="50" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(58 285) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#1B5FD9" stroke="none"/><circle cx="8.3" cy="14" r="2.6"/><circle cx="20" cy="7.6" r="2"/><circle cx="20" cy="14" r="2"/><circle cx="20" cy="20.4" r="2"/><path d="M10.9 14 H18 M10.6 12.8 L18.2 8.4 M10.6 15.2 L18.2 19.6"/></g>
+<text x="95" y="296.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">ALB</text>
+<text x="95" y="311.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">/api를 Spring으로</text>
+<rect x="274" y="275.5" width="190" height="50" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="274" y="274" width="190" height="50" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(284 285) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#1B5FD9" stroke="none"/><rect x="5.5" y="8" width="10" height="12" rx="2"/><path d="M11.5 14 H22.5 M19 10.5 L22.5 14 L19 17.5"/></g>
+<text x="321" y="296.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">NAT 게이트웨이</text>
+<text x="321" y="311.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">밖으로 나가는 문</text>
+<rect x="36" y="344" width="440" height="190" rx="10" fill="#EAF1FE"/>
+<text x="48" y="358" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#1B5FD9">프라이빗 · 앱</text>
+<rect x="48" y="367.5" width="190" height="156" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="48" y="366" width="190" height="156" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(58 376) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#5B4BC4" stroke="none"/><rect x="5.5" y="8.5" width="17" height="11" rx="2"/><path d="M10 11.2 V16.8 M14 11.2 V16.8 M18 11.2 V16.8"/></g>
+<text x="95" y="388" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">Spring Boot API</text>
+<text x="95" y="403" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">Java · ECS Fargate</text>
+<path d="M58 415.5 H228" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="63" cy="429" r="2.2" fill="#5B4BC4"/>
+<text x="72" y="433" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">로그인 · 권한</text>
+<circle cx="63" cy="447" r="2.2" fill="#5B4BC4"/>
+<text x="72" y="451" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">승인 · 감사 기록</text>
+<circle cx="63" cy="465" r="2.2" fill="#5B4BC4"/>
+<text x="72" y="469" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">업무 데이터 (JPA)</text>
+<circle cx="63" cy="483" r="2.2" fill="#5B4BC4"/>
+<text x="72" y="487" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">파일 업로드 → S3</text>
+<circle cx="63" cy="501" r="2.2" fill="#5B4BC4"/>
+<text x="72" y="505" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">Agent 호출 · SSE 중계</text>
+<rect x="274" y="367.5" width="190" height="156" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="274" y="366" width="190" height="156" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(284 376) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#0B8B7B" stroke="none"/><rect x="5.5" y="8.5" width="17" height="11" rx="2"/><path d="M10 11.2 V16.8 M14 11.2 V16.8 M18 11.2 V16.8"/></g>
+<text x="321" y="388" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">LangGraph Agent</text>
+<text x="321" y="403" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">Python · ECS Fargate</text>
+<path d="M284 415.5 H454" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="289" cy="429" r="2.2" fill="#0B8B7B"/>
+<text x="298" y="433" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">FastAPI — REST로 받는 문</text>
+<circle cx="289" cy="447" r="2.2" fill="#0B8B7B"/>
+<text x="298" y="451" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">그래프: 검증 → 계산 → 보고서</text>
+<circle cx="289" cy="465" r="2.2" fill="#0B8B7B"/>
+<text x="298" y="469" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">도구: 계산 엔진 · 문서 파싱</text>
+<circle cx="289" cy="483" r="2.2" fill="#0B8B7B"/>
+<text x="298" y="487" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">LLM 호출 (비용 상한)</text>
+<circle cx="289" cy="501" r="2.2" fill="#0B8B7B"/>
+<text x="298" y="505" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">체크포인트로 이어 가기</text>
+<rect x="36" y="546" width="440" height="110" rx="10" fill="#EAF1FE"/>
+<text x="48" y="560" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#1B5FD9">프라이빗 · 데이터</text>
+<rect x="48" y="569.5" width="416" height="76" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="48" y="568" width="416" height="76" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(58 592) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#B26A00" stroke="none"/><ellipse cx="14" cy="8.5" rx="6.5" ry="2.4"/><path d="M7.5 8.5 V19.5 A6.5 2.4 0 0 0 20.5 19.5 V8.5"/><path d="M7.5 14 A6.5 2.4 0 0 0 20.5 14"/></g>
+<text x="95" y="601" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">RDS PostgreSQL</text>
+<text x="95" y="617" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">자동 백업 · 시점 복구</text>
+<rect x="236" y="582" width="102" height="48" rx="8" fill="#EFEDFB"/>
+<text x="246" y="602" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#5B4BC4">app 스키마</text>
+<text x="246" y="618" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#344054">업무 · 승인 · 감사</text>
+<rect x="352" y="582" width="102" height="48" rx="8" fill="#E3F5F1"/>
+<text x="362" y="602" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="600" fill="#0B8B7B">agent 스키마</text>
+<text x="362" y="618" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#344054">체크포인트</text>
+<text x="506" y="266" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#667085">VPC 밖 · 관리형 서비스</text>
+<rect x="504" y="275.5" width="152" height="50" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="504" y="274" width="152" height="50" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(512 287) scale(0.857143)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#C2255C" stroke="none"/><path d="M14 5.2 L15.9 12.1 L22.8 14 L15.9 15.9 L14 22.8 L12.1 15.9 L5.2 14 L12.1 12.1 Z" fill="#FFFFFF" stroke="none"/></g>
+<text x="545" y="296.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#0E1726">LLM API</text>
+<text x="545" y="311.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">Bedrock 또는 외부</text>
+<rect x="504" y="367.5" width="152" height="46" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="504" y="366" width="152" height="46" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(512 377) scale(0.857143)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#475467" stroke="none"/><path d="M5.5 15 H10 L12.2 9 L15.8 20 L18 15 H22.5"/></g>
+<text x="545" y="386.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#0E1726">CloudWatch</text>
+<text x="545" y="401.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">로그 · 지표 · 알림</text>
+<rect x="504" y="422.5" width="152" height="46" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="504" y="421" width="152" height="46" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(512 432) scale(0.857143)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#475467" stroke="none"/><circle cx="10" cy="13.5" r="3.4"/><path d="M13.4 13.5 H22.5 M19.3 13.5 V17 M22.5 13.5 V17"/></g>
+<text x="545" y="441.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#0E1726">Secrets Manager</text>
+<text x="545" y="456.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">키 · DB 비밀번호</text>
+<rect x="504" y="477.5" width="152" height="46" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="504" y="476" width="152" height="46" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(512 487) scale(0.857143)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#475467" stroke="none"/><path d="M14 6 L22 10 L14 14 L6 10 Z"/><path d="M6 14 L14 18 L22 14 M6 18 L14 22 L22 18"/></g>
+<text x="545" y="496.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#0E1726">ECR</text>
+<text x="545" y="511.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">이미지 저장소</text>
+<rect x="12" y="696" width="656" height="100" rx="14" fill="#EEF2F7"/>
+<text x="24" y="714" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#344054">배포 파이프라인 · GitHub</text>
+<rect x="24" y="731.5" width="176" height="52" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="24" y="730" width="176" height="52" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(34 742) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#0B1F33" stroke="none"/><rect x="6" y="6.5" width="7" height="6.5" rx="1" fill="#FFFFFF" stroke="none"/><rect x="15" y="9.5" width="7" height="6.5" rx="1" fill="#FFFFFF" stroke="none"/><rect x="6" y="15" width="7" height="6.5" rx="1" fill="#FFFFFF" stroke="none"/></g>
+<text x="71" y="753.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">Terraform</text>
+<text x="71" y="768.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">plan → 승인 → apply</text>
+<rect x="232" y="731.5" width="196" height="52" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="232" y="730" width="196" height="52" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(242 742) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#0B1F33" stroke="none"/><circle cx="9" cy="8" r="2.2"/><circle cx="9" cy="20" r="2.2"/><circle cx="19" cy="11" r="2.2"/><path d="M9 10.2 V17.8 M19 13.2 C19 17 9 14.6 9 17.8"/></g>
+<text x="279" y="753.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">GitHub 저장소</text>
+<text x="279" y="768.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">PR · main 병합</text>
+<rect x="462" y="731.5" width="194" height="52" rx="10" fill="#101828" opacity="0.06"/>
+<rect x="462" y="730" width="194" height="52" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<g transform="translate(472 742) scale(1)" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect width="28" height="28" rx="7" fill="#0B1F33" stroke="none"/><circle cx="14" cy="14" r="7.5"/><path d="M12 10.4 L18.2 14 L12 17.6 Z" fill="#FFFFFF" stroke="none"/></g>
+<text x="509" y="753.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0E1726">GitHub Actions</text>
+<text x="509" y="768.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085">검사 → 정답 검문 → 이미지</text>
+<path d="M160 116 L160 152" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M238 182 L270 182" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M160 208 L160 270" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M160 324 L160 362" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M238 430 L270 430" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M369 366 L369 328" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M464 299 L500 299" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M160 522 L160 564" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M369 522 L369 564" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mr)"/>
+<path d="M476 389 L500 389" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mo)"/>
+<path d="M504 444 L480 444" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mo)"/>
+<path d="M504 499 L480 499" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<path d="M580 730 L580 526" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<path d="M428 756 L458 756" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<path d="M232 756 L204 756" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<path d="M176 730 L176 688" fill="none" stroke="#D9620B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1.5 4" marker-end="url(#md)"/>
+<circle cx="177" cy="136" r="9.5" fill="#FFFFFF"/>
+<circle cx="177" cy="136" r="8.5" fill="#0E1726"/>
+<text x="177" y="139.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">1</text>
+<circle cx="256" cy="168" r="9.5" fill="#FFFFFF"/>
+<circle cx="256" cy="168" r="8.5" fill="#0E1726"/>
+<text x="256" y="171.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">2</text>
+<circle cx="177" cy="240" r="9.5" fill="#FFFFFF"/>
+<circle cx="177" cy="240" r="8.5" fill="#0E1726"/>
+<text x="177" y="243.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">3</text>
+<circle cx="256" cy="416" r="9.5" fill="#FFFFFF"/>
+<circle cx="256" cy="416" r="8.5" fill="#0E1726"/>
+<text x="256" y="419.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">4</text>
+<circle cx="386" cy="348" r="9.5" fill="#FFFFFF"/>
+<circle cx="386" cy="348" r="8.5" fill="#0E1726"/>
+<text x="386" y="351.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">5</text>
+<circle cx="177" cy="544" r="9.5" fill="#FFFFFF"/>
+<circle cx="177" cy="544" r="8.5" fill="#0E1726"/>
+<text x="177" y="547.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">6</text>
+<rect x="12" y="809.5" width="656" height="96" rx="14" fill="#101828" opacity="0.06"/>
+<rect x="12" y="808" width="656" height="96" rx="14" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="24" y="828" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#344054">요청 한 건 따라가기</text>
+<circle cx="34" cy="846" r="9.5" fill="#FFFFFF"/>
+<circle cx="34" cy="846" r="8.5" fill="#0E1726"/>
+<text x="34" y="849.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">1</text>
+<text x="49" y="850" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">화면을 연다 — CloudFront가 HTTPS로 받는다</text>
+<circle cx="34" cy="866" r="9.5" fill="#FFFFFF"/>
+<circle cx="34" cy="866" r="8.5" fill="#0E1726"/>
+<text x="34" y="869.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">2</text>
+<text x="49" y="870" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">화면 파일은 S3에서 내려온다</text>
+<circle cx="34" cy="886" r="9.5" fill="#FFFFFF"/>
+<circle cx="34" cy="886" r="8.5" fill="#0E1726"/>
+<text x="34" y="889.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">3</text>
+<text x="49" y="890" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">API 요청은 ALB를 거쳐 Spring으로 간다</text>
+<circle cx="356" cy="846" r="9.5" fill="#FFFFFF"/>
+<circle cx="356" cy="846" r="8.5" fill="#0E1726"/>
+<text x="356" y="849.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">4</text>
+<text x="371" y="850" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">Spring이 권한을 확인하고 Agent를 부른다</text>
+<circle cx="356" cy="866" r="9.5" fill="#FFFFFF"/>
+<circle cx="356" cy="866" r="8.5" fill="#0E1726"/>
+<text x="356" y="869.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">5</text>
+<text x="371" y="870" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">Agent가 계산하고, 문장만 LLM에 묻는다</text>
+<circle cx="356" cy="886" r="9.5" fill="#FFFFFF"/>
+<circle cx="356" cy="886" r="8.5" fill="#0E1726"/>
+<text x="356" y="889.9" text-anchor="middle" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">6</text>
+<text x="371" y="890" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="500" fill="#344054">결과 · 승인 · 진행 상태를 DB에 남긴다</text>
+</svg>

@@ -1,0 +1,52 @@
+{
+  "case_id": "TC-01b",
+  "title": "변형 — NOR이 전날 밤 제출되어 야간 계류 금지 대기가 체선료가 됨",
+  "source": "docs/domain/04-worked-examples.md 예제 1 변형 1b (TC-01b)",
+  "assumptions": [
+    "문서(2026-11-02 갱신)대로 묘박지 도착과 NOR 제출·수령을 모두 D0 20:00으로, 나머지 SOF 행은 예제 1과 같게 둔다. 문서에 이 변형의 SOF 표가 없어 예제 1의 행 번호를 그대로 쓴다."
+  ],
+  "base_date": "2026-11-03",
+  "port_call": {"call_id": "TC-01b", "vessel_name": "HANRIVER STAR (가상)", "vessel_type": "VLCC", "dwt": 300000,
+                "operation": "DISCHARGE", "cargo": "CRUDE", "berth_id": "SK2B"},
+  "contract_terms": {
+    "form": "ASBATANKVOY", "layer": "CHARTER_PARTY",
+    "laytime_total_hours": 72, "laytime_this_port_hours": 36, "notice_hours": 6,
+    "demurrage_rate_usd_day": 120000,
+    "half_rate_events": ["FIRE", "EXPLOSION", "STORM", "STRIKE", "PLANT_BREAKDOWN"],
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK2B", "berth_type": "SBM", "berthing_rules": ["ULS-SBM-NIGHT"],
+    "daytime": {"start": "07:00", "end": "17:30"},
+    "berth_ready_at": "D0 20:00", "berth_ready_row": 3,
+    "berth_ready_ref": "TC-01과 같이 도착 때 선석은 비어 있었다고 봄 [추론]"
+  },
+  "sof_events": [
+    {"event_id": "TC01b-R01-ANCHORED", "row": 1, "event_type": "ANCHORED", "ts_local": "D0 20:00", "remarks": "묘박지 도착, 투묘 (변형 1b)"},
+    {"event_id": "TC01b-R02-NOR_TENDERED", "row": 2, "event_type": "NOR_TENDERED", "ts_local": "D0 20:00", "remarks": "NOR 제출·수령 (변형 1b)"},
+    {"event_id": "TC01b-R02-NOR_RECEIVED", "row": 2, "event_type": "NOR_RECEIVED", "ts_local": "D0 20:00", "remarks": "NOR 제출·수령 (변형 1b)"},
+    {"event_id": "TC01b-R03-ANCHOR_AWEIGH", "row": 3, "event_type": "ANCHOR_AWEIGH", "ts_local": "D1 06:00", "remarks": "양묘, SBM으로 이동 시작 (주간 계류를 위해 대기 후 이동)"},
+    {"event_id": "TC01b-R04-ALL_FAST", "row": 4, "event_type": "ALL_FAST", "ts_local": "D1 08:00", "remarks": "계류 완료"},
+    {"event_id": "TC01b-R06-HOSES_CONNECTED", "row": 6, "event_type": "HOSES_CONNECTED", "ts_local": "D1 09:00", "remarks": "호스 연결"},
+    {"event_id": "TC01b-R07-OPS_COMMENCED", "row": 7, "event_type": "OPS_COMMENCED", "ts_local": "D1 09:30", "remarks": "양하 개시"},
+    {"event_id": "TC01b-R08-OPS_COMPLETED", "row": 8, "event_type": "OPS_COMPLETED", "ts_local": "D2 18:30", "remarks": "양하 완료"},
+    {"event_id": "TC01b-R09-HOSES_DISCONNECTED", "row": 9, "event_type": "HOSES_DISCONNECTED", "ts_local": "D2 19:30", "remarks": "호스 분리"},
+    {"event_id": "TC01b-R10-DOCS_ON_BOARD", "row": 10, "event_type": "DOCS_ON_BOARD", "ts_local": "D2 20:30", "remarks": "서류 완료, 이안"},
+    {"event_id": "TC01b-R10-LAST_LINE", "row": 10, "event_type": "LAST_LINE", "ts_local": "D2 20:30", "remarks": "서류 완료, 이안"}
+  ],
+  "doc_rows_not_events": [
+    {"row": 5, "text": "D1 02:00 (계산) 통지시간 만료 (NOR+6h)", "why": "계산 결과 — expected.notice_expiry_at"}
+  ],
+  "expected": {
+    "doc_ref": "04 예제 1 변형 1b 문단, TC 요약표 TC-01b",
+    "notice_expiry_at": "D1 02:00",
+    "laytime_start_at": "D1 02:00",
+    "laytime_end_at": "D2 19:30",
+    "elapsed_hours": "41.5",
+    "deduction_hours": {"SHIFTING": "2"},
+    "used_hours": "39.5",
+    "demurrage_hours": "3.5",
+    "amount_usd": "17500",
+    "issues": ["DISPUTE-NIGHT-WAIT"]
+  }
+}

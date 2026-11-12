@@ -1,0 +1,783 @@
+<title>체선료 선석 시뮬레이터</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: terminal operations console — header band with the clock, KPI strip, berth Gantt, per-vessel laytime lanes, then controls beside the live situation board. */
+:root{
+  --bg:#f3f6f9; --surface:#ffffff; --surface-2:#e9eef4; --fg:#111a26; --muted:#5b6977; --line:#d6dee8; --line-strong:#b5c1ce;
+  --accent:#0f6e73; --accent-fg:#ffffff; --accent-soft:#d8eeee;
+  --ops:#2a78d6; --ops-soft:#b7d3f6; --lay:#2a78d6; --notice:#c6ced8; --excl:#8e9bab; --prior:#aeb8c4;
+  --dem:#d03b3b; --dem-half:#ec835a; --good:#0ca30c; --warn:#fab219;
+  --night:rgba(17,26,38,0.07); --weather:rgba(236,131,90,0.20); --focus:#0f6e73;
+  --font-body:"IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1218; --surface:#151c25; --surface-2:#1d2631; --fg:#e6ecf3; --muted:#97a5b4; --line:#293441; --line-strong:#3a4756;
+    --accent:#4fcfc3; --accent-fg:#052321; --accent-soft:#143836;
+    --ops:#3987e5; --ops-soft:#1c5cab; --lay:#3987e5; --notice:#48545f; --excl:#6c7a8a; --prior:#4e5a67;
+    --dem:#d03b3b; --dem-half:#ec835a; --good:#0ca30c; --warn:#fab219;
+    --night:rgba(255,255,255,0.05); --weather:rgba(236,131,90,0.24); --focus:#4fcfc3;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1218; --surface:#151c25; --surface-2:#1d2631; --fg:#e6ecf3; --muted:#97a5b4; --line:#293441; --line-strong:#3a4756;
+  --accent:#4fcfc3; --accent-fg:#052321; --accent-soft:#143836;
+  --ops:#3987e5; --ops-soft:#1c5cab; --lay:#3987e5; --notice:#48545f; --excl:#6c7a8a; --prior:#4e5a67;
+  --dem:#d03b3b; --dem-half:#ec835a; --good:#0ca30c; --warn:#fab219;
+  --night:rgba(255,255,255,0.05); --weather:rgba(236,131,90,0.24); --focus:#4fcfc3;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:auto}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1280px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font-size:clamp(20px,2.6vw,28px);font-weight:700;letter-spacing:-0.01em}
+h2{font-size:15px;font-weight:600}
+h3{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em}
+p{margin:0}
+.muted{color:var(--muted)}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+.btn{border:1px solid var(--line-strong);background:var(--surface);border-radius:8px;padding:6px 12px;cursor:pointer;line-height:1.3}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.lane:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);font-weight:600}
+.btn.small{padding:3px 8px;font-size:12px;border-radius:6px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+select{font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line-strong);border-radius:6px;padding:4px 6px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--muted);background:var(--surface)}
+.badge.warn{border-color:var(--warn);color:var(--fg)}
+.pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:600;line-height:1.6;border:1px solid transparent}
+.pill.wait{background:var(--surface-2);color:var(--fg);border-color:var(--line-strong)}
+.pill.shift{background:var(--surface-2);color:var(--fg);border-style:dashed;border-color:var(--excl)}
+.pill.ops{background:var(--ops);color:#fff}
+.pill.pause{background:var(--dem-half);color:#fff}
+.pill.done{background:var(--accent-soft);color:var(--fg)}
+.pill.na{color:var(--muted);border-color:var(--line)}
+.pill.dem{background:var(--dem);color:#fff}
+
+/* header */
+.head{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
+.head .titles{display:flex;flex-direction:column;gap:6px;min-width:0;max-width:62ch}
+.head .badges{display:flex;flex-wrap:wrap;gap:6px}
+.clock{display:flex;flex-direction:column;gap:8px;align-items:flex-end;min-width:280px;flex:1 1 300px}
+.clock .time{font-family:var(--font-mono);font-size:30px;font-weight:500;letter-spacing:0.02em;line-height:1}
+.clock .time small{font-size:12px;color:var(--muted);font-family:var(--font-body);margin-left:8px;letter-spacing:0}
+.clock .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.clock .slider{width:100%}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .label{font-size:12px;color:var(--muted)}
+.kpi .value{font-family:var(--font-mono);font-size:24px;font-weight:500;line-height:1.1}
+.kpi .value.dem{color:var(--dem)}
+.kpi .sub{font-size:12px;color:var(--muted)}
+
+/* panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px;min-width:0}
+.panel-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:2px;border:1px solid transparent}
+.legend i.lay{background:var(--lay)}
+.legend i.dem{background:var(--dem)}
+.legend i.half{background:var(--dem-half)}
+.legend i.notice{background:var(--notice)}
+.legend i.excl{background:repeating-linear-gradient(45deg,var(--surface-2) 0 3px,var(--excl) 3px 5px)}
+.legend i.ops{background:var(--ops)}
+.legend i.night{background:var(--night);border-color:var(--line)}
+.legend i.wx{background:var(--weather);border-color:var(--dem-half)}
+.scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.scroll svg{display:block;min-width:760px;width:100%;height:auto}
+svg text{font-family:var(--font-body);fill:var(--fg)}
+svg .axis text{fill:var(--muted);font-size:11px}
+svg .axis line{stroke:var(--line)}
+svg .rowline{stroke:var(--line)}
+svg .label{font-size:12.5px;font-weight:600}
+svg .sublabel{font-size:11px;fill:var(--muted)}
+svg .night{fill:var(--night)}
+svg .wx{fill:var(--weather)}
+svg .prior{fill:var(--prior)}
+svg .bar-shift{fill:url(#hatch)}
+svg .bar-ops{fill:var(--ops)}
+svg .bar-hose{fill:var(--ops-soft)}
+svg .bar-pause{fill:url(#hatchwarm)}
+svg .seg-notice{fill:var(--notice)}
+svg .seg-lay{fill:var(--lay)}
+svg .seg-excl{fill:url(#hatch)}
+svg .seg-dem{fill:var(--dem)}
+svg .seg-demhalf{fill:var(--dem-half)}
+svg .barlabel{font-size:11.5px;fill:#fff;font-weight:600;pointer-events:none}
+svg .playhead{stroke:var(--accent);stroke-width:2}
+svg .playhead-label{fill:var(--accent);font-size:11px;font-weight:600;font-family:var(--font-mono)}
+svg .nor{fill:var(--fg)}
+svg .allowed{stroke:var(--fg);stroke-dasharray:3 3}
+svg .lane{cursor:pointer}
+svg .lane:hover .rowbg{fill:var(--surface-2)}
+svg .lane.selected .rowbg{fill:var(--accent-soft)}
+svg .rowbg{fill:transparent}
+svg .hit{fill:transparent}
+.tip{position:fixed;z-index:50;pointer-events:none;background:var(--fg);color:var(--bg);padding:6px 9px;border-radius:6px;font-size:12px;max-width:280px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.tip b{display:block;margin-bottom:2px}
+
+/* two column */
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width: 900px){.cols{grid-template-columns:1fr}}
+.table-scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;text-align:right}
+th.num{text-align:right}
+td .vname{font-weight:600}
+td .vmeta{font-size:11.5px;color:var(--muted)}
+tr.berth-head td{background:var(--surface-2);font-weight:600;font-size:12px;color:var(--fg);padding-block:5px}
+.order{display:inline-flex;gap:3px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.proposal{margin-top:10px;border:1px solid var(--accent);border-radius:10px;padding:12px;background:var(--accent-soft)}
+.proposal .delta{font-family:var(--font-mono);font-size:20px;font-weight:500}
+.proposal ul{margin:6px 0 10px 18px;padding:0}
+.proposal li{margin:2px 0}
+
+/* status */
+.status-list{display:flex;flex-direction:column;gap:8px}
+.vs{border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:4px 10px;cursor:pointer;background:var(--surface)}
+.vs:hover{border-color:var(--accent)}
+.vs .name{font-weight:600}
+.vs .meter{grid-column:1 / -1;height:8px;border-radius:4px;background:var(--surface-2);position:relative;overflow:hidden}
+.vs .meter i{position:absolute;top:0;bottom:0;left:0}
+.vs .meter i.lay{background:var(--lay)}
+.vs .meter i.dem{background:var(--dem)}
+.vs .meter i.half{background:var(--dem-half)}
+.vs .meta{grid-column:1 / -1;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.vs .amt{font-family:var(--font-mono);font-weight:500}
+.vs .amt.dem{color:var(--dem)}
+.feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.feed li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:6px 8px;border-radius:8px;background:var(--surface-2)}
+.feed li:first-child{background:var(--accent-soft)}
+.feed .t{font-family:var(--font-mono);color:var(--muted);white-space:nowrap}
+.feed .v{font-weight:600}
+.headline{font-size:13px;margin-bottom:8px;padding:8px 10px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 8px 8px 0}
+
+/* drawer */
+.drawer{position:fixed;top:env(safe-area-inset-top,0px);right:0;bottom:0;width:min(560px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:-12px 0 30px rgba(0,0,0,.15);z-index:40;overflow-y:auto;padding:16px;padding-right:max(16px, env(safe-area-inset-right,0px));padding-bottom:max(16px, env(safe-area-inset-bottom,0px))}
+.drawer .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.drawer table{font-size:12.5px}
+.drawer td,.drawer th{white-space:normal}
+.drawer td.rule{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+.drawer .total td{font-weight:700;border-top:2px solid var(--line-strong)}
+.issue{border:1px solid var(--warn);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:12.5px;background:var(--surface-2)}
+.issue b{color:var(--fg)}
+.events{font-size:12.5px;margin:0;padding:0;list-style:none}
+.events li{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:30}
+
+/* glossary & notes */
+details{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 16px;margin-bottom:12px}
+summary{cursor:pointer;font-weight:600}
+dl{display:grid;grid-template-columns:minmax(140px,auto) 1fr;gap:6px 14px;margin:10px 0 4px}
+dt{font-weight:600}
+dd{margin:0;color:var(--fg)}
+@media (max-width:600px){dl{grid-template-columns:1fr}dd{margin-bottom:6px;color:var(--muted)}}
+.notes{font-size:12.5px;color:var(--muted);line-height:1.6}
+.notes code{font-family:var(--font-mono);font-size:11.5px;background:var(--surface-2);padding:1px 5px;border-radius:4px;color:var(--fg)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div class="titles">
+      <h1>체선료 선석 시뮬레이터</h1>
+      <p class="muted">울산 CLX 4개 선석에 8척이 들어오는 하루. 선박마다 레이타임 시계가 돌고, 허용 시간을 넘기면 체선료가 쌓인다. 선석과 순서를 바꿔 총 노출이 어떻게 변하는지 보라.</p>
+      <div class="badges">
+        <span class="badge warn">가상 데이터</span>
+        <span class="badge">규칙값은 가정 · 주간 07:00–17:30</span>
+        <span class="badge">Asbatankvoy 기준 · 통지시간 6h</span>
+      </div>
+    </div>
+    <div class="clock">
+      <div class="time"><span id="nowText">D1 20:00</span><small id="nowSub">현재 시각</small></div>
+      <input class="slider" id="slider" type="range" min="0" max="96" step="0.25" value="20" aria-label="현재 시각">
+      <div class="row">
+        <button class="btn primary" id="playBtn">▶ 재생</button>
+        <button class="btn" id="speedBtn" title="재생 속도">속도 1×</button>
+        <button class="btn" id="resetTimeBtn">처음으로</button>
+        <label class="badge" style="cursor:pointer"><input type="checkbox" id="weatherChk"> D2 14:00–20:00 강풍 중단</label>
+      </div>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>선석 일정 · Berth Gantt</h2><p class="muted" style="font-size:12px">선석별로 누가 언제 붙어서 언제 떠나는지. 빗금은 이동·중단, 어두운 띠는 야간.</p></div>
+      <div class="legend">
+        <span><i class="ops"></i>하역</span><span><i class="excl"></i>이동 shifting</span><span><i class="night"></i>야간(접안 제한)</span><span><i class="wx"></i>강풍 중단</span>
+      </div>
+    </div>
+    <div class="scroll" id="ganttWrap"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>레이타임 시계 · Laytime Lanes</h2><p class="muted" style="font-size:12px">선박마다 NOR 이후의 시간을 어떻게 세는지. 행을 누르면 레이타임 계산서가 열린다.</p></div>
+      <div class="legend">
+        <span><i class="notice"></i>통지시간(미산입)</span><span><i class="lay"></i>레이타임 산입</span><span><i class="excl"></i>이동(제외)</span><span><i class="dem"></i>체선 전액</span><span><i class="half"></i>체선 반액</span>
+      </div>
+    </div>
+    <div class="scroll" id="lanesWrap"></div>
+  </section>
+
+  <div class="cols">
+    <section class="panel">
+      <div class="panel-head">
+        <div><h2>접안 계획 편집</h2><p class="muted" style="font-size:12px">선석을 바꾸거나 순서를 올리고 내리면 전체가 다시 계산된다. 적합한 선석만 고를 수 있다.</p></div>
+        <div class="toolbar">
+          <button class="btn primary" id="optBtn">대안 순서 탐색 (what-if)</button>
+          <button class="btn" id="resetPlanBtn">기본 계획으로</button>
+        </div>
+      </div>
+      <div id="proposal"></div>
+      <div class="table-scroll" id="planTable"></div>
+    </section>
+    <section class="panel">
+      <h2 style="margin-bottom:8px">지금 상황판</h2>
+      <div class="headline" id="headline"></div>
+      <div class="status-list" id="statusList"></div>
+      <h3 style="margin:14px 0 6px">최근 이벤트</h3>
+      <ul class="feed" id="feed"></ul>
+    </section>
+  </div>
+
+  <details>
+    <summary>용어 빠른 참조</summary>
+    <dl>
+      <dt>Laytime 레이타임</dt><dd>선적·양하를 위해 용선주에게 허용된 시간. 이 시뮬레이터는 양하항 허용 시간만 쓴다.</dd>
+      <dt>NOR</dt><dd>도착·준비 완료 통지. 묘박지 도착 시 낸다. 레이타임은 NOR 후 6시간, 또는 접안 완료 중 빠른 때 시작한다.</dd>
+      <dt>통지시간 Notice time</dt><dd>NOR 후 6시간의 유예. 이 사이에 접안이 끝나면 그 시점부터 센다.</dd>
+      <dt>Shifting 이동</dt><dd>묘박지에서 선석으로 옮기는 시간. 레이타임 중에는 세지 않는다. 체선 중이면 세는 것이 원칙(once on demurrage)이라 쟁점이다.</dd>
+      <dt>All fast / Finished mooring</dt><dd>부두에 모든 줄을 고정 / SBM 계류 완료. 접안 완료 시점.</dd>
+      <dt>Hoses disconnected</dt><dd>호스 분리. 레이타임과 체선 시간이 끝나는 시점.</dd>
+      <dt>Demurrage 체선료</dt><dd>허용 시간을 넘긴 시간 × 요율(USD/일 ÷ 24). 분 단위 비례.</dd>
+      <dt>Half rate 반액</dt><dd>폭풍·화재·파업·플랜트 고장으로 생긴 체선은 절반 요율. 여기서는 접안 중 강풍 중단 구간에 적용한다.</dd>
+      <dt>Reachable on arrival</dt><dd>용선주가 도착 즉시 갈 수 있는 선석을 제공할 의무. 혼잡·야간 제한 대기는 용선주 부담이 되기 쉽다.</dd>
+      <dt>Exposure 노출</dt><dd>아직 확정되지 않았지만 현재 계획대로면 발생할 체선료.</dd>
+    </dl>
+  </details>
+
+  <details>
+    <summary>가정과 규칙 ID</summary>
+    <p class="notes" style="margin-top:8px">
+      선석 제원은 울산항만공사 공개 표, 야간 규칙은 SEAGATE Entry Guide 울산(<code>ULS-SBM-NIGHT</code> SK Buoy 야간 계류 불가, <code>ULS-SK38-DAYTIME</code> 대형선 주간 접안)에서 가져왔다. "주간"은 07:00–17:30으로 가정했다(<code>ULS-DAYTIME-DEF</code>).
+      이동 시간은 부두 1.5h, SBM 2.0h, 호스 연결·분리 각 1h, 이안 1h로 가정했다. 레이타임 개시는 <code>ASB-06-NOR-START</code>, 이동 제외는 <code>ASB-07-SHIFTING-EXCL</code>, 종료는 <code>ASB-11-END-HOSES</code>, 반액은 <code>ASB-08-HALF-RATE</code>를 따른다.
+      선박명·ETA·허용 시간·요율은 전부 가상이며 SK8은 D1 09:00까지 앞 선박이 점유한 것으로 두었다. 강풍 중단은 D2 14:00–20:00에 전 선석 하역 중단·접안 불가로 가정했다.
+      대안 순서 탐색은 총 체선료 노출을 줄이는 선석·순서 조합을 찾아 보여주는 학습용 what-if다. SEAGATE에는 이미 Berth Optimization·Berthing Simulation·체선 리포트가 있어(<code>docs/seagate-diagnosis.md</code>) 이 기능을 대체하려는 것이 아니라, 접안 순서 변경 1건이 레이타임·체선료로 어떻게 번역되는지 익히는 데 목적이 있다. 접안 가능 규칙은 모든 계획에 자동 적용되지만 실제 운영 제약(공정·탱크 여유·도선 가용성)은 반영하지 않았다.
+      문서 세트 <code>docs/domain/</code>의 04(계산 예제)·05(조항 맵)와 함께 보라.
+    </p>
+  </details>
+</div>
+
+<div class="tip" id="tip" hidden></div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="레이타임 계산서"></aside>
+
+<script id="core">
+// ===== 순수 계산부 (DOM 없음) =====
+const NOTICE_H = 6, DAY_START = 7, DAY_END = 17.5, HORIZON = 96;
+const WEATHER = { from: 38, to: 44, label: '강풍 — 전 선석 하역 중단·접안 불가 (가정)' };
+
+const BERTHS = [
+  { id: 'SK2B', name: 'SK2 Buoy', sub: 'SBM · 325,000 DWT · 수심 27m', type: 'SBM', maxDwt: 325000, cargo: ['CRUDE'], shiftH: 2.0, hoseH: 1.0, unberthH: 1.0, busyUntil: 0, rule: 'ULS-SBM-NIGHT' },
+  { id: 'SK8', name: 'SK8 Pier', sub: 'Dolphin · 150,000 DWT · 18m', type: 'DOLPHIN', maxDwt: 150000, cargo: ['CRUDE', 'OIL'], shiftH: 1.5, hoseH: 1.0, unberthH: 1.0, busyUntil: 9, rule: 'ULS-SK38-DAYTIME' },
+  { id: 'SK7', name: 'SK7 Pier', sub: 'Dolphin · 130,000 DWT · 15m', type: 'DOLPHIN', maxDwt: 130000, cargo: ['OIL', 'CHEM'], shiftH: 1.5, hoseH: 1.0, unberthH: 1.0, busyUntil: 0, rule: 'ULS-SK38-DAYTIME' },
+  { id: 'SK6', name: 'SK6 Pier', sub: 'Dolphin · 70,000 DWT · 15m', type: 'DOLPHIN', maxDwt: 70000, cargo: ['LPG', 'OIL'], shiftH: 1.5, hoseH: 1.0, unberthH: 1.0, busyUntil: 0, rule: 'ULS-SK38-DAYTIME' },
+];
+
+const VESSELS = [
+  { id: 'V1', name: 'HANRIVER STAR', type: 'VLCC', dwt: 300000, large: true, cargo: 'CRUDE', cargoKo: '원유', nor: 2.5, opsH: 33, allowedH: 36, rate: 120000, berths: ['SK2B'] },
+  { id: 'V2', name: 'ULSAN GLORY', type: 'VLCC', dwt: 310000, large: true, cargo: 'CRUDE', cargoKo: '원유', nor: 30, opsH: 30, allowedH: 36, rate: 115000, berths: ['SK2B'] },
+  { id: 'V3', name: 'DONGHAE PIONEER', type: 'Aframax', dwt: 105000, large: true, cargo: 'CRUDE', cargoKo: '원유', nor: 10, opsH: 22, allowedH: 36, rate: 55000, berths: ['SK8', 'SK7'] },
+  { id: 'V4', name: 'PACIFIC MERIDIAN', type: 'Aframax', dwt: 100000, large: true, cargo: 'OIL', cargoKo: '연료유', nor: 13, opsH: 20, allowedH: 30, rate: 50000, berths: ['SK8', 'SK7'] },
+  { id: 'V5', name: 'GEOJE SPIRIT', type: 'MR', dwt: 48000, large: true, cargo: 'CHEM', cargoKo: '케미컬', nor: 20, opsH: 12, allowedH: 24, rate: 26000, berths: ['SK7', 'SK6'] },
+  { id: 'V6', name: 'NAMHAE GAS', type: 'LPG', dwt: 45000, large: true, cargo: 'LPG', cargoKo: 'LPG', nor: 25, opsH: 18, allowedH: 24, rate: 45000, berths: ['SK6'] },
+  { id: 'V7', name: 'SEORAK TRADER', type: 'MR', dwt: 50000, large: true, cargo: 'OIL', cargoKo: '경유', nor: 39, opsH: 14, allowedH: 24, rate: 28000, berths: ['SK7', 'SK6'] },
+  { id: 'V8', name: 'BUSAN COASTAL', type: '연안 탱커', dwt: 12000, large: false, cargo: 'OIL', cargoKo: '제품유', nor: 46, opsH: 8, allowedH: 18, rate: 12000, berths: ['SK7', 'SK6'] },
+];
+const VMAP = Object.fromEntries(VESSELS.map(v => [v.id, v]));
+const BMAP = Object.fromEntries(BERTHS.map(b => [b.id, b]));
+const DEFAULT_PLAN = { SK2B: ['V1', 'V2'], SK8: ['V4', 'V3'], SK7: ['V5', 'V7', 'V8'], SK6: ['V6'] };
+
+const EPS = 1e-9;
+function clonePlan(p) { return Object.fromEntries(Object.entries(p).map(([k, v]) => [k, v.slice()])); }
+function pad(n) { return String(n).padStart(2, '0'); }
+function fmtT(t) {
+  let d = Math.floor(t / 24), h = t - d * 24, hh = Math.floor(h + EPS), mm = Math.round((h - hh) * 60);
+  if (mm === 60) { mm = 0; hh += 1; } if (hh === 24) { hh = 0; d += 1; }
+  return `D${d + 1} ${pad(hh)}:${pad(mm)}`;
+}
+function fmtH(h) {
+  const neg = h < 0; h = Math.abs(h); let hh = Math.floor(h + EPS), mm = Math.round((h - hh) * 60);
+  if (mm === 60) { mm = 0; hh += 1; }
+  return `${neg ? '−' : ''}${hh}h ${pad(mm)}m`;
+}
+function fmtUSD(x) { return '$' + Math.round(x).toLocaleString('en-US'); }
+function isDay(t) { const h = ((t % 24) + 24) % 24; return h >= DAY_START - EPS && h <= DAY_END + EPS; }
+function nextDayStart(t) { const d = Math.floor(t / 24), h = t - d * 24; if (h < DAY_START) return d * 24 + DAY_START; if (h <= DAY_END + EPS) return t; return (d + 1) * 24 + DAY_START; }
+function overlap(a0, a1, b0, b1) { return Math.max(0, Math.min(a1, b1) - Math.max(a0, b0)); }
+
+function simulate(plan, weatherOn) {
+  const W = weatherOn ? WEATHER : null;
+  const results = {}, berthRows = {};
+  for (const b of BERTHS) {
+    let free = b.busyUntil || 0;
+    const row = [];
+    if (b.busyUntil > 0) row.push({ kind: 'prior', from: 0, to: b.busyUntil });
+    for (const vid of (plan[b.id] || [])) {
+      const v = VMAP[vid];
+      const needsDay = b.type === 'SBM' || v.large;
+      const earliest = Math.max(free, v.nor);
+      let t = earliest, shiftStart = earliest, allFast = earliest + b.shiftH, nightDelay = 0, wxDelay = 0;
+      for (let i = 0; i < 12; i++) {
+        let af = t + b.shiftH;
+        if (needsDay && !isDay(af)) { const nd = nextDayStart(af); nightDelay += nd - af; af = nd; }
+        if (W && af > W.from + EPS && (af - b.shiftH) < W.to - EPS) { wxDelay += W.to - t; t = W.to; continue; }
+        shiftStart = af - b.shiftH; allFast = af; break;
+      }
+      const hosesOn = allFast + b.hoseH;
+      let tt = hosesOn, remaining = v.opsH; const pauses = [];
+      while (remaining > EPS) {
+        if (W && tt >= W.from - EPS && tt < W.to - EPS) { pauses.push({ from: tt, to: W.to }); tt = W.to; continue; }
+        const segEnd = (W && tt < W.from) ? Math.min(tt + remaining, W.from) : tt + remaining;
+        remaining -= (segEnd - tt); tt = segEnd;
+      }
+      const opsEnd = tt, hosesOff = opsEnd + b.hoseH, unberth = hosesOff + b.unberthH;
+      free = unberth;
+      const call = { vid, berthId: b.id, shiftStart, allFast, hosesOn, opsEnd, hosesOff, unberth, pauses, nightDelay, wxDelay, waitH: shiftStart - v.nor };
+      row.push({ kind: 'call', ...call });
+      results[vid] = computeLaytime(v, b, call, W);
+    }
+    berthRows[b.id] = row;
+  }
+  const totals = summarize(results, berthRows);
+  return { results, berthRows, totals };
+}
+
+function computeLaytime(v, b, c, W) {
+  const ltStart = Math.min(v.nor + NOTICE_H, c.allFast);
+  const startRule = c.allFast < v.nor + NOTICE_H - EPS ? 'all fast (접안 완료가 NOR+6h보다 먼저)' : 'NOR + 6h (통지시간 만료)';
+  const ltEnd = c.hosesOff;
+  const segs = [], issues = [];
+  let counted = 0, demStart = null;
+  const allowed = v.allowedH;
+  function addCount(from, to) {
+    if (to - from <= EPS) return;
+    if (demStart === null) {
+      const cap = allowed - counted;
+      if (to - from <= cap + EPS) { segs.push({ from, to, type: 'lay' }); counted += to - from; if (Math.abs(counted - allowed) < EPS) demStart = to; return; }
+      const split = from + cap;
+      if (cap > EPS) segs.push({ from, to: split, type: 'lay' });
+      counted = allowed; demStart = split; segs.push({ from: split, to, type: 'dem' }); return;
+    }
+    segs.push({ from, to, type: 'dem' });
+  }
+  if (ltStart < c.shiftStart - EPS) {
+    addCount(ltStart, c.shiftStart);
+    if (demStart === null) segs.push({ from: c.shiftStart, to: c.allFast, type: 'excl' });
+    else { addCount(c.shiftStart, c.allFast); issues.push({ code: 'SHIFT_ON_DEM', title: '체선 중 이동 시간 산입', text: `이동 ${fmtH(c.allFast - c.shiftStart)}이 체선 개시 후에 발생했다. "once on demurrage, always on demurrage" 원칙상 산입했지만(ASB-07은 used laytime만 언급), 용선주는 공제를 주장할 수 있다. 자동 판정 대신 쟁점으로 표시한다.`, altHours: -(c.allFast - c.shiftStart) }); }
+    addCount(c.allFast, ltEnd);
+  } else if (ltStart < c.allFast - EPS) {
+    segs.push({ from: ltStart, to: c.allFast, type: 'excl' });
+    addCount(c.allFast, ltEnd);
+  } else {
+    addCount(ltStart, ltEnd);
+  }
+  // 반액: 접안 중 강풍 구간과 겹치는 체선 시간
+  const out = [];
+  for (const s of segs) {
+    if (s.type === 'dem' && W) {
+      const lo = Math.max(s.from, W.from, c.allFast), hi = Math.min(s.to, W.to);
+      if (hi > lo + EPS) {
+        if (lo > s.from + EPS) out.push({ from: s.from, to: lo, type: 'dem' });
+        out.push({ from: lo, to: hi, type: 'demhalf' });
+        if (s.to > hi + EPS) out.push({ from: hi, to: s.to, type: 'dem' });
+        continue;
+      }
+    }
+    out.push(s);
+  }
+  if (W && demStart !== null) {
+    const waitWx = overlap(demStart, Math.min(c.shiftStart, ltEnd), W.from, W.to);
+    if (waitWx > EPS) issues.push({ code: 'WX_WAITING', title: '대기 중 폭풍 구간은 전액 계산', text: `묘박 대기 중 강풍 ${fmtH(waitWx)}은 전액으로 계산했다. 선석이 비어 있었는데 기상 때문에 못 붙었다면 반액(ASB-08-HALF-RATE) 주장 여지가 있다.` });
+  }
+  if (c.nightDelay > EPS) issues.push({ code: 'NIGHT_WAIT', title: '야간 접안 제한 대기', text: `${b.rule}로 ${fmtH(c.nightDelay)} 대기가 생겼다. 이 시간은 레이타임에 산입했다(reachable on arrival 위반은 용선주 부담이라는 판례 흐름). 용선주는 ASB-06-BERTH-DELAY-EXC("통제 밖 사유")를 들어 다툴 수 있다.` });
+  if (c.wxDelay > EPS) issues.push({ code: 'WX_BERTHING', title: '강풍으로 접안 지연', text: `강풍 창 때문에 접안이 ${fmtH(c.wxDelay)} 늦어졌다. 대기 시간은 산입했다.` });
+  const demFull = out.filter(s => s.type === 'dem').reduce((a, s) => a + s.to - s.from, 0);
+  const demHalf = out.filter(s => s.type === 'demhalf').reduce((a, s) => a + s.to - s.from, 0);
+  const layUsed = out.filter(s => s.type === 'lay').reduce((a, s) => a + s.to - s.from, 0);
+  const exclH = out.filter(s => s.type === 'excl').reduce((a, s) => a + s.to - s.from, 0);
+  const amount = demFull * v.rate / 24 + demHalf * v.rate / 48;
+  const events = [
+    { t: v.nor, text: `NOR 제출 · 묘박지 도착`, kind: 'nor' },
+    { t: ltStart, text: `레이타임 개시 — ${startRule}`, kind: 'start' },
+    { t: c.shiftStart, text: `양묘 · ${b.name}으로 이동 시작${c.nightDelay > EPS ? ` (야간 제한으로 ${fmtH(c.nightDelay)} 대기 후)` : ''}`, kind: 'shift' },
+    { t: c.allFast, text: `접안 완료 (all fast) · ${b.name}`, kind: 'fast' },
+    { t: c.hosesOn, text: `호스 연결 · 하역 개시`, kind: 'ops' },
+    ...c.pauses.flatMap(p => [{ t: p.from, text: `강풍으로 하역 중단`, kind: 'pause' }, { t: p.to, text: `하역 재개`, kind: 'resume' }]),
+    { t: c.opsEnd, text: `하역 완료`, kind: 'ops' },
+    { t: c.hosesOff, text: `호스 분리 · 레이타임 종료`, kind: 'end' },
+  ];
+  if (demStart !== null && demStart < ltEnd - EPS) events.push({ t: demStart, text: `허용 레이타임 ${allowed}h 소진 → 체선 개시 (${fmtUSD(v.rate / 24)}/h)`, kind: 'dem' });
+  events.sort((a, b2) => a.t - b2.t);
+  return { vid: v.id, berthId: b.id, call: c, ltStart, startRule, ltEnd, segs: out, allowed, layUsed, exclH, demStart, demFull, demHalf, demHours: demFull + demHalf, usedTotal: layUsed + demFull + demHalf, amount, issues, events, waitH: c.waitH };
+}
+
+function summarize(results, berthRows) {
+  let amount = 0, demVessels = 0, waitH = 0, occupied = 0;
+  for (const r of Object.values(results)) { amount += r.amount; if (r.demHours > EPS) demVessels++; waitH += r.waitH; }
+  for (const row of Object.values(berthRows)) for (const x of row) {
+    if (x.kind === 'prior') occupied += Math.min(x.to, HORIZON) - x.from;
+    else occupied += Math.max(0, Math.min(x.unberth, HORIZON) - Math.min(x.allFast, HORIZON));
+  }
+  return { amount, demVessels, waitH, utilization: occupied / (BERTHS.length * HORIZON) };
+}
+
+// 특정 시각까지의 누적
+function accrueUntil(r, now) {
+  let lay = 0, full = 0, half = 0;
+  for (const s of r.segs) { const o = overlap(s.from, s.to, -1, now); if (s.type === 'lay') lay += o; else if (s.type === 'dem') full += o; else if (s.type === 'demhalf') half += o; }
+  const v = VMAP[r.vid];
+  return { lay, full, half, amount: full * v.rate / 24 + half * v.rate / 48 };
+}
+function statusAt(r, now) {
+  const c = r.call, v = VMAP[r.vid];
+  if (now < v.nor) return { code: 'na', label: '미도착' };
+  if (now < c.shiftStart) return { code: r.demStart !== null && now >= r.demStart ? 'dem' : 'wait', label: r.demStart !== null && now >= r.demStart ? '대기 · 체선 중' : '묘박 대기' };
+  if (now < c.allFast) return { code: 'shift', label: '이동 중' };
+  if (now < c.hosesOn) return { code: 'ops', label: '호스 연결' };
+  if (now < c.opsEnd) { const p = c.pauses.find(p => now >= p.from && now < p.to); return p ? { code: 'pause', label: '하역 중단(강풍)' } : { code: 'ops', label: '하역 중' }; }
+  if (now < c.hosesOff) return { code: 'ops', label: '호스 분리 중' };
+  if (now < c.unberth) return { code: 'done', label: '이안' };
+  return { code: 'done', label: '출항' };
+}
+
+// ===== 최적화: 선석·순서 지역 탐색 =====
+function evaluate(plan, weatherOn) { const s = simulate(plan, weatherOn); return s.totals.amount + s.totals.waitH * 10; }
+function neighbor(plan, rnd) {
+  const p = clonePlan(plan);
+  const vid = VESSELS[Math.floor(rnd() * VESSELS.length)].id;
+  const v = VMAP[vid];
+  const curB = Object.keys(p).find(k => p[k].includes(vid));
+  p[curB] = p[curB].filter(x => x !== vid);
+  const choices = v.berths;
+  const toB = (rnd() < 0.5) ? curB : choices[Math.floor(rnd() * choices.length)];
+  const pos = Math.floor(rnd() * (p[toB].length + 1));
+  p[toB].splice(pos, 0, vid);
+  return p;
+}
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function optimize(plan, weatherOn, iters = 2500, seed = 7) {
+  const rnd = mulberry32(seed);
+  let best = clonePlan(plan), bestScore = evaluate(best, weatherOn);
+  let cur = clonePlan(best), curScore = bestScore;
+  for (let restart = 0; restart < 3; restart++) {
+    cur = clonePlan(best); curScore = bestScore;
+    for (let i = 0; i < iters; i++) {
+      const T = 30000 * Math.pow(0.001, i / iters) + 50;
+      const cand = neighbor(cur, rnd), sc = evaluate(cand, weatherOn);
+      if (sc < curScore || rnd() < Math.exp(-(sc - curScore) / T)) { cur = cand; curScore = sc; if (sc < bestScore - EPS) { best = clonePlan(cand); bestScore = sc; } }
+    }
+  }
+  return { plan: best, score: bestScore };
+}
+function diffPlans(a, b) {
+  const moves = [];
+  for (const v of VESSELS) {
+    const ba = Object.keys(a).find(k => a[k].includes(v.id)), bb = Object.keys(b).find(k => b[k].includes(v.id));
+    const ia = a[ba].indexOf(v.id) + 1, ib = b[bb].indexOf(v.id) + 1;
+    if (ba !== bb || ia !== ib) moves.push({ vid: v.id, from: `${BMAP[ba].name} ${ia}번째`, to: `${BMAP[bb].name} ${ib}번째`, berthChanged: ba !== bb });
+  }
+  return moves;
+}
+if (typeof module !== 'undefined') module.exports = { simulate, optimize, diffPlans, DEFAULT_PLAN, VESSELS, BERTHS, fmtT, fmtH, fmtUSD, clonePlan, accrueUntil, statusAt, WEATHER };
+</script>
+
+<script>
+// ===== 렌더링 =====
+const state = { plan: clonePlan(DEFAULT_PLAN), weather: false, now: 20, playing: false, speed: 1, selected: null, proposal: null, sim: null };
+const $ = id => document.getElementById(id);
+const VB_W = 1000, LABEL_W = 170, PLOT_W = VB_W - LABEL_W - 12;
+const xOf = t => LABEL_W + (t / HORIZON) * PLOT_W;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function recompute() { state.sim = simulate(state.plan, state.weather); }
+
+function defs() {
+  return `<defs>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><rect width="6" height="6" style="fill:var(--surface-2)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--excl);stroke-width:2"/></pattern>
+    <pattern id="hatchwarm" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(135)"><rect width="6" height="6" style="fill:var(--ops-soft)"/><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--dem-half);stroke-width:2"/></pattern>
+  </defs>`;
+}
+function axisAndBands(top, height) {
+  let s = '';
+  // night bands
+  const bands = [[0, DAY_START]];
+  for (let d = 0; d < HORIZON / 24; d++) bands.push([d * 24 + DAY_END, Math.min(HORIZON, (d + 1) * 24 + DAY_START)]);
+  for (const [a, b] of bands) s += `<rect class="night" x="${xOf(a)}" y="${top}" width="${xOf(b) - xOf(a)}" height="${height}"/>`;
+  if (state.weather) s += `<rect class="wx" x="${xOf(WEATHER.from)}" y="${top}" width="${xOf(WEATHER.to) - xOf(WEATHER.from)}" height="${height}"><title>${esc(WEATHER.label)} ${fmtT(WEATHER.from)}–${fmtT(WEATHER.to)}</title></rect>`;
+  s += '<g class="axis">';
+  for (let t = 0; t <= HORIZON; t += 6) {
+    const x = xOf(t), major = t % 24 === 0;
+    s += `<line x1="${x}" y1="${top - (major ? 10 : 5)}" x2="${x}" y2="${top + height}" ${major ? 'style="stroke:var(--line-strong)"' : ''}/>`;
+    if (t % 12 === 0 && t < HORIZON) s += `<text x="${x + 3}" y="${top - 12}">${major ? `D${t / 24 + 1} 00:00` : '12:00'}</text>`;
+  }
+  s += '</g>';
+  return s;
+}
+function playhead(top, height) {
+  const x = xOf(state.now);
+  return `<line class="playhead" x1="${x}" y1="${top - 22}" x2="${x}" y2="${top + height}"/><text class="playhead-label" x="${x + 4}" y="${top - 24}">▼ ${fmtT(state.now)}</text>`;
+}
+
+function renderGantt() {
+  const rowH = 46, top = 34, height = rowH * BERTHS.length;
+  let s = `<svg viewBox="0 0 ${VB_W} ${top + height + 6}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선석별 접안 일정">${defs()}${axisAndBands(top, height)}`;
+  BERTHS.forEach((b, i) => {
+    const y = top + i * rowH;
+    s += `<line class="rowline" x1="0" y1="${y + rowH}" x2="${VB_W}" y2="${y + rowH}"/>`;
+    s += `<text class="label" x="8" y="${y + 19}">${esc(b.name)}</text><text class="sublabel" x="8" y="${y + 34}">${esc(b.sub)}</text>`;
+    for (const x of state.sim.berthRows[b.id]) {
+      if (x.kind === 'prior') { s += `<rect class="prior" x="${xOf(x.from)}" y="${y + 12}" width="${xOf(x.to) - xOf(x.from)}" height="22" rx="3"><title>앞 선박 점유 · ${fmtT(x.from)}–${fmtT(x.to)}</title></rect>`; continue; }
+      const v = VMAP[x.vid], r = state.sim.results[x.vid];
+      const tip = `${v.name} · ${v.type}\n이동 ${fmtT(x.shiftStart)} → 접안 ${fmtT(x.allFast)}\n하역 ${fmtT(x.hosesOn)} → ${fmtT(x.opsEnd)}\n호스 분리 ${fmtT(x.hosesOff)} · 이안 ${fmtT(x.unberth)}\n체선료 ${fmtUSD(r.amount)}`;
+      s += `<g data-vid="${x.vid}" class="gbar" data-tip="${esc(tip)}">`;
+      s += `<rect class="bar-shift" x="${xOf(x.shiftStart)}" y="${y + 12}" width="${xOf(x.allFast) - xOf(x.shiftStart)}" height="22" rx="3"/>`;
+      s += `<rect class="bar-hose" x="${xOf(x.allFast)}" y="${y + 12}" width="${xOf(x.unberth) - xOf(x.allFast)}" height="22" rx="3"/>`;
+      s += `<rect class="bar-ops" x="${xOf(x.hosesOn)}" y="${y + 12}" width="${xOf(x.opsEnd) - xOf(x.hosesOn)}" height="22" rx="2"/>`;
+      for (const p of x.pauses) s += `<rect class="bar-pause" x="${xOf(p.from)}" y="${y + 12}" width="${xOf(p.to) - xOf(p.from)}" height="22"/>`;
+      const w = xOf(x.opsEnd) - xOf(x.hosesOn);
+      if (w > 70) s += `<text class="barlabel" x="${xOf(x.hosesOn) + 6}" y="${y + 27}">${esc(v.name)}</text>`;
+      else if (w > 30) s += `<text class="barlabel" x="${xOf(x.hosesOn) + 4}" y="${y + 27}">${esc(v.id)}</text>`;
+      s += `</g>`;
+    }
+  });
+  s += playhead(top, height) + '</svg>';
+  $('ganttWrap').innerHTML = s;
+}
+
+function laneOrder() { return BERTHS.flatMap(b => state.plan[b.id]); }
+function renderLanes() {
+  const rowH = 36, top = 34, order = laneOrder(), height = rowH * order.length;
+  let s = `<svg viewBox="0 0 ${VB_W} ${top + height + 6}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선박별 레이타임 시계">${defs()}${axisAndBands(top, height)}`;
+  order.forEach((vid, i) => {
+    const v = VMAP[vid], r = state.sim.results[vid], y = top + i * rowH;
+    const acc = accrueUntil(r, state.now);
+    const tip = `${v.name}\n레이타임 개시 ${fmtT(r.ltStart)} · 종료 ${fmtT(r.ltEnd)}\n사용 ${fmtH(r.usedTotal)} / 허용 ${r.allowed}h\n체선 ${fmtH(r.demHours)} → ${fmtUSD(r.amount)}\n클릭하면 계산서`;
+    s += `<g class="lane${state.selected === vid ? ' selected' : ''}" data-vid="${vid}" tabindex="0" role="button" aria-label="${esc(v.name)} 레이타임 계산서 열기" data-tip="${esc(tip)}">`;
+    s += `<rect class="rowbg" x="0" y="${y}" width="${VB_W}" height="${rowH}"/>`;
+    s += `<line class="rowline" x1="0" y1="${y + rowH}" x2="${VB_W}" y2="${y + rowH}"/>`;
+    s += `<text class="label" x="8" y="${y + 15}">${esc(v.name)}</text><text class="sublabel" x="8" y="${y + 29}">${esc(v.type)} · ${esc(BMAP[r.berthId].name)} · 허용 ${r.allowed}h · ${fmtUSD(v.rate / 1000)}k/일</text>`;
+    // notice (display only)
+    if (r.ltStart > v.nor + EPS) s += `<rect class="seg-notice" x="${xOf(v.nor)}" y="${y + 11}" width="${xOf(r.ltStart) - xOf(v.nor)}" height="14" rx="2"/>`;
+    for (const sg of r.segs) s += `<rect class="seg-${sg.type}" x="${xOf(sg.from)}" y="${y + 11}" width="${Math.max(0.5, xOf(sg.to) - xOf(sg.from))}" height="14"/>`;
+    // NOR marker
+    s += `<path class="nor" d="M${xOf(v.nor)},${y + 9} l-5,-7 l10,0 z"><title>NOR ${fmtT(v.nor)}</title></path>`;
+    // demurrage start marker
+    if (r.demStart !== null && r.demStart < r.ltEnd) s += `<line class="allowed" x1="${xOf(r.demStart)}" y1="${y + 6}" x2="${xOf(r.demStart)}" y2="${y + rowH - 4}"/>`;
+    // running counter at playhead
+    const amtTxt = acc.amount > 0 ? fmtUSD(acc.amount) : (state.now >= v.nor ? fmtH(acc.lay) + ' 사용' : '');
+    if (amtTxt) s += `<text class="sublabel" style="${acc.amount > 0 ? 'fill:var(--dem);font-weight:600' : ''}" x="${VB_W - 8}" y="${y + 22}" text-anchor="end">${esc(amtTxt)}</text>`;
+    s += `</g>`;
+  });
+  s += playhead(top, height) + '</svg>';
+  $('lanesWrap').innerHTML = s;
+}
+
+function renderKpis() {
+  const t = state.sim.totals;
+  let sofar = 0; for (const r of Object.values(state.sim.results)) sofar += accrueUntil(r, state.now).amount;
+  $('kpis').innerHTML = `
+    <div class="kpi"><span class="label">계획 전체 체선료 노출</span><span class="value dem">${fmtUSD(t.amount)}</span><span class="sub">현재 시각까지 발생 ${fmtUSD(sofar)}</span></div>
+    <div class="kpi"><span class="label">체선 발생 선박</span><span class="value">${t.demVessels} / ${VESSELS.length}척</span><span class="sub">허용 레이타임을 넘기는 배</span></div>
+    <div class="kpi"><span class="label">총 묘박 대기</span><span class="value">${fmtH(t.waitH)}</span><span class="sub">NOR부터 이동 시작까지의 합</span></div>
+    <div class="kpi"><span class="label">선석 가동률 (4일)</span><span class="value">${Math.round(t.utilization * 100)}%</span><span class="sub">접안 완료~이안 점유 시간 기준</span></div>`;
+}
+
+function renderPlanTable() {
+  let s = `<table><thead><tr><th>선박</th><th>NOR</th><th class="num">허용</th><th class="num">요율/일</th><th>선석</th><th>순서</th><th class="num">대기</th><th class="num">체선료</th></tr></thead><tbody>`;
+  for (const b of BERTHS) {
+    s += `<tr class="berth-head"><td colspan="8">${esc(b.name)} <span class="muted" style="font-weight:400">· ${esc(b.sub)}${b.busyUntil ? ` · 앞 선박 ${fmtT(b.busyUntil)}까지` : ''}</span></td></tr>`;
+    const list = state.plan[b.id];
+    if (!list.length) s += `<tr><td colspan="8" class="muted">배정된 선박 없음</td></tr>`;
+    list.forEach((vid, i) => {
+      const v = VMAP[vid], r = state.sim.results[vid];
+      const opts = v.berths.map(bid => `<option value="${bid}" ${bid === b.id ? 'selected' : ''}>${esc(BMAP[bid].name)}</option>`).join('');
+      s += `<tr>
+        <td><div class="vname">${esc(v.name)}</div><div class="vmeta">${esc(v.type)} · ${v.dwt.toLocaleString()} DWT · ${esc(v.cargoKo)}</div></td>
+        <td class="mono">${fmtT(v.nor)}</td>
+        <td class="num">${v.allowedH}h</td>
+        <td class="num">${fmtUSD(v.rate)}</td>
+        <td><select data-vid="${vid}" class="berthSel" aria-label="${esc(v.name)} 선석">${opts}</select></td>
+        <td><span class="order"><button class="btn small mv" data-vid="${vid}" data-dir="-1" ${i === 0 ? 'disabled' : ''} aria-label="앞으로">↑</button><button class="btn small mv" data-vid="${vid}" data-dir="1" ${i === list.length - 1 ? 'disabled' : ''} aria-label="뒤로">↓</button></span></td>
+        <td class="num">${fmtH(r.waitH)}</td>
+        <td class="num" style="${r.amount > 0 ? 'color:var(--dem);font-weight:600' : ''}">${fmtUSD(r.amount)}</td>
+      </tr>`;
+    });
+  }
+  s += `</tbody></table>`;
+  $('planTable').innerHTML = s;
+}
+
+function renderStatus() {
+  const rows = Object.values(state.sim.results).map(r => ({ r, v: VMAP[r.vid], acc: accrueUntil(r, state.now), st: statusAt(r, state.now) }));
+  rows.sort((a, b) => {
+    const rank = s => ({ dem: 0, pause: 1, wait: 2, shift: 3, ops: 4, done: 6, na: 7 }[s.code] ?? 5);
+    const ra = rank(a.st), rb = rank(b.st); if (ra !== rb) return ra - rb;
+    if (b.acc.amount !== a.acc.amount) return b.acc.amount - a.acc.amount;
+    const remA = a.r.allowed - a.acc.lay, remB = b.r.allowed - b.acc.lay; return remA - remB;
+  });
+  $('statusList').innerHTML = rows.map(({ r, v, acc, st }) => {
+    const used = acc.lay + acc.full + acc.half, span = Math.max(r.allowed, used);
+    const layW = (acc.lay / span) * 100, fullW = (acc.full / span) * 100, halfW = (acc.half / span) * 100;
+    const remaining = r.allowed - acc.lay;
+    const meta = st.code === 'na' ? `NOR 예정 ${fmtT(v.nor)}` : (acc.amount > 0 ? `체선 ${fmtH(acc.full + acc.half)}` : `레이타임 잔여 ${fmtH(remaining)}`);
+    return `<div class="vs" data-vid="${v.id}" role="button" tabindex="0">
+      <span class="name">${esc(v.name)}</span><span class="pill ${st.code}">${esc(st.label)}</span>
+      <div class="meter"><i class="lay" style="width:${layW}%"></i><i class="dem" style="left:${layW}%;width:${fullW}%"></i><i class="half" style="left:${layW + fullW}%;width:${halfW}%"></i></div>
+      <div class="meta"><span>${esc(meta)} · 허용 ${r.allowed}h</span><span class="amt ${acc.amount > 0 ? 'dem' : ''}">${fmtUSD(acc.amount)}</span></div>
+    </div>`;
+  }).join('');
+  // feed
+  const ev = Object.values(state.sim.results).flatMap(r => r.events.map(e => ({ ...e, vid: r.vid }))).filter(e => e.t <= state.now + EPS).sort((a, b) => b.t - a.t);
+  const latest = ev[0];
+  $('headline').textContent = latest ? `${fmtT(latest.t)} · ${VMAP[latest.vid].name} · ${latest.text}` : '아직 아무 선박도 도착하지 않았다.';
+  $('feed').innerHTML = ev.slice(0, 9).map(e => `<li><span class="t">${fmtT(e.t)}</span><span><span class="v">${esc(VMAP[e.vid].name)}</span> · ${esc(e.text)}</span></li>`).join('') || '<li><span class="t">—</span><span class="muted">이벤트 없음</span></li>';
+}
+
+function renderDrawer() {
+  const vid = state.selected; if (!vid) { $('drawer').hidden = true; $('scrim').hidden = true; return; }
+  const v = VMAP[vid], r = state.sim.results[vid], b = BMAP[r.berthId], c = r.call;
+  const row = (k, val, rule) => `<tr><td>${k}</td><td class="num">${val}</td><td class="rule">${rule || ''}</td></tr>`;
+  let s = `<div class="dhead"><div><h2>${esc(v.name)} — 레이타임 계산서</h2><p class="muted" style="font-size:12px">${esc(v.type)} · ${v.dwt.toLocaleString()} DWT · ${esc(v.cargoKo)} · ${esc(b.name)} · 가상 데이터</p></div><button class="btn small" id="closeDrawer" aria-label="닫기">닫기 ✕</button></div>`;
+  s += `<table><thead><tr><th>항목</th><th class="num">값</th><th>근거</th></tr></thead><tbody>`;
+  s += row('NOR 제출·수령', fmtT(v.nor), 'SOF');
+  s += row('통지시간 만료 (NOR+6h)', fmtT(v.nor + NOTICE_H), 'ASB-06-NOR-START');
+  s += row('이동 시작 → 접안 완료', `${fmtT(c.shiftStart)} → ${fmtT(c.allFast)}`, b.rule);
+  s += row('레이타임 개시', `<b>${fmtT(r.ltStart)}</b>`, `min 규칙 · ${esc(r.startRule)}`);
+  s += row('호스 분리 = 종료', fmtT(r.ltEnd), 'ASB-11-END-HOSES');
+  s += row('경과', fmtH(r.ltEnd - r.ltStart), '');
+  s += row('(−) 이동 제외', fmtH(r.exclH), r.exclH > EPS ? 'ASB-07-SHIFTING-EXCL' : '개시 전 이동 또는 체선 중');
+  s += row('사용 시간', `<b>${fmtH(r.usedTotal)}</b>`, '');
+  s += row('허용 시간', `${r.allowed}h`, '계약 Part I (가정)');
+  s += row('체선 개시', r.demStart !== null && r.demStart < r.ltEnd ? fmtT(r.demStart) : '—', '');
+  s += row('체선 시간 (전액)', fmtH(r.demFull), 'ASB-08-RATE-PRORATA');
+  s += row('체선 시간 (반액)', fmtH(r.demHalf), r.demHalf > EPS ? 'ASB-08-HALF-RATE (강풍)' : '');
+  s += row('요율', `${fmtUSD(v.rate)}/일 = ${fmtUSD(v.rate / 24)}/h`, '계약 Part I (가상)');
+  s += `<tr class="total"><td>체선료</td><td class="num" style="color:var(--dem)">${fmtUSD(r.amount)}</td><td class="rule">${r.demFull.toFixed(2)}h × ${fmtUSD(v.rate / 24)} + ${r.demHalf.toFixed(2)}h × ${fmtUSD(v.rate / 48)}</td></tr>`;
+  s += `</tbody></table>`;
+  for (const is of r.issues) {
+    const alt = is.altHours ? ` 대안 계산: ${fmtUSD(Math.max(0, (r.demFull + is.altHours)) * v.rate / 24 + r.demHalf * v.rate / 48)}.` : '';
+    s += `<div class="issue"><b>쟁점 · ${esc(is.title)}</b><br>${esc(is.text)}${esc(alt)}</div>`;
+  }
+  s += `<h3 style="margin:14px 0 6px">사건 기록 (SOF)</h3><ul class="events">${r.events.map(e => `<li><span class="mono muted">${fmtT(e.t)}</span><span>${esc(e.text)}</span></li>`).join('')}</ul>`;
+  s += `<p class="notes" style="margin-top:12px">대기 ${fmtH(r.waitH)} · 하역 ${v.opsH}h · 이 계산서는 양하항 1개 항구의 허용 시간만 쓴 단순화다. 실제 계산서는 선적항 사용분·서류 대기·펌핑 워런티를 함께 본다.</p>`;
+  $('drawer').innerHTML = s; $('drawer').hidden = false; $('scrim').hidden = false;
+  $('closeDrawer').onclick = () => { state.selected = null; renderAll(); };
+}
+
+function renderProposal() {
+  const p = state.proposal; const el = $('proposal');
+  if (!p) { el.innerHTML = ''; return; }
+  const cur = state.sim.totals.amount, nxt = p.sim.totals.amount, saving = cur - nxt;
+  if (!p.moves.length || saving <= 0.5) { el.innerHTML = `<div class="proposal"><b>현재 계획이 탐색 범위에서 최선이다.</b><p class="muted" style="font-size:12.5px">선석·순서를 바꿔도 총 노출 ${fmtUSD(cur)}을 줄이지 못했다. 남은 레버는 하역 속도(육상 탱크 여유)나 접안 규칙 예외다.</p><div class="toolbar" style="margin-top:8px"><button class="btn small" id="closeProp">닫기</button></div></div>`; }
+  else el.innerHTML = `<div class="proposal"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><b>대안: 총 노출 ${fmtUSD(cur)} → ${fmtUSD(nxt)}</b><span class="delta" style="color:var(--good)">−${fmtUSD(saving)}</span></div>
+    <ul>${p.moves.map(m => `<li><b>${esc(VMAP[m.vid].name)}</b>: ${esc(m.from)} → ${esc(m.to)}</li>`).join('')}</ul>
+    <p class="muted" style="font-size:12.5px">체선 선박 ${state.sim.totals.demVessels}척 → ${p.sim.totals.demVessels}척, 총 대기 ${fmtH(state.sim.totals.waitH)} → ${fmtH(p.sim.totals.waitH)}. 접안 규칙은 자동 적용됐고 공정·탱크 제약은 반영되지 않았다. 학습용 what-if이며 적용은 담당자 판단이다.</p>
+    <div class="toolbar" style="margin-top:8px"><button class="btn primary small" id="applyProp">대안 적용</button><button class="btn small" id="closeProp">닫기</button></div></div>`;
+  const ap = $('applyProp'); if (ap) ap.onclick = () => { state.plan = clonePlan(p.plan); state.proposal = null; recompute(); renderAll(); };
+  $('closeProp').onclick = () => { state.proposal = null; renderProposal(); };
+}
+
+function renderAll() {
+  $('nowText').textContent = fmtT(state.now);
+  $('slider').value = state.now;
+  renderKpis(); renderGantt(); renderLanes(); renderPlanTable(); renderStatus(); renderDrawer(); renderProposal();
+}
+function renderTimeOnly() {
+  $('nowText').textContent = fmtT(state.now);
+  renderKpis(); renderGantt(); renderLanes(); renderStatus();
+}
+
+// ===== 상호작용 =====
+$('slider').addEventListener('input', e => { state.now = parseFloat(e.target.value); renderTimeOnly(); });
+let raf = null, last = null;
+function tick(ts) {
+  if (!state.playing) return;
+  if (last !== null) { const dt = (ts - last) / 1000; state.now = Math.min(HORIZON, state.now + dt * 4 * state.speed); }
+  last = ts; renderTimeOnly(); $('slider').value = state.now;
+  if (state.now >= HORIZON) { state.playing = false; $('playBtn').textContent = '▶ 재생'; return; }
+  raf = requestAnimationFrame(tick);
+}
+$('playBtn').addEventListener('click', () => {
+  state.playing = !state.playing; $('playBtn').textContent = state.playing ? '❚❚ 일시정지' : '▶ 재생';
+  if (state.playing) { if (state.now >= HORIZON) state.now = 0; last = null; raf = requestAnimationFrame(tick); }
+});
+$('speedBtn').addEventListener('click', () => { state.speed = state.speed === 1 ? 3 : state.speed === 3 ? 8 : 1; $('speedBtn').textContent = `속도 ${state.speed}×`; });
+$('resetTimeBtn').addEventListener('click', () => { state.now = 0; renderTimeOnly(); $('slider').value = 0; });
+$('weatherChk').addEventListener('change', e => { state.weather = e.target.checked; state.proposal = null; recompute(); renderAll(); });
+$('resetPlanBtn').addEventListener('click', () => { state.plan = clonePlan(DEFAULT_PLAN); state.proposal = null; recompute(); renderAll(); });
+$('optBtn').addEventListener('click', () => {
+  $('optBtn').disabled = true; $('optBtn').textContent = '탐색 중…';
+  setTimeout(() => {
+    const res = optimize(state.plan, state.weather);
+    state.proposal = { plan: res.plan, sim: simulate(res.plan, state.weather), moves: diffPlans(state.plan, res.plan) };
+    $('optBtn').disabled = false; $('optBtn').textContent = '대안 순서 탐색 (what-if)'; renderProposal();
+  }, 20);
+});
+document.addEventListener('change', e => {
+  if (e.target.classList.contains('berthSel')) {
+    const vid = e.target.dataset.vid, to = e.target.value;
+    const from = Object.keys(state.plan).find(k => state.plan[k].includes(vid));
+    state.plan[from] = state.plan[from].filter(x => x !== vid); state.plan[to].push(vid);
+    state.proposal = null; recompute(); renderAll();
+  }
+});
+document.addEventListener('click', e => {
+  const mv = e.target.closest('.mv');
+  if (mv) {
+    const vid = mv.dataset.vid, dir = parseInt(mv.dataset.dir, 10);
+    const bid = Object.keys(state.plan).find(k => state.plan[k].includes(vid)); const list = state.plan[bid]; const i = list.indexOf(vid), j = i + dir;
+    if (j >= 0 && j < list.length) { [list[i], list[j]] = [list[j], list[i]]; state.proposal = null; recompute(); renderAll(); }
+    return;
+  }
+  const lane = e.target.closest('.lane, .vs, .gbar');
+  if (lane) { state.selected = lane.dataset.vid; renderAll(); return; }
+  if (e.target.id === 'scrim') { state.selected = null; renderAll(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && state.selected) { state.selected = null; renderAll(); }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.lane, .vs')) { e.preventDefault(); state.selected = e.target.dataset.vid; renderAll(); }
+});
+// tooltip
+const tip = $('tip');
+document.addEventListener('mousemove', e => {
+  const el = e.target.closest('[data-tip]');
+  if (!el) { tip.hidden = true; return; }
+  const lines = el.dataset.tip.split('\n');
+  tip.innerHTML = `<b>${esc(lines[0])}</b>${lines.slice(1).map(esc).join('<br>')}`;
+  tip.hidden = false;
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX + pad, y = e.clientY + pad;
+  if (x + w > window.innerWidth - 8) x = e.clientX - w - pad; if (y + h > window.innerHeight - 8) y = e.clientY - h - pad;
+  tip.style.left = x + 'px'; tip.style.top = y + 'px';
+});
+document.addEventListener('mouseleave', () => { tip.hidden = true; });
+
+recompute(); renderAll();
+</script>

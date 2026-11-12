@@ -1,0 +1,333 @@
+{
+  "id": "S15-deadline",
+  "title": "선적 기한이 있는 출하",
+  "description": "강풍(11/11 09:00~11/12 03:00) 예보 아래, V09 매수인이 다음 항차 때문에 '11/11 08:00까지 접안'을 요구합니다(계약 제7조 선적 기한). 도착 순서대로 붙이면 V09는 강풍이 끝난 11/12 04:30에야 접안할 수 있습니다.",
+  "data_label": "가상 데이터",
+  "card": {
+    "category": "출하 마감",
+    "situation": "강풍(11/11 09:00~11/12 03:00) 예보 아래, V09 매수인이 다음 항차 때문에 '11/11 08:00까지 접안'을 요구합니다(계약 제7조 선적 기한). 도착 순서대로 붙이면 V09는 강풍이 끝난 11/12 04:30에야 접안할 수 있습니다.",
+    "question": "선적 기한을 지키려면 누가 강풍 전 자리를 양보해야 하고, 그 비용은 얼마인가?",
+    "rules": [
+      "ETB-11",
+      "ETB-07",
+      "ETB-05"
+    ],
+    "clauses": [
+      "CT-2611-61 제7조"
+    ],
+    "watch": [
+      "기준안이 '성립 안 함(V09 기한 초과)'으로 표시되는지",
+      "모든 후보에서 V09 접안이 11/11 08:00 이전인지",
+      "기한 때문에 밀려난 배와 그 체선료"
+    ],
+    "order": 14
+  },
+  "horizon": {
+    "start": "2026-11-10 00:00",
+    "end": "2026-11-14 00:00"
+  },
+  "berths": [
+    "#6",
+    "#7",
+    "#8",
+    "Buoy"
+  ],
+  "vessels": [
+    {
+      "id": "V01",
+      "name": "MT HANBADA",
+      "vessel_type": "CRUDE",
+      "grt": 160000,
+      "dwt": 300000,
+      "loa": 330,
+      "pbl": 0,
+      "draft": 20.5,
+      "direction": "IMPORT",
+      "material_code": "CR-ARL",
+      "qty": 260000,
+      "eta": "2026-11-10 04:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-01",
+      "remarks": "VLCC. 흘수 20.5 m → Buoy 조석 시간창 필요"
+    },
+    {
+      "id": "V02",
+      "name": "MT DONGHAE STAR",
+      "vessel_type": "CRUDE",
+      "grt": 85000,
+      "dwt": 160000,
+      "loa": 274,
+      "pbl": 0,
+      "draft": 17.0,
+      "direction": "IMPORT",
+      "material_code": "CR-BSR",
+      "qty": 150000,
+      "eta": "2026-11-10 14:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-02"
+    },
+    {
+      "id": "V03",
+      "name": "MT SEORAK GLORY",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 28000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 42000,
+      "eta": "2026-11-10 07:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-03"
+    },
+    {
+      "id": "V04",
+      "name": "MT HALLA SPIRIT",
+      "vessel_type": "PRODUCT",
+      "grt": 42000,
+      "dwt": 75000,
+      "loa": 228,
+      "pbl": 110,
+      "draft": 12.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 40000,
+      "eta": "2026-11-10 09:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-04"
+    },
+    {
+      "id": "V05",
+      "name": "MT JIRI PEARL",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 26000,
+      "dwt": 45000,
+      "loa": 180,
+      "pbl": 90,
+      "draft": 10.5,
+      "direction": "EXPORT",
+      "material_code": "KR-JETA1",
+      "qty": 30000,
+      "eta": "2026-11-11 01:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-05",
+      "priority": "URGENT",
+      "remarks": "항공유 긴급 출하 — 부분 화물이라 허용 시간 12시간"
+    },
+    {
+      "id": "V06",
+      "name": "MT TAEBAEK",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 29000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 40000,
+      "eta": "2026-11-10 22:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-06",
+      "remarks": "허용 36시간·하루 $16,000 — 기다려도 비용이 작은 배"
+    },
+    {
+      "id": "V07",
+      "name": "MT GAYA BRIDGE",
+      "vessel_type": "BASE_OIL",
+      "grt": 22000,
+      "dwt": 38000,
+      "loa": 176,
+      "pbl": 85,
+      "draft": 10.0,
+      "direction": "EXPORT",
+      "material_code": "BC-HSFO",
+      "qty": 35000,
+      "eta": "2026-11-11 06:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-07",
+      "remarks": "국내 판매계약 — 기상 감면 조항 없음"
+    },
+    {
+      "id": "V08",
+      "name": "MT NAMSAN DAWN",
+      "vessel_type": "PRODUCT",
+      "grt": 45000,
+      "dwt": 80000,
+      "loa": 230,
+      "pbl": 115,
+      "draft": 12.5,
+      "direction": "IMPORT",
+      "material_code": "NP-FR",
+      "qty": 54000,
+      "eta": "2026-11-11 08:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-08"
+    },
+    {
+      "id": "V09",
+      "name": "MT BUKHAN RIVER",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 27000,
+      "dwt": 48000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 38000,
+      "eta": "2026-11-10 23:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-61",
+      "deadline": "2026-11-11 08:00",
+      "remarks": "매수인 요청 선적 기한 11/11 08:00 접안"
+    },
+    {
+      "id": "W1",
+      "name": "MT ULSAN ARIRANG",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 28000,
+      "dwt": 50000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 40000,
+      "eta": "2026-11-09 18:00",
+      "status": "WORKING",
+      "contract_id": "CT-2611-10",
+      "working": {
+        "berth": "#6",
+        "etb": "2026-11-09 22:00",
+        "work_start": "2026-11-09 23:00"
+      },
+      "work": {
+        "hours": 14,
+        "hose_term_h": 1
+      },
+      "remarks": "11/09 22:00부터 #6에서 선적 중"
+    },
+    {
+      "id": "F1",
+      "name": "MT MUSAN",
+      "vessel_type": "PRODUCT",
+      "grt": 40000,
+      "dwt": 72000,
+      "loa": 228,
+      "pbl": 110,
+      "draft": 12.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 38000,
+      "eta": "2026-11-11 10:00",
+      "status": "FIX",
+      "contract_id": "CT-2611-11",
+      "fixed": {
+        "berth": "#7",
+        "etb": "2026-11-11 14:00"
+      },
+      "work": {
+        "hours": 12,
+        "hose_term_h": 1
+      },
+      "remarks": "매수인 요청으로 11/11 14:00 #7 접안 확정(FIX)"
+    }
+  ],
+  "restrictions": [],
+  "tide_windows": {
+    "_note": "가상 조석 시간창(고조 ±2시간). 공공데이터포털 조석예보 형식을 대신하는 값",
+    "Buoy": [
+      [
+        "2026-11-10 03:10",
+        "2026-11-10 07:10"
+      ],
+      [
+        "2026-11-10 15:35",
+        "2026-11-10 19:35"
+      ],
+      [
+        "2026-11-11 04:00",
+        "2026-11-11 08:00"
+      ],
+      [
+        "2026-11-11 16:25",
+        "2026-11-11 20:25"
+      ],
+      [
+        "2026-11-12 04:50",
+        "2026-11-12 08:50"
+      ],
+      [
+        "2026-11-12 17:15",
+        "2026-11-12 21:15"
+      ],
+      [
+        "2026-11-13 05:40",
+        "2026-11-13 09:40"
+      ],
+      [
+        "2026-11-13 18:05",
+        "2026-11-13 22:05"
+      ],
+      [
+        "2026-11-14 06:30",
+        "2026-11-14 10:30"
+      ],
+      [
+        "2026-11-14 18:55",
+        "2026-11-14 22:55"
+      ],
+      [
+        "2026-11-15 07:20",
+        "2026-11-15 11:20"
+      ],
+      [
+        "2026-11-15 19:45",
+        "2026-11-15 23:45"
+      ],
+      [
+        "2026-11-16 08:10",
+        "2026-11-16 12:10"
+      ],
+      [
+        "2026-11-16 20:35",
+        "2026-11-17 00:35"
+      ]
+    ]
+  },
+  "inventory": [
+    {
+      "group": "CRUDE",
+      "unit": "kl",
+      "capacity": 850000,
+      "opening": 600000,
+      "daily_net": -120000,
+      "minimum": 0
+    }
+  ],
+  "weather_forecast": {
+    "source": "가상 예보(기상청 단기예보 형식)",
+    "issued_at": "2026-11-09 17:00",
+    "note": "11/11 오전 강풍 특보 예상 — 접안 한계 15 m/s 초과 구간",
+    "segments": [
+      {
+        "from": "2026-11-10 00:00",
+        "to": "2026-11-11 09:00",
+        "wind_ms": 8
+      },
+      {
+        "from": "2026-11-11 09:00",
+        "to": "2026-11-12 03:00",
+        "wind_ms": 17
+      },
+      {
+        "from": "2026-11-12 03:00",
+        "to": "2026-11-14 00:00",
+        "wind_ms": 9
+      }
+    ]
+  }
+}

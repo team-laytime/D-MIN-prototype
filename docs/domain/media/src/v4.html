@@ -1,0 +1,420 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="lib.css">
+<style>
+.scene.on{display:flex;flex-direction:column;justify-content:center}
+body,#cap,.card,.sub{word-break:keep-all}
+.ref{font-size:15px;color:var(--muted);text-align:center;margin-top:14px}
+/* parking */
+.pk{display:flex;flex-direction:column;gap:20px;margin-top:10px}
+.pkrow{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center}
+.pkrow .l{font-size:34px;color:var(--muted);text-align:right}
+.pkrow .ar{font-size:34px;color:var(--accent);text-align:center}
+.pkrow .r{font-size:38px;font-weight:700}
+.pkrow .r small{font-size:20px;color:var(--muted);font-weight:500;margin-left:10px}
+/* two ships setup */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:2px}
+.two .card .nm{font-size:30px;font-weight:700}
+.two .card .ln{font-size:20px;margin-top:6px;color:var(--fg)}
+.two .card .ln b{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-weight:600}
+/* totals */
+.tot{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:10px}
+.tot .card{min-width:230px;text-align:center;padding:12px 20px}
+.tot .op{font-size:34px;color:var(--muted)}
+/* baseline */
+.bs{display:grid;grid-template-columns:1fr 260px 1fr;gap:18px;align-items:center;margin-top:10px}
+.bs .card{text-align:center;padding:22px 20px}
+.bs .mid{text-align:center}
+/* flow */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:26px 36px;margin-top:6px}
+.fb{position:relative;min-height:168px}
+.fb .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px;margin-bottom:6px}
+.fb .t{font-size:28px;font-weight:700;line-height:1.2}
+.fb .d{font-size:17px;color:var(--muted);margin-top:8px;line-height:1.4}
+.fb.human{border-color:var(--orange)}
+.fb.human .n{color:var(--orange)}
+.fb .arr{position:absolute;right:-31px;top:50%;margin-top:-16px;font-size:28px;color:var(--accent)}
+/* candidate card */
+.cc{width:1000px;margin:4px auto 0;padding:20px 28px}
+.cc .hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px}
+.cc .ttl{font-size:30px;font-weight:700}
+.cc .badge{padding:6px 16px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);font-size:20px;font-weight:600}
+.cc .row{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--line);align-items:baseline}
+.cc .k{color:var(--muted);font-size:17px}
+.cc .v{font-size:22px;line-height:1.35}
+.cc .v.warn{color:#fab219}
+.cc .btns{display:flex;gap:14px;margin-top:10px;align-items:center}
+.btn{padding:9px 24px;border-radius:10px;border:1px solid var(--accent);font-size:20px;font-weight:600}
+.btn.o{border-color:var(--orange);color:var(--orange)}
+/* validation */
+.vt{width:1060px;margin:0 auto;border-collapse:collapse;font-size:24px}
+.vt th{color:var(--muted);font-size:15px;letter-spacing:.05em;text-align:left;padding:8px 14px;border-bottom:1px solid var(--line2)}
+.vt td{padding:13px 14px;border-bottom:1px solid var(--line)}
+.vt td.num{font-family:"IBM Plex Mono",monospace;text-align:right}
+.ok{color:var(--accent);font-weight:700}
+.chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chip{padding:6px 16px;border-radius:999px;border:1px dashed var(--line2);color:var(--muted);font-size:18px}
+/* scope */
+table.mx{border-collapse:separate;border-spacing:0;font-size:28px;margin:6px auto 0}
+table.mx th{color:var(--muted);font-size:17px;font-weight:600;padding:8px 30px;text-align:center}
+table.mx td{padding:14px 34px;text-align:center;border-top:1px solid var(--line)}
+table.mx td.rl{text-align:left;font-weight:600}
+table.mx td.mono{font-family:"IBM Plex Mono",monospace}
+table.mx .good{color:var(--accent);font-weight:700}
+table.mx .bad{color:var(--red)}
+.two2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}
+.two2 .card .t{font-size:24px;font-weight:700}
+.two2 .card .d{font-size:17px;color:var(--muted);margin-top:6px;line-height:1.4}
+/* wrap */
+.sum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:14px}
+.sum .card{min-height:160px}
+.sum .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px;margin-bottom:8px}
+.sum .t{font-size:25px;font-weight:600;line-height:1.3}
+.sum .d{color:var(--muted);font-size:17px;margin-top:8px;line-height:1.4}
+</style></head><body>
+<div class="topbar"><div><b>체선료 입문</b> · 4편 배의 여정에서 후보 비교까지</div><div>SKALA 최종 프로젝트 · 가상 데이터 · 규칙값 가정</div></div>
+<div class="stage">
+
+<section class="scene" id="s-title">
+  <div style="position:absolute;left:64px;top:70px;max-width:740px">
+    <div class="tag rv" id="t1-tag">체선료 입문 · 4편</div>
+    <div class="h rv" id="t1-h" style="font-size:60px;margin-top:20px">배의 여정에서<br>후보 비교까지</div>
+    <div class="sub rv" id="t1-sub" style="margin-top:16px;font-size:24px">배가 기다리는 시간이 돈이 되고, 순서를 바꾸면 그 돈이 달라진다</div>
+    <div class="rv" id="t1-meta" style="margin-top:30px;color:var(--muted);font-size:16px">여정 · 시계 · 기준안(베이스라인) · 제약 · 후보 비교 · 검증</div>
+  </div>
+  <svg id="t1-ship" viewBox="0 0 420 210" style="position:absolute;right:60px;top:90px;width:460px;height:230px"></svg>
+</section>
+
+<section class="scene" id="s-parking">
+  <div class="h rv" id="pk0" style="text-align:center;font-size:36px">터미널을 주차장으로 바꿔 보면</div>
+  <div class="pk" style="margin-top:26px">
+    <div class="pkrow rv" id="pk1"><div class="l">주차칸</div><div class="ar">→</div><div class="r">부두</div></div>
+    <div class="pkrow rv" id="pk2"><div class="l">손님</div><div class="ar">→</div><div class="r">배</div></div>
+    <div class="pkrow rv" id="pk3"><div class="l">무료 시간</div><div class="ar">→</div><div class="r">허용 시간<small>레이타임</small></div></div>
+    <div class="pkrow rv" id="pk4"><div class="l">초과 요금</div><div class="ar">→</div><div class="r" style="color:var(--red)">체선료</div></div>
+    <div class="pkrow rv" id="pk5"><div class="l">관리인</div><div class="ar">→</div><div class="r" style="color:var(--orange)">스케줄러</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-j1"><svg id="jv1" viewBox="0 0 1152 400" width="1152" height="400" style="display:block"></svg></section>
+<section class="scene" id="s-j2"><svg id="jv2" viewBox="0 0 1152 400" width="1152" height="400" style="display:block"></svg></section>
+<section class="scene" id="s-j3"><svg id="jv3" viewBox="0 0 1152 400" width="1152" height="400" style="display:block"></svg></section>
+<section class="scene" id="s-j4"><svg id="jv4" viewBox="0 0 1152 400" width="1152" height="400" style="display:block"></svg></section>
+
+<section class="scene" id="s-calc">
+  <div class="sub">허용 시간 <b class="mono" style="color:var(--fg)">12시간</b> · 요금 <b class="mono" style="color:var(--fg)">시간당 $4,000</b> (Y호의 경우)</div>
+  <svg id="k4-svg" width="1152" height="185" style="margin-top:10px;display:block"></svg>
+  <div style="display:flex;gap:56px;margin-top:6px;align-items:flex-end">
+    <div><div class="sub">사용 시간</div><div class="big mono" id="k4-used">0시간</div></div>
+    <div><div class="sub">넘은 시간</div><div class="big mono" id="k4-dem" style="color:var(--red)">0시간</div></div>
+    <div><div class="sub">체선료 = 넘은 시간 × 시간당 요금</div><div class="big mono" id="k4-amt" style="color:var(--red)">$0</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-setup">
+  <div class="two">
+    <div class="card rv" id="su-x" style="border-color:var(--blue)"><div class="nm">X호 <span class="sub" style="font-size:18px">먼저 도착</span></div><div class="ln">허용 시간 <b>24시간</b> · 시간당 <b>$2,000</b> · 하역 <b>14시간</b></div></div>
+    <div class="card rv" id="su-y" style="border-color:var(--accent)"><div class="nm">Y호 <span class="sub" style="font-size:18px">2시간 뒤 도착</span></div><div class="ln">허용 시간 <b>12시간</b> · 시간당 <b>$4,000</b> · 하역 <b>8시간</b></div></div>
+  </div>
+  <svg id="su-svg" width="1152" height="282" style="margin-top:10px;display:block"></svg>
+  <div class="rv ref" id="su-n" style="margin-top:2px">접안 · 호스 연결 · 호스 분리 · 이안에 각각 1시간이 걸린다고 단순하게 잡은 사례(SC-01) · 단위: 달러, 가상 데이터</div>
+</section>
+
+<section class="scene" id="s-ordA">
+  <div class="sub" style="margin-top:0">순서 A · <b style="color:var(--fg)">도착 순서대로</b> (X호 먼저) — 이게 기준안이다</div>
+  <svg id="oa-svg" width="1152" height="282" style="margin-top:4px;display:block"></svg>
+  <div class="tot">
+    <div class="card rv" id="oa-1"><div class="sub">X호 체선료</div><div class="big mono" id="oa-1v" style="font-size:44px">$0</div></div><div class="op rv" id="oa-op1">+</div>
+    <div class="card rv" id="oa-2" style="border-color:var(--red)"><div class="sub">Y호 체선료</div><div class="big mono" id="oa-2v" style="font-size:44px;color:var(--red)">$0</div></div><div class="op rv" id="oa-op2">=</div>
+    <div class="card rv" id="oa-3" style="border-color:var(--red)"><div class="sub">합계</div><div class="big mono" id="oa-3v" style="font-size:44px;color:var(--red)">$0</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-ordB">
+  <div class="sub" style="margin-top:0">순서 B · <b style="color:var(--fg)">허용 시간이 짧은 Y호 먼저</b></div>
+  <svg id="ob-svg" width="1152" height="282" style="margin-top:4px;display:block"></svg>
+  <div class="tot">
+    <div class="card rv" id="ob-1" style="border-color:var(--red)"><div class="sub">X호 체선료</div><div class="big mono" id="ob-1v" style="font-size:44px;color:var(--red)">$0</div></div><div class="op rv" id="ob-op1">+</div>
+    <div class="card rv" id="ob-2"><div class="sub">Y호 체선료</div><div class="big mono" id="ob-2v" style="font-size:44px">$0</div></div><div class="op rv" id="ob-op2">=</div>
+    <div class="card rv" id="ob-3" style="border-color:var(--accent)"><div class="sub">합계</div><div class="big mono" id="ob-3v" style="font-size:44px;color:var(--accent)">$0</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-base">
+  <div class="bs">
+    <div class="card rv" id="bs1" style="border-color:var(--muted)"><div class="tag">베이스라인 · 기준안</div><div class="h" style="font-size:32px;margin-top:12px">순서 A<br>도착 순서대로</div><div class="big mono" id="bs1v" style="margin-top:10px">$0</div><div class="sub" style="margin-top:6px">현업의 기본 규칙: 선착순</div></div>
+    <div class="mid rv" id="bs2"><div class="mono" id="bs2v" style="font-size:46px;color:var(--accent);font-weight:600">−$0</div><div class="sub" style="color:var(--fg);font-size:22px">줄인 금액</div><div class="mono" id="bs2p" style="font-size:26px;color:var(--accent);margin-top:4px">−0%</div>
+      <svg width="220" height="40" viewBox="0 0 220 40" style="margin-top:6px"><line x1="8" y1="20" x2="190" y2="20" stroke="#4fcfc3" stroke-width="3"/><path d="M188,10 L206,20 L188,30 z" fill="#4fcfc3"/></svg></div>
+    <div class="card rv" id="bs3" style="border-color:var(--accent)"><div class="tag" style="border-color:var(--accent);color:var(--accent)">후보 · 최적화 결과</div><div class="h" style="font-size:32px;margin-top:12px">순서 B<br>Y호 먼저</div><div class="big mono" id="bs3v" style="margin-top:10px;color:var(--accent)">$0</div><div class="sub" style="margin-top:6px">제약을 지키는 후보</div></div>
+  </div>
+  <div class="rv" id="bs4" style="text-align:center;margin-top:30px;font-size:26px">줄인 금액 = <b style="color:var(--fg)">기준안의 총 체선료</b> − <b style="color:var(--accent)">후보의 총 체선료</b></div>
+  <div class="rv ref" id="bs5">참고: 과제 원문 3절 · Vopak Horizon Fujairah 계획 규칙(선착순) · IMO MEPC 75/INF.22 (탱커·벌크의 일반 관행은 선착순)</div>
+</section>
+
+<section class="scene" id="s-gates"><svg id="g-svg" viewBox="0 0 1152 450" width="1152" height="450" style="display:block"></svg></section>
+
+<section class="scene" id="s-many">
+  <svg id="m-svg" viewBox="0 0 1152 330" width="1152" height="330" style="display:block"></svg>
+  <div class="chips" id="m-chips" style="margin-top:6px"></div>
+</section>
+
+<section class="scene" id="s-flow1"><div id="fl1"></div></section>
+<section class="scene" id="s-flow2"><div id="fl2"></div></section>
+
+<section class="scene" id="s-card">
+  <div class="card cc">
+    <div class="hd rv" id="cc1"><div class="ttl">후보 1 · 순서 B (Y호 먼저)</div><div class="badge">기준안 대비 −$46,000</div></div>
+    <div class="row rv" id="cc2"><div class="k">예상 총 체선료</div><div class="v"><b class="mono" style="font-size:30px;color:var(--accent)">$6,000</b> <span style="color:var(--muted);margin-left:10px">X호 $6,000 · Y호 $0</span></div></div>
+    <div class="row rv" id="cc3"><div class="k">근거</div><div class="v">도착·NOR 시각, 허용 시간, 시간당 요금, 쓴 규칙이 함께 나온다</div></div>
+    <div class="row rv" id="cc4"><div class="k">남은 위험 ①</div><div class="v warn">접안·호스 연결 1시간이라는 가정에 기댄다 (달라지면 금액이 바뀐다)</div></div>
+    <div class="row rv" id="cc5"><div class="k">남은 위험 ②</div><div class="v warn">도착 시각(ETA)이 바뀌면 순서가 달라질 수 있다</div></div>
+    <div class="row rv" id="cc6"><div class="k">대안</div><div class="v">기준안(순서 A) 유지 시 $52,000</div></div>
+    <div class="btns rv" id="cc7"><div class="btn">이 후보 선택</div><div class="btn o">반려</div><div class="sub" style="margin-left:10px;font-size:17px">'확정' 버튼은 없다 — 고르는 건 사람</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-valid">
+  <table class="vt">
+    <thead><tr><th>정답 사례(손계산)</th><th style="text-align:right">손계산 정답</th><th style="text-align:right">자동 계산</th><th>일치</th></tr></thead>
+    <tbody>
+      <tr class="rv" id="va1"><td>SC-01 · 두 척, 부두 하나 (순서 B)</td><td class="num">$6,000</td><td class="num">$6,000</td><td class="ok">✓ 같다</td></tr>
+      <tr class="rv" id="va2"><td>기준안(순서 A) → 후보(순서 B)</td><td class="num">$52,000 → $6,000</td><td class="num" style="color:var(--accent)">−$46,000</td><td class="ok">✓ 줄인 금액</td></tr>
+      <tr class="rv" id="va3"><td>제약 위반 후보</td><td class="num">0건이어야 한다</td><td class="num">0건</td><td class="ok">✓</td></tr>
+    </tbody>
+  </table>
+  <div class="rv ref" id="va4" style="margin-top:10px">시간 가정(접안·호스 연결 등 1시간)을 같게 맞춘 경우 · 손계산과 계산 엔진·프로토타입이 같은 값</div>
+  <div class="chips rv" id="va5"><div class="chip">다음 정답 사례 · SC-02 밤 접안 제한</div><div class="chip">SC-03 부두 2곳·배 3척</div><div class="chip">SC-04 부두별 제품</div><div class="chip">SC-05 강풍 예보(데모)</div><div class="chip">SC-06 예상값 vs 실제값</div></div>
+</section>
+
+<section class="scene" id="s-scope">
+  <table class="mx">
+    <thead><tr><th></th><th>X호 체선료</th><th>Y호 체선료</th><th>합계</th></tr></thead>
+    <tbody>
+      <tr class="rv" id="sc1"><td class="rl">X호를 먼저</td><td class="mono good" id="sc1x">$0</td><td class="mono bad">$52,000</td><td class="mono bad">$52,000</td></tr>
+      <tr class="rv" id="sc2"><td class="rl">Y호를 먼저</td><td class="mono bad">$6,000</td><td class="mono good" id="sc2y">$0</td><td class="mono good">$6,000</td></tr>
+    </tbody>
+  </table>
+  <div class="rv" id="sc3" style="text-align:center;margin-top:16px;font-size:24px">배마다 <b style="color:var(--accent)">'내가 먼저'</b>가 유리하다 → 그래서 한 척이 아니라 <b style="color:var(--fg)">총합</b>으로 정한다</div>
+  <div class="two2">
+    <div class="card rv" id="sc4"><div class="t">한 척의 체선료 계산</div><div class="d">근거(규칙·시각)까지 낸다 = 총합을 만드는 <b style="color:var(--fg)">부품</b></div></div>
+    <div class="card rv" id="sc5" style="border-color:var(--accent)"><div class="t">여러 척의 순서</div><div class="d">총 체선료를 낮추는 순서 = <b style="color:var(--accent)">최적화 대상</b></div></div>
+  </div>
+  <div class="rv ref" id="sc6">총합은 SK가 실제로 부담하는 금액 기준이어야 한다 · 계약마다 SK가 내는 배와 받는 배가 달라 확인 필요</div>
+</section>
+
+<section class="scene" id="s-wrap">
+  <div class="sum">
+    <div class="card rv" id="w1"><div class="n">01 · 시계</div><div class="t">기다리는 시간부터 돌고<br>호스를 떼면 멈춘다</div><div class="d">통지 시간(보통 6시간) 뒤 또는 접안 중 빠른 때부터. 대기도 산입.</div></div>
+    <div class="card rv" id="w2"><div class="n">02 · 순서가 돈</div><div class="t">같은 두 척도<br>$52,000 대 $6,000</div><div class="d">기준안(도착 순서)보다 얼마나 줄였는지가 성과다.</div></div>
+    <div class="card rv" id="w3"><div class="n">03 · 도우미</div><div class="t">제약을 지키는 후보 →<br>비교 → 위험 → 사람이 선택</div><div class="d">계산은 규칙이, 확정은 사람이.</div></div>
+  </div>
+  <div class="chips rv" id="w4"><div class="chip" style="border-style:solid;color:var(--fg)">아직 현업 확인이 필요한 것</div><div class="chip">예상 작업 종료 시간</div><div class="chip">기준안의 정확한 정의</div><div class="chip">규모(배·부두 수)</div><div class="chip">계약 유형</div><div class="chip">보고서 양식</div></div>
+  <div class="rv ref" id="w5">자료: 과제 원문 · 팀 손계산 정답 SC-01 · Vopak Horizon Fujairah 계획 규칙 · IMO MEPC 75/INF.22 · BIMCO · 팀 도메인 문서</div>
+</section>
+
+</div>
+<div class="capbar"><div id="cap"></div></div>
+<div id="progwrap"><div id="prog"></div></div>
+<script src="lib.js"></script>
+<script>
+// narration progress (0..1) over the spoken part of a scene, and a soft reveal helper
+const P = (lt, dur) => clamp((lt - 0.6) / Math.max(1, dur - 1.6), 0, 1);
+const at = (pn, f, w = 0.08) => easeOut(clamp((pn - f) / w, 0, 1));
+const hh = v => Math.round(v) + '시간';
+
+// ---- title ----
+const shipPaths = ['M30,130 L70,180 L350,180 L392,130 Z', 'M300,130 L300,86 L352,86 L352,130', 'M318,86 L318,62 L336,62 L336,86', 'M90,130 L90,96 M60,130 L60,108', 'M8,198 Q48,184 88,198 T168,198 T248,198 T328,198 T408,198'];
+$('t1-ship').innerHTML = shipPaths.map((d, i) => `<path d="${d}" pathLength="1" fill="none" stroke="${i === 0 ? C.accent : i === 4 ? C.blue : C.muted}" stroke-width="${i === 0 ? 4 : 3}" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1" id="sp${i}"/>`).join('');
+registerScene('title', lt => {
+  rv($('t1-tag'), seg(lt, 0.2)); rv($('t1-h'), seg(lt, 0.6, 0.8)); rv($('t1-sub'), seg(lt, 1.6)); rv($('t1-meta'), seg(lt, 2.6));
+  const k = easeInOut(lin(lt, 0.4, 2.6)); for (let i = 0; i < 5; i++) $('sp' + i).setAttribute('stroke-dashoffset', String(1 - k));
+});
+
+// ---- parking analogy ----
+registerScene('parking', (lt, dur) => {
+  const pn = P(lt, dur); rv($('pk0'), at(pn, 0.0, 0.1));
+  [1, 2, 3, 4, 5].forEach(i => rv($('pk' + i), at(pn, 0.1 + (i - 1) * 0.17)));
+});
+
+// ---- the ship's journey (9 steps, drawn in 4 scenes) ----
+const JX = [76, 201, 326, 451, 576, 701, 826, 951, 1076], JY = 122;
+const JL = [['도착 예정', '시각 통보'], ['주문 확정', '제품·물량·탱크'], ['도착·준비', '완료 통지'], ['지금 불러도', '될까?'], ['접안', '(부두에 붙음)'], ['호스 연결', '안전 점검'], ['하역', '펌프·배관·탱크'], ['호스 분리', '시계 멈춤'], ['기록 정리', '체선료 정산']];
+const JZ = [['도착 전', 16, 264], ['바다에서 기다림', 264, 514], ['부두에서', 514, 889], ['끝난 뒤', 889, 1136]];
+const JFIRST = [1, 1, 2, 3, 4, 4, 4, 4, 4];
+const JWHEN = [0.12, 0.50, 0.12, 0.10, 0.08, 0.22, 0.36, 0.54, 0.76];
+function drawJourney(svgId, stage, lt, dur) {
+  const pn = P(lt, dur);
+  const vis = i => JFIRST[i] < stage ? 1 : (JFIRST[i] === stage ? at(pn, JWHEN[i]) : 0);
+  let s = '';
+  JZ.forEach((z, k) => { s += `<rect x="${z[1]}" y="24" width="${z[2] - z[1] - 6}" height="224" rx="12" fill="${k % 2 ? 'rgba(255,255,255,0.025)' : 'rgba(255,255,255,0.05)'}"/><text x="${(z[1] + z[2]) / 2 - 3}" y="52" text-anchor="middle" fill="${C.muted}" font-size="16" font-weight="600">${z[0]}</text>`; });
+  for (let i = 0; i < 8; i++) { const o = Math.min(vis(i), vis(i + 1)); if (o > 0) s += `<line x1="${JX[i] + 26}" y1="${JY}" x2="${JX[i + 1] - 26}" y2="${JY}" stroke="${C.accent}" stroke-width="3" opacity="${o}"/>`; }
+  for (let i = 0; i < 9; i++) {
+    const o = vis(i); if (o <= 0) continue;
+    const col = i === 3 ? C.orange : (i === 7 ? C.red : C.accent);
+    s += `<g opacity="${o}"><circle cx="${JX[i]}" cy="${JY}" r="24" fill="${C.surface}" stroke="${col}" stroke-width="3"/><text x="${JX[i]}" y="${JY + 7}" text-anchor="middle" fill="${col}" font-size="20" font-weight="700">${i + 1}</text>`;
+    s += `<text x="${JX[i]}" y="${JY + 56}" text-anchor="middle" fill="${C.fg}" font-size="15" font-weight="600">${JL[i][0]}</text><text x="${JX[i]}" y="${JY + 77}" text-anchor="middle" fill="${C.muted}" font-size="14">${JL[i][1]}</text></g>`;
+    if (i === 3 && stage === 3) s += `<circle cx="${JX[i]}" cy="${JY}" r="${32 + 4 * Math.sin(lt * 5)}" fill="none" stroke="${C.orange}" stroke-width="2" opacity="${0.55 * o}"/>`;
+  }
+  // clock bar
+  if (stage >= 2) {
+    const gapEnd = JX[2] + 46, e2 = JX[3], e3 = JX[4] - 40, e4 = JX[7], by = 272, bh = 34;
+    const gk = stage === 2 ? lin(pn, 0.32, 0.12) : 1;
+    let end;
+    if (stage === 2) end = gapEnd + (e2 - gapEnd) * lin(pn, 0.46, 0.46);
+    else if (stage === 3) end = e2 + (e3 - e2) * lin(pn, 0.32, 0.4);
+    else end = e3 + (e4 - e3) * lin(pn, 0.1, 0.42);
+    s += `<text x="20" y="${by + 22}" fill="${C.muted}" font-size="16">허용 시간을 재는 시계</text>`;
+    s += `<rect x="${JX[2]}" y="${by}" width="${(gapEnd - JX[2]) * gk}" height="${bh}" rx="4" fill="${C.notice}"/>`;
+    if (gk > 0.9) s += `<text x="${JX[2] + 2}" y="${by - 8}" fill="${C.muted}" font-size="13">통지 시간</text>`;
+    if (stage > 2 || at(pn, 0.46, 0.06) > 0) s += `<rect x="${gapEnd}" y="${by}" width="${Math.max(0, end - gapEnd)}" height="${bh}" rx="4" fill="${C.blue}"/>`;
+    if (end - gapEnd > 190) s += `<text x="${gapEnd + 12}" y="${by + 23}" fill="#fff" font-size="16" font-weight="600">시계 켜짐 — 허용 시간을 센다</text>`;
+    if (stage >= 3 && end > e2) s += `<line x1="${JX[3]}" y1="${JY + 90}" x2="${JX[3]}" y2="${by}" stroke="${C.orange}" stroke-width="2" stroke-dasharray="4 4" opacity="0.6"/>`;
+    if (stage === 4 && pn > 0.5) { const k = at(pn, 0.5, 0.06); s += `<g opacity="${k}"><line x1="${e4}" y1="${by - 12}" x2="${e4}" y2="${by + bh + 12}" stroke="${C.red}" stroke-width="4"/><text x="${e4}" y="${by + bh + 34}" text-anchor="middle" fill="${C.red}" font-size="17" font-weight="700">시계 멈춤</text></g>`; }
+    const notes = { 2: ['기다리는 시간도 시계에 들어가요', 0.62], 3: ['부르지 못하는 동안에도 시계는 돌아가요', 0.55], 4: ['호스를 떼면 시계가 멈추고, 기록으로 체선료를 계산해요', 0.66] };
+    const nt = notes[stage]; s += `<text x="576" y="378" text-anchor="middle" fill="${C.fg}" font-size="22" font-weight="600" opacity="${at(pn, nt[1])}">${nt[0]}</text>`;
+  }
+  if (stage === 3) s += `<text x="${JX[3]}" y="334" text-anchor="middle" fill="${C.orange}" font-size="16" font-weight="600" opacity="${at(pn, 0.3)}">확인: 부두 · 탱크 · 날씨 · 낮밤 · 도선사와 예선</text>`;
+  $(svgId).innerHTML = s;
+}
+registerScene('j1', (lt, dur) => drawJourney('jv1', 1, lt, dur));
+registerScene('j2', (lt, dur) => drawJourney('jv2', 2, lt, dur));
+registerScene('j3', (lt, dur) => drawJourney('jv3', 3, lt, dur));
+registerScene('j4', (lt, dur) => drawJourney('jv4', 4, lt, dur));
+
+// ---- clock calculation: 12h allowed, 25h used ----
+registerScene('calc', (lt, dur) => {
+  const pn = P(lt, dur), L = 24, R = 1128, hours = 30, x = h => L + h / hours * (R - L), allowed = 12, rate = 4000, used = 25;
+  const cur = used * easeInOut(lin(pn, 0.14, 0.5));
+  let s = '';
+  for (let h = 0; h <= 30; h += 5) s += `<line x1="${x(h)}" y1="46" x2="${x(h)}" y2="130" stroke="${C.line}"/><text x="${x(h)}" y="152" text-anchor="middle" fill="${C.muted}" font-size="13" class="mono">${h}h</text>`;
+  s += `<rect x="${x(0)}" y="64" width="${x(30) - x(0)}" height="54" rx="8" fill="${C.surface2}"/>`;
+  const b1 = Math.min(cur, allowed);
+  if (b1 > 0) s += `<rect x="${x(0)}" y="64" width="${x(b1) - x(0)}" height="54" rx="8" fill="${C.blue}"/>`;
+  if (cur > allowed) s += `<rect x="${x(allowed)}" y="64" width="${x(cur) - x(allowed)}" height="54" fill="${C.red}"/>`;
+  s += `<line x1="${x(allowed)}" y1="50" x2="${x(allowed)}" y2="128" stroke="${C.fg}" stroke-width="2" stroke-dasharray="5 4"/><text x="${x(allowed)}" y="38" text-anchor="middle" fill="${C.fg}" font-size="16" font-weight="600">허용 12시간 소진</text>`;
+  if (b1 > 3) s += `<text x="${x(0) + 14}" y="97" fill="#fff" font-size="18" font-weight="600">허용 시간 안</text>`;
+  if (cur > allowed + 3) s += `<text x="${x(allowed) + 12}" y="97" fill="#fff" font-size="18" font-weight="600">넘은 시간 = 체선</text>`;
+  s += `<line x1="${x(cur)}" y1="54" x2="${x(cur)}" y2="126" stroke="${C.accent}" stroke-width="3"/>`;
+  $('k4-svg').innerHTML = s;
+  const dem = Math.max(0, cur - allowed);
+  $('k4-used').textContent = Math.round(cur) + '시간'; $('k4-dem').textContent = Math.round(dem) + '시간'; $('k4-amt').textContent = fmtUSD(Math.round(dem) * rate);
+});
+
+// ---- two ships, one berth (hours since D1 00:00) ----
+const mkTrack = id => new Track($(id), { hours: 38, offset: 0, left: 120, right: 1136, axisY: 26, labelStep: 6, labelEvery: 12, height: 240 });
+const trSetup = mkTrack('su-svg'), trA = mkTrack('oa-svg'), trB = mkTrack('ob-svg');
+const ROW = { b: 52, x: 116, y: 180 };
+registerScene('setup', (lt, dur) => {
+  const pn = P(lt, dur);
+  rv($('su-x'), at(pn, 0.12)); rv($('su-y'), at(pn, 0.34)); rv($('su-n'), at(pn, 0.9));
+  const it = [{ type: 'rowlabel', y: ROW.b + 17, text: '부두', sub: '누가 붙어 있나' }, { type: 'rowlabel', y: ROW.x + 17, text: 'X호' }, { type: 'rowlabel', y: ROW.y + 17, text: 'Y호' }];
+  it.push({ type: 'bar', y: ROW.b, h: 34, from: 0, to: 6, fill: C.prior, label: '앞 배', opacity: at(pn, 0.58) });
+  it.push({ type: 'mark', t: 6, y0: 40, y1: 226, color: C.warn, dash: '5 4', label: '부두가 비는 시각 D1 06:00', ly: 250, opacity: at(pn, 0.74) });
+  it.push({ type: 'flag', t: 2, y: ROW.x + 34, label: '도착·NOR 02:00', color: C.blue, opacity: at(pn, 0.42) });
+  it.push({ type: 'flag', t: 4, y: ROW.y + 34, label: '도착·NOR 04:00', color: C.accent, opacity: at(pn, 0.56) });
+  trSetup.render(it);
+});
+const ORD = {
+  A: { berth: [['X', 7, 23], ['Y', 25, 35]], X: { gray: [2, 7], blue: [7, 23], bl: 'X호 16시간 사용 · 허용 24시간 안', red: null }, Y: { gray: [4, 10], blue: [10, 22], bl: '허용 12시간', red: [22, 35], rl: '체선 13시간' }, cost: { X: 0, Y: 52000 }, total: 52000 },
+  B: { berth: [['Y', 7, 17], ['X', 19, 35]], Y: { gray: [4, 7], blue: [7, 17], bl: 'Y호 10시간 사용 · 허용 12시간 안', red: null }, X: { gray: [2, 8], blue: [8, 32], bl: '허용 24시간', red: [32, 35], rl: '체선 3시간' }, cost: { X: 6000, Y: 0 }, total: 6000 }
+};
+function ordItems(key, now) {
+  const D = ORD[key], it = [];
+  it.push({ type: 'rowlabel', y: ROW.b + 17, text: '부두', sub: '누가 붙어 있나' }, { type: 'rowlabel', y: ROW.x + 17, text: 'X호', sub: '시계' }, { type: 'rowlabel', y: ROW.y + 17, text: 'Y호', sub: '시계' });
+  const bar = (row, from, to, fill, label) => { if (now <= from || to <= from) return; it.push({ type: 'bar', y: ROW[row], h: 34, from, to: Math.min(to, now), fill, label, minLabel: 36 }); };
+  bar('b', 0, 6, C.prior, '앞 배');
+  D.berth.forEach(([k, a, b]) => bar('b', a, b, k === 'X' ? C.blueSoft : '#1b8f87', k + '호 하역'));
+  ['X', 'Y'].forEach(k => { const d = D[k], r = k.toLowerCase(); bar(r, d.gray[0], d.gray[1], C.notice, '통지'); bar(r, d.blue[0], d.blue[1], C.blue, d.bl); if (d.red) bar(r, d.red[0], d.red[1], C.red, d.rl); });
+  it.push({ type: 'cursor', t: now });
+  return it;
+}
+function drawOrd(key, tr, pre, lt, dur) {
+  const pn = P(lt, dur), D = ORD[key];
+  tr.render(ordItems(key, 35 * easeInOut(lin(pn, 0.05, 0.55))));
+  const f = 0.62; rv($(pre + '-1'), at(pn, f)); rv($(pre + '-op1'), at(pn, f + 0.05)); rv($(pre + '-2'), at(pn, f + 0.06)); rv($(pre + '-op2'), at(pn, f + 0.12)); rv($(pre + '-3'), at(pn, f + 0.14));
+  $(pre + '-1v').textContent = fmtUSD(D.cost.X * easeOut(lin(pn, f, 0.1))); $(pre + '-2v').textContent = fmtUSD(D.cost.Y * easeOut(lin(pn, f + 0.06, 0.1))); $(pre + '-3v').textContent = fmtUSD(D.total * easeOut(lin(pn, f + 0.14, 0.1)));
+}
+registerScene('ordA', (lt, dur) => drawOrd('A', trA, 'oa', lt, dur));
+registerScene('ordB', (lt, dur) => drawOrd('B', trB, 'ob', lt, dur));
+
+// ---- baseline ----
+registerScene('base', (lt, dur) => {
+  const pn = P(lt, dur);
+  rv($('bs1'), at(pn, 0.12)); $('bs1v').textContent = fmtUSD(52000 * easeOut(lin(pn, 0.14, 0.12)));
+  rv($('bs3'), at(pn, 0.50)); $('bs3v').textContent = fmtUSD(6000 * easeOut(lin(pn, 0.52, 0.12)));
+  rv($('bs2'), at(pn, 0.68)); const k = easeOut(lin(pn, 0.7, 0.12)); $('bs2v').textContent = '−' + fmtUSD(46000 * k); $('bs2p').textContent = '−' + Math.round(88 * k) + '%';
+  rv($('bs4'), at(pn, 0.84)); rv($('bs5'), at(pn, 0.9));
+});
+
+// ---- constraints as gates ----
+const PERMS = ['①→②→③', '①→③→②', '②→①→③', '②→③→①', '③→①→②', '③→②→①'];
+const GATES = [['부두별 제품', { 1: '③은 이 부두 불가' }], ['물때(조석)', {}], ['밤(일출·일몰)', { 3: '밤 접안 불가' }], ['날씨(풍속)', { 4: '강풍과 겹침' }], ['탱크 여유', {}]];
+const GX = [410, 530, 650, 770, 890];
+registerScene('gates', (lt, dur) => {
+  const pn = P(lt, dur); let s = '';
+  s += `<text x="20" y="28" fill="${C.muted}" font-size="16" font-weight="600">순서 후보 6개 (배 3척)</text>`;
+  const gt = j => 0.14 + j * 0.15;
+  GATES.forEach((g, j) => {
+    const act = clamp(1 - Math.abs(pn - gt(j) - 0.03) / 0.07, 0, 1);
+    s += `<rect x="${GX[j] - 7}" y="48" width="14" height="380" rx="7" fill="${C.surface2}"/><rect x="${GX[j] - 7}" y="48" width="14" height="380" rx="7" fill="${C.orange}" opacity="${0.15 + 0.85 * act}"/>`;
+    s += `<text x="${GX[j]}" y="40" text-anchor="middle" fill="${pn > gt(j) - 0.02 ? C.fg : C.muted}" font-size="15" font-weight="600">${g[0]}</text>`;
+  });
+  PERMS.forEach((p, i) => {
+    const y = 56 + i * 62; let dead = null;
+    GATES.forEach((g, j) => { if (g[1][i] && pn >= gt(j) + 0.02) dead = dead || { j, why: g[1][i] }; });
+    const alive = !dead;
+    s += `<g opacity="${alive ? 1 : 0.5}"><rect x="20" y="${y}" width="330" height="46" rx="10" fill="${C.surface}" stroke="${dead ? C.red : (pn > 0.80 ? C.accent : C.line2)}" stroke-width="2"/><text x="38" y="${y + 30}" fill="${C.fg}" font-size="22" font-weight="600" class="mono" ${dead ? 'text-decoration="line-through"' : ''}>${p}</text>`;
+    if (dead) s += `<text x="340" y="${y + 29}" text-anchor="end" fill="${C.red}" font-size="15" font-weight="600">✕ ${dead.why}</text>`;
+    s += '</g>';
+    if (alive && pn > 0.80) s += `<line x1="350" y1="${y + 23}" x2="${GX[4] + 40}" y2="${y + 23}" stroke="${C.accent}" stroke-width="2" opacity="${0.35 * at(pn, 0.80, 0.08)}"/>`;
+  });
+  const rk = at(pn, 0.84);
+  s += `<g opacity="${rk}"><rect x="960" y="140" width="172" height="150" rx="14" fill="${C.surface}" stroke="${C.accent}" stroke-width="2"/><text x="1046" y="190" text-anchor="middle" fill="${C.muted}" font-size="16">제약을 지키는</text><text x="1046" y="236" text-anchor="middle" fill="${C.accent}" font-size="40" font-weight="700">후보 3개</text><text x="1046" y="266" text-anchor="middle" fill="${C.fg}" font-size="15">→ 이 셋만 계산한다</text></g>`;
+  $('g-svg').innerHTML = s;
+});
+
+// ---- permutations explode ----
+registerScene('many', (lt, dur) => {
+  const pn = P(lt, dur), rows = [[3, 6, '6'], [5, 120, '120'], [9, 362880, '362,880']]; let s = '';
+  s += `<text x="20" y="26" fill="${C.muted}" font-size="15">가능한 순서의 수 (배 N척 = N! 가지, 막대는 로그 눈금)</text>`;
+  rows.forEach((r, i) => {
+    const y = 56 + i * 92, k = at(pn, 0.10 + i * 0.22, 0.14), w = Math.max(24, 125 * Math.log10(r[1])) * k;
+    s += `<g opacity="${clamp(k * 2, 0, 1)}"><text x="20" y="${y + 38}" fill="${C.fg}" font-size="32" font-weight="700">${r[0]}척</text><rect x="130" y="${y}" width="${w}" height="56" rx="10" fill="${i === 2 ? C.red : C.blue}"/><text x="${130 + w + 16}" y="${y + 40}" fill="${i === 2 ? C.red : C.fg}" font-size="32" font-weight="700" class="mono">${fmtNum(r[1] * k)}가지</text></g>`;
+  });
+  $('m-svg').innerHTML = s;
+  const kk = at(pn, 0.74); $('m-chips').style.opacity = kk; $('m-chips').innerHTML = `<div class="chip" style="border-style:solid;color:var(--fg)">제약으로 먼저 거르기</div><div class="chip" style="border-style:solid;color:var(--fg)">좋은 후보 몇 개만 추리기</div><div class="chip" style="border-style:solid;color:var(--accent);border-color:var(--accent)">체선료 낮은 순으로 보여 주기</div>`;
+});
+function fmtNum(v) { return Math.round(v).toLocaleString('en-US'); }
+
+// ---- how the helper works: 7 steps in 2 scenes ----
+const FLOW = [['01 · 입력', '입력', '배 · 부두 · 예보 · 계약'], ['02 · 거르기', '거르기', '제품 · 물때 · 밤 · 날씨 · 탱크를 못 지키는 순서 제외'], ['03 · 계산', '계산', '계약 규칙으로 배마다 체선료와 근거'], ['04 · 비교', '비교', '총 체선료 낮은 순 · 기준안 대비 줄인 금액'], ['05 · 위험', '위험 표시', '후보마다 못 넣은 변수 · 가정 · 대안'], ['06 · 사람', '사람이 선택', "화면에는 '선택'만 있고 '확정'은 없다"], ['07 · 보고서', '보고서 초안', '메일과 Report: 왜 이 안인지, 무엇이 남았는지']];
+function buildFlow(id, pre) {
+  $(id).innerHTML = `<div class="flow">${FLOW.map((f, i) => `<div class="card fb rv ${i === 5 ? 'human' : ''}" id="${pre}${i + 1}"><div class="n">${f[0]}</div><div class="t">${f[1]}</div><div class="d">${f[2]}</div>${(i !== 3 && i !== 6) ? '<div class="arr">→</div>' : ''}</div>`).join('')}<div class="card rv" id="${pre}p" style="border-color:var(--accent);display:flex;flex-direction:column;justify-content:center"><div class="n" style="font-family:'IBM Plex Mono',monospace;color:var(--accent);font-size:15px">원칙</div><div class="t" style="font-size:22px;line-height:1.4">금액 계산 = <b style="color:var(--accent)">정해진 규칙</b><br>확정 = <b style="color:var(--orange)">사람</b></div></div></div>`;
+}
+buildFlow('fl1', 'f1'); buildFlow('fl2', 'f2');
+registerScene('flow1', (lt, dur) => {
+  const pn = P(lt, dur); [1, 2, 3, 4].forEach((i, k) => rv($('f1' + i), at(pn, 0.10 + k * 0.22)));
+  [5, 6, 7].forEach(i => $('f1' + i).style.opacity = 0); $('f1p').style.opacity = 0;
+});
+registerScene('flow2', (lt, dur) => {
+  const pn = P(lt, dur); [1, 2, 3, 4].forEach(i => { $('f2' + i).style.opacity = 0.55; $('f2' + i).style.transform = 'none'; });
+  [5, 6, 7].forEach((i, k) => rv($('f2' + i), at(pn, 0.08 + k * 0.24))); rv($('f2p'), at(pn, 0.80));
+});
+
+// ---- candidate card ----
+registerScene('card', (lt, dur) => { const pn = P(lt, dur); [1, 2, 3, 4, 5, 6, 7].forEach((i, k) => rv($('cc' + i), at(pn, 0.06 + k * 0.125))); });
+
+// ---- validation ----
+registerScene('valid', (lt, dur) => { const pn = P(lt, dur); rv($('va1'), at(pn, 0.12)); rv($('va2'), at(pn, 0.32)); rv($('va3'), at(pn, 0.50)); rv($('va4'), at(pn, 0.68)); rv($('va5'), at(pn, 0.80)); });
+
+// ---- scope: one ship vs the whole ----
+registerScene('scope', (lt, dur) => {
+  const pn = P(lt, dur);
+  rv($('sc1'), at(pn, 0.16)); rv($('sc2'), at(pn, 0.30)); rv($('sc3'), at(pn, 0.46));
+  rv($('sc4'), at(pn, 0.66)); rv($('sc5'), at(pn, 0.76)); rv($('sc6'), at(pn, 0.9));
+});
+
+// ---- wrap ----
+registerScene('wrap', (lt, dur) => { const pn = P(lt, dur); rv($('w1'), at(pn, 0.06)); rv($('w2'), at(pn, 0.24)); rv($('w3'), at(pn, 0.42)); rv($('w4'), at(pn, 0.72)); rv($('w5'), at(pn, 0.9)); });
+</script>
+</body></html>

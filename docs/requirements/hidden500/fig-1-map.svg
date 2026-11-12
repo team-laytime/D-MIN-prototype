@@ -1,0 +1,639 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="795" viewBox="0 0 680 795" role="img"><title>숨은 비기능 요구 250개와 화면 특징 250개의 한 장 지도</title><desc>분류 31개마다 항목을 칸 하나로 그렸다. 진한 색이 Must, 중간이 Should, 옅은 색이 Could이고 흰 점은 먼저 볼 20개다.</desc><rect x="0.0" y="0.0" width="680.0" height="795.0" rx="14" fill="#F6F8FB"/>
+<text x="24.0" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:17px;font-weight:700;fill:#0E1726">500개 한 장 지도</text>
+<text x="24.0" y="56.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#667085">칸 하나 = 항목 하나 · 진한 칸부터 Must · Should · Could · 흰 점 = 먼저 볼 20개</text>
+<rect x="556.8" y="22.0" width="99.2" height="22.0" rx="11" fill="#FFF4DF"/>
+<text x="566.8" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#B26A00">제안 · 팀 확인 전</text>
+<rect x="24.0" y="70.0" width="10.0" height="10.0" rx="2" fill="#1F4FBF"/>
+<rect x="37.0" y="70.0" width="10.0" height="10.0" rx="2" fill="#7398E6"/>
+<rect x="50.0" y="70.0" width="10.0" height="10.0" rx="2" fill="#CAD7F3"/>
+<text x="65.0" y="79.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#344054">숨은 비기능</text>
+<rect x="136.9" y="70.0" width="10.0" height="10.0" rx="2" fill="#0B7A6E"/>
+<rect x="149.9" y="70.0" width="10.0" height="10.0" rx="2" fill="#4FB5A6"/>
+<rect x="162.9" y="70.0" width="10.0" height="10.0" rx="2" fill="#C0E6DF"/>
+<text x="177.9" y="79.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#344054">화면 특징</text>
+<circle cx="244.2" cy="75.0" r="2.6" fill="#FFFFFF" stroke="#667085" stroke-width="1"/>
+<text x="252.2" y="79.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#344054">먼저 볼 20개</text>
+<rect x="16.0" y="93.5" width="648.0" height="313.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="16.0" y="92.0" width="648.0" height="313.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="32.0" y="116.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;font-weight:700;fill:#0E1726">숨은 비기능 요구 250 · HN-001~250</text>
+<text x="648.0" y="116.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#667085;text-anchor:end">Must 68 · Should 136 · Could 46</text>
+<line x1="32.0" y1="128.0" x2="648.0" y2="128.0" stroke="#EEF1F5" stroke-width="1"/>
+<text x="32.0" y="149.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N01</text>
+<text x="64.0" y="149.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">시간·신선도</text>
+<text x="262.0" y="149.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="276.7" cy="144.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="288.3" cy="144.7" r="2.2" fill="#FFFFFF"/>
+<rect x="295.2" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="330.0" y="140.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="341.6" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="140.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="446.0" y="140.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="457.6" y="140.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="469.2" y="140.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="480.8" y="140.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="492.4" y="140.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="166.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N02</text>
+<text x="64.0" y="166.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">계산 정확성</text>
+<text x="262.0" y="166.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="276.7" cy="161.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="288.3" cy="161.7" r="2.2" fill="#FFFFFF"/>
+<rect x="295.2" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="330.0" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="341.6" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="353.2" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="364.8" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="376.4" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="388.0" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="399.6" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="411.2" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="422.8" y="157.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="434.4" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="446.0" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="457.6" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="469.2" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="480.8" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="492.4" y="157.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<text x="32.0" y="183.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N03</text>
+<text x="64.0" y="183.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">불확실성 표현</text>
+<text x="262.0" y="183.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="174.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="174.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="174.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<circle cx="311.5" cy="178.7" r="2.2" fill="#FFFFFF"/>
+<rect x="318.4" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="174.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="174.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="422.8" y="174.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="174.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="200.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N04</text>
+<text x="64.0" y="200.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">설명·근거 추적</text>
+<text x="262.0" y="200.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="191.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="191.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="191.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="191.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="191.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="191.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="217.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N05</text>
+<text x="64.0" y="217.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">최적화 품질·계획 안정성</text>
+<text x="262.0" y="217.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="330.0" y="208.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="341.6" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<circle cx="346.3" cy="212.7" r="2.2" fill="#FFFFFF"/>
+<rect x="353.2" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="208.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="446.0" y="208.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="457.6" y="208.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="469.2" y="208.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="480.8" y="208.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="492.4" y="208.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="234.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N06</text>
+<text x="64.0" y="234.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">역할·권한</text>
+<text x="262.0" y="234.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="276.7" cy="229.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="288.3" cy="229.7" r="2.2" fill="#FFFFFF"/>
+<rect x="295.2" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="330.0" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="341.6" y="225.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="353.2" y="225.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="225.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="225.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="225.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="225.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="225.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="422.8" y="225.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="225.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="251.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N07</text>
+<text x="64.0" y="251.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">기밀·데이터 보호</text>
+<text x="262.0" y="251.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="242.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="242.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="242.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="242.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="242.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="242.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="268.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N08</text>
+<text x="64.0" y="268.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">기록 보존·감사</text>
+<text x="262.0" y="268.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="259.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="276.7" cy="263.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="259.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="259.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="259.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="259.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="259.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="422.8" y="259.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="259.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="285.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N09</text>
+<text x="64.0" y="285.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">입력·문서 추출 품질</text>
+<text x="262.0" y="285.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="330.0" y="276.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="341.6" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="446.0" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="457.6" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="469.2" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="480.8" y="276.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="492.4" y="276.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="302.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N10</text>
+<text x="64.0" y="302.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">LLM·Agent 품질</text>
+<text x="262.0" y="302.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="293.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="293.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="306.8" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="318.4" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="446.0" y="293.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="457.6" y="293.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="469.2" y="293.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="480.8" y="293.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="492.4" y="293.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="319.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N11</text>
+<text x="64.0" y="319.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">성능·응답성</text>
+<text x="262.0" y="319.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="310.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<circle cx="276.7" cy="314.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="310.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="306.8" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="318.4" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="310.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="310.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="399.6" y="310.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="411.2" y="310.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="422.8" y="310.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="310.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="336.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N12</text>
+<text x="64.0" y="336.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">가용성·복구</text>
+<text x="262.0" y="336.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="327.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="327.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="327.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="327.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="327.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="327.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="327.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="353.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N13</text>
+<text x="64.0" y="353.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">운영·배포·관측</text>
+<text x="262.0" y="353.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="344.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="344.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="344.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="306.8" y="344.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="318.4" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="411.2" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="422.8" y="344.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="434.4" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="446.0" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="457.6" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="469.2" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="480.8" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="492.4" y="344.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="370.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N14</text>
+<text x="64.0" y="370.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">유지보수·변경 관리</text>
+<text x="262.0" y="370.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="283.6" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="295.2" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="306.8" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="318.4" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="364.8" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="376.4" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="388.0" y="361.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="399.6" y="361.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="411.2" y="361.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="422.8" y="361.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="434.4" y="361.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<text x="32.0" y="387.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">N15</text>
+<text x="64.0" y="387.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">법·계약·책임</text>
+<text x="262.0" y="387.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">10</text>
+<rect x="272.0" y="378.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="283.6" y="378.0" width="9.4" height="9.4" rx="2" fill="#1F4FBF"/>
+<rect x="295.2" y="378.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="306.8" y="378.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="318.4" y="378.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="330.0" y="378.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="341.6" y="378.0" width="9.4" height="9.4" rx="2" fill="#7398E6"/>
+<rect x="353.2" y="378.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="364.8" y="378.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="376.4" y="378.0" width="9.4" height="9.4" rx="2" fill="#CAD7F3"/>
+<rect x="16.0" y="420.5" width="648.0" height="330.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="16.0" y="419.0" width="648.0" height="330.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="32.0" y="443.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;font-weight:700;fill:#0E1726">페인 포인트 기반 화면 특징 250 · UX-001~250</text>
+<text x="648.0" y="443.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#667085;text-anchor:end">Must 63 · Should 131 · Could 56</text>
+<line x1="32.0" y1="455.0" x2="648.0" y2="455.0" stroke="#EEF1F5" stroke-width="1"/>
+<text x="32.0" y="476.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U01</text>
+<text x="64.0" y="476.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">공통 원칙·상태 표시</text>
+<text x="262.0" y="476.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="467.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="341.6" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="434.4" y="467.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<text x="32.0" y="493.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U02</text>
+<text x="64.0" y="493.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">시나리오 입력</text>
+<text x="262.0" y="493.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="484.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="488.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="484.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="484.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="484.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="484.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="434.4" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="446.0" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="457.6" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="469.2" y="484.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="480.8" y="484.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="492.4" y="484.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="510.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U03</text>
+<text x="64.0" y="510.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">문서 업로드·추출 확인</text>
+<text x="262.0" y="510.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="505.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="501.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="341.6" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="501.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="501.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="501.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="527.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U04</text>
+<text x="64.0" y="527.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">타임라인·제약 시각화</text>
+<text x="262.0" y="527.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">30</text>
+<rect x="272.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="522.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="341.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="353.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="364.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="434.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="446.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="457.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="469.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="480.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="492.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="504.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="515.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="527.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="538.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="550.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="562.0" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="573.6" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="585.2" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="596.8" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="608.4" y="518.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="544.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U05</text>
+<text x="64.0" y="544.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">직접 조정·What-if</text>
+<text x="262.0" y="544.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="539.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="341.6" y="535.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="353.2" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="434.4" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="446.0" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="457.6" y="535.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="469.2" y="535.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="480.8" y="535.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="492.4" y="535.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="561.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U06</text>
+<text x="64.0" y="561.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">후보 비교</text>
+<text x="262.0" y="561.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">20</text>
+<rect x="272.0" y="552.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="556.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="552.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="552.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="552.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="552.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="330.0" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="434.4" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="446.0" y="552.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="457.6" y="552.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="469.2" y="552.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="480.8" y="552.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="492.4" y="552.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="578.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U07</text>
+<text x="64.0" y="578.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">산출 근거·계약 조항</text>
+<text x="262.0" y="578.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="569.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="569.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="569.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="569.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="569.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="569.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="595.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U08</text>
+<text x="64.0" y="595.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">리스크·민감도</text>
+<text x="262.0" y="595.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="586.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="586.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="586.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="586.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="586.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="422.8" y="586.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="586.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="612.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U09</text>
+<text x="64.0" y="612.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">막힘·오류</text>
+<text x="262.0" y="612.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">10</text>
+<rect x="272.0" y="603.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="603.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="603.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="306.8" y="603.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="603.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="603.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="603.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="603.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="364.8" y="603.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="376.4" y="603.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="629.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U10</text>
+<text x="64.0" y="629.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">확정·결정 기록</text>
+<text x="262.0" y="629.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="620.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="624.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="620.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="288.3" cy="624.7" r="2.2" fill="#FFFFFF"/>
+<rect x="295.2" y="620.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="620.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="620.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="422.8" y="620.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="620.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="646.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U11</text>
+<text x="64.0" y="646.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">보고서·메일 초안</text>
+<text x="262.0" y="646.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="637.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="637.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="637.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="637.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="637.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="399.6" y="637.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="411.2" y="637.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="422.8" y="637.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="637.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="663.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U12</text>
+<text x="64.0" y="663.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">작업 지시자 화면</text>
+<text x="262.0" y="663.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="654.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="658.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="654.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="654.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="654.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="654.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="399.6" y="654.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="411.2" y="654.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="422.8" y="654.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="654.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="680.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U13</text>
+<text x="64.0" y="680.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">지불 부서 화면</text>
+<text x="262.0" y="680.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">15</text>
+<rect x="272.0" y="671.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="675.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="671.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="671.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="306.8" y="671.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="318.4" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="364.8" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="376.4" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="388.0" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="399.6" y="671.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="411.2" y="671.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="422.8" y="671.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="434.4" y="671.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="697.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U14</text>
+<text x="64.0" y="697.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">변경 알림·협업</text>
+<text x="262.0" y="697.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">10</text>
+<rect x="272.0" y="688.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<circle cx="276.7" cy="692.7" r="2.2" fill="#FFFFFF"/>
+<rect x="283.6" y="688.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="295.2" y="688.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="306.8" y="688.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="688.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="688.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="341.6" y="688.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="353.2" y="688.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="364.8" y="688.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="376.4" y="688.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="714.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U15</text>
+<text x="64.0" y="714.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">관리·검증 화면</text>
+<text x="262.0" y="714.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">10</text>
+<rect x="272.0" y="705.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="705.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="295.2" y="705.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="306.8" y="705.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="705.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="330.0" y="705.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="341.6" y="705.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="353.2" y="705.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="364.8" y="705.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="376.4" y="705.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="32.0" y="731.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3">U16</text>
+<text x="64.0" y="731.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;fill:#0E1726">접근성·화면 환경</text>
+<text x="262.0" y="731.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#344054;text-anchor:end">10</text>
+<rect x="272.0" y="722.0" width="9.4" height="9.4" rx="2" fill="#0B7A6E"/>
+<rect x="283.6" y="722.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="295.2" y="722.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="306.8" y="722.0" width="9.4" height="9.4" rx="2" fill="#4FB5A6"/>
+<rect x="318.4" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="330.0" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="341.6" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="353.2" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="364.8" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<rect x="376.4" y="722.0" width="9.4" height="9.4" rx="2" fill="#C0E6DF"/>
+<text x="24.0" y="775.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">칸은 분류 안에서 우선순위 순서로 놓았다. 항목 문장은 15-hidden-nfr-ux-500.md와 hidden500.csv에 있다</text></svg>

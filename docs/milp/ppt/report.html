@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPT 기준 수리계획법 최종본</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* 한 가지 밝은 세계: 그림(PNG)과 같은 회청 바탕 · 흰 카드 · 청록 강조. 글은 가운데 한 줄기, 그림·표만 넓게 */
+  --ink: #0E1726; --sub: #344054; --muted: #667085; --line: #E2E7EE; --bg: #F6F8FB; --card: #FFFFFF;
+  --accent: #0B8B7B; --accent-tint: #E3F4F1; --blue: #1B5FD9; --amber: #B26A00; --amber-tint: #FFF4DF;
+  --font-body: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15.5px; line-height: 1.72; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 72px; }
+header { display: grid; gap: 10px; padding: 8px 0 22px; border-bottom: 1px solid var(--line); margin-bottom: 26px; }
+header .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .02em; }
+header h1 { font-family: var(--font-display); font-size: 30px; line-height: 1.3; margin: 0; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); font-size: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 28px; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
+.tile .k { color: var(--muted); font-size: 12.5px; font-weight: 500; }
+.tile .v { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.tile .s { color: var(--sub); font-size: 12.5px; }
+main > * { max-width: 780px; }
+main > figure, main > .tw, main > pre { max-width: none; }
+h2 { font-family: var(--font-display); font-size: 22px; margin: 48px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); text-wrap: balance; }
+h3 { font-size: 17.5px; margin: 30px 0 8px; text-wrap: balance; }
+p, li { color: var(--sub); }
+strong { color: var(--ink); }
+a { color: var(--blue); text-underline-offset: 3px; }
+a:focus-visible, pre:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+ul, ol { padding-left: 22px; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: .88em; background: #EEF2F7; padding: 1px 5px; border-radius: 5px; color: var(--ink); }
+pre { background: #0F1A2A; color: #E6EDF6; border-radius: 12px; padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.6; }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+.tw { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin: 14px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--sub); }
+th { color: var(--ink); background: #F8FAFC; font-weight: 700; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+td[style*="right"], th[style*="right"] { white-space: nowrap; }
+img { max-width: 100%; height: auto; }
+figure { margin: 18px 0 8px; display: grid; gap: 8px; }
+figure img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--card); }
+figcaption { color: var(--muted); font-size: 13px; }
+footer { margin-top: 56px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  header h1 { font-size: 24px; }
+  body { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">SKALA 4기 최종 프로젝트 · 체선료 · 2026-11-12</div>
+  <h1>멘토링 PPT 기준 수리계획법 — 최종 식 · 적용 · 결과</h1>
+  <p>원본: 현업 멘토링 PPT 13장 · Sample data.xlsx · 팀 최종본 본체 식 (1)~(8). 금액은 샘플 엑셀과 [가정] 값으로 낸 것이다.</p>
+</header>
+<section class="tiles" aria-label="요약 숫자"><div class="tile"><div class="k">1안 총 예상 체선료</div><div class="v">$216,985.68</div><div class="s">샘플 주간 54건 · 규칙 위반 0</div></div><div class="tile"><div class="k">기준안 대비</div><div class="v">−$29,284.25</div><div class="s">−11.9% · 기준안 $246,269.93</div></div><div class="tile"><div class="k">최적화 범위</div><div class="v">전체</div><div class="s">부두별 합이 아니라 모든 입항 건의 합</div></div><div class="tile"><div class="k">본체 식 변경</div><div class="v">0줄</div><div class="s">PPT 규칙은 모두 입력값으로</div></div></section>
+<main>
+<ul>
+<li>작성 2026-11-12 · 원본: <code>SKALA_Mentoring_전무룡Manager.pptx</code>(13장) · <code>Sample data.xlsx</code> · 팀 최종본 식: ../milp-final.md</li>
+<li>그림: <a href="figures/">figures/</a> · 장마다 캡처: <a href="slides/">slides/</a> · 결과 JSON: out/</li>
+<li>표기: 대괄호 안이 아래첨자다 (<code>z[i,k]</code> = z에 아래첨자 ik). 시각은 KST, 금액은 USD.</li>
+</ul>
+<h2>0. 결론</h2>
+<ol>
+<li><strong>식은 그대로다.</strong> 팀 최종본 본체 식 (1)~(8)을 한 글자도 바꾸지 않았다. PPT 06~12쪽의 규칙은 모두 '솔버에 넣기 전의 값'(작업계획 Ω, 충돌 쌍 F, 체선료 C, 재고 q)을 만드는 계산식 P1~P23이 됐다. 규칙이 바뀌면 식이 아니라 규칙 표 <code>rules/terminal.json</code>의 값을 바꾼다.</li>
+<li><strong>전체 체선료 최적화다.</strong> 목적함수는 모든 입항 건의 체선료 합이고, 어느 부두에 댈지도 솔버가 정한다. 샘플 54건은 부두 후보·부두 사이 제약·원유 탱크로 전부 이어져 있어 부두별로 나눠 풀 수 없다.</li>
+<li><strong>샘플 주간 결과</strong>: 1안 <strong>$216,985.68</strong>. 기준안(ETA 순서, 가장 이른 부두) $246,269.93보다 <strong>$29,284.25(11.9%) 낮다</strong>. 규칙 위반 0, 계산 97초.</li>
+<li>부두 배정을 현행 계획대로 묶고 순서만 바꾸면 $362,079.02. 부두마다 따로 최적화하면 동일 화물 그룹 충돌 3건이 생기고, 고쳐 맞추면 $432,325.41.</li>
+<li><strong>검산</strong>: 무작위 60건에서 식으로 푼 1·2·3안이 '순서를 전부 계산한 답', '작업계획 조합을 전부 해 본 답'과 모두 같았다.</li>
+</ol>
+<figure><img alt="PPT 계산식이 수리계획법에 들어가는 길" src="figures/formula-map.png"><figcaption>PPT 계산식이 수리계획법에 들어가는 길</figcaption></figure>
+<h2>1. PPT 장별 레퍼런스</h2>
+<p>PPT를 장마다 캡처했다 (<a href="slides/">slides/</a>). 13장을 한 장에 모은 그림:</p>
+<figure><img alt="멘토링 PPT 13장" src="figures/ppt-pages.png"><figcaption>멘토링 PPT 13장</figcaption></figure>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>쪽</th>
+<th>정한 것</th>
+<th>이 문서에서 간 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="slides/ppt-p01.png">01</a></td>
+<td>9월 체선료 약 180억 원, 접안 스케줄은 숙련자가 짠다</td>
+<td>목적함수 (1)</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p02.png">02</a></td>
+<td>사용자(스케줄러·작업 지시자·지불 부서), 쓸 자료</td>
+<td>요청 JSON의 항목 (6절)</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p03.png">03</a></td>
+<td>① 예상 체선료 + 산출 근거 ② 접안 순서를 여러 안으로 시뮬레이션해 낮은 후보 비교</td>
+<td>C[i,k] + 근거(trace), 1·2·3안</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p04.png">04</a></td>
+<td>정답이 아니라 의사결정 보조, 최종 선택은 사람</td>
+<td>후보안만 내고 확정은 사람 (6절 5단계)</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p05.png">05</a></td>
+<td>같은 기준으로 빠르게 비교</td>
+<td>기준안·현행 계획을 같은 식으로 계산</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p06.png">06</a></td>
+<td>ETB = 조건별 접안 가능 시각의 교집합(AND), FIX는 자동 산출 제외, 바뀌면 전부 재확인</td>
+<td>P7 · P8 · 식 (8) · P23</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p07.png">07</a></td>
+<td>빈 부두 ETA + Direction, 앞 배 ETU + Switching, Shifting 표, FIX 앞에 못 끼면 접안불가</td>
+<td>P2 · P3 · P8 · F</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p08.png">08</a></td>
+<td>야간 도선 → 다가오는 08시, 동일 화물 그룹·부두 동시 접안 → ETU − 2h, 부두 제약 → 종료 + Direction</td>
+<td>P4 · P5 · P6 · F</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p09.png">09</a></td>
+<td>작업시작 ETB + 1h, 이안 완료 + 2h, 호스분리 완료 + 30분, ETANR, 정박개시(Daylight 미적용)</td>
+<td>P9~P14</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p10.png">10</a></td>
+<td>정박개시(Daylight 적용, 07시·일출·일몰), 정박종료, 원유 &amp;&amp; CFR False → LayTime ÷ 2</td>
+<td>P15 · P16</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p11.png">11</a></td>
+<td>Demurrage = 호스분리 − 정박종료 − 기상체선 시간 ÷ 2, 체선료 = × Rate ÷ 24, 사용시간 그림</td>
+<td>P17~P19 → C[i,k]</td>
+</tr>
+<tr>
+<td><a href="slides/ppt-p12.png">12</a></td>
+<td>선박·부두 제원, 일출·일몰 공공데이터, 기상은 부두 제약 설정으로, 조석은 고려 안 함, 원유 탱크 30기·1,000만 배럴</td>
+<td>P1 · P5 · 식 (4)~(6)</td>
+</tr>
+</tbody>
+</table></div>
+<p>09쪽에는 빨간 X가 두 개 있다. 하나는 'ETA와 N/R Tender가 없으면 정박개시를 못 낸다'는 경고 상자, 다른 하나는 '과거 호스분리 − 완료(Term)의 최빈값' 설명이다. 그래서 <strong>호스분리 = 작업완료 + 30분</strong>으로 계산했다 [내 해석, 멘토 확인 필요].</p>
+<h2>2. 최종 식</h2>
+<h3>2-1. 본체 — 팀 최종본 그대로 (solver.py)</h3>
+<pre tabindex="0"><code class="language-text">(1)  min  Σ_i Σ_k  C[i,k] · z[i,k]                       총 예상 체선료 (모든 입항 건)
+(2)  Σ_k z[i,k] = 1                     ∀ i              입항 건마다 작업계획 하나
+(3)  z[i,k] + z[j,l] ≤ 1                ∀ (i,k,j,l) ∈ F  충돌하는 작업계획은 같이 고르지 않는다
+(4)  R[t+1] = R[t] + Σ_i Σ_k q[i,k,t]·z[i,k] − D[t]      시간대별 원유 재고 수지
+(5)  R[0] = R⁰                                           처음 재고
+(6)  R_min ≤ R[t] ≤ R_max                                최소 허용 재고 · 저장용량
+(7)  z[i,k] ∈ {0,1},  R[t] 연속
+(8)  z[i, k_fix[i]] = 1                 ∀ i ∈ FIX        FIX · 작업 중 입항 건
+(+)  Σ_{(i,k)∈S} z[i,k] ≤ |I| − 1                        다음 후보안을 낼 때만 (FR-42)
+</code></pre>
+<ul>
+<li>작업계획 k 하나 = (부두 b, 접안 시각 s). 그래서 z가 정해지면 <strong>부두 배정과 순서가 함께</strong> 정해진다.</li>
+<li>큰 문제에서는 (3)을 쌍마다 쓰지 않고 '같은 시각에 겹치는 작업계획 묶음'마다 한 줄로 쓴다(Σ z ≤ 1). 고를 수 있는 조합은 같고 줄 수만 준다 — 무작위 56건에서 두 방식의 답이 같았다.</li>
+</ul>
+<h3>2-2. 체선료 C[i,k] — PPT 09·10·11쪽을 한 줄로 (pptcalc.py)</h3>
+<pre tabindex="0"><code class="language-text">C[i,k] = (Rate[i] ÷ 24) × max(0,  h[i,k] − ℓ[i,k] − λ[i]·A[i] − ½·W[i,k])        P18 · P19
+
+  a[i,k] = s[i,k] + 1h                                작업시작          P9   (09쪽)
+  c[i,k] = a[i,k] + T[i,b]                            작업완료          P10  T = 물량 ÷ 평균 Rate (과거 Shipment)
+  h[i,k] = c[i,k] + 30분                              호스분리          P11  (09쪽, 빨간 X 해석)
+  u[i,k] = c[i,k] + 2h                                이안 ETU          P12
+  ETANR  = NVL(NOR Tender, ETA)                                         P13
+  ℓ[i,k] = 정박개시 (아래 갈래, 위에서부터 처음 맞는 것)                P14 · P15
+  λ[i]   = ½ (원유선 이고 CFR False) · 그 밖 1                           P16  (10쪽)
+  W[i,k] = | 기상 악화 제약 시간 ∩ [ℓ[i,k], h[i,k]] |                    P17  (11쪽 + 멘토 설명)
+</code></pre>
+<p>정박개시 ℓ (P14 Daylight 미적용 = 특수·윤활유·화학제품선, P15 Daylight 적용 = 원유선·석유제품선):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>갈래</th>
+<th>조건</th>
+<th>정박개시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Early Loading</td>
+<td>ETANR &lt; LayCan From 이고 ETB &lt; LayCan From</td>
+<td>ETB</td>
+</tr>
+<tr>
+<td>LayCan Miss</td>
+<td>ETANR &gt; LayCan To</td>
+<td>ETB</td>
+</tr>
+<tr>
+<td>조기 도착</td>
+<td>ETANR &lt; LayCan From</td>
+<td>From 날 06시 (Daylight 적용 선박은 07시)</td>
+</tr>
+<tr>
+<td>LayCan 안 · 미적용</td>
+<td>그 밖</td>
+<td>min(ETANR + 6h, ETB)</td>
+</tr>
+<tr>
+<td>LayCan 안 · Daylight</td>
+<td>일출 &lt; ETANR &lt; 일몰 → ETANR + 6h · ETANR ≤ 일출 → 그날 07시 · ETANR ≥ 일몰 → 다음 날 07시</td>
+<td>그 값과 ETB 중 이른 쪽</td>
+</tr>
+</tbody>
+</table></div>
+<p>팀 최종본 식 (20) <code>C = (r/24)·max(0, H − ℓ − A − e)</code>의 기호 자리에 PPT 값이 들어간 것과 같다: H = 호스분리 h, A → λ·A, 공제 e → ½·W, δ_setup = 1h, δ_hose = 30분, δ_departure = 2h.</p>
+<h3>2-3. 작업계획 Ω[i] — 어떤 접안 시각을 만드나 (P1~P8, P20)</h3>
+<pre tabindex="0"><code class="language-text">Ω[i] = { (b, s) :  b ∈ B[i],  s = φ[i,b](τ),  u ≤ 계획 종료 }                           P20
+
+  B[i]  = 제품 그룹을 받고 제원 5종(Max DWT · Max/Min LOA · Min PBL · Max Draft)이 맞는 부두    P1 (12쪽)
+          비어 있는 항목은 비교하지 않고, Draft는 수입선만 본다
+  τ ∈  { ETA[i] + Direction[b] }                         빈 부두                         P2 (07쪽)
+     ∪ { u[j,l] + Switching[b]   : 같은 부두의 다른 작업계획 }                            P3 (07쪽)
+     ∪ { u[j,l] − 2h             : 동일 화물 그룹 · 부두 동시 접안 짝의 작업계획 }          P6 (08쪽)
+  φ[i,b](τ) = τ가 금지 구간 안이면 그 구간의 끝, 아니면 τ                                  P7 (06쪽 AND)
+     금지 구간: 야간 도선(→ 다가오는 08시)  P4 · 부두 제약 [시작, 종료 + Direction)  P5 · 계획 시작 전
+  FIX 선박 앞에 끼는 계획(u + Switching ≥ FIX ETB)은 만들지 않는다                        P8 (07쪽 '접안불가')
+</code></pre>
+<ul>
+<li>접안 시각은 <strong>PPT 식이 낼 수 있는 값만</strong> 만든다. 그래서 솔버가 고르는 것은 사실상 '부두 배정과 순서'이고, 시각은 PPT 06~08쪽이 정한다. PPT 03쪽 '접안 순서를 여러 방안으로 시뮬레이션'을 모든 순서에 대해 한 번에 하는 셈이다.</li>
+<li>위 τ를 끝까지 모두 만들면(EXACT) 정확하다. 입항 건이 많아 계획이 1,500개를 넘으면 금지 구간을 피한 시각을 30분 눈금으로 만들고(GRID), 고른 배정·순서를 P23에서 PPT 식으로 다시 계산해 눈금 틈을 없앤다.</li>
+<li>야간 도선 P4: 대상은 (GRT ≥ 7.5만) 또는 (GRT ≤ 3만 · 수입선 · Draft ≥ 10.5). ETA ≥ Last POB(일몰 − 1.5h, GRT 5만 초과는 − 2h)이면 다가오는 08시. 따로 GRT ≥ 3만이면 02:00~08:00 접안 금지 → 08시.</li>
+</ul>
+<h3>2-4. 충돌 쌍 F · FIX (P8, P21)</h3>
+<pre tabindex="0"><code class="language-text">같은 부두 b:               s[j,l] &lt; u[i,k] + Switching[b]  그리고  s[i,k] &lt; u[j,l] + Switching[b]   → 충돌
+동일 화물 그룹 (08쪽):     b, b' ∈ {#6,#7,#8} 또는 {#1-1,#1-2,#2-7}, 같은 제품 그룹,
+                          s[j,l] &lt; u[i,k] − 2h  그리고  s[i,k] &lt; u[j,l] − 2h                        → 충돌
+부두 동시 접안 (08쪽):     {b, b'} = {#4-1, #4-2} 이고 두 배가 모두 GRT 3,000 이하가 아니면, 위와 같은 식
+FIX 보호 (07쪽):           뒤에 서는 쪽이 FIX면 같은 시각도 충돌 — 'FIX ETB ≤ 예상 ETU + Switching → 접안불가'
+</code></pre>
+<h3>2-5. 재고 q · D (P22)와 다시 계산 (P23)</h3>
+<pre tabindex="0"><code class="language-text">q[i,k,t] = ± 물량[i] × | [τ_t, τ_t+1) ∩ [a[i,k], c[i,k]) | ÷ T[i,b]     하역 +, 선적 −
+D[t]     = 공정 처리량 × 구간 길이                                       원유 탱크 30기를 하나로 (12쪽)
+</code></pre>
+<p>P23: 솔버가 고른 조합을 PPT 식(P2~P19)으로 처음부터 다시 계산하고, 모든 규칙을 다시 검사한다(PPT 06쪽 '모든 조건 재확인'). 위반이 하나라도 있으면 결과를 내지 않고 멈춘다. 솔버의 '최적'을 그대로 믿지 않기 위한 장치다.</p>
+<h3>2-6. 규칙이 바뀌면 고칠 곳 — 식이 아니라 표</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>바뀌는 것</th>
+<th><code>rules/terminal.json</code></th>
+<th>지금 값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shifting 표</td>
+<td><code>berths[].switching_h · direction_h</code></td>
+<td>PPT 07쪽 표 (#5-1~#5-4는 표에 없어 #5-5 값)</td>
+</tr>
+<tr>
+<td>야간 도선 대상 · Last POB · 새벽 시간</td>
+<td><code>night_pilotage</code></td>
+<td>PPT 08쪽</td>
+</tr>
+<tr>
+<td>동일 화물 그룹 · 동시 접안 부두</td>
+<td><code>pair_rules</code></td>
+<td>{#6,#7,#8} · {#1-1,#1-2,#2-7} · {#4-1,#4-2}</td>
+</tr>
+<tr>
+<td>작업시작 · 호스분리 · 이안</td>
+<td><code>work</code></td>
+<td>1h · 0.5h · 2h</td>
+</tr>
+<tr>
+<td>정박개시 시각 · Daylight 선종</td>
+<td><code>laytime</code></td>
+<td>+6h · 06시/07시 · 07시 · 원유선·석유제품선</td>
+</tr>
+<tr>
+<td>LayTime 절반 조건</td>
+<td><code>laytime.factor</code></td>
+<td>원유 · CFR False → ½</td>
+</tr>
+<tr>
+<td>기상 공제 비율 · 세는 구간</td>
+<td><code>demurrage.weather_ratio · weather_basis</code></td>
+<td>½ · <code>USED</code>(정박개시~호스분리). <code>DEMURRAGE</code>·<code>WAIT</code>로 바꿀 수 있다</td>
+</tr>
+</tbody>
+</table></div>
+<p>요청 한 건에만 다르게 쓰려면 요청 JSON의 <code>rule_patch</code>에 넣는다 (예: <code>{"demurrage.weather_basis": "WAIT"}</code>).</p>
+<h2>3. 어떻게 적용되었나 — 한 척 따라가기</h2>
+<p>샘플 주간의 <strong>S54</strong> (LR1 석유제품선, R-G 수출, #7만 가능, ETA 11/13 08:00, 하루 $24,312)를 기준안과 1안에서 같은 식으로 계산한 산출 근거다. 응답 JSON의 <code>trace</code>를 그대로 옮겼다.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>식</th>
+<th>기준안 (ETA 순서)</th>
+<th>1안 (수리계획법)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P7 접안 ETB</td>
+<td>11/15 18:30 — S57 이안 + Switching</td>
+<td><strong>11/14 08:30 — S52 이안 + Switching</strong></td>
+</tr>
+<tr>
+<td>P9 작업시작 = ETB + 1h</td>
+<td>11/15 19:30</td>
+<td>11/14 09:30</td>
+</tr>
+<tr>
+<td>P10 작업완료 = + 작업시간 18h</td>
+<td>11/16 13:30</td>
+<td>11/15 03:30</td>
+</tr>
+<tr>
+<td>P11 호스분리 = + 30분</td>
+<td>11/16 14:00</td>
+<td>11/15 04:00</td>
+</tr>
+<tr>
+<td>P12 이안 = 완료 + 2h</td>
+<td>11/16 15:30</td>
+<td>11/15 05:30</td>
+</tr>
+<tr>
+<td>P13 ETANR</td>
+<td>11/13 08:00 (NOR 없음 → ETA)</td>
+<td>같음</td>
+</tr>
+<tr>
+<td>P15 정박개시 (Daylight)</td>
+<td>11/13 14:00 — 일출~일몰 사이 → ETANR + 6h</td>
+<td>같음</td>
+</tr>
+<tr>
+<td>P16 정박종료 = + LayTime 36h</td>
+<td>11/15 02:00</td>
+<td>같음</td>
+</tr>
+<tr>
+<td>P18 체선시간</td>
+<td>max(0, 11/16 14:00 − 11/15 02:00) = 36h</td>
+<td>max(0, 11/15 04:00 − 11/15 02:00) = <strong>2h</strong></td>
+</tr>
+<tr>
+<td>P19 체선료 = × $24,312 ÷ 24</td>
+<td>$36,468.00</td>
+<td><strong>$2,026.00</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>1안은 #7에서 S57(DSL)을 #8로 보냈다. 그래서 S54가 S52 바로 뒤에 선다. 정박개시는 그대로이고 호스분리만 34시간 당겨져 체선료가 $34,442 줄었다.</p>
+<p>다른 규칙이 걸린 예:</p>
+<ul>
+<li><strong>야간 도선 P4 + 원유 LayTime 절반 P16</strong> — S60 (VLCC, GRT 156,597, ETA 11/10 22:00): Last POB(일몰 17:21 − 2h) 뒤 도착 → ETB = 11/11 08:00. 정박개시 = 다음 날 07시(일몰 뒤 도착). 정박종료 = 07:00 + 72h × ½ = 11/12 19:00. 호스분리 11/12 06:00이 더 이르므로 $0.</li>
+<li><strong>부두 제약 P5 + 기상 공제 P17</strong> (기상 악화 변형, 11/12 06:00~18:00 전 부두) — S59 (VLCC, BUOY2, ETA 11/12 06:00): ETB = 제약 종료 18:00 + Direction 1.5h = 19:30. 정박개시 = 그날 07시(일출 전 도착). 사용시간 [07:00, 11/13 20:00] 안의 기상 시간 11h → 공제 5.5h. 체선시간 = max(0, 20:00 − 19:00 − 5.5h) = 0 → $0.</li>
+<li><strong>FIX P8 + 부두 바꾸기</strong> (API 예시, 6절) — FIX 선박 F가 #8에 11/12 08:00. 수리계획법은 A(DSL)를 #6 대신 #8에 대 F 앞에 끝내고(이안 + Switching 2.5h &lt; FIX ETB), 비운 #6에 B(R-G)를 기상 제약 끝 17:30에 바로 댄다. 기준안 $25,641.62 → 1안 $7,192.30.</li>
+</ul>
+<h2>4. 부두별 최적화인가, 전체 최적화인가</h2>
+<p><strong>전체 체선료 최적화다.</strong> 이유는 셋이다.</p>
+<ol>
+<li>목적함수 (1)이 모든 입항 건의 C를 한 번에 더한다. 한 부두의 합을 따로 줄이는 식이 아니다.</li>
+<li>부두 배정이 결정에 들어 있다. 작업계획 = (부두, 접안 시각)이라, 같은 배가 #6·#7·#8 중 어디로 갈지를 솔버가 고른다.</li>
+<li>부두 사이를 묶는 규칙이 있다. 동일 화물 그룹(#6·#7·#8, #1-1·#1-2·#2-7), 부두 동시 접안(#4-1·#4-2), 원유 탱크(BUOY2·BUOY3·#8의 원유가 같은 탱크로 들어간다).</li>
+</ol>
+<p>그래서 샘플 54건은 한 덩어리로 이어진다. 소형선 S41(DSL)은 #5-5와 #6 둘 다 갈 수 있어 소형 부두와 대형 부두를 잇고, S33(MEOH)은 #3과 #7을, S37(BENZENE)은 #4-1과 #3을 잇는다.</p>
+<p>같은 식·같은 입력으로 최적화 범위만 바꿔 보았다 (<code>run.py --compare</code>):</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>범위</th>
+<th style="text-align: right;">총 예상 체선료</th>
+<th>실행 가능?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 전체 최적화 (부두 배정 + 순서, 부두 사이 규칙·탱크까지) = 1안</td>
+<td style="text-align: right;"><strong>$216,985.68</strong></td>
+<td>예, 위반 0</td>
+</tr>
+<tr>
+<td>B 부두 배정은 현행 계획대로, 순서·시각만 최적화</td>
+<td style="text-align: right;">$362,079.02</td>
+<td>예</td>
+</tr>
+<tr>
+<td>C 부두마다 따로 최적화 (다른 부두와의 규칙·탱크는 안 봄)</td>
+<td style="text-align: right;">종이 위 합계 $339,108.52</td>
+<td><strong>아니오</strong> — 동일 화물 그룹 충돌 3건 (S16·S29, S45·S51, S45·S57)</td>
+</tr>
+<tr>
+<td>C를 같은 부두·같은 순서로 실제 규칙에 맞춰 다시 계산</td>
+<td style="text-align: right;">$432,325.41</td>
+<td>예</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>부두마다 따로 풀면 종이 위에서는 싸 보이지만(C), 다른 부두와 같은 제품을 동시에 싣는 일정이 나와 실행할 수 없다. 고쳐 맞추면 전체 최적화보다 $215,339.73 비싸다.</li>
+<li>B와 A의 차이($145,093.34)는 부두를 바꿔 댈 수 있어서 생긴다. 다만 현행 계획에는 한 부두에 두 척이 겹친 곳이 있어(5-1절) B가 그 배들을 한 줄로 세우느라 비싸진 몫도 들어 있다.</li>
+<li>전체 최적화는 <strong>한 배의 손해로 다른 배들의 이익을 사는 맞바꿈</strong>을 한다. 1안에서 S53은 #8에서 50시간 더 기다려 +$30,390이지만, 그 덕에 S54(−$34,442)·S57(−$19,754)·S41(−$5,479)이 줄어 합계가 $29,284 내려갔다. 부두마다 따로 보면 이 맞바꿈이 보이지 않는다.</li>
+</ul>
+<p>계산을 나누는 것은 다른 이야기다. 서로 전혀 이어지지 않는 입항 건 묶음은 따로 풀어 더해도 전체 최적과 같다 (<code>run.py</code>의 <code>components()</code>가 자동으로 나눈다). 목표는 그대로 전체 합이고, 계산만 빨라진다.</p>
+<h2>5. 결과 보고</h2>
+<h3>5-1. 샘플 주간 (Sample data.xlsx '접안계획 예시', ETB 11/09~11/15)</h3>
+<ul>
+<li>입력: 68행 중 같은 (부두, ETA, ETB, ETU, 업무) 행을 한 배의 여러 화물로 보고 합쳐 <strong>54건</strong>. 계획 시작(11/09 00:00)에 이미 대 있던 2건(S32 #3, S36 #4-1)은 '작업 중'으로 고정. 계획 기간 11/09~11/19.</li>
+<li>엑셀에 없는 값은 [가정]으로 넣었다 (7절). 금액은 이 가정에서의 값이다.</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>일정</th>
+<th style="text-align: right;">총 예상 체선료</th>
+<th style="text-align: right;">기준안 대비</th>
+<th style="text-align: right;">규칙 위반</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>현행 계획 (엑셀의 부두·ETB를 PPT 식으로 계산)</td>
+<td style="text-align: right;">$479,697.11</td>
+<td style="text-align: right;">+$233,427.18</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>기준안 (ETA 순서, 가장 이른 부두 · FR-41)</td>
+<td style="text-align: right;">$246,269.93</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td><strong>1안 (수리계획법)</strong></td>
+<td style="text-align: right;"><strong>$216,985.68</strong></td>
+<td style="text-align: right;"><strong>−$29,284.25 (−11.9%)</strong></td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>2안 · 3안</td>
+<td style="text-align: right;">$216,985.68</td>
+<td style="text-align: right;">−$29,284.25</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<figure><img alt="샘플 주간 현행 계획 vs 1안" src="figures/sample-gantt.png"><figcaption>샘플 주간 현행 계획 vs 1안</figcaption></figure>
+<ul>
+<li><strong>1안이 바꾼 것</strong>: S57을 #7 → #8, 그래서 S54가 #7에서 34시간 일찍 선다. S41은 #5-5 대신 #6에 바로 댄다. S53은 #8에서 S57 뒤로 기다린다. 나머지 바뀐 배들은 체선료가 0인 소형선의 부두 바꾸기다.</li>
+<li><strong>2안·3안이 1안과 같은 금액인 이유</strong>: 다른 점이 체선료 0인 배들의 부두뿐이다(18~20척). 금액으로는 차이가 없으니 현장 편의로 고르면 된다. 금액이 다른 다음 안을 원하면 (+) 식을 '체선료가 있는 배의 배정이 달라야 한다'로 바꿀 수 있다 [팀 결정].</li>
+<li><strong>현행 계획을 PPT 규칙으로 보면</strong>: 같은 부두 충돌 10쌍(시간이 실제로 겹치는 곳 4쌍: #1-1 S06·S08, #6 S48·S49, #7 S51·S52, #7 S53·S54 + Switching 시간을 못 채운 곳 6쌍), 도착 + Direction보다 이른 ETB 2건, Last POB 뒤 도착인데 08시 전 접안 2건. 한 부두에 한 척씩이라는 PPT 07쪽 규칙으로는 실행할 수 없는 일정이라 금액도 크다. 한 부두에 두 척을 대는 곳이 있는지 확인이 필요하다.</li>
+<li><strong>계획 시작 전에 이미 쌓인 체선료</strong>도 모든 일정에 똑같이 들어 있다. 예: S28은 ETA가 11/04라 11/09 00:00에 바로 대도 $41,128.31. 비교에는 영향이 없다.</li>
+</ul>
+<h3>5-2. 기상 악화 변형 (11/12 06:00~18:00, 전 부두) [가정]</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>일정</th>
+<th style="text-align: right;">총 예상 체선료</th>
+<th style="text-align: right;">기준안 대비</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>현행 계획</td>
+<td style="text-align: right;">$461,842.20 (규칙 위반 20)</td>
+<td style="text-align: right;">+$211,520.27</td>
+</tr>
+<tr>
+<td>기준안</td>
+<td style="text-align: right;">$250,321.93</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr>
+<td><strong>1안</strong></td>
+<td style="text-align: right;"><strong>$232,687.18</strong></td>
+<td style="text-align: right;"><strong>−$17,634.75 (−7.0%)</strong></td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>6척이 '제약 종료 + Direction'으로 밀렸다 (#6·#7·BUOY2는 19:30, 소형 부두는 19:00). P5가 그대로 작동한다.</li>
+<li><strong>찾은 것 — 일부러 늦게 대면 공제가 커진다.</strong> 기상체선 시간을 '사용시간과 겹친 시간'(기본 <code>USED</code>)으로 세면, 배를 더 늦게 대 사용시간이 기상 시간과 더 겹치게 할수록 공제(½)가 커진다. 그런 조합은 $230,223.66까지 내려가지만, PPT 식의 ETB(가장 이른 접안 가능 시각)가 아니라서 후보안에는 넣지 않고 응답의 <code>notes</code>에만 남겼다. 기상체선 시간을 어느 구간으로 세는지 멘토 확인이 필요하다 (11-10에 찾은 것과 같은 현상).</li>
+</ul>
+<h3>5-3. 모델 크기와 시간</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: right;">샘플 주간</th>
+<th style="text-align: right;">기상 변형</th>
+<th style="text-align: right;">API 예시 (6절)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>움직이는 입항 건</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>작업계획 (z 변수)</td>
+<td style="text-align: right;">39,477 (30분 눈금)</td>
+<td style="text-align: right;">36,646</td>
+<td style="text-align: right;">19 (EXACT)</td>
+</tr>
+<tr>
+<td>제약식 · 0 아닌 계수</td>
+<td style="text-align: right;">9,474 · 170만</td>
+<td style="text-align: right;">8,891</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr>
+<td>풀이 횟수 · 시간</td>
+<td style="text-align: right;">3회 · 85초 (전체 97초)</td>
+<td style="text-align: right;">3회 · 99초</td>
+<td style="text-align: right;">3회 · 0.02초</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>한 번 풀 때마다 1차 총 체선료 최소 → 2차 같은 금액 안에서 일찍 대는 쪽 (EXACT는 3차로 계획 번호까지) 순서로 푼다. 같은 입력이면 같은 순위가 나오게 하려는 것이다 (NFR-02).</li>
+<li>솔버는 HiGHS (scipy 1.18.1의 <code>scipy.optimize.milp</code>). 무료(MIT)라 이미지에 그대로 넣는다.</li>
+</ul>
+<h3>5-4. 검산</h3>
+<p><code>validate.py --n 60</code> (무작위 60건: 대형 부두 #6·#7·#8, 원유 #8·BUOY, 화학 #4-1·#4-2, 제품 #1-1·#1-2·#2-7 묶음, 2~5척, FIX·기상 제약·원유 탱크 섞음)</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>검사</th>
+<th>무엇과 비교</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>부두 배정 × 순서를 전부 PPT 식으로 계산한 1·2·3안 (재고 없는 사례)</td>
+<td>50건 모두 같음</td>
+</tr>
+<tr>
+<td>B</td>
+<td>작업계획의 모든 조합을 하나씩 해 본 1·2·3안</td>
+<td>36건 모두 같음</td>
+</tr>
+<tr>
+<td>C</td>
+<td>식 (3)을 쌍으로 넣은 답 = 겹치는 묶음으로 넣은 답</td>
+<td>56건 모두 같음</td>
+</tr>
+<tr>
+<td>G</td>
+<td>30분 눈금(GRID) + PPT 재계산의 1안 = 정답 1안</td>
+<td>53건 모두 같음</td>
+</tr>
+</tbody>
+</table></div>
+<p>모든 후보안은 나오기 전에 P23 재검사를 거친다. 위반이 있으면 결과 대신 오류를 낸다 — 이번 실행에서 0건이었다.</p>
+<h2>6. 인프라와 주고받는 것</h2>
+<figure><img alt="수리계획법이 인프라와 주고받는 것" src="figures/infra-flow.png"><figcaption>수리계획법이 인프라와 주고받는 것</figcaption></figure>
+<p>기준은 ADR-014(Spring Boot + Python 두 서비스), ADR-015(REST + SSE), ADR-016(EKS)이다. 아래 경로 이름과 저장 위치는 <strong>제안</strong>이다 [팀 확인 필요].</p>
+<h3>6-1. 요청 한 건의 흐름</h3>
+<ol>
+<li>스케줄러가 기간을 정하고 '후보 계산'을 누른다. Spring이 업무 DB에서 입항 건·계약·부두 제약·재고를 모아 <strong>요청 JSON 하나</strong>로 만든다. 입력 스냅샷과 지문(hash), 규칙 표 버전을 <code>app</code> 스키마에 남긴다.</li>
+<li>Spring이 Python 서비스에 <code>POST /v1/optimizations</code> → <code>202</code> + 작업 ID. Python 서비스는 클러스터 안에서만 보인다(ClusterIP).</li>
+<li>Python 서비스의 LangGraph 그래프가 정해진 순서로 돈다: 입력 검증 → <strong>수리계획법 <code>run.optimize()</code></strong> → 산출 근거 → 보고서 초안. 진행 상황은 SSE(<code>/events</code>)로 흘린다. 수리계획법은 LLM이 고르는 도구가 아니라 고정된 한 단계다.</li>
+<li>결과는 <strong>응답 JSON</strong> (<code>/result</code>). <code>agent</code> 스키마에 저장하고 Spring이 화면에 보여 준다 (1·2·3안 비교표, 부두별 간트, 입항 건마다 산출 근거).</li>
+<li>사람이 한 안을 고르면 Spring이 결정으로 기록한다 (FR-47·48). SEAGATE에 자동으로 반영하지 않는다.</li>
+</ol>
+<h3>6-2. 주고받는 JSON — 계약</h3>
+<p>요청 (= <code>cases/*.json</code>과 같은 모양, 예: cases/example-request.json):</p>
+<pre tabindex="0"><code class="language-json">{
+  &quot;request_id&quot;: &quot;REQ-20261112-001&quot;,
+  &quot;plan&quot;: {&quot;start&quot;: &quot;2026-11-10T00:00&quot;, &quot;end&quot;: &quot;2026-11-16T00:00&quot;},
+  &quot;arrivals&quot;: [{
+    &quot;id&quot;: &quot;B&quot;, &quot;class&quot;: &quot;PP&quot;, &quot;biz&quot;: &quot;IM|EX|DI|DO&quot;, &quot;cargo_group&quot;: &quot;R-G&quot;, &quot;qty&quot;: 300000,
+    &quot;eta&quot;: &quot;2026-11-10T09:00&quot;, &quot;nor_tender&quot;: null,
+    &quot;grt&quot;: 29597, &quot;dwt&quot;: 45000, &quot;loa&quot;: 183.0, &quot;pbl&quot;: 85.5, &quot;draft&quot;: 12.64,
+    &quot;contract&quot;: {&quot;laycan_from&quot;: &quot;…&quot;, &quot;laycan_to&quot;: &quot;…&quot;, &quot;laytime_h&quot;: 36, &quot;rate_usd_day&quot;: 26252, &quot;cfr&quot;: false},
+    &quot;work&quot;: {&quot;rate_per_h&quot;: 11145},
+    &quot;status&quot;: &quot;PLANNED|FIX|WORKING&quot;, &quot;fix&quot;: {&quot;berth&quot;: &quot;#8&quot;, &quot;etb&quot;: &quot;…&quot;}, &quot;berths&quot;: [&quot;선택: 지정 부두&quot;]
+  }],
+  &quot;restrictions&quot;: [{&quot;id&quot;: &quot;WX-1&quot;, &quot;reason&quot;: &quot;WEATHER|WORK&quot;, &quot;berths&quot;: [&quot;*&quot;], &quot;start&quot;: &quot;…&quot;, &quot;end&quot;: &quot;…&quot;}],
+  &quot;inventory&quot;: [{&quot;group&quot;: &quot;CRUDE&quot;, &quot;opening&quot;: 5500000, &quot;min&quot;: 3000000, &quot;max&quot;: 10000000,
+                 &quot;flows&quot;: [{&quot;from&quot;: &quot;…&quot;, &quot;to&quot;: &quot;…&quot;, &quot;use_per_h&quot;: 35000}]}],
+  &quot;sun&quot;: {&quot;2026-11-10&quot;: [&quot;06:53&quot;, &quot;17:21&quot;]},
+  &quot;current_plan&quot;: [{&quot;id&quot;: &quot;B&quot;, &quot;berth&quot;: &quot;#6&quot;, &quot;etb&quot;: &quot;…&quot;}],
+  &quot;rule_patch&quot;: {&quot;demurrage.weather_basis&quot;: &quot;USED&quot;},
+  &quot;options&quot;: {&quot;generation&quot;: &quot;auto&quot;, &quot;grid_min&quot;: 30, &quot;max_wait_h&quot;: 120}
+}
+</code></pre>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>요청 항목</th>
+<th>어디서 오나</th>
+<th>식에서 쓰는 곳</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>arrivals[].eta · nor_tender · status · fix</code></td>
+<td>SEAGATE · 업무 입력</td>
+<td>P2 · P13 · 식 (8)</td>
+</tr>
+<tr>
+<td><code>arrivals[].contract</code></td>
+<td>계약(C/P)</td>
+<td>P14~P16 · P19</td>
+</tr>
+<tr>
+<td><code>arrivals[].grt…draft · cargo_group</code></td>
+<td>선박 제원 · 자재코드 → 제품 그룹</td>
+<td>P1 · P4 · P6</td>
+</tr>
+<tr>
+<td><code>arrivals[].work.rate_per_h</code></td>
+<td>과거 Shipment 평균 Rate (배치로 미리 계산)</td>
+<td>P10</td>
+</tr>
+<tr>
+<td><code>restrictions</code></td>
+<td>부두 제약 설정 화면 (기상 악화 · 공사)</td>
+<td>P5 · P17</td>
+</tr>
+<tr>
+<td><code>inventory</code></td>
+<td>원유 탱크 재고 · 공정 처리량</td>
+<td>식 (4)~(6)</td>
+</tr>
+<tr>
+<td><code>sun</code></td>
+<td>공공데이터 일출·일몰 (매일 배치). 없으면 근사식</td>
+<td>P4 · P15</td>
+</tr>
+<tr>
+<td><code>current_plan</code></td>
+<td>지금 SEAGATE에 있는 계획 (선택)</td>
+<td>비교용</td>
+</tr>
+<tr>
+<td><code>rule_patch</code> · <code>options</code></td>
+<td>임시 조건 · 제약 켜고 끄기 (FR-26·28)</td>
+<td>규칙 표 · 생성 설정</td>
+</tr>
+</tbody>
+</table></div>
+<p>응답 (예시를 줄인 것, 전체는 out/EXAMPLE-3.response.json):</p>
+<pre tabindex="0"><code class="language-json">{
+  &quot;request_id&quot;: &quot;REQ-20261112-001&quot;, &quot;request_hash&quot;: &quot;53caa8107d00a515&quot;, &quot;status&quot;: &quot;OK&quot;,
+  &quot;engine&quot;: {&quot;version&quot;: &quot;ppt-milp/1.0&quot;, &quot;rules_version&quot;: &quot;ulsan-clx/ppt-v1&quot;, &quot;solver&quot;: &quot;HiGHS (scipy 1.18.1)&quot;,
+             &quot;formulas&quot;: &quot;팀 최종본 본체 식 (1)~(8) — 변경 없음&quot;, &quot;objective&quot;: &quot;전체 입항 건의 총 예상 체선료 최소화 (부두별 합이 아님)&quot;},
+  &quot;baseline&quot;: {&quot;total_usd&quot;: 25641.62, &quot;plans&quot;: [&quot;…&quot;], &quot;violations&quot;: []},
+  &quot;candidates&quot;: [{
+    &quot;rank&quot;: 1, &quot;status&quot;: &quot;OPTIMAL&quot;, &quot;total_usd&quot;: 7192.3, &quot;delta_vs_baseline_usd&quot;: -18449.32, &quot;violations&quot;: [],
+    &quot;changes_vs_baseline&quot;: [{&quot;arrival_id&quot;: &quot;B&quot;, &quot;from&quot;: {&quot;berth&quot;: &quot;#6&quot;, &quot;etb&quot;: &quot;2026-11-11T15:56&quot;, &quot;usd&quot;: 18449.32},
+                             &quot;to&quot;: {&quot;berth&quot;: &quot;#6&quot;, &quot;etb&quot;: &quot;2026-11-10T17:30&quot;, &quot;usd&quot;: 0.0}, &quot;delta_usd&quot;: -18449.32}],
+    &quot;plans&quot;: [{&quot;arrival_id&quot;: &quot;B&quot;, &quot;berth&quot;: &quot;#6&quot;, &quot;etb&quot;: &quot;2026-11-10T17:30&quot;, &quot;hose_off&quot;: &quot;2026-11-11T21:56&quot;, &quot;etu&quot;: &quot;2026-11-11T23:26&quot;,
+               &quot;laytime_start&quot;: &quot;2026-11-10T15:00&quot;, &quot;laytime_end&quot;: &quot;2026-11-12T03:00&quot;, &quot;demurrage_usd&quot;: 0.0,
+               &quot;why_etb&quot;: &quot;ETA + Direction → 부두 제약 WX-1이라 그 끝으로&quot;,
+               &quot;trace&quot;: [{&quot;rule&quot;: &quot;P7&quot;, &quot;text&quot;: &quot;접안 ETB = 11/10 17:30 — …&quot;}, {&quot;rule&quot;: &quot;P9&quot;, &quot;text&quot;: &quot;작업시작 = ETB 11/10 17:30 + 1h = 11/10 18:30&quot;}, &quot;…&quot;]}]
+  }],
+  &quot;components&quot;: [{&quot;plans&quot;: 19, &quot;mode&quot;: &quot;EXACT&quot;, &quot;variables&quot;: 19, &quot;rows&quot;: 21, &quot;seconds&quot;: 0.02}],
+  &quot;notes&quot;: [], &quot;elapsed_seconds&quot;: 0.04
+}
+</code></pre>
+<ul>
+<li>화면의 '산출 근거'는 <code>trace</code>를 그대로 보여 준다. 보고서 초안을 쓰는 LLM도 이 JSON만 읽고, 숫자는 복사만 한다 (NFR-01: 금액 계산에 LLM 0건).</li>
+<li>상태 값: <code>OK</code> · <code>INFEASIBLE</code>(식 (2)(3)(6)(8)을 모두 지키는 조합 없음 → '실행 가능한 후보 없음', FR-43). 후보마다 <code>OPTIMAL</code> 또는 <code>TIME_LIMIT</code>(제한시간 안에 최적 증명 못 함 → 그때까지의 최선안 + 갭, NFR-09).</li>
+</ul>
+<h3>6-3. 경로 (제안)</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>서비스</th>
+<th>경로</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td><code>POST /v1/optimizations</code></td>
+<td>요청 JSON 받기 → <code>202 {job_id, request_hash}</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td><code>GET /v1/optimizations/{job_id}</code></td>
+<td>상태: queued · running · done · failed</td>
+</tr>
+<tr>
+<td>Python</td>
+<td><code>GET /v1/optimizations/{job_id}/events</code></td>
+<td>SSE: 입력 검증 → 작업계획 n개 → 풀이 1/3 … → 재검사 → 근거</td>
+</tr>
+<tr>
+<td>Python</td>
+<td><code>GET /v1/optimizations/{job_id}/result</code></td>
+<td>응답 JSON</td>
+</tr>
+<tr>
+<td>Spring</td>
+<td><code>POST /api/schedules/{id}/optimize</code> · <code>GET …/events</code></td>
+<td>화면이 부르는 곳. 권한 확인 후 Python을 부르고 SSE를 중계</td>
+</tr>
+<tr>
+<td>Spring</td>
+<td><code>POST /api/runs/{id}/decisions</code></td>
+<td>사람의 결정 (데모에 이미 있음)</td>
+</tr>
+</tbody>
+</table></div>
+<h3>6-4. 운영에서 지킬 것</h3>
+<ul>
+<li><strong>같은 입력 → 같은 답 (NFR-02)</strong>: 요청 지문(<code>request_hash</code>)·엔진 버전·규칙 표 버전을 함께 저장한다. 같은 지문이 다시 오면 저장된 결과를 돌려준다.</li>
+<li><strong>시간</strong>: 풀이 한 번의 제한시간 120초(<code>time_limit</code>), 작업 전체 10분. 샘플 54건이 97초라 화면은 기다리게 하지 않고 작업 ID + SSE로 받는다.</li>
+<li><strong>자원</strong>: HiGHS는 CPU를 여러 개 쓴다 (샘플 실행에서 약 2.7코어). Python Pod 요청 2 CPU부터 시작하고, 메모리는 실제 실행에서 재서 정한다 (아직 재지 않았다).</li>
+<li><strong>배치</strong>: CronJob(매일 09:00 KST)이 같은 이미지로 다음 7일을 다시 풀어 응답 JSON을 S3 <code>reports/&lt;날짜&gt;/</code>와 DB에 남긴다. 확정·발송은 하지 않는다.</li>
+<li><strong>규칙 표</strong>: <code>rules/terminal.json</code>은 이미지에 넣고 버전을 응답에 남긴다. 운영 중 바꾸려면 DB 표로 옮기고 Spring이 요청에 실어 보낸다 [팀 결정].</li>
+<li>정해야 하는 것 [팀 확인 필요]: 경로 이름, 작업 큐를 둘지(한 Pod 한 작업으로 시작), 규칙 표를 이미지와 DB 중 어디에 둘지, 과거 Shipment 평균 Rate 배치를 누가 맡을지.</li>
+</ul>
+<h2>7. 가정과 확인할 것</h2>
+<h3>7-1. 샘플 주간에 넣은 가정 (엑셀에 없는 값)</h3>
+<ul>
+<li><strong>선박 제원</strong>: 그 배가 쓴 부두 크기에 맞는 '선박 제원 Sample' DWT 구간 평균 (BUOY → VLCC 29만~30만, #8 수입 → Aframax 원유선, #7·#8 수출 → LR1 7만~8만, #6 → MR 4만~5만, #3 → 3만~4만, 소형 부두 → 부두 제원 안으로 맞춘 소형선). BUOY2에 댄 VLCC는 흘수를 21.01 m로 낮췄다 (평균 21.54 m는 BUOY2 최대 21.21 m를 넘는다).</li>
+<li><strong>제품 그룹</strong>: 그 부두가 받는 그룹에서 골랐다. 동일 화물 그룹 부두 묶음에서는 현행 계획에서 겹치는 배끼리 다르게 골랐다.</li>
+<li><strong>작업시간</strong>: 엑셀의 (ETU − ETB) − 3h (PPT 09쪽 작업시작 +1h, 이안 +2h를 거꾸로 푼 값).</li>
+<li><strong>계약</strong>: 일 체선료 = DWT 구간 평균, LayTime 원유 72h(CFR False → 36h) · 제품 36h · 소형 24h, LayCan = ETA 전날 00:00 ~ 다음 날 23:59, NOR 없음.</li>
+<li><strong>원유 탱크</strong>: 저장용량 1,000만 · 최소 허용 300만 · 처음 550만 배럴, 공정 처리 시간당 3.5만 배럴.</li>
+<li><strong>FIX</strong>: 엑셀에 표시가 없어 없음. 계획 시작 전에 이미 대 있던 2척만 고정.</li>
+<li>일출·일몰은 공공데이터 대신 근사식(NOAA)으로 계산했다. 운영에서는 요청의 <code>sun</code>에 공공데이터 값을 넣는다.</li>
+</ul>
+<h3>7-2. 멘토께 확인할 것</h3>
+<ol>
+<li>09쪽 빨간 X 두 개 — 호스분리를 '완료 + 30분'으로 확정한 것인지, 'ETA·N/R Tender가 없으면 경고'를 없앤 것인지.</li>
+<li>기상체선 시간을 세는 구간 — 사용시간 전체와 겹친 시간인지(지금), 체선 기간과 겹친 시간인지, 기상 때문에 기다린 시간인지. 앞의 둘은 '일부러 늦게 대기'가 더 싸지는 문제가 있다 (5-2절).</li>
+<li>한 부두에 두 척을 대는 곳이 있는지 — 샘플 '접안계획 예시'에서 #1-1·#6·#7(2쌍)에 시간이 겹치는 배가 있다.</li>
+<li>야간 도선 대상 — '(3만톤 이하 AND 수입선 AND Draft ≥ 10.5)'와 'GRT 3만 이하는 야간 도선 제한 X'가 서로 맞지 않는다. 지금은 앞의 조건을 적힌 대로 두고 Last POB는 일몰 − 1.5h를 썼다.</li>
+<li>LayTime 절반 조건이 '원유 &amp;&amp; CFR False'가 맞는지.</li>
+<li>동일 화물 그룹의 '화물 그룹'이 엑셀의 제품 그룹(DSL, JET …)인지.</li>
+<li>원유 탱크의 최소 허용 재고와 공정 처리량.</li>
+</ol>
+<h2>8. 파일과 다시 돌리기</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th>하는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slides/ppt-p00-cover.png</code>, <code>ppt-p01.png</code> … <code>ppt-p12.png</code></td>
+<td>PPT 장마다 캡처 (LibreOffice로 PDF → PNG, 한글 글꼴을 맞춰서)</td>
+</tr>
+<tr>
+<td><code>build_master.py</code> → <code>rules/terminal.json</code>, <code>rules/sample_plan.json</code></td>
+<td>엑셀 4개 시트 + PPT 표(Shifting · 야간 도선 · 동시 접안 · 작업 시각 · 정박개시) → 규칙 표</td>
+</tr>
+<tr>
+<td><code>pptcalc.py</code></td>
+<td>P1~P19 — 한 척의 한 작업계획 계산 + 산출 근거</td>
+</tr>
+<tr>
+<td><code>planner.py</code></td>
+<td>P20~P23 — 작업계획 Ω · 충돌 F · 재고 q 만들기, 기준안, 검산 도구</td>
+</tr>
+<tr>
+<td><code>solver.py</code></td>
+<td>본체 식 (1)~(8) → HiGHS, 2·3안, 재계산·재검사</td>
+</tr>
+<tr>
+<td><code>run.py</code></td>
+<td>서비스 입구 <code>optimize(요청) → 응답</code>, 묶음 나누기, 범위 비교</td>
+</tr>
+<tr>
+<td><code>validate.py</code>, <code>fleet.py</code></td>
+<td>무작위 검산</td>
+</tr>
+<tr>
+<td><code>cases/</code></td>
+<td>샘플 주간 · 기상 변형 · API 예시 요청</td>
+</tr>
+<tr>
+<td><code>out/</code></td>
+<td>응답 JSON · 요약 · 검산 기록</td>
+</tr>
+<tr>
+<td><code>figures/make_figures.py</code></td>
+<td>그림 4장 (SVG → PNG)</td>
+</tr>
+</tbody>
+</table></div>
+<pre tabindex="0"><code class="language-bash">python3 docs/milp/ppt/build_master.py &quot;&lt;Sample data.xlsx 경로&gt;&quot;
+python3 docs/milp/ppt/cases/build_sample_week.py
+python3 docs/milp/ppt/run.py cases/sample-week.json --compare
+python3 docs/milp/ppt/validate.py --n 60
+python3 docs/milp/ppt/figures/make_figures.py
+</code></pre>
+<p>scipy가 필요하다 (시스템 <code>python3</code> 3.14에 scipy 1.18.1이 있다. <code>demo/.venv</code>에는 없다).</p>
+</main>
+<footer>docs/milp/ppt/README.md에서 만든 페이지 · 코드와 결과 JSON은 저장소의 docs/milp/ppt/에 있다.</footer>
+</div>
+</body>
+</html>

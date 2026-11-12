@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>와이어프레임 — 접안 스케줄 비교 · 보고서 초안 · 검증 결과</title>
+<style>
+:root{--text-primary:#1f2328;--text-secondary:#656d76;--text-success:#3b6d11;--text-accent:#185fa5;--text-warning:#854f0b;
+--surface-1:#f3f3f0;--surface-2:#ffffff;--border:#e3e3de;--border-strong:#c9c9c2;--border-stronger:#9d9d95;
+--bg-accent:#e6f1fb;--border-accent:#378add;--bg-warning:#faeeda;--border-warning:#ef9f27}
+@media (prefers-color-scheme:dark){:root{--text-primary:#e6edf3;--text-secondary:#9da7b3;--text-success:#7fc96b;--text-accent:#85b7eb;--text-warning:#fac775;
+--surface-1:#1b1f24;--surface-2:#12161b;--border:#2d333b;--border-strong:#444c56;--border-stronger:#6e7681;
+--bg-accent:#0c3050;--border-accent:#378add;--bg-warning:#3b2e12;--border-warning:#ba7517}}
+body{margin:0;background:var(--surface-2);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;font-size:16px;line-height:1.7}
+main{max-width:680px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:18px;font-weight:500;margin:0 0 4px}
+p.sub{margin:0 0 16px;color:var(--text-secondary);font-size:13px}
+.gap{height:24px}
+button{border:0.5px solid var(--border-stronger);background:transparent;border-radius:8px;color:var(--text-primary);font-family:inherit}
+</style>
+</head>
+<body>
+<main>
+<h1>와이어프레임</h1>
+<p class="sub">원문 4절의 최종 산출물 이미지 세 장입니다. 파란 태그는 원문 3절 기능 번호입니다. 요구와의 대응은 07-requirements-analysis.md 7절에 있습니다.</p>
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">접안 스케줄 비교 화면 와이어프레임. 왼쪽에 대기 선박, 부두, 외부 조건을 넣고, 가운데에서 후보 순서를 총 예상 체선료 순으로 비교하며, 선박을 누르면 산출 근거와 남은 리스크가 아래에 나온다.</h2>
+<style>
+.wf{font-size:12px;line-height:1.5;color:var(--text-primary)}
+.wf *{box-sizing:border-box}
+.wf .bx{border:0.5px solid var(--border-strong);border-radius:8px;background:var(--surface-2);padding:8px 10px}
+.wf .ph{background:var(--surface-1);border-radius:4px;padding:4px 6px;font-size:11px;line-height:1.6}
+.wf .mu{color:var(--text-secondary)}
+.wf .sm{font-size:11px}
+.wf .hd{font-weight:500;font-size:13px}
+.wf .rw{display:flex;align-items:center;gap:6px}
+.wf .tg{font-size:11px;font-weight:500;padding:0 7px;border-radius:10px;background:var(--bg-accent);color:var(--text-accent);white-space:nowrap}
+.wf .bar{position:absolute;height:22px;border:0.5px solid var(--border-stronger);background:var(--surface-1);border-radius:4px;font-size:11px;line-height:21px;padding:0 6px;overflow:hidden;white-space:nowrap}
+.wf .wt{border:1px dashed var(--border-warning);background:var(--bg-warning)}
+.wf .sel{border:1.5px solid var(--border-accent);background:var(--bg-accent);color:var(--text-accent)}
+.wf .l1{top:7px}.wf .l2{top:43px}.wf .l3{top:79px}
+.wf .band{position:absolute;top:0;bottom:0}
+.wf .rk{display:inline-block;width:14px;height:14px;line-height:13px;text-align:center;border-radius:50%;background:var(--bg-warning);border:0.5px solid var(--border-warning);color:var(--text-warning);font-size:11px;margin-left:4px}
+.wf button{height:28px;padding:0 12px;font-size:12px}
+</style>
+<div class="wf">
+<div class="bx rw" style="justify-content:space-between;margin-bottom:10px;padding:6px 10px">
+<span class="hd">접안 스케줄 비교</span>
+<span class="rw"><span class="mu">기준 시각</span><span class="bx" style="padding:1px 8px">11/18 08:00</span><span class="mu" style="margin-left:6px">시나리오</span><span class="bx" style="padding:1px 8px">강풍 예보일</span><button>후보 다시 계산</button></span>
+</div>
+<div style="display:flex;gap:12px;align-items:stretch">
+<div class="bx" style="width:158px;flex:none">
+<div class="rw" style="margin-bottom:8px"><span class="hd">입력</span><span class="tg">스케줄러</span></div>
+<div class="mu sm">대기 선박 5척</div>
+<div class="ph" style="margin:2px 0 8px">A선 11/18 06:00 나프타<br>B선 11/18 10:00 경유<br>C선 11/19 08:00 휘발유<br>D선 11/19 12:00 경유<br>E선 11/20 14:00 나프타</div>
+<div class="mu sm">부두 3곳</div>
+<div class="ph" style="margin:2px 0 8px">부두 1 · 사용 가능<br>부두 2 · 사용 가능<br>부두 3 · 정비 중</div>
+<div class="mu sm">외부 조건</div>
+<div class="ph" style="margin:2px 0 8px">일기예보 · 조석<br>일출 · 일몰</div>
+<div class="mu sm">계획 · 설비</div>
+<div class="ph" style="margin:2px 0 0">생산 · 출하 계획<br>탱크 · 설비 여유</div>
+</div>
+<div style="flex:1;min-width:0">
+<div class="rw" style="margin-bottom:6px"><span class="hd">후보 비교</span><span class="tg">기능 2</span><span class="mu sm" style="margin-left:auto">낮은 순 · 초록은 기준안 대비 절감</span></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px">
+<div class="bx" style="background:var(--surface-1);padding:6px 8px"><div class="mu sm">기준안</div><div class="hd" style="font-size:14px">$412,000</div><div class="mu sm">도착 순서대로</div></div>
+<div class="bx" style="border:1.5px solid var(--border-accent);padding:6px 8px"><div class="sm" style="color:var(--text-accent)">후보 1 · 선택 중</div><div class="hd" style="font-size:14px">$286,000</div><div class="sm" style="color:var(--text-success)">−$126,000</div><div class="mu sm">남은 리스크 2</div></div>
+<div class="bx" style="padding:6px 8px"><div class="mu sm">후보 2</div><div class="hd" style="font-size:14px">$301,000</div><div class="sm" style="color:var(--text-success)">−$111,000</div><div class="mu sm">남은 리스크 1</div></div>
+<div class="bx" style="padding:6px 8px"><div class="mu sm">후보 3</div><div class="hd" style="font-size:14px">$329,000</div><div class="sm" style="color:var(--text-success)">−$83,000</div><div class="mu sm">남은 리스크 3</div></div>
+</div>
+<div class="bx" style="padding:8px 10px 6px;margin-bottom:10px">
+<div class="rw" style="margin-bottom:6px"><span class="hd">후보 1 · 부두별 타임라인</span><span class="mu sm" style="margin-left:auto">선박을 누르면 아래에 근거가 나와요</span></div>
+<div style="display:flex">
+<div class="mu sm" style="width:40px;flex:none;padding-top:16px"><div style="height:36px;line-height:36px">부두 1</div><div style="height:36px;line-height:36px">부두 2</div><div style="height:36px;line-height:36px">부두 3</div></div>
+<div style="flex:1;min-width:0">
+<div class="mu sm" style="position:relative;height:16px"><span style="position:absolute;left:0">11/18</span><span style="position:absolute;left:33.33%">11/19</span><span style="position:absolute;left:66.67%">11/20</span><span style="position:absolute;right:0">11/21</span></div>
+<div style="position:relative;height:108px;border:0.5px solid var(--border);border-radius:4px;overflow:hidden">
+<div class="band" style="left:24.31%;width:18.75%;background:var(--surface-1)"></div>
+<div class="band" style="left:57.64%;width:18.75%;background:var(--surface-1)"></div>
+<div class="band" style="left:90.97%;width:9.03%;background:var(--surface-1)"></div>
+<div class="band" style="left:52.78%;width:11.11%;background:var(--bg-warning);opacity:.7"></div>
+<div style="position:absolute;left:0;right:0;top:36px;border-top:0.5px solid var(--border)"></div>
+<div style="position:absolute;left:0;right:0;top:72px;border-top:0.5px solid var(--border)"></div>
+<div class="bar l1" style="left:8.33%;width:33.33%">A선</div>
+<div class="bar l1 wt" style="left:44.44%;width:5.56%"></div>
+<div class="bar l1" style="left:50%;width:33.33%">C선<i class="rk">!</i></div>
+<div class="bar l2 wt" style="left:13.89%;width:25%">B선 대기 18시간</div>
+<div class="bar l2 sel" style="left:38.89%;width:47.22%">B선 · 선택됨<i class="rk">!</i></div>
+<div class="bar l2 wt" style="left:86.11%;width:5.56%"></div>
+<div class="bar l2" style="left:91.67%;width:8.33%;padding:0 3px">E</div>
+<div class="bar l3" style="left:0;width:50%;border-style:dashed">정비</div>
+<div class="bar l3 wt" style="left:50%;width:5.56%"></div>
+<div class="bar l3" style="left:55.56%;width:33.33%">D선</div>
+</div>
+</div>
+</div>
+<div class="rw mu sm" style="gap:14px;margin-top:6px;flex-wrap:wrap"><span>점선 칸 = 대기</span><span>노란 띠 = 강풍 예보</span><span>회색 띠 = 야간(일몰~일출)</span><span><i class="rk" style="margin:0 3px 0 0">!</i>남은 리스크</span></div>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:10px">
+<div class="bx">
+<div class="rw" style="margin-bottom:4px"><span class="hd">B선 · 산출 근거</span><span class="tg">기능 1</span></div>
+<div style="display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:11px">
+<span class="mu">도착 일시</span><span>11/18 10:00</span>
+<span class="mu">허용 시간 시작</span><span>11/18 16:00 (도착 + 6시간)</span>
+<span class="mu">허용 시간</span><span>36시간 → 11/20 04:00까지</span>
+<span class="mu">예상 작업 종료</span><span>11/20 14:00</span>
+<span class="mu">체선 시간</span><span>10시간</span>
+<span class="mu">하루 체선료</span><span>$60,000 (시간당 $2,500)</span>
+<span class="mu">예상 체선료</span><span class="hd" style="font-size:12px">$25,000</span>
+</div>
+<div class="mu sm" style="margin-top:4px">쓴 규칙은 계약 정보에서 읽어 와요.</div>
+</div>
+<div class="bx">
+<div class="rw" style="margin-bottom:4px"><span class="hd">남은 리스크 · 대안</span><span class="tg">기능 3</span></div>
+<div class="sm" style="line-height:1.55">
+<div style="margin-bottom:4px"><i class="rk" style="margin:0 4px 0 0">!</i>강풍 예보가 바뀌면 부두 2 순서가 달라져요</div>
+<div style="margin-bottom:4px"><i class="rk" style="margin:0 4px 0 0">!</i>탱크 여유는 아직 반영하지 못했어요</div>
+<div class="mu">대안: C선을 부두 3으로 옮기면 +$18,000</div>
+</div>
+</div>
+</div>
+<div class="rw" style="margin-top:10px;gap:8px;flex-wrap:wrap"><span class="mu sm" style="margin-right:auto">자동 확정은 안 해요. 고르는 건 담당자예요.</span><button>이 후보 선택</button><button>보고서 초안 만들기</button><span class="tg">기능 4</span></div>
+</div>
+</div>
+<div class="mu sm" style="margin-top:8px">금액과 시간은 자리 표시용 예시예요. 계약 정보와 선박·부두 제원도 입력에 들어가요.</div>
+</div>
+<div class="gap"></div><h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">보고서 초안 화면과 검증 결과 화면 와이어프레임. 보고서 초안은 고른 후보로 만든 메일과 Report이고, 검증 결과는 계산 일치 비율과 시나리오별 기준안 대비 총 예상 체선료 차이를 보여 준다.</h2>
+<style>
+.wf{font-size:12px;line-height:1.5;color:var(--text-primary)}
+.wf *{box-sizing:border-box}
+.wf .bx{border:0.5px solid var(--border-strong);border-radius:8px;background:var(--surface-2);padding:8px 10px}
+.wf .ph{background:var(--surface-1);border-radius:4px;padding:4px 6px;font-size:12px;line-height:1.6}
+.wf .ln{background:var(--surface-1);border-radius:3px;height:8px;margin:5px 0}
+.wf .mu{color:var(--text-secondary)}
+.wf .sm{font-size:11px}
+.wf .hd{font-weight:500;font-size:13px}
+.wf .rw{display:flex;align-items:center;gap:6px}
+.wf .tg{font-size:11px;font-weight:500;padding:0 7px;border-radius:10px;background:var(--bg-accent);color:var(--text-accent);white-space:nowrap}
+.wf .mt{background:var(--surface-1);border-radius:8px;padding:8px 10px}
+.wf button{height:28px;padding:0 12px;font-size:12px}
+</style>
+<div class="wf" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start">
+<div class="bx">
+<div class="rw" style="margin-bottom:8px"><span class="hd">보고서 초안</span><span class="tg">기능 4</span><span class="mu sm" style="margin-left:auto">후보 1 기준</span></div>
+<div class="rw" style="margin-bottom:8px"><span class="bx" style="padding:1px 10px;border-color:var(--border-accent);color:var(--text-accent)">메일</span><span class="bx" style="padding:1px 10px">Report</span></div>
+<div class="mu sm">받는 사람</div>
+<div class="ph" style="margin-bottom:6px">입출항 작업 지시자</div>
+<div class="mu sm">제목</div>
+<div class="ph" style="margin-bottom:8px">11/18 접안 계획 후보 1 안내</div>
+<div class="bx" style="padding:8px 10px">
+<div class="mu sm">왜 이 안인가요</div>
+<div class="ln"></div><div class="ln" style="width:85%"></div>
+<div class="mu sm" style="margin-top:6px">총 예상 체선료</div>
+<div class="sm">$286,000 (기준안보다 $126,000 적어요)</div>
+<div class="mu sm" style="margin-top:6px">남은 리스크 · 대안</div>
+<div class="ln"></div><div class="ln" style="width:70%"></div>
+</div>
+<div class="mu sm" style="margin:8px 0">첨부: 후보 비교 표 · 타임라인</div>
+<div class="rw"><button>복사</button><button>다시 쓰기</button></div>
+<div class="mu sm" style="margin-top:6px">초안이에요. 보내는 건 담당자가 해요.</div>
+</div>
+<div class="bx">
+<div class="rw" style="margin-bottom:8px"><span class="hd">검증 결과</span><span class="tg">기능 5</span><span class="mu sm" style="margin-left:auto">발표용</span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px">
+<div class="mt"><div class="mu sm">계산 일치</div><div style="font-size:20px;font-weight:500;line-height:1.3">18 / 20</div><div class="mu sm">손계산 정답과 같은 선박</div></div>
+<div class="mt"><div class="mu sm">제약 위반</div><div style="font-size:20px;font-weight:500;line-height:1.3">0건</div><div class="mu sm">모든 시나리오 합계</div></div>
+</div>
+<div class="mu sm" style="margin-bottom:4px">시나리오별 총 예상 체선료</div>
+<div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:5px 6px;font-size:11px">
+<span class="mu">시나리오</span><span class="mu">기준안</span><span class="mu">제안</span><span class="mu">줄인 금액</span>
+<span>평상시</span><span>$180,000</span><span>$152,000</span><span style="color:var(--text-success)">−$28,000</span>
+<span>강풍 예보</span><span>$412,000</span><span>$286,000</span><span style="color:var(--text-success)">−$126,000</span>
+<span>선박 몰림</span><span>$355,000</span><span>$297,000</span><span style="color:var(--text-success)">−$58,000</span>
+<span>부두 정비</span><span>$268,000</span><span>$231,000</span><span style="color:var(--text-success)">−$37,000</span>
+</div>
+<div class="mu sm" style="margin-top:10px">기준안은 도착 순서대로 접안한 경우예요.</div>
+</div>
+</div>
+<div style="margin-top:8px;font-size:11px;color:var(--text-secondary)">금액과 시간은 자리 표시용 예시예요.</div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,159 @@
+{
+  "id": "GC-05",
+  "title": "동일 화물 그룹 동시 접안 제한 {#6, #7, #8}",
+  "requirements": [
+    "FR-13",
+    "FR-35"
+  ],
+  "rule_ids": [
+    "ETB-05",
+    "ETB-01"
+  ],
+  "hand_calc": "P(FIX, #6, 경유): ETB 07:30, 작업 08:30~18:30, ETU 20:30 → 배타 구간 [07:30, 18:30). Q: ETA 08:00",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      }
+    },
+    "vessel": {
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 20000,
+      "dwt": 30000,
+      "loa": 180,
+      "pbl": 90,
+      "draft": 10,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 30000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "같은 그룹(경유) → #7 접안 = P의 ETU − 2h = 18:30",
+      "scenario": {
+        "berths": [
+          "#6",
+          "#7"
+        ],
+        "vessels": [
+          {
+            "id": "P",
+            "eta": "2026-11-10 06:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 07:30"
+            }
+          },
+          {
+            "id": "Q",
+            "eta": "2026-11-10 08:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "berth": "#7",
+            "etb": "2026-11-10 18:30"
+          },
+          "P": {
+            "etb": "2026-11-10 07:30",
+            "etu": "2026-11-10 20:30"
+          }
+        },
+        "pushes": {
+          "Q": [
+            "ETB-05"
+          ]
+        }
+      }
+    },
+    {
+      "name": "다른 그룹(휘발유) → 제한 없음, #7 09:30",
+      "scenario": {
+        "berths": [
+          "#6",
+          "#7"
+        ],
+        "vessels": [
+          {
+            "id": "P",
+            "eta": "2026-11-10 06:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 07:30"
+            }
+          },
+          {
+            "id": "Q",
+            "eta": "2026-11-10 08:00",
+            "material_code": "PG-RG92"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "berth": "#7",
+            "etb": "2026-11-10 09:30"
+          }
+        },
+        "pushes": {
+          "Q": []
+        }
+      }
+    },
+    {
+      "name": "조합 밖 부두(#1-1) → 제한 없음, 09:00",
+      "scenario": {
+        "berths": [
+          "#6",
+          "#1-1"
+        ],
+        "vessels": [
+          {
+            "id": "P",
+            "eta": "2026-11-10 06:00",
+            "status": "FIX",
+            "fixed": {
+              "berth": "#6",
+              "etb": "2026-11-10 07:30"
+            }
+          },
+          {
+            "id": "Q",
+            "eta": "2026-11-10 08:00"
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "Q": {
+            "berth": "#1-1",
+            "etb": "2026-11-10 09:00"
+          }
+        },
+        "pushes": {
+          "Q": []
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

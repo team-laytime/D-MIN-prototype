@@ -1,0 +1,139 @@
+{
+  "id": "GC-09",
+  "title": "기상 공제 — 기상 체선 시간의 1/2 (+ 규칙 표만 바꿔 결과가 바뀌는 시연)",
+  "requirements": [
+    "FR-28",
+    "FR-29",
+    "NFR-04"
+  ],
+  "rule_ids": [
+    "WX-01",
+    "ETB-07",
+    "DEM-02",
+    "DEM-03"
+  ],
+  "hand_calc": "강풍(17 m/s ≥ 15) 11/10 08:00~20:00 → #4-1 금지 [08:00, 21:00). ETA 07:30 → 08:30 → ETB 21:00. 정박개시 = ETANR + 6h = 13:30, Laytime 6h → 정박종료 19:30. 작업 22:00~08:00, 호스분리 11/11 09:00 → 공제 전 13.5h. 기상이 없었다면 ETB 08:30 → 기상 대기 [08:30, 21:00) 중 체선 기간에 든 것 [19:30, 21:00) = 1.5h → 공제 0.75h → 12.75h × 1,000 = 12,750",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      },
+      "berths": [
+        "#4-1"
+      ],
+      "weather_forecast": {
+        "source": "가상 예보",
+        "issued_at": "2026-11-09 17:00",
+        "segments": [
+          {
+            "from": "2026-11-10 08:00",
+            "to": "2026-11-10 20:00",
+            "wind_ms": 17
+          }
+        ]
+      }
+    },
+    "vessel": {
+      "id": "W1",
+      "vessel_type": "CHEMICAL",
+      "grt": 5000,
+      "dwt": 8000,
+      "loa": 110,
+      "pbl": 50,
+      "draft": 7,
+      "direction": "IMPORT",
+      "material_code": "CH-PX",
+      "qty": 7000,
+      "status": "PLANNED",
+      "eta": "2026-11-10 07:30",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 6,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-11"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "기상 공제 0.75h → 12.75h, 12,750",
+      "scenario": {
+        "vessels": [
+          {}
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "W1": {
+            "etb": "2026-11-10 21:00",
+            "etb_without_weather": "2026-11-10 08:30",
+            "laytime_start": "2026-11-10 13:30",
+            "laytime_end": "2026-11-10 19:30",
+            "hose_off": "2026-11-11 09:00",
+            "demurrage_raw_hours": "13.5",
+            "weather_hours": "1.5",
+            "weather_deduction_hours": "0.75",
+            "demurrage_hours": "12.75",
+            "amount_usd": "12750"
+          }
+        },
+        "pushes": {
+          "W1": [
+            "ETB-07"
+          ]
+        }
+      }
+    },
+    {
+      "name": "규칙 표의 기상 공제 비율만 0으로 → 13.5h, 13,500 (코드 수정 없음)",
+      "rules_patch": {
+        "contract.weather_deduction.ratio": 0
+      },
+      "scenario": {
+        "vessels": [
+          {}
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "W1": {
+            "weather_hours": "1.5",
+            "weather_deduction_hours": "0",
+            "demurrage_hours": "13.5",
+            "amount_usd": "13500"
+          }
+        }
+      }
+    },
+    {
+      "name": "규칙 표의 #4 Direction만 2h로 → ETB 22:00, 공제 전 14.5h, 기상 2.5h·공제 1.25h → 13.25h, 13,250 (코드 수정 없음)",
+      "rules_patch": {
+        "terminal.shifting_hours.#4.direction": 2
+      },
+      "scenario": {
+        "vessels": [
+          {}
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "W1": {
+            "etb": "2026-11-10 22:00",
+            "laytime_end": "2026-11-10 19:30",
+            "hose_off": "2026-11-11 10:00",
+            "weather_hours": "2.5",
+            "demurrage_hours": "13.25",
+            "amount_usd": "13250"
+          }
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

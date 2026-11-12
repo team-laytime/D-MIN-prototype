@@ -1,0 +1,22 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-11-02T03:05:00Z"},
+  "lists": "css",
+  "title": "체선료 도메인 집중 강의",
+  "order": ["cover", "agenda", "m1-divider", "m1-supply", "m1-sizes", "m1-players", "m1-rates", "m2-divider", "m2-structure", "m2-clauses", "m2-gtc", "m2-incoterms", "m2-recap", "m3-divider", "m3-money", "m3-units", "m3-nor", "m3-start", "m3-rules", "m3-reversible", "m3-demurrage", "m3-calc", "m3-case", "m4-divider", "m4-flow", "m4-sof", "m4-blame", "m5-divider", "m5-review", "m5-disputes", "m5-gap", "m6-divider", "m6-mapping", "m6-agent", "m6-seagate", "close"],
+  "sections": {
+    "intro": {"description": "강의 소개와 6개 모듈 지도", "start": "cover"},
+    "m1": {"description": "해운 시장과 탱커 운송의 기초: 누가 어떤 배로 무엇을 나르나", "start": "m1-divider"},
+    "m2": {"description": "용선계약과 매매계약의 구조: 시간의 값이 정해지는 조항", "start": "m2-divider"},
+    "m3": {"description": "레이타임의 과학: 개시·산입·제외·전환·반액·시효", "start": "m3-divider"},
+    "m4": {"description": "터미널 운영과 시간: 부두에서 시간이 새는 곳과 귀책", "start": "m4-divider"},
+    "m5": {"description": "클레임 실무: 청구서 검토 절차와 분쟁 유형", "start": "m5-divider"},
+    "m6": {"description": "데이터와 Agent로 연결: 개념을 필드·룰·평가로 옮기기", "start": "m6-divider"},
+    "close": {"description": "과제·평가·다음 단계", "start": "close"}
+  },
+  "faces": {
+    "ibm-plex-sans-kr": {"family": "IBM Plex Sans KR", "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"},
+    "ibm-plex-mono": {"family": "IBM Plex Mono", "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"}
+  },
+  "designSystems": []
+}

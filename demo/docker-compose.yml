@@ -1,0 +1,44 @@
+# 로컬·스테이징 구성: 앱 컨테이너 1개 + PostgreSQL 1개
+# 운영은 같은 이미지를 관리형 컨테이너 서비스 + 관리형 Postgres에 올린다(ADR-006).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: demurrage
+      POSTGRES_USER: demurrage
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-demurrage-local-only}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U demurrage -d demurrage"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    image: chukhwabi-demurrage-demo:local
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://demurrage:${POSTGRES_PASSWORD:-demurrage-local-only}@db:5432/demurrage
+      LLM_PROVIDER: ${LLM_PROVIDER:-none}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-claude-opus-5-5}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://api.anthropic.com}
+      LLM_COST_CAP_USD: ${LLM_COST_CAP_USD:-1.0}
+      LOG_LEVEL: INFO
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    restart: unless-stopped
+
+  # 배포 문지기: 정답 세트·검증 시나리오를 컨테이너 안에서 돌린다
+  #   docker compose --profile verify run --rm verify
+  verify:
+    image: chukhwabi-demurrage-demo:local
+    profiles: ["verify"]
+    command: ["python", "-m", "demurrage", "verify", "--strict"]
+
+volumes:
+  pgdata:

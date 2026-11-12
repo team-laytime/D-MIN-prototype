@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: demurrage
+resources:
+  - serviceaccounts.yaml
+  - deployment.yaml
+  - service.yaml
+  - cronjob.yaml
+configMapGenerator:
+  - name: demurrage-config
+    literals:
+      - LLM_PROVIDER=none
+      - LOG_LEVEL=INFO
+      - AWS_DEFAULT_REGION=ap-northeast-2
+      - AWS_ACCOUNT_ID=REPLACE_ME
+      - AWS_EC2_METADATA_DISABLED=true
+      - REPORTS_BUCKET=REPLACE_ME
+      - REPORTS_PREFIX=reports
+      - BATCH_SCENARIO=S05-storm-rush
+      - RELEASE_ID=REPLACE_ME

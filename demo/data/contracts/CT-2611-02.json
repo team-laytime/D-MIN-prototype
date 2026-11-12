@@ -1,0 +1,147 @@
+{
+  "id": "CT-2611-02",
+  "title": "MT DONGHAE STAR 항해용선계약",
+  "kind": "항해용선계약 (Voyage Charter Party)",
+  "form": "ASBATANKVOY 서식 기반 + 용선자 추가 조항(Rider)",
+  "type": "CP",
+  "label": "가상 예시 — 실제 계약이 아닙니다. 조항 문구는 표준 서식을 참고해 새로 쓴 요약입니다.",
+  "signed_on": "2026-10-27",
+  "parties": [
+    {
+      "role": "선주 (Owners)",
+      "name": "Donghae Maritime Inc. (가상)",
+      "counterparty": true
+    },
+    {
+      "role": "용선자 (Charterers)",
+      "name": "SK에너지 울산CLX (예시)"
+    }
+  ],
+  "payer_note": "울산에서 생긴 체선료는 용선자(SK에너지)가 선주에게 직접 지급한다.",
+  "vessel": {
+    "name": "MT DONGHAE STAR",
+    "class": "Suezmax",
+    "dwt": 160000
+  },
+  "cargo": "원유(Basrah Medium) 150,000 kl",
+  "ports": {
+    "load": "Basrah",
+    "discharge": "울산 SK Buoy"
+  },
+  "laycan": {
+    "from": "2026-11-10",
+    "to": "2026-11-12"
+  },
+  "terms": {
+    "laytime": {
+      "hours": 30,
+      "basis": "SHINC"
+    },
+    "notice_hours": 6,
+    "demurrage_rate_usd_day": 38000,
+    "weather_deduction_ratio": 0.5,
+    "daylight_nor": true,
+    "end_event": "호스 분리"
+  },
+  "clauses": [
+    {
+      "ref": "Part I (A)",
+      "title": "선박",
+      "text": "MT DONGHAE STAR — Suezmax, 160,000 DWT.",
+      "rules": []
+    },
+    {
+      "ref": "Part I (B)",
+      "title": "화물",
+      "text": "원유(Basrah Medium) 150,000 kl",
+      "rules": []
+    },
+    {
+      "ref": "Part I (C)",
+      "title": "Laycan",
+      "text": "2026-11-10 ~ 2026-11-12.",
+      "rules": []
+    },
+    {
+      "ref": "Part I (D)",
+      "title": "선적항 · 양하항",
+      "text": "선적: Basrah / 양하: 울산 SK Buoy",
+      "rules": []
+    },
+    {
+      "ref": "Part I (H)",
+      "title": "허용 정박시간",
+      "text": "울산 양하 30시간, 일요일·공휴일 포함(SHINC).",
+      "rules": [
+        "LAY-07"
+      ]
+    },
+    {
+      "ref": "Part I (I)",
+      "title": "체선료율",
+      "text": "하루 USD 38,000, 시간 비례(PDPR).",
+      "rules": [
+        "DEM-03"
+      ]
+    },
+    {
+      "ref": "Part II §5",
+      "title": "Laycan과 정박시간 개시",
+      "text": "Laycan 첫날 전에 도착하면 정박시간은 Laycan 첫날 06:00에 시작한다. 다만 Laycan 첫날 전에 접안까지 마치면(조기 작업) 접안 때부터 계산한다. Laycan이 지난 뒤 도착한 선박을 용선자가 받아 주면 정박시간은 접안 완료 때부터 계산한다.",
+      "rules": [
+        "LAY-02",
+        "LAY-03",
+        "LAY-04"
+      ]
+    },
+    {
+      "ref": "Part II §6",
+      "title": "준비 완료 통지(NOR)",
+      "text": "선박은 관습 묘박지에 도착해 하역 준비가 되면 NOR을 낸다. 정박시간은 NOR을 낸 뒤 6시간이 지난 때와 접안 완료 때 중 먼저 오는 때에 시작한다.",
+      "rules": [
+        "LAY-01",
+        "LAY-05"
+      ]
+    },
+    {
+      "ref": "Part II §8",
+      "title": "체선료",
+      "text": "허용 정박시간을 넘긴 시간에 대해 Part I (I)의 요율을 시간 비례로 지급한다.",
+      "rules": [
+        "DEM-01"
+      ]
+    },
+    {
+      "ref": "Part II §11",
+      "title": "호스 분리",
+      "text": "정박시간과 체선 시간은 호스를 분리할 때 끝난다.",
+      "rules": [
+        "WRK-03",
+        "DEM-01"
+      ]
+    },
+    {
+      "ref": "Rider 12",
+      "title": "주간 NOR",
+      "text": "일출~일몰 사이에 낸 NOR만 6시간 통지 규칙(Part II §6)을 따른다. 일출 전에 NOR을 내면 정박시간은 그날 07:00에, 일몰 뒤에 내면 다음 날 07:00에 시작한다. 그보다 먼저 접안하면 접안 때부터 계산한다.",
+      "rules": [
+        "LAY-06"
+      ]
+    },
+    {
+      "ref": "Rider 21",
+      "title": "기상 지연",
+      "text": "강풍 등 기상 때문에 터미널이 접안을 막아 기다린 시간 중 체선 기간에 든 시간은 절반만 체선 시간으로 본다.",
+      "rules": [
+        "DEM-02"
+      ]
+    },
+    {
+      "ref": "Rider 30",
+      "title": "청구 기한",
+      "text": "체선료는 하역 완료 후 90일 안에 NOR·SOF·타임시트를 갖춰 청구해야 하며, 기한이 지나면 청구권이 사라진다.",
+      "rules": []
+    }
+  ],
+  "recap": "M/T DONGHAE STAR (가상) — Suezmax 160,000 DWT\nACCT  SK ENERGY ULSAN CLX (CHARTERERS, 예시)   OWNERS: DONGHAE MARITIME INC. (가상)\nCARGO 원유(Basrah Medium) 150,000 kl\nLOAD  BASRAH    DISCH 울산 SK BUOY\nLAYCAN 2026-11-10 / 2026-11-12\nLAYTIME 30 HRS SHINC AT ULSAN\nDEMURRAGE USD 38,000 PDPR\nNOR ATDNSHINC, 6 HRS NOTICE / DAYLIGHT NOR (RIDER 12)\nWEATHER DELAY AT BERTH: 50 PCT (RIDER 21)\nTIME BAR 90 DAYS FULLY DOCUMENTED\nCP FORM ASBATANKVOY + CHRTS RIDER (가상 예시)"
+}

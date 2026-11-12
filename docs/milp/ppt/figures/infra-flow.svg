@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1020" viewBox="0 0 1520 1020" role="img">
+<title>수리계획법이 인프라와 주고받는 것</title><desc>Spring Boot가 입력을 모아 요청 JSON을 만들고 Python 계산 서비스에 보낸다. Python 서비스의 LangGraph 그래프가 검증, 수리계획법, 근거, 보고서 초안 순서로 돌고 결과 JSON을 DB에 남긴다. 사람이 후보를 고르면 Spring이 결정을 기록한다.</desc>
+<defs><marker id="mk" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0E1726"/></marker><marker id="mg" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#667085"/></marker><marker id="mo" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#D9620B"/></marker><marker id="mb" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#1B5FD9"/></marker><marker id="mt" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0B8B7B"/></marker><marker id="mp" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#5B4BC4"/></marker></defs>
+<rect x="0" y="0" width="1520" height="1020" rx="14" fill="#F6F8FB"/>
+<text x="28.0" y="40.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="700" fill="#0E1726" text-anchor="start">수리계획법이 우리 인프라와 주고받는 것</text>
+<text x="28.0" y="63.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#667085" text-anchor="start">Spring Boot ↔ Python 계산 서비스(LangGraph + 수리계획법) · REST(JSON) + SSE · EKS · PostgreSQL · S3 — 요청 한 건은 번호 순서로 흐른다</text>
+<rect x="1350.0" y="24.0" width="114.4" height="26.0" rx="13.0" fill="#FFF4DF" stroke="none" stroke-width="1"/>
+<text x="1362.0" y="41.3" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#B26A00" text-anchor="start">제안 · 팀 확인 전</text>
+<text x="28.0" y="112.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="14" font-weight="700" fill="#344054" text-anchor="start">입력이 오는 곳</text>
+<rect x="24.0" y="127.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="126.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="151.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">SEAGATE · 업무 입력</text>
+<text x="40.0" y="171.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">입항 건 · ETA · NOR · 상태 · FIX</text>
+<path d="M288.0 157.0 L322.0 157.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="199.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="198.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="223.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">계약 (C/P)</text>
+<text x="40.0" y="243.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">LayCan · LayTime · Rate · CFR</text>
+<path d="M288.0 229.0 L322.0 229.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="271.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="270.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="295.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">부두 기준정보</text>
+<text x="40.0" y="315.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">제원 · 제품 그룹 · Shifting 표 · 규칙 버전</text>
+<path d="M288.0 301.0 L322.0 301.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="343.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="342.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="367.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">부두 제약 설정</text>
+<text x="40.0" y="387.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">기상 악화(전 부두) · 공사(부두별)</text>
+<path d="M288.0 373.0 L322.0 373.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="415.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="414.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="439.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">공공데이터</text>
+<text x="40.0" y="459.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">울산 일출·일몰 (매일 배치)</text>
+<path d="M288.0 445.0 L322.0 445.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="487.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="486.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="511.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">탱크 · 공정</text>
+<text x="40.0" y="531.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">원유 재고 · 처리량 · 생산량</text>
+<path d="M288.0 517.0 L322.0 517.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="559.5" width="262.0" height="62.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="558.0" width="262.0" height="62.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="583.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#0E1726" text-anchor="start">과거 Shipment</text>
+<text x="40.0" y="603.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">평균 Rate · 호스분리 Term (배치)</text>
+<path d="M288.0 589.0 L322.0 589.0" fill="none" stroke="#667085" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="330.0" y="100.0" width="1166.0" height="640.0" rx="16" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="1242.6" y="112.0" width="235.4" height="24.0" rx="12.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="1253.6" y="128.1" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="600" fill="#667085" text-anchor="start">제공받은 EKS · 팀 namespace (ADR-016)</text>
+<rect x="350.0" y="146.0" width="360.0" height="574.0" rx="14" fill="#EFEDFB" stroke="none" stroke-width="1"/>
+<text x="366.0" y="172.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#5B4BC4" text-anchor="start">Spring Boot API (Java)</text>
+<text x="366.0" y="192.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#344054" text-anchor="start">로그인 · 권한 · 업무 데이터 · 결정 기록</text>
+<rect x="366.0" y="211.5" width="328.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="366.0" y="210.0" width="328.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="382.0" y="238.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">입력 모으기</text>
+<text x="382.0" y="264.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">부두·입항 건·계약·제약·재고 → 요청 하나</text>
+<text x="382.0" y="286.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">rules 버전 + 입력 지문(hash) 저장</text>
+<rect x="366.0" y="333.5" width="328.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="366.0" y="332.0" width="328.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="382.0" y="360.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">임시 조건 · 제약 켜고 끄기</text>
+<text x="382.0" y="386.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">FR-26 &#x27;이 배는 #3 금지&#x27; · FR-28</text>
+<text x="382.0" y="408.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">→ restrictions · rule_patch로 보냄</text>
+<rect x="366.0" y="455.5" width="328.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="366.0" y="454.0" width="328.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="382.0" y="482.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">결과 보여 주기</text>
+<text x="382.0" y="508.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">1·2·3안 비교표 · 부두별 간트 · 근거</text>
+<text x="382.0" y="530.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">근거는 trace(P7~P19) 그대로</text>
+<rect x="366.0" y="577.5" width="328.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="366.0" y="576.0" width="328.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="382.0" y="604.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">사람의 결정</text>
+<text x="382.0" y="630.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">선택 · 취소 · 현업 반영 완료 (FR-47·48)</text>
+<text x="382.0" y="652.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">SEAGATE에 자동 반영하지 않는다</text>
+<rect x="850.0" y="146.0" width="630.0" height="574.0" rx="14" fill="#E3F4F1" stroke="none" stroke-width="1"/>
+<text x="866.0" y="172.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#0B8B7B" text-anchor="start">Python 계산 서비스 (FastAPI · 밖에 열지 않음)</text>
+<text x="866.0" y="192.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#344054" text-anchor="start">LangGraph 그래프 = 순서가 고정된 노드 · 수리계획법은 정해진 한 단계</text>
+<rect x="1309.1" y="158.0" width="154.9" height="20.0" rx="10.0" fill="#E3F4F1" stroke="none" stroke-width="1"/>
+<text x="1317.1" y="171.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#0B8B7B" text-anchor="start">같은 입력 → 같은 답 (NFR-02)</text>
+<rect x="866.0" y="211.5" width="598.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="866.0" y="210.0" width="598.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="884.0" y="238.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">입력 검증</text>
+<text x="884.0" y="264.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">필수값 · 단위 · 시각 · 부두 이름</text>
+<text x="884.0" y="286.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">멈춤 → 422 + 빠진 항목</text>
+<path d="M1165.0 318.0 L1165.0 330.0" fill="none" stroke="#0B8B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mt)"/>
+<rect x="866.0" y="333.5" width="598.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="866.0" y="332.0" width="598.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#0B8B7B" stroke-width="1"/>
+<text x="884.0" y="360.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#0B8B7B" text-anchor="start">수리계획법  run.optimize()</text>
+<text x="884.0" y="386.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="600" fill="#344054" text-anchor="start">P20~P22 작업계획 생성 → HiGHS 본체 식 (1)~(8)</text>
+<text x="884.0" y="408.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">→ P23 PPT 식으로 재계산 · 위반 검사 · 1·2·3안</text>
+<path d="M1165.0 440.0 L1165.0 452.0" fill="none" stroke="#0B8B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mt)"/>
+<rect x="866.0" y="455.5" width="598.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="866.0" y="454.0" width="598.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="884.0" y="482.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">산출 근거</text>
+<text x="884.0" y="508.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">입항 건마다 P7~P19 숫자 대입 (explain)</text>
+<text x="884.0" y="530.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">기준안 대비 바뀐 것 · 바뀐 이유</text>
+<path d="M1165.0 562.0 L1165.0 574.0" fill="none" stroke="#0B8B7B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mt)"/>
+<rect x="866.0" y="577.5" width="598.0" height="108.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="866.0" y="576.0" width="598.0" height="108.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="884.0" y="604.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">보고서 초안 (LLM)</text>
+<text x="884.0" y="630.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">문장만 쓴다 · 숫자는 응답 JSON에서 복사</text>
+<text x="884.0" y="652.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">금액 계산에 LLM 0건 (NFR-01)</text>
+<path d="M322.0 450.0 L350.0 450.0" fill="none" stroke="#0E1726" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk)"/>
+<circle cx="334.0" cy="432.0" r="11" fill="#0E1726"/>
+<text x="334.0" y="436.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<path d="M710.0 250.0 L850.0 250.0" fill="none" stroke="#0E1726" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk)"/>
+<circle cx="780.0" cy="232.0" r="11" fill="#0E1726"/>
+<text x="780.0" y="236.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="780.0" y="270.0" font-family="'SF Mono',Menlo,monospace" font-size="10" font-weight="700" fill="#0E1726" text-anchor="middle">POST</text>
+<text x="780.0" y="284.0" font-family="'SF Mono',Menlo,monospace" font-size="9.6" font-weight="600" fill="#0E1726" text-anchor="middle">/v1/optimizations</text>
+<text x="780.0" y="298.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10" font-weight="500" fill="#344054" text-anchor="middle">→ 202 + 작업 ID</text>
+<path d="M850.0 360.0 L710.0 360.0" fill="none" stroke="#1B5FD9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3" marker-end="url(#mb)"/>
+<circle cx="780.0" cy="342.0" r="11" fill="#1B5FD9"/>
+<text x="780.0" y="346.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="780.0" y="380.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#1B5FD9" text-anchor="middle">SSE 진행 상황</text>
+<text x="780.0" y="395.0" font-family="'SF Mono',Menlo,monospace" font-size="9.6" font-weight="600" fill="#1B5FD9" text-anchor="middle">/events</text>
+<path d="M850.0 520.0 L710.0 520.0" fill="none" stroke="#0E1726" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk)"/>
+<circle cx="780.0" cy="502.0" r="11" fill="#0E1726"/>
+<text x="780.0" y="506.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="780.0" y="540.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#0E1726" text-anchor="middle">응답 JSON</text>
+<text x="780.0" y="555.0" font-family="'SF Mono',Menlo,monospace" font-size="9.6" font-weight="600" fill="#0E1726" text-anchor="middle">/result</text>
+<rect x="350.0" y="771.5" width="530.0" height="120.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="350.0" y="770.0" width="530.0" height="120.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="368.0" y="798.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#0E1726" text-anchor="start">PostgreSQL (외부 DB, 스키마를 나눔)</text>
+<rect x="368.0" y="812.0" width="37.1" height="21.0" rx="10.5" fill="#EFEDFB" stroke="none" stroke-width="1"/>
+<text x="377.0" y="826.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#5B4BC4" text-anchor="start">app</text>
+<text x="410.0" y="827.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">입력 스냅샷 · 입력 지문 · 결정 · 감사 기록</text>
+<rect x="368.0" y="846.0" width="49.9" height="21.0" rx="10.5" fill="#E3F4F1" stroke="none" stroke-width="1"/>
+<text x="377.0" y="860.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="700" fill="#0B8B7B" text-anchor="start">agent</text>
+<text x="422.0" y="861.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">작업 상태 · 응답 JSON · 실행 시간 · 모델 크기</text>
+<rect x="900.0" y="771.5" width="290.0" height="120.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="900.0" y="770.0" width="290.0" height="120.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="918.0" y="798.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#0E1726" text-anchor="start">CronJob · 매일 09:00 KST</text>
+<text x="918.0" y="822.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">같은 이미지 · 다음 7일을 다시 풀어</text>
+<text x="918.0" y="842.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">아침 보고서용 응답 JSON 저장</text>
+<text x="918.0" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">확정 · 발송은 하지 않는다</text>
+<rect x="1210.0" y="771.5" width="286.0" height="120.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="1210.0" y="770.0" width="286.0" height="120.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="1228.0" y="798.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#0E1726" text-anchor="start">S3 · reports/&lt;날짜&gt;/</text>
+<text x="1228.0" y="822.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">검증된 응답 JSON · 보고서</text>
+<text x="1228.0" y="842.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">배치 서비스 계정만 쓰기 권한</text>
+<text x="1228.0" y="866.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">Pod Identity (ADR-016)</text>
+<path d="M560.0 720.0 L560.0 770.0" fill="none" stroke="#0E1726" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mk)"/>
+<circle cx="578.0" cy="745.0" r="11" fill="#0E1726"/>
+<text x="578.0" y="749.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">5</text>
+<path d="M1165.0 720.0 L1165.0 770.0" fill="none" stroke="#667085" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<path d="M1190.0 830.0 L1210.0 830.0" fill="none" stroke="#667085" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#mg)"/>
+<rect x="24.0" y="911.5" width="1472.0" height="92.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="910.0" width="1472.0" height="92.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="42.0" y="936.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#0E1726" text-anchor="start">요청 한 건 따라가기</text>
+<circle cx="51.0" cy="958.0" r="9" fill="#0E1726"/>
+<text x="51.0" y="962.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="66.0" y="962.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="500" fill="#344054" text-anchor="start">스케줄러가 기간을 정하고 &#x27;후보 계산&#x27;을 누른다 → Spring이 입력을 모아 요청 JSON 하나로 만든다</text>
+<circle cx="537.0" cy="958.0" r="9" fill="#0E1726"/>
+<text x="537.0" y="962.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="552.0" y="962.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="500" fill="#344054" text-anchor="start">Spring이 Python 서비스에 POST → 202 + 작업 ID. 계산은 1~2분 (샘플 54건 97초)</text>
+<circle cx="1023.0" cy="958.0" r="9" fill="#0E1726"/>
+<text x="1023.0" y="962.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="1038.0" y="962.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="500" fill="#344054" text-anchor="start">진행 상황은 SSE: 입력 검증 → 작업계획 n개 → 풀이 1/3 → 재계산 · 검사 → 근거</text>
+<circle cx="51.0" cy="984.0" r="9" fill="#0E1726"/>
+<text x="51.0" y="988.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="66.0" y="988.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="500" fill="#344054" text-anchor="start">응답 JSON: 1·2·3안 · 기준안 · 현행 계획 · 입항 건마다 근거 · 모델 크기 · 버전</text>
+<circle cx="537.0" cy="984.0" r="9" fill="#0E1726"/>
+<text x="537.0" y="988.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">5</text>
+<text x="552.0" y="988.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="500" fill="#344054" text-anchor="start">결과는 DB(agent)에, 사람이 고른 안은 DB(app)에 결정으로 남는다</text>
+</svg>

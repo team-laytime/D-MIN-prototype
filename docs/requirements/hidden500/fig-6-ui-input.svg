@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="910" viewBox="0 0 680 910" role="img"><title>입력과 문서 확인 화면 목업</title><desc>표 붙여넣기, 변경 한 건 입력, 원문 옆 추출값 확인, 위험한 값 먼저, 모호한 날짜 두 해석, C/P와 NOR 충돌, 확인 진행 막대, 문서에 없는 값 직접 입력을 번호로 표시한다.</desc><rect x="0.0" y="0.0" width="680.0" height="910.0" rx="14" fill="#F6F8FB"/>
+<text x="24.0" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:17px;font-weight:700;fill:#0E1726">입력 · 문서 확인 화면 — 옮겨 적기와 확인을 줄인다</text>
+<text x="24.0" y="56.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#667085">가상 예시 · 계약서 문구는 설명용으로 지어낸 것</text>
+<rect x="556.8" y="22.0" width="99.2" height="22.0" rx="11" fill="#FFF4DF"/>
+<text x="566.8" y="37.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#B26A00">제안 · 팀 확인 전</text>
+<rect x="16.0" y="74.0" width="648.0" height="576.0" rx="12" fill="#101828" opacity="0.06"/>
+<rect x="16.0" y="72.0" width="648.0" height="576.0" rx="12" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<path d="M16 84 a12 12 0 0 1 12 -12 h624 a12 12 0 0 1 12 12 v26 h-648 Z" fill="#0B1F33"/>
+<text x="32.0" y="96.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;font-weight:700;fill:#FFFFFF">입력 · 문서 확인</text>
+<text x="130.0" y="96.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:400;fill:#9FB3C8">S05 강풍 예보 + 선박 집중 · 작업본</text>
+<rect x="440.0" y="80.0" width="210.0" height="22.0" rx="11" fill="#16314D"/>
+<rect x="443.0" y="82.5" width="62.2" height="17.0" rx="8.5" fill="#FFFFFF"/>
+<text x="474.1" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:600;fill:#0B1F33;text-anchor:middle">스케줄러</text>
+<text x="543.4" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#C9D6E3;text-anchor:middle">작업 지시자</text>
+<text x="614.3" y="95.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#C9D6E3;text-anchor:middle">지불 부서</text>
+<rect x="28.0" y="120.0" width="47.1" height="22.0" rx="11" fill="#E8F0FE" stroke="#9DB5E8" stroke-width="1"/>
+<text x="51.6" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:700;fill:#1B5FD9;text-anchor:middle">1 입력</text>
+<rect x="81.1" y="120.0" width="47.1" height="22.0" rx="11" fill="#F6F8FB" stroke="#E4E7EC" stroke-width="1"/>
+<text x="104.7" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3;text-anchor:middle">2 계산</text>
+<rect x="134.2" y="120.0" width="47.1" height="22.0" rx="11" fill="#F6F8FB" stroke="#E4E7EC" stroke-width="1"/>
+<text x="157.8" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3;text-anchor:middle">3 비교</text>
+<rect x="187.4" y="120.0" width="57.7" height="22.0" rx="11" fill="#F6F8FB" stroke="#E4E7EC" stroke-width="1"/>
+<text x="216.2" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3;text-anchor:middle">4 리스크</text>
+<rect x="251.0" y="120.0" width="57.7" height="22.0" rx="11" fill="#F6F8FB" stroke="#E4E7EC" stroke-width="1"/>
+<text x="279.9" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3;text-anchor:middle">5 보고서</text>
+<rect x="314.7" y="120.0" width="47.1" height="22.0" rx="11" fill="#F6F8FB" stroke="#E4E7EC" stroke-width="1"/>
+<text x="338.3" y="135.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3;text-anchor:middle">6 확정</text>
+<rect x="28.0" y="152.0" width="330.0" height="104.0" rx="9" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="44.0" y="174.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">표 붙여넣기</text>
+<text x="115.5" y="174.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">SEAGATE 접안계획에서 복사한 12행</text>
+<rect x="44.0" y="188.0" width="86.8" height="17.0" rx="8.5" fill="#E7F5EE"/>
+<text x="50.0" y="200.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#127A45">Berth → 부두 ✓</text>
+<rect x="135.8" y="188.0" width="41.6" height="17.0" rx="8.5" fill="#E7F5EE"/>
+<text x="141.8" y="200.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#127A45">ETA ✓</text>
+<rect x="182.4" y="188.0" width="41.6" height="17.0" rx="8.5" fill="#E7F5EE"/>
+<text x="188.4" y="200.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#127A45">ETB ✓</text>
+<rect x="229.0" y="188.0" width="41.6" height="17.0" rx="8.5" fill="#E7F5EE"/>
+<text x="235.0" y="200.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#127A45">ETU ✓</text>
+<rect x="44.0" y="212.0" width="128.5" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="50.0" y="224.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">Biz → ? 열을 골라 주세요</text>
+<rect x="273.8" y="222.0" width="68.2" height="22.0" rx="6" fill="#1B5FD9"/>
+<text x="307.9" y="237.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">가져오기</text>
+<circle cx="28.0" cy="153.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="28.0" y="157.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">1</text>
+<rect x="368.0" y="152.0" width="284.0" height="104.0" rx="9" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="384.0" y="174.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">변경 한 건</text>
+<text x="447.0" y="174.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">대리점 연락 한 통 = 세 번 클릭</text>
+<text x="384.0" y="198.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#667085">선박</text>
+<rect x="384.0" y="204.0" width="52.0" height="22.0" rx="5" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="391.0" y="219.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">B호 ▾</text>
+<text x="444.0" y="198.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#667085">새 ETA</text>
+<rect x="444.0" y="204.0" width="96.0" height="22.0" rx="5" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="451.0" y="219.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">11/12 16:30</text>
+<text x="548.0" y="198.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#667085">출처</text>
+<rect x="548.0" y="204.0" width="96.0" height="22.0" rx="5" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="555.0" y="219.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">대리점 연락 ▾</text>
+<rect x="589.9" y="230.0" width="46.1" height="20.0" rx="6" fill="#1B5FD9"/>
+<text x="613.0" y="244.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">저장</text>
+<circle cx="368.0" cy="153.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="368.0" y="157.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">2</text>
+<rect x="28.0" y="266.0" width="624.0" height="368.0" rx="9" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="44.0" y="288.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">C/P · NOR 확인 — B호 · CT-2611-03 (가상)</text>
+<text x="640.0" y="288.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726;text-anchor:end">확인 14 / 18</text>
+<rect x="500.0" y="296.0" width="140.0" height="6.0" rx="3" fill="#E4E7EC"/>
+<rect x="500.0" y="296.0" width="108.9" height="6.0" rx="3" fill="#127A45"/>
+<text x="640.0" y="316.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#B26A00;text-anchor:end">남은 4개를 확인해야 계산할 수 있어요</text>
+<circle cx="488.0" cy="288.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="488.0" y="292.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">7</text>
+<rect x="40.0" y="328.0" width="250.0" height="294.0" rx="6" fill="#FBFBF7" stroke="#E6E2D3" stroke-width="1"/>
+<rect x="50.0" y="338.0" width="104.8" height="17.0" rx="8.5" fill="#FFF4DF"/>
+<text x="56.0" y="350.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#8A5300">스캔본 · 꼼꼼히 확인</text>
+<text x="50.0" y="376.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:700;fill:#667085">CHARTER PARTY (가상 예시)</text>
+<text x="50.0" y="397.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:700;fill:#0E1726">PART I</text>
+<text x="50.0" y="418.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">(H) Laytime:</text>
+<rect x="47.0" y="426.5" width="92.9" height="17.0" rx="3" fill="#FFE58F"/>
+<text x="50.0" y="439.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">36 running hours</text>
+<text x="50.0" y="460.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">(I) Demurrage: USD 28,000 / day</text>
+<text x="50.0" y="481.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">6. NOR: laytime starts 6 hours after</text>
+<text x="50.0" y="502.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">NOR or on all fast, whichever is earlier.</text>
+<text x="50.0" y="523.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">NOR tendered:</text>
+<rect x="47.0" y="531.5" width="121.7" height="17.0" rx="3" fill="#FFD8B0"/>
+<text x="50.0" y="544.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">12/11/2026 15:10 UTC</text>
+<text x="50.0" y="565.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#0E1726">Master's note:</text>
+<rect x="47.0" y="573.5" width="81.9" height="17.0" rx="3" fill="#FAD1CF"/>
+<text x="50.0" y="586.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#0E1726">laytime 30 hrs</text>
+<circle cx="40.0" cy="329.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="40.0" y="333.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">3</text>
+<text x="302.0" y="340.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#667085">위험한 값부터</text>
+<circle cx="385.5" cy="336.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="385.5" y="340.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">4</text>
+<rect x="302.0" y="352.0" width="338.0" height="66.0" rx="7" fill="#FFF8EB" stroke="#F2D29B" stroke-width="1"/>
+<text x="314.0" y="371.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#7A4A00">NOR 제출 시각 · 날짜 순서가 모호해요</text>
+<text x="314.0" y="388.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#344054">원문 12/11/2026 15:10 UTC → KST로는 다음 날 00:10</text>
+<rect x="314.0" y="394.0" width="109.8" height="19.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="368.9" y="407.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#344054;text-anchor:middle">11월 12일 (일/월)</text>
+<rect x="429.8" y="394.0" width="109.8" height="19.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="484.7" y="407.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#344054;text-anchor:middle">12월 11일 (월/일)</text>
+<circle cx="640.0" cy="353.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="640.0" y="357.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">5</text>
+<rect x="302.0" y="426.0" width="338.0" height="66.0" rx="7" fill="#FFF7F6" stroke="#F4C7C2" stroke-width="1"/>
+<text x="314.0" y="445.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#C13A32">Laytime · C/P와 NOR 메모가 달라요</text>
+<text x="314.0" y="462.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#344054">C/P (H) 36h ↔ 선장 메모 30h</text>
+<rect x="314.0" y="468.0" width="90.4" height="19.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="359.2" y="481.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#344054;text-anchor:middle">C/P 36h 쓰기</text>
+<rect x="410.4" y="468.0" width="90.9" height="19.0" rx="6" fill="#FFFFFF" stroke="#C9D3E1" stroke-width="1"/>
+<text x="455.9" y="481.5" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#344054;text-anchor:middle">메모 30h 쓰기</text>
+<circle cx="640.0" cy="427.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="640.0" y="431.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">6</text>
+<line x1="302.0" y1="500.0" x2="640.0" y2="500.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="306.0" y="520.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">청구 기한</text>
+<text x="376.0" y="520.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#B26A00">문서에 없음</text>
+<rect x="584.7" y="508.0" width="55.3" height="17.0" rx="8.5" fill="#FFFFFF" stroke="#D0D5DD" stroke-width="1"/>
+<text x="590.7" y="520.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#344054">직접 입력</text>
+<circle cx="570.7" cy="516.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="570.7" y="520.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">8</text>
+<line x1="302.0" y1="530.0" x2="640.0" y2="530.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="306.0" y="550.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">일 체선료</text>
+<text x="376.0" y="550.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#344054">$28,000 / day</text>
+<rect x="588.9" y="538.0" width="51.1" height="17.0" rx="8.5" fill="#E7F5EE"/>
+<text x="594.9" y="550.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#127A45">확인함 ✓</text>
+<line x1="302.0" y1="560.0" x2="640.0" y2="560.0" stroke="#F0F2F5" stroke-width="1"/>
+<text x="306.0" y="580.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#0E1726">Laycan</text>
+<text x="376.0" y="580.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:500;fill:#344054">11/10 ~ 11/12</text>
+<rect x="501.4" y="568.0" width="138.6" height="17.0" rx="8.5" fill="#E8F0FE"/>
+<text x="507.4" y="580.3" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:10.5px;font-weight:600;fill:#1B5FD9">고침 · 원래 11/10 ~ 11/11</text>
+<text x="306.0" y="610.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:500;fill:#98A2B3">Enter 확인 · ↓ 다음 값</text>
+<text x="24.0" y="678.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12.5px;font-weight:700;fill:#0E1726">번호 설명 · 오른쪽 ID는 15-hidden-nfr-ux-500.md의 UX 항목</text>
+<rect x="24.0" y="691.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="690.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="711.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="715.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">1</text>
+<text x="60.0" y="707.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">붙여넣기 열 자동 맞춤</text>
+<text x="324.0" y="707.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-016</text>
+<text x="60.0" y="723.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">연동이 없어 사람이 옮겨 적는다</text>
+<rect x="346.0" y="691.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="690.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="711.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="715.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">2</text>
+<text x="382.0" y="707.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">'변경 한 건' 입력창</text>
+<text x="646.0" y="707.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-027</text>
+<text x="382.0" y="723.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">ETA 연락은 한 건씩 온다 [추정]</text>
+<rect x="24.0" y="741.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="740.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="761.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="765.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">3</text>
+<text x="60.0" y="757.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">원문 옆 근거 강조</text>
+<text x="324.0" y="757.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-036</text>
+<text x="60.0" y="773.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">근거를 봐야 확인할 수 있다</text>
+<rect x="346.0" y="741.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="740.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="761.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="765.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">4</text>
+<text x="382.0" y="757.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">위험한 값부터</text>
+<text x="646.0" y="757.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-037</text>
+<text x="382.0" y="773.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">사람의 시간을 위험한 값에 쓴다</text>
+<rect x="24.0" y="791.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="790.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="811.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="815.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">5</text>
+<text x="60.0" y="807.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">모호한 날짜 두 해석</text>
+<text x="324.0" y="807.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-042</text>
+<text x="60.0" y="823.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">12/11은 두 날짜로 읽힌다</text>
+<rect x="346.0" y="791.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="790.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="811.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="815.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">6</text>
+<text x="382.0" y="807.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">C/P와 NOR 충돌 고르기</text>
+<text x="646.0" y="807.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-046</text>
+<text x="382.0" y="823.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">교차 검증은 사람이 정한다 (FR-07)</text>
+<rect x="24.0" y="841.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="24.0" y="840.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="42.0" cy="861.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="42.0" y="865.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">7</text>
+<text x="60.0" y="857.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">확인 진행 막대</text>
+<text x="324.0" y="857.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-039</text>
+<text x="60.0" y="873.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">미확인이 있으면 계산이 막힌다 (FR-06)</text>
+<rect x="346.0" y="841.5" width="310.0" height="42.0" rx="10" fill="#101828" opacity="0.05"/>
+<rect x="346.0" y="840.0" width="310.0" height="42.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<circle cx="364.0" cy="861.0" r="10" fill="#6E56CF" stroke="#FFFFFF" stroke-width="2"/>
+<text x="364.0" y="865.1" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11.5px;font-weight:700;fill:#FFFFFF;text-anchor:middle">8</text>
+<text x="382.0" y="857.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:12px;font-weight:700;fill:#0E1726">문서에 없으면 직접 입력</text>
+<text x="646.0" y="857.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:600;fill:#98A2B3;text-anchor:end">UX-044</text>
+<text x="382.0" y="873.0" style="font-family:Pretendard,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:11px;font-weight:400;fill:#667085">지어낸 값을 막는다</text></svg>

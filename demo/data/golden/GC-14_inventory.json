@@ -1,0 +1,108 @@
+{
+  "id": "GC-14",
+  "title": "재고 제약 — 출하할 재고가 모자라면 작업시작을 다음 날로",
+  "requirements": [
+    "FR-16"
+  ],
+  "rule_ids": [
+    "ETB-09"
+  ],
+  "hand_calc": "경유 재고 100, 하루 +50(생산), 출하 180. 11/10 작업 시: 100 + 50 − 180 = −30 → 부족. 11/11: 100 + 50 + 50 − 180 = 20 ≥ 0 → 작업시작 11/11 00:00 → ETB = 작업시작 − 1h = 11/10 23:00",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-14 00:00"
+      },
+      "berths": [
+        "#1-1"
+      ],
+      "inventory": [
+        {
+          "group": "DIESEL",
+          "unit": "천 kl(가상)",
+          "capacity": 1000,
+          "opening": 100,
+          "daily_net": 50,
+          "minimum": 0
+        }
+      ]
+    },
+    "vessel": {
+      "id": "K",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 20000,
+      "dwt": 30000,
+      "loa": 180,
+      "pbl": 85,
+      "draft": 10,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 180,
+      "status": "PLANNED",
+      "eta": "2026-11-10 06:00",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 24000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "11/10 재고 부족 30 → ETB 11/10 23:00",
+      "scenario": {
+        "vessels": [
+          {}
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "K": {
+            "etb": "2026-11-10 23:00",
+            "work_start": "2026-11-11 00:00"
+          }
+        },
+        "pushes": {
+          "K": [
+            "ETB-09"
+          ]
+        }
+      }
+    },
+    {
+      "name": "재고가 넉넉하면(시작 300) 그대로 07:00",
+      "scenario": {
+        "vessels": [
+          {}
+        ],
+        "inventory": [
+          {
+            "group": "DIESEL",
+            "capacity": 1000,
+            "opening": 300,
+            "daily_net": 50,
+            "minimum": 0
+          }
+        ]
+      },
+      "expect": {
+        "vessels": {
+          "K": {
+            "etb": "2026-11-10 07:00"
+          }
+        },
+        "pushes": {
+          "K": []
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

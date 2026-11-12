@@ -1,0 +1,144 @@
+{
+  "id": "GC-10",
+  "title": "부두 제원·화물 그룹 적합성",
+  "requirements": [
+    "FR-07",
+    "FR-08",
+    "FR-02"
+  ],
+  "rule_ids": [
+    "ELG-01",
+    "ELG-02"
+  ],
+  "hand_calc": "#6 허용: DWT ≤ 160,000 · LOA 120~280 · PBL ≥ 80 · Draft ≤ 16.0(수입선만) · 경유·휘발유·등유·나프타",
+  "eligibility": {
+    "base_vessel": {
+      "id": "E",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 40000,
+      "dwt": 60000,
+      "loa": 200,
+      "pbl": 100,
+      "draft": 12,
+      "direction": "IMPORT",
+      "material_code": "DS-ULSD",
+      "qty": 50000,
+      "eta": "2026-11-10 08:00",
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laytime_h": 24,
+        "demurrage_rate_usd_day": 20000,
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-11"
+      },
+      "work": {
+        "hours": 10,
+        "hose_term_h": 1
+      }
+    },
+    "checks": [
+      {
+        "name": "기준 선박은 #6 가능",
+        "berth": "#6",
+        "vessel": {},
+        "excluded_items": []
+      },
+      {
+        "name": "DWT 170,000 > 160,000",
+        "berth": "#6",
+        "vessel": {
+          "dwt": 170000
+        },
+        "excluded_items": [
+          "최대 DWT"
+        ]
+      },
+      {
+        "name": "LOA 290 > 280",
+        "berth": "#6",
+        "vessel": {
+          "loa": 290
+        },
+        "excluded_items": [
+          "최대 LOA"
+        ]
+      },
+      {
+        "name": "LOA 100 < 120",
+        "berth": "#6",
+        "vessel": {
+          "loa": 100
+        },
+        "excluded_items": [
+          "최소 LOA"
+        ]
+      },
+      {
+        "name": "PBL 70 < 80",
+        "berth": "#6",
+        "vessel": {
+          "pbl": 70
+        },
+        "excluded_items": [
+          "최소 PBL"
+        ]
+      },
+      {
+        "name": "수입선 Draft 16.5 > 16.0",
+        "berth": "#6",
+        "vessel": {
+          "draft": 16.5
+        },
+        "excluded_items": [
+          "최대 Draft"
+        ]
+      },
+      {
+        "name": "수출선은 Draft 비교 안 함",
+        "berth": "#6",
+        "vessel": {
+          "draft": 16.5,
+          "direction": "EXPORT"
+        },
+        "excluded_items": []
+      },
+      {
+        "name": "원유는 #6 취급 불가",
+        "berth": "#6",
+        "vessel": {
+          "material_code": "CR-ARL"
+        },
+        "excluded_items": [
+          "화물 그룹"
+        ]
+      },
+      {
+        "name": "두 가지 동시 위반",
+        "berth": "#8",
+        "vessel": {
+          "dwt": 130000,
+          "material_code": "PG-RG92"
+        },
+        "excluded_items": [
+          "화물 그룹",
+          "최대 DWT"
+        ]
+      }
+    ]
+  },
+  "cargo_mapping": {
+    "CR-ARL": "CRUDE",
+    "CR-MRB": "CRUDE",
+    "PG-RG92": "GASOLINE",
+    "NP-FR": "NAPHTHA",
+    "DS-ULSD": "DIESEL",
+    "KR-JETA1": "KEROSENE",
+    "BC-HSFO": "BUNKER",
+    "BO-G3": "BASE_OIL",
+    "CH-PX": "CHEMICAL",
+    "LP-PROP": "LPG"
+  },
+  "unknown_material_code": "XX-999",
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

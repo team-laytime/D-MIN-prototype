@@ -1,0 +1,31 @@
+<section id="m4-blame" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M4 · 지연 원인과 방어 데이터</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">양하 속도 = min(선박 펌프, 육상 배압, 탱크 여유). 기록이 있는 쪽이 이긴다</h2>
+</div>
+<div style="display:flex;gap:36px;align-items:flex-start">
+<table style="width:960px;font-size:24px;color:#3A4654">
+<tr style="background:#E9EEF3"><th style="width:34%;text-align:left;color:#0F1A26">원인 코드</th><th style="width:30%;text-align:left;color:#0F1A26">누구 시간인가</th><th style="width:36%;text-align:left;color:#0F1A26">증빙</th></tr>
+<tr><td style="font-weight:600;color:#0F1A26">BERTH_OCCUPIED</td><td>용선주(산입)</td><td>선석 점유 로그</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">NIGHT_RULE · TIDE · WEATHER_BERTHING</td><td>용선주 경향, 쟁점</td><td>규칙 문서, 접안 불가 통보, 기상</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">SHORE_TANK · SHORE_EQUIPMENT</td><td>용선주(플랜트 고장은 반액 가능)</td><td>탱크 재고, 설비 로그</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">SHIP_PUMP · SHIP_EQUIPMENT</td><td>선주(공제)</td><td>펌핑 로그 vs 배압 기록</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">WEATHER_OPS</td><td>산입, 체선 중 폭풍은 반액</td><td>중단 지시 + KMA 관측</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">DOCUMENTS · INSPECTION · QUARANTINE</td><td>서식·원인별</td><td>서류 시각, 검사 기록</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#0F6E73;padding:32px;border-radius:16px">
+<h3 style="font-size:30px;font-weight:600;color:#F5F7F9">터미널이 남겨야 할 것</h3>
+<ul style="font-size:25px;color:#D8EEEE;line-height:1.5">
+<li>선석 점유 시작·종료</li>
+<li>접안 지시·불가 통보와 사유</li>
+<li>호스 연결·분리 시각</li>
+<li>시간별 배압·유량·밸브</li>
+<li>수용 탱크 상태</li>
+<li>중단 지시 시각·사유, 기상 관측</li>
+<li>통신 로그, LOP</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M4 · 27 · 04-terminal-operations.md §3·§5·§6</p>
+<aside>펌핑 분쟁은 선주의 매니폴드 압력 기록과 터미널의 배압·탱크 기록을 같은 시간축에 놓는 순간 결판이 납니다. 오른쪽 목록이 터미널의 방어 자산이고, 이것이 SEAGATE 체선사유 리포트의 코드표와 어떻게 대응하는지가 인터뷰 질문 2번입니다. 사람이 고르는 코드 대신 증거로 분류 초안을 내는 것이 Agent의 과제입니다.</aside>
+</section>

@@ -1,0 +1,215 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="lib.css">
+<style>
+.trk{display:block;width:1152px;height:210px}
+.half{display:block;width:1152px;height:200px}
+.two h3{margin:0 0 4px;font-size:20px;font-weight:600}
+.two .sub{font-size:16px}
+.rules{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:14px}
+.rules .card{padding:12px 14px;min-height:118px}
+.rules .k{font-size:13px;color:var(--accent);font-family:"IBM Plex Mono",monospace;margin-bottom:6px}
+.rules .t{font-size:18px;font-weight:600;line-height:1.3}
+.rules .d{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.35}
+.kv{display:flex;gap:40px;margin-top:4px}
+.kv .big{font-size:40px}
+</style></head><body>
+<div class="topbar"><div><b>체선료 입문</b> · 2편 NOR과 시계가 도는 순간</div><div>예제 TC-02 · 가상 데이터 · 규칙값 가정</div></div>
+<div class="stage">
+
+<section class="scene" id="s-title">
+  <div style="position:absolute;left:64px;top:80px;max-width:760px">
+    <div class="tag rv" id="t-tag">체선료 입문 · 2편</div>
+    <div class="h rv" id="t-h" style="font-size:60px;margin-top:20px">NOR과 시계가<br>도는 순간</div>
+    <div class="sub rv" id="t-sub" style="margin-top:14px;font-size:24px">언제 시작하고, 무엇을 세고, 언제 멈추나</div>
+  </div>
+  <svg id="t-svg" viewBox="0 0 420 240" style="position:absolute;right:70px;top:80px;width:440px;height:250px"></svg>
+</section>
+
+<section class="scene" id="s-arrive">
+  <div class="legend" style="margin-top:2px"><span><i style="background:var(--prior)"></i>앞 선박 점유</span><span><i style="background:var(--notice)"></i>통지시간</span><span><i style="background:var(--blue)"></i>레이타임 산입</span><span><i style="background:repeating-linear-gradient(45deg,#1d2631 0 3px,#6c7a8a 3px 6px)"></i>이동(제외)</span><span><i style="background:var(--red)"></i>체선</span></div>
+  <svg class="trk" id="tr-arrive"></svg>
+  <div class="callout rv" id="a-c1" style="left:220px;top:300px"><b>NOR 제출 · D1 14:00</b><br>묘박지 도착 즉시. 선석이 차 있어도 낼 수 있다 (berth or no berth)</div>
+  <div class="callout rv" id="a-c2" style="left:640px;top:300px">유효 요건: <b>도착선</b> + 물리적·법적 준비 완료 + 계약이 정한 방식</div>
+</section>
+
+<section class="scene" id="s-start">
+  <div class="two">
+    <h3 class="rv" id="st-ha">A · 선석이 차 있을 때</h3>
+    <svg id="tr-startA" style="display:block;width:1152px;height:120px"></svg>
+    <h3 class="rv" id="st-hb" style="margin-top:14px">B · 선석이 비어 있을 때</h3>
+    <svg id="tr-startB" style="display:block;width:1152px;height:120px"></svg>
+  </div>
+  <div id="st-note" class="rv" style="margin-top:14px;font-size:24px;text-align:center">개시 = <b class="mono" style="color:var(--accent)">min( NOR + 6h , all fast )</b> — 둘 중 먼저 오는 때</div>
+</section>
+
+<section class="scene" id="s-waiting">
+  <svg class="trk" id="tr-wait"></svg>
+  <div class="callout rv" id="w-c1" style="left:300px;top:300px"><b>대기 10h 30m — 산입</b><br>용선주는 "도착 즉시 갈 수 있는 선석"을 제공할 의무(reachable on arrival). 혼잡은 용선주 위험 (The Laura Prima)</div>
+  <div class="kv rv" id="w-kv" style="position:absolute;left:800px;top:300px"><div><div class="sub">산입된 시간</div><div class="big mono" id="w-used">0h 00m</div></div></div>
+</section>
+
+<section class="scene" id="s-shifting">
+  <svg class="trk" id="tr-shift"></svg>
+  <div class="callout rv" id="sh-c1" style="left:560px;top:300px"><b>이동 1h 30m — 제외</b><br>양묘 D2 06:30 → 접안 완료 08:00. 묘박지→선석 이동은 used laytime에 넣지 않는다 (ASB-07-SHIFTING-EXCL)</div>
+  <div class="callout orange rv" id="sh-c2" style="left:120px;top:300px;max-width:400px"><b>이미 체선에 들어간 뒤라면?</b><br>once on demurrage 원칙상 산입이 원칙. 용선주는 공제 주장 → 자주 다투는 쟁점</div>
+</section>
+
+<section class="scene" id="s-night">
+  <div class="legend" style="margin-top:2px"><span><i style="background:var(--night);border:1px solid var(--line2)"></i>야간 17:30–07:00 (가정) · SBM 계류 불가</span><span><i style="background:var(--notice)"></i>통지시간</span><span><i style="background:var(--blue)"></i>산입</span><span><i style="background:repeating-linear-gradient(45deg,#1d2631 0 3px,#6c7a8a 3px 6px)"></i>SBM 이동·계류 (제외)</span></div>
+  <svg class="trk" id="tr-night" style="height:230px"></svg>
+  <div class="callout rv" id="n-c1" style="left:560px;top:292px"><b>A · NOR 02:30 → 손실 0</b><br>07:00 계류 완료가 NOR+6h(08:30)보다 먼저 → 개시 07:00. 대기 4.5h는 통지시간 안</div>
+  <div class="callout red rv" id="n-c2" style="left:120px;top:292px;max-width:420px"><b>B · 전날 20:00 NOR → 3h 산입</b><br>개시 02:00(NOR+6h). 02:00~05:00 대기 산입, 이동 05:00~07:00 제외 → 3h × $5,000 = <b>$15,000</b></div>
+</section>
+
+<section class="scene" id="s-end">
+  <svg class="trk" id="tr-end"></svg>
+  <div class="callout rv" id="e-c1" style="left:700px;top:300px"><b>종료 · 호스 분리 D3 06:30</b><br>접안 → 호스 연결 → 하역 → 호스 분리. 이 사이는 모두 산입 (ASB-11-END-HOSES)</div>
+  <div class="callout rv" id="e-c2" style="left:120px;top:300px;max-width:520px"><b>선박 펌프가 느려 늦어진 시간은 선주 몫</b><br>펌핑 워런티(24h 또는 100 psi). 단, 터미널의 배압·탱크 여유 기록으로 "육상 제한 없음"을 입증해야 공제</div>
+</section>
+
+<section class="scene" id="s-demurrage">
+  <svg class="trk" id="tr-dem"></svg>
+  <div class="kv rv" id="d-kv" style="position:absolute;left:64px;top:296px"><div><div class="sub">허용</div><div class="big mono">30h</div></div><div><div class="sub">사용</div><div class="big mono" id="d-used">0h 00m</div></div><div><div class="sub">체선</div><div class="big mono" id="d-dem" style="color:var(--red)">0h 00m</div></div><div><div class="sub">체선료 ($55,000/일)</div><div class="big mono" id="d-amt" style="color:var(--red)">$0</div></div></div>
+  <div class="callout red rv" id="d-c1" style="left:800px;top:296px;max-width:340px;font-size:18px"><b>once on demurrage, always on demurrage</b><br>체선에 들어간 뒤에는 레이타임 예외(이동 제외 등)가 "체선"을 명시하지 않는 한 적용되지 않는다</div>
+</section>
+
+<section class="scene" id="s-half">
+  <div class="sub" style="margin-top:6px">예: 체선 40h 30m 중 강풍으로 하역이 멈춘 6h (TC-03, 요율 $120,000/일)</div>
+  <svg class="half" id="hf-svg"></svg>
+  <div style="display:flex;gap:40px;align-items:flex-end;margin-top:2px">
+    <div class="rv" id="hf-1"><div class="sub">전액 34h 30m × $5,000</div><div class="big mono" style="font-size:40px">$172,500</div></div>
+    <div class="rv" id="hf-2"><div class="sub">반액 6h × $2,500</div><div class="big mono" style="font-size:40px;color:var(--orange)">$15,000</div></div>
+    <div class="rv" id="hf-3"><div class="sub">합계 (전액이었다면 $202,500)</div><div class="big mono" style="font-size:40px;color:var(--red)">$187,500</div></div>
+    <div class="callout orange rv" id="hf-c" style="position:static;max-width:330px;font-size:17px;margin-left:auto"><b>반액 사유 (Asbatankvoy cl.8)</b><br>화재·폭발·폭풍·파업, 용선주 측 플랜트 설비 고장. 증빙은 기상 관측 기록(KMA)</div>
+  </div>
+</section>
+
+<section class="scene" id="s-summary">
+  <svg class="trk" id="tr-sum" style="height:190px"></svg>
+  <div class="rules">
+    <div class="card rv" id="su1"><div class="k">ASB-06-NOR-START</div><div class="t">개시</div><div class="d">min(NOR+6h, all fast)</div></div>
+    <div class="card rv" id="su2"><div class="k">ASB-09-REACHABLE</div><div class="t">대기는 센다</div><div class="d">혼잡·야간 제한 대기는 용선주 위험 (쟁점 있음)</div></div>
+    <div class="card rv" id="su3"><div class="k">ASB-07-SHIFTING-EXCL</div><div class="t">이동은 뺀다</div><div class="d">레이타임 중에만. 체선 중은 쟁점</div></div>
+    <div class="card rv" id="su4"><div class="k">ASB-11-END-HOSES</div><div class="t">호스 분리에서 끝</div><div class="d">하역 시간은 모두 산입</div></div>
+    <div class="card rv" id="su5"><div class="k">ASB-08-HALF-RATE</div><div class="t">넘기면 체선, 폭풍은 반액</div><div class="d">once on demurrage</div></div>
+  </div>
+</section>
+
+</div>
+<div class="capbar"><div id="cap"></div></div>
+<div id="progwrap"><div id="prog"></div></div>
+<script src="lib.js"></script>
+<script>
+const S = { nor: 14, notice: 20, prior: 30, shift0: 30.5, fast: 32, hoseOn: 33, opsEnd: 53.5, hoseOff: 54.5, allowed: 30, rate: 55000, demStart: 51.5 };
+const ROW_B = 56, ROW_L = 126, BH = 34;
+function scenarioItems(cur, opts = {}) {
+  const it = [], m = (a, b) => Math.min(a, b);
+  it.push({ type: 'rowlabel', y: ROW_B + BH / 2, text: 'SK8 선석', sub: 'berth' });
+  it.push({ type: 'rowlabel', y: ROW_L + BH / 2, text: '레이타임 시계', sub: 'laytime clock' });
+  if (cur > 0) it.push({ type: 'bar', key: 'prior', from: 0, to: m(cur, S.prior), y: ROW_B, h: BH, fill: C.prior, label: '앞 선박 점유', labelColor: C.fg });
+  if (cur > S.shift0) it.push({ type: 'hatch', key: 'shift', from: S.shift0, to: m(cur, S.fast), y: ROW_B, h: BH });
+  if (cur > S.fast) it.push({ type: 'bar', key: 'ops', from: S.fast, to: m(cur, S.hoseOff + 1), y: ROW_B, h: BH, fill: C.blueSoft });
+  if (cur > S.hoseOn) it.push({ type: 'bar', key: 'ops', from: S.hoseOn, to: m(cur, S.opsEnd), y: ROW_B, h: BH, fill: C.blue, label: '하역 · DONGHAE PIONEER', rx: 2 });
+  if (cur > S.nor) it.push({ type: 'bar', key: 'notice', from: S.nor, to: m(cur, S.notice), y: ROW_L, h: BH, fill: C.notice, label: '통지시간 6h', labelColor: C.fg });
+  if (cur > S.notice) it.push({ type: 'bar', key: 'wait', from: S.notice, to: m(cur, S.shift0), y: ROW_L, h: BH, fill: C.blue, label: '대기 · 산입', rx: 2 });
+  if (cur > S.shift0) it.push({ type: 'hatch', key: 'shift', from: S.shift0, to: m(cur, S.fast), y: ROW_L, h: BH });
+  if (cur > S.fast) it.push({ type: 'bar', key: 'lay2', from: S.fast, to: m(cur, S.demStart), y: ROW_L, h: BH, fill: C.blue, label: '하역 · 산입', rx: 2 });
+  if (cur > S.demStart) it.push({ type: 'bar', key: 'dem', from: S.demStart, to: m(cur, S.hoseOff), y: ROW_L, h: BH, fill: C.red, label: '체선', minLabel: 28, rx: 2 });
+  if (cur >= S.nor) it.push({ type: 'flag', key: 'nor', t: S.nor, y: ROW_L - 6, label: 'NOR' });
+  if (cur >= S.notice) it.push({ type: 'mark', key: 'start', t: S.notice, y0: ROW_L - 10, y1: ROW_L + BH + 8, label: '개시 D1 20:00', ly: ROW_L + BH + 24 });
+  if (cur >= S.demStart) it.push({ type: 'mark', key: 'dem', t: S.demStart, y0: ROW_L - 10, y1: ROW_L + BH + 8, color: C.red, label: '허용 30h 소진', ly: ROW_L + BH + 24, anchor: 'end' });
+  if (cur >= S.hoseOff) it.push({ type: 'mark', key: 'end', t: S.hoseOff, y0: ROW_B - 10, y1: ROW_L + BH + 8, color: C.fg, label: '종료 · 호스 분리', ly: ROW_B - 16, anchor: 'end' });
+  if (opts.cursor) it.push({ type: 'cursor', t: cur });
+  return it;
+}
+const mkTrack = (id, o = {}) => new Track($(id), Object.assign({ hours: 60, offset: 0, height: 192, labelStep: 6, labelEvery: 12 }, o));
+
+// title: a clock face whose hand sweeps, with blue→red ring
+registerScene('title', lt => {
+  rv($('t-tag'), seg(lt, 0.2)); rv($('t-h'), seg(lt, 0.6, 0.8)); rv($('t-sub'), seg(lt, 1.6));
+  const k = easeInOut(lin(lt, 0.6, 3.2)), cx = 210, cy = 120, r = 92;
+  const ang = -Math.PI / 2 + k * Math.PI * 1.7, hx = cx + r * 0.72 * Math.cos(ang), hy = cy + r * 0.72 * Math.sin(ang);
+  const arc = (a0, a1, col) => { if (a1 <= a0) return ''; const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0), x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1); return `<path d="M${x0},${y0} A${r},${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1},${y1}" fill="none" stroke="${col}" stroke-width="14" stroke-linecap="butt"/>`; };
+  const split = -Math.PI / 2 + Math.PI * 1.25;
+  let s = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${C.surface2}" stroke-width="14"/>`;
+  s += arc(-Math.PI / 2, Math.min(ang, split), C.blue) + arc(split, Math.max(split, ang), C.red);
+  s += `<line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="${C.fg}" stroke-width="5" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="7" fill="${C.accent}"/>`;
+  s += `<text x="${cx}" y="${cy + r + 34}" text-anchor="middle" fill="${C.muted}" font-size="15">laytime → demurrage</text>`;
+  $('t-svg').innerHTML = s;
+});
+// arrive
+{ const tr = mkTrack('tr-arrive'); registerScene('arrive', lt => { const cur = S.nor * easeInOut(lin(lt, 0.5, 3.4)); tr.render(scenarioItems(cur, { cursor: true })); rv($('a-c1'), seg(lt, 4.0)); rv($('a-c2'), seg(lt, 7.5)); }); }
+// start: two cases
+{
+  const A = new Track($('tr-startA'), { hours: 24, offset: 8, height: 100, axisY: 22, labelStep: 2, labelEvery: 6 });
+  const B = new Track($('tr-startB'), { hours: 24, offset: 8, height: 100, axisY: 22, labelStep: 2, labelEvery: 6 });
+  registerScene('start', lt => {
+    rv($('st-ha'), seg(lt, 0.3)); rv($('st-hb'), seg(lt, 6.8)); rv($('st-note'), seg(lt, 10.4));
+    const ca = 8 + 24 * easeInOut(lin(lt, 0.6, 3.2)), y = 40, h = 30;
+    const ia = [{ type: 'rowlabel', y: y + h / 2, text: 'A' }];
+    if (ca > 8) ia.push({ type: 'bar', from: 8, to: Math.min(ca, 30), y, h, fill: C.prior, label: '앞 선박 점유', labelColor: C.fg });
+    if (ca > 14) ia.push({ type: 'bar', from: 14, to: Math.min(ca, 20), y, h, fill: C.notice, label: '통지시간 6h', labelColor: C.fg });
+    if (ca > 20) ia.push({ type: 'bar', from: 20, to: Math.min(ca, 32), y, h, fill: C.blue, label: '레이타임 산입' });
+    if (ca >= 14) ia.push({ type: 'flag', t: 14, y: y - 4, label: 'NOR 14:00' });
+    if (ca >= 20) ia.push({ type: 'mark', t: 20, y0: y - 8, y1: y + h + 6, label: '개시 = NOR + 6h → 20:00', ly: y + h + 22 });
+    A.render(ia);
+    const cb = lt < 6.8 ? 8 : 8 + 24 * easeInOut(lin(lt, 7.0, 3.0));
+    const ib = [{ type: 'rowlabel', y: y + h / 2, text: 'B' }];
+    if (cb > 14) ib.push({ type: 'bar', from: 14, to: Math.min(cb, 15.5), y, h, fill: C.notice });
+    if (cb > 14) ib.push({ type: 'hatch', from: 14, to: Math.min(cb, 15.5), y: y - 2, h: 8 });
+    if (cb > 15.5) ib.push({ type: 'bar', from: 15.5, to: Math.min(cb, 32), y, h, fill: C.blue, label: '레이타임 산입' });
+    if (cb >= 14) ib.push({ type: 'flag', t: 14, y: y - 10, label: 'NOR 14:00 · 바로 이동' });
+    if (cb >= 15.5) ib.push({ type: 'mark', t: 15.5, y0: y - 8, y1: y + h + 6, label: '개시 = all fast → 15:30 (NOR+6h보다 먼저)', ly: y + h + 22 });
+    B.render(ib);
+  });
+}
+// waiting
+{ const tr = mkTrack('tr-wait'); registerScene('waiting', lt => { const cur = S.nor + (S.shift0 - S.nor) * easeInOut(lin(lt, 0.5, 4.6)); tr.render(scenarioItems(cur, { cursor: true }), ['prior', 'notice', 'wait', 'nor', 'start']); rv($('w-c1'), seg(lt, 5.4)); rv($('w-kv'), seg(lt, 1.0)); $('w-used').textContent = fmtH(Math.max(0, cur - S.notice)); }); }
+// shifting
+{ const tr = mkTrack('tr-shift'); registerScene('shifting', lt => { const cur = S.shift0 + (S.fast - S.shift0) * easeInOut(lin(lt, 0.6, 2.4)); tr.render(scenarioItems(cur, { cursor: true }), ['shift', 'prior', 'ops']); rv($('sh-c1'), seg(lt, 3.2)); rv($('sh-c2'), seg(lt, 6.6)); }); }
+// night
+{
+  const tr = new Track($('tr-night'), { hours: 36, offset: -6, night: true, height: 212, labelStep: 3, labelEvery: 6, left: 178 });
+  registerScene('night', lt => {
+    const yA = 52, yB = 134, h = 34;
+    const ca = -6 + 18 * easeInOut(lin(lt, 0.8, 5.0));
+    const cb = lt < 9.4 ? -6 : -6 + 18 * easeInOut(lin(lt, 9.6, 4.6));
+    const it = [{ type: 'rowlabel', y: yA + h / 2, text: 'A · NOR 02:30', sub: 'VLCC → SBM' }, { type: 'rowlabel', y: yB + h / 2, text: 'B · NOR 전날 20:00', sub: 'VLCC → SBM' }];
+    if (ca > 2.5) it.push({ type: 'bar', from: 2.5, to: Math.min(ca, 7), y: yA, h, fill: C.notice, label: '통지시간 (대기 4.5h)', labelColor: C.fg });
+    if (ca > 5) it.push({ type: 'hatch', from: 5, to: Math.min(ca, 7), y: yA - 8, h: 8 });
+    if (ca > 7) it.push({ type: 'bar', from: 7, to: Math.min(ca, 12), y: yA, h, fill: C.blue, label: '산입' });
+    if (ca >= 2.5) it.push({ type: 'flag', t: 2.5, y: yA - 14, label: 'NOR 02:30' });
+    if (ca >= 7) it.push({ type: 'mark', t: 7, y0: yA - 10, y1: yA + h + 6, label: '개시 07:00 (all fast)', ly: yA + h + 20 });
+    if (cb > -4) it.push({ type: 'bar', from: -4, to: Math.min(cb, 2), y: yB, h, fill: C.notice, label: '통지시간 6h', labelColor: C.fg });
+    if (cb > 2) it.push({ type: 'bar', from: 2, to: Math.min(cb, 5), y: yB, h, fill: C.blue, label: '대기 3h 산입', minLabel: 60 });
+    if (cb > 5) it.push({ type: 'hatch', from: 5, to: Math.min(cb, 7), y: yB, h });
+    if (cb > 7) it.push({ type: 'bar', from: 7, to: Math.min(cb, 12), y: yB, h, fill: C.blue, label: '산입' });
+    if (cb >= -4) it.push({ type: 'flag', t: -4, y: yB - 14, label: 'NOR D0 20:00' });
+    if (cb >= 2) it.push({ type: 'mark', t: 2, y0: yB - 10, y1: yB + h + 6, color: C.red, label: '개시 02:00 (NOR+6h)', ly: yB + h + 20 });
+    it.push({ type: 'text', t: 12.2, y: yA + 22, text: lt > 6 ? '← 07:00 주간 시작, SBM 계류' : '', color: C.muted, size: 13 });
+    tr.render(it);
+    rv($('n-c1'), seg(lt, 6.2)); rv($('n-c2'), seg(lt, 14.6));
+  });
+}
+// end
+{ const tr = mkTrack('tr-end'); registerScene('end', lt => { const cur = S.fast + (S.hoseOff - S.fast) * easeInOut(lin(lt, 0.5, 4.4)); tr.render(scenarioItems(cur, { cursor: true }), ['prior', 'shift', 'ops', 'end']); rv($('e-c1'), seg(lt, 5.2)); rv($('e-c2'), seg(lt, 7.6)); }); }
+// demurrage
+{ const tr = mkTrack('tr-dem'); registerScene('demurrage', lt => { const cur = S.fast + (S.hoseOff - S.fast) * easeInOut(lin(lt, 0.5, 4.6)); tr.render(scenarioItems(cur, { cursor: true }), ['notice', 'wait', 'shift', 'lay2', 'dem', 'nor', 'start']); const used = Math.max(0, Math.min(cur, S.shift0) - S.notice) + Math.max(0, cur - S.fast); const dem = Math.max(0, cur - S.demStart); rv($('d-kv'), seg(lt, 0.8)); $('d-used').textContent = fmtH(used); $('d-dem').textContent = fmtH(dem); $('d-amt').textContent = fmtUSD(dem * S.rate / 24); rv($('d-c1'), seg(lt, 6.4)); }); }
+// half rate schematic
+registerScene('half', lt => {
+  const L = 24, R = 1128, tot = 40.5, x = h => L + h / tot * (R - L), cur = tot * easeInOut(lin(lt, 0.6, 4.6));
+  let s = '';
+  for (let h = 0; h <= 40; h += 5) s += `<line x1="${x(h)}" y1="60" x2="${x(h)}" y2="140" stroke="${C.line}"/><text x="${x(h)}" y="160" text-anchor="middle" fill="${C.muted}" font-size="13" class="mono">+${h}h</text>`;
+  s += `<rect x="${x(0)}" y="78" width="${x(tot) - x(0)}" height="50" rx="8" fill="${C.surface2}"/>`;
+  const segs = [[0, 18, C.red, '체선 전액'], [18, 24, C.orange, '강풍 6h · 반액'], [24, tot, C.red, '체선 전액']];
+  for (const [a, b, col, lab] of segs) { if (cur > a) { s += `<rect x="${x(a)}" y="78" width="${x(Math.min(cur, b)) - x(a)}" height="50" fill="${col}"/>`; if (cur > a + 2) s += `<text x="${x(a) + 10}" y="109" fill="#fff" font-size="16" font-weight="600">${lab}</text>`; } }
+  s += `<text x="${x(0)}" y="188" fill="${C.muted}" font-size="14">체선 개시 D3 04:00</text><text x="${x(tot)}" y="188" text-anchor="end" fill="${C.muted}" font-size="14">호스 분리 D4 20:30</text>`;
+  s += `<line x1="${x(cur)}" y1="70" x2="${x(cur)}" y2="136" stroke="${C.accent}" stroke-width="3"/>`;
+  $('hf-svg').innerHTML = s;
+  rv($('hf-1'), seg(lt, 5.4)); rv($('hf-2'), seg(lt, 6.6)); rv($('hf-3'), seg(lt, 7.8)); rv($('hf-c'), seg(lt, 2.6));
+});
+// summary
+{ const tr = mkTrack('tr-sum', { height: 176 }); registerScene('summary', lt => { tr.render(scenarioItems(60)); [1, 2, 3, 4, 5].forEach(i => rv($('su' + i), seg(lt, 0.6 + (i - 1) * 1.7))); }); }
+</script>
+</body></html>

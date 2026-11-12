@@ -1,0 +1,201 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="lib.css">
+<style>
+.trk{display:block;width:1152px;height:176px}
+.fields{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.fields .card{padding:14px 18px}
+.fields .k{font-size:14px;color:var(--muted)}
+.fields .v{font-size:26px;font-weight:600;margin-top:4px}
+.fields .v small{font-size:15px;color:var(--muted);font-weight:400}
+table.sof{border-collapse:collapse;width:100%;font-size:17px;margin-top:6px}
+table.sof td{padding:4px 12px;border-bottom:1px solid var(--line)}
+table.sof td:first-child{width:130px;color:var(--accent)}
+table.sof td:nth-child(2){width:360px}
+table.sof td.note{color:var(--muted);font-size:15px}
+.formula{display:flex;gap:18px;align-items:center;justify-content:center;margin-top:48px;flex-wrap:wrap}
+.formula .card{text-align:center;min-width:250px}
+.formula .op{font-size:34px;color:var(--muted)}
+table.st{border-collapse:collapse;width:100%;font-size:17px;margin-top:4px}
+table.st th{text-align:left;color:var(--muted);font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-bottom:1px solid var(--line2)}
+table.st td{padding:4px 10px;border-bottom:1px solid var(--line)}
+table.st td.num{text-align:right;font-family:"IBM Plex Mono",monospace}
+table.st td.rule{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+table.st tr.total td{font-weight:700;border-top:2px solid var(--line2);font-size:19px}
+.pipe{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:40px}
+.pipe .card{min-width:200px;text-align:center}
+.pipe .k{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px}
+.pipe .t{font-size:20px;font-weight:600;margin-top:4px}
+.pipe .arr{font-size:30px;color:var(--muted)}
+.chips{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.chip{border:1px solid var(--orange);color:var(--fg);border-radius:999px;padding:6px 16px;font-size:17px}
+.chip b{color:var(--orange)}
+.sum{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+.sum .card{min-height:150px}
+.sum .t{font-size:24px;font-weight:600}
+.sum .d{color:var(--muted);font-size:17px;margin-top:8px;line-height:1.45}
+</style></head><body>
+<div class="topbar"><div><b>체선료 입문</b> · 3편 체선료 계산 따라하기</div><div>예제 TC-02 · 가상 데이터 · 규칙값 가정</div></div>
+<div class="stage">
+
+<section class="scene" id="s-title">
+  <div style="position:absolute;left:64px;top:80px;max-width:760px">
+    <div class="tag rv" id="t-tag">체선료 입문 · 3편</div>
+    <div class="h rv" id="t-h" style="font-size:60px;margin-top:20px">체선료 계산<br>따라하기</div>
+    <div class="sub rv" id="t-sub" style="margin-top:14px;font-size:24px">SOF 한 장 → 레이타임 계산서</div>
+  </div>
+  <div class="rv" id="t-card" style="position:absolute;right:70px;top:84px;width:420px">
+    <table class="st" style="font-size:16px"><tbody>
+      <tr><td>개시</td><td class="num">D1 20:00</td></tr><tr><td>종료</td><td class="num">D3 06:30</td></tr><tr><td>(−) 이동</td><td class="num">1h 30m</td></tr><tr><td>사용 / 허용</td><td class="num">33h / 30h</td></tr><tr class="total"><td>체선료</td><td class="num" style="color:var(--red)">$6,875</td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+<section class="scene" id="s-case">
+  <div class="fields">
+    <div class="card rv" id="f1"><div class="k">선박</div><div class="v">DONGHAE PIONEER <small>가상</small></div></div>
+    <div class="card rv" id="f2"><div class="k">선형 · 화물</div><div class="v">Aframax 105,000 DWT <small>원유</small></div></div>
+    <div class="card rv" id="f3"><div class="k">선석</div><div class="v">SK8 Pier <small>150,000 DWT · 수심 18m</small></div></div>
+    <div class="card rv" id="f4"><div class="k">이 항구 허용 레이타임</div><div class="v mono">30h</div></div>
+    <div class="card rv" id="f5"><div class="k">체선료율</div><div class="v mono">$55,000 <small>/ 일 = $2,291.67 / h</small></div></div>
+    <div class="card rv" id="f6" style="border-color:var(--orange)"><div class="k">선석 상태</div><div class="v">앞 선박이 D2 06:00까지 점유</div></div>
+  </div>
+  <div class="rv" id="f7" style="margin-top:30px;text-align:center;font-size:22px;color:var(--muted)">서식 Asbatankvoy · 통지시간 6h · 이동 제외 · 종료 = 호스 분리 (수치는 가정)</div>
+</section>
+
+<section class="scene" id="s-sof">
+  <svg class="trk" id="tr-sof"></svg>
+  <table class="sof"><tbody id="sof-body"></tbody></table>
+</section>
+
+<section class="scene" id="s-start">
+  <svg class="trk" id="tr-start" style="height:200px"></svg>
+  <div class="formula" style="margin-top:22px">
+    <div class="card rv" id="s-a"><div class="sub">후보 1 · NOR + 6h</div><div class="big mono" style="font-size:40px">D1 20:00</div></div>
+    <div class="op rv" id="s-vs">vs</div>
+    <div class="card rv" id="s-b"><div class="sub">후보 2 · 접안 완료</div><div class="big mono" style="font-size:40px;color:var(--muted)">D2 08:00</div></div>
+    <div class="op rv" id="s-eq">→</div>
+    <div class="card rv" id="s-c" style="border-color:var(--accent)"><div class="sub">개시 = 먼저 오는 때</div><div class="big mono" style="font-size:40px;color:var(--accent)">D1 20:00</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-end">
+  <svg class="trk" id="tr-end" style="height:236px"></svg>
+  <div class="formula" style="margin-top:22px">
+    <div class="card rv" id="e-a"><div class="sub">개시</div><div class="big mono" style="font-size:40px">D1 20:00</div></div>
+    <div class="op rv" id="e-ar">→</div>
+    <div class="card rv" id="e-b"><div class="sub">종료 · 호스 분리</div><div class="big mono" style="font-size:40px">D3 06:30</div></div>
+    <div class="op rv" id="e-eq">=</div>
+    <div class="card rv" id="e-c"><div class="sub">경과</div><div class="big mono" style="font-size:40px" id="e-span">0h 00m</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-deduct">
+  <svg class="trk" id="tr-ded" style="height:236px"></svg>
+  <div class="formula" style="margin-top:22px">
+    <div class="card rv" id="d-a"><div class="sub">경과</div><div class="big mono" style="font-size:40px">34h 30m</div></div>
+    <div class="op rv" id="d-m">−</div>
+    <div class="card rv" id="d-b" style="border-color:var(--excl)"><div class="sub">이동 D2 06:30 → 08:00 (제외)</div><div class="big mono" style="font-size:40px;color:var(--muted)">1h 30m</div></div>
+    <div class="op rv" id="d-eq">=</div>
+    <div class="card rv" id="d-c" style="border-color:var(--accent)"><div class="sub">사용 시간</div><div class="big mono" style="font-size:40px;color:var(--accent)">33h 00m</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-calc">
+  <div class="formula" style="margin-top:36px">
+    <div class="card rv" id="c-a"><div class="sub">사용 − 허용</div><div class="big mono" style="font-size:38px">33h − 30h</div><div class="sub">= <b style="color:var(--red)">체선 3h</b></div></div>
+    <div class="card rv" id="c-b"><div class="sub">요율 ÷ 24</div><div class="big mono" style="font-size:38px">$55,000 ÷ 24</div><div class="sub">= <b style="color:var(--fg)">$2,291.67 / h</b></div></div>
+    <div class="card rv" id="c-c" style="border-color:var(--red)"><div class="sub">체선료</div><div class="big mono" style="font-size:38px;color:var(--red)" id="c-amt">$0</div><div class="sub">3h × $2,291.67</div></div>
+  </div>
+  <div class="rv" id="c-note" style="margin-top:40px;text-align:center;font-size:22px;color:var(--muted)">분 단위 비례(pro rata). 하루 미만도 시간·분으로 정산한다 (ASB-08-RATE-PRORATA)</div>
+</section>
+
+<section class="scene" id="s-statement">
+  <table class="st"><thead><tr><th>항목</th><th style="text-align:right">값</th><th>근거</th></tr></thead><tbody id="st-body"></tbody></table>
+</section>
+
+<section class="scene" id="s-agent">
+  <div class="pipe">
+    <div class="card rv" id="p1"><div class="k">INTAKE</div><div class="t">SOF·계약 파싱</div></div><div class="arr rv" id="p1a">→</div>
+    <div class="card rv" id="p2"><div class="k">CLOCK</div><div class="t">레이타임 계산서</div></div><div class="arr rv" id="p2a">→</div>
+    <div class="card rv" id="p3"><div class="k">CLAIM</div><div class="t">청구서 대조·쟁점</div></div><div class="arr rv" id="p3a">→</div>
+    <div class="card rv" id="p4" style="border-color:var(--accent)"><div class="k">HITL</div><div class="t">담당자 승인</div></div>
+  </div>
+  <div class="chips">
+    <div class="chip rv" id="ch1"><b>쟁점</b> 체선 중 이동 시간 산입 여부</div>
+    <div class="chip rv" id="ch2"><b>쟁점</b> 야간 접안 제한 대기의 부담 주체</div>
+    <div class="chip rv" id="ch3"><b>쟁점</b> 레이타임 중 폭풍의 반액 적용</div>
+  </div>
+  <div class="rv" id="p-q" style="margin-top:34px;text-align:center;font-size:24px">D1 20:00에 "앞 선박 종료 D2 06:00 + 주간 접안 → <b style="color:var(--red)">체선 3h 예상</b>"을 미리 알았다면?</div>
+</section>
+
+<section class="scene" id="s-summary">
+  <div class="sum">
+    <div class="card rv" id="m1"><div class="t">예제 5건 + 정답표</div><div class="d">docs/domain/04-worked-examples.md — TC-01 야간 대기, TC-02 선석 점유, TC-03 체선 중 이동·반액, TC-04 펌핑 공제, TC-05 무효 NOR</div></div>
+    <div class="card rv" id="m2"><div class="t">시뮬레이터</div><div class="d">docs/domain/00-README.md의 링크 — 선석·순서를 바꾸며 선박별 시계와 체선료 노출이 변하는 것을 직접 본다</div></div>
+  </div>
+  <div class="rv" id="m3" style="margin-top:34px;text-align:center;font-size:22px;color:var(--muted)">체선료 입문 1~3편 끝 · 다음: 현업 인터뷰로 [확인 필요] 항목 해소</div>
+</section>
+
+</div>
+<div class="capbar"><div id="cap"></div></div>
+<div id="progwrap"><div id="prog"></div></div>
+<script src="lib.js"></script>
+<script>
+const S = { nor: 14, notice: 20, prior: 30, shift0: 30.5, fast: 32, hoseOn: 33, opsStart: 33.5, opsEnd: 53.5, hoseOff: 54.5, allowed: 30, rate: 55000, demStart: 51.5 };
+const ROW_B = 50, ROW_L = 112, BH = 32;
+function items(cur, opts = {}) {
+  const it = [], m = (a, b) => Math.min(a, b);
+  it.push({ type: 'rowlabel', y: ROW_B + BH / 2, text: 'SK8 선석' }); it.push({ type: 'rowlabel', y: ROW_L + BH / 2, text: '레이타임 시계' });
+  if (cur > 0) it.push({ type: 'bar', key: 'prior', from: 0, to: m(cur, S.prior), y: ROW_B, h: BH, fill: C.prior, label: '앞 선박 점유', labelColor: C.fg });
+  if (cur > S.shift0) it.push({ type: 'hatch', key: 'shift', from: S.shift0, to: m(cur, S.fast), y: ROW_B, h: BH });
+  if (cur > S.fast) it.push({ type: 'bar', key: 'ops', from: S.fast, to: m(cur, S.hoseOff + 1), y: ROW_B, h: BH, fill: C.blueSoft });
+  if (cur > S.hoseOn) it.push({ type: 'bar', key: 'ops', from: S.hoseOn, to: m(cur, S.opsEnd), y: ROW_B, h: BH, fill: C.blue, label: '하역', rx: 2 });
+  if (cur > S.nor) it.push({ type: 'bar', key: 'notice', from: S.nor, to: m(cur, S.notice), y: ROW_L, h: BH, fill: C.notice, label: '통지시간 6h', labelColor: C.fg });
+  if (cur > S.notice) it.push({ type: 'bar', key: 'wait', from: S.notice, to: m(cur, S.shift0), y: ROW_L, h: BH, fill: C.blue, label: '대기 · 산입', rx: 2 });
+  if (cur > S.shift0) it.push({ type: 'hatch', key: 'shift', from: S.shift0, to: m(cur, S.fast), y: ROW_L, h: BH });
+  if (cur > S.fast) it.push({ type: 'bar', key: 'lay2', from: S.fast, to: m(cur, S.demStart), y: ROW_L, h: BH, fill: C.blue, label: '하역 · 산입', rx: 2 });
+  if (cur > S.demStart) it.push({ type: 'bar', key: 'dem', from: S.demStart, to: m(cur, S.hoseOff), y: ROW_L, h: BH, fill: C.red, label: '체선', minLabel: 28, rx: 2 });
+  if (cur >= S.nor) it.push({ type: 'flag', key: 'nor', t: S.nor, y: ROW_L - 6, label: 'NOR' });
+  if (opts.start && cur >= S.notice) it.push({ type: 'mark', key: 'start', t: S.notice, y0: ROW_L - 10, y1: ROW_L + BH + 8, label: '개시 D1 20:00', ly: ROW_L + BH + 24 });
+  if (opts.dem && cur >= S.demStart) it.push({ type: 'mark', key: 'dem', t: S.demStart, y0: ROW_L - 10, y1: ROW_L + BH + 8, color: C.red, label: '허용 30h 소진', ly: ROW_L + BH + 24, anchor: 'end' });
+  if (opts.end && cur >= S.hoseOff) it.push({ type: 'mark', key: 'end', t: S.hoseOff, y0: ROW_B - 10, y1: ROW_L + BH + 8, color: C.fg, label: '종료 · 호스 분리 D3 06:30', ly: ROW_B - 16, anchor: 'end' });
+  if (opts.cursor) it.push({ type: 'cursor', t: cur });
+  return it;
+}
+const mkTrack = (id, o = {}) => new Track($(id), Object.assign({ hours: 60, offset: 0, height: 164, labelStep: 6, labelEvery: 12 }, o));
+
+registerScene('title', lt => { rv($('t-tag'), seg(lt, 0.2)); rv($('t-h'), seg(lt, 0.6, 0.8)); rv($('t-sub'), seg(lt, 1.6)); rv($('t-card'), seg(lt, 2.4, 0.9)); });
+registerScene('case', lt => { [1, 2, 3, 4, 5, 6].forEach(i => rv($('f' + i), seg(lt, 0.4 + (i - 1) * 1.5))); rv($('f7'), seg(lt, 10.6)); });
+
+// SOF: keyframed cursor so rows appear in step with narration
+const SOF = [
+  [14, 'D1 14:00', '묘박지 도착 · NOR 제출·수령', '도착선 + 준비 완료'],
+  [20, 'D1 20:00', '통지시간 만료 (NOR + 6h)', '선석 점유 중 → 레이타임 개시'],
+  [30.5, 'D2 06:30', '도선사 승선 · 양묘 · 이동 시작', '이동 shifting'],
+  [32, 'D2 08:00', '접안 완료 (all fast)', '주간 접안'],
+  [33, 'D2 09:00', '호스 연결', ''],
+  [33.5, 'D2 09:30', '양하 개시', ''],
+  [53.5, 'D3 05:30', '양하 완료 (20h)', ''],
+  [54.5, 'D3 06:30', '호스 분리', '레이타임 종료'],
+];
+$('sof-body').innerHTML = SOF.map((r, i) => `<tr class="rv" id="sof${i}"><td class="mono">${r[1]}</td><td>${r[2]}</td><td class="note">${r[3]}</td></tr>`).join('');
+const KEY = SOF.map((r, i) => [1.4 + i * 2.05, r[0]]); // [lt, hours]
+function sofCursor(lt) { if (lt <= KEY[0][0]) return KEY[0][1] * easeInOut(lin(lt, 0.2, KEY[0][0] - 0.2)); for (let i = 1; i < KEY.length; i++) { if (lt <= KEY[i][0]) { const p = easeInOut(lin(lt, KEY[i - 1][0], KEY[i][0] - KEY[i - 1][0])); return KEY[i - 1][1] + (KEY[i][1] - KEY[i - 1][1]) * p; } } return KEY[KEY.length - 1][1] + 0.0001; }
+{ const tr = mkTrack('tr-sof'); registerScene('sof', lt => { const cur = sofCursor(lt); tr.render(items(cur, { cursor: true, start: true, end: true })); SOF.forEach((r, i) => rv($('sof' + i), seg(lt, KEY[i][0] - 0.3, 0.5), 8)); }); }
+{ const tr = mkTrack('tr-start', { height: 188 }); registerScene('start', lt => { const it = items(60, {}); const k1 = seg(lt, 1.0), k2 = seg(lt, 3.6), k3 = seg(lt, 6.2); if (k1 > 0) it.push({ type: 'mark', t: 20, y0: ROW_L - 10, y1: ROW_L + BH + 8, color: k3 > 0.5 ? C.accent : C.fg, label: 'NOR + 6h = D1 20:00', ly: ROW_L + BH + 24, opacity: k1 }); if (k2 > 0) it.push({ type: 'mark', t: 32, y0: ROW_B - 10, y1: ROW_L + BH + 8, color: C.muted, label: 'all fast = D2 08:00', ly: ROW_B - 16, opacity: k2, dash: '5 4' }); tr.render(it, k3 > 0.5 ? ['notice', 'wait', 'nor', 'prior'] : null); rv($('s-a'), k1); rv($('s-vs'), k2); rv($('s-b'), k2); rv($('s-eq'), k3); rv($('s-c'), k3); }); }
+{ const tr = mkTrack('tr-end', { height: 224 }); registerScene('end', lt => { const it = items(60, { start: true, end: true }); const k = easeInOut(lin(lt, 1.2, 3.0)); if (k > 0) it.push({ type: 'span', from: 20, to: 20 + 34.5 * k, y: ROW_L + BH + 48, label: `경과 ${fmtH(34.5 * k)}`, color: C.accent }); tr.render(it); rv($('e-a'), seg(lt, 0.6)); rv($('e-ar'), seg(lt, 1.2)); rv($('e-b'), seg(lt, 1.4)); rv($('e-eq'), seg(lt, 4.4)); rv($('e-c'), seg(lt, 4.6)); $('e-span').textContent = fmtH(34.5 * k); }); }
+{ const tr = mkTrack('tr-ded', { height: 224 }); registerScene('deduct', lt => { const it = items(60, { start: true, end: true }); const k = seg(lt, 1.0); if (k > 0) it.push({ type: 'span', from: 30.5, to: 32, y: ROW_L + BH + 48, label: '이동 1h 30m · 제외', color: C.excl }); tr.render(it, k > 0.5 ? ['shift', 'start', 'end', 'nor'] : null); rv($('d-a'), seg(lt, 0.6)); rv($('d-m'), seg(lt, 4.6)); rv($('d-b'), seg(lt, 4.8)); rv($('d-eq'), seg(lt, 8.2)); rv($('d-c'), seg(lt, 8.4)); }); }
+registerScene('calc', lt => { rv($('c-a'), seg(lt, 0.6)); rv($('c-b'), seg(lt, 4.2)); rv($('c-c'), seg(lt, 7.6)); $('c-amt').textContent = fmtUSD(count(lt, 7.8, 1.6, 6875)); rv($('c-note'), seg(lt, 10.4)); });
+const ST = [
+  ['NOR 제출·수령', 'D1 14:00', 'SOF'], ['통지시간 만료 (NOR+6h)', 'D1 20:00', 'ASB-06-NOR-START'], ['접안 완료 (all fast)', 'D2 08:00', 'SOF'],
+  ['레이타임 개시 = min(위 둘)', 'D1 20:00', 'ASB-06-NOR-START'], ['호스 분리 = 종료', 'D3 06:30', 'ASB-11-END-HOSES'], ['경과', '34h 30m', ''],
+  ['(−) 이동 D2 06:30~08:00', '1h 30m', 'ASB-07-SHIFTING-EXCL'], ['사용 시간', '33h 00m', ''], ['허용 시간', '30h', '계약 Part I (가정)'],
+  ['체선 시간', '3h 00m', 'ASB-08-RATE-PRORATA'], ['요율', '$55,000/일 = $2,291.67/h', '계약 Part I (가상)'],
+];
+$('st-body').innerHTML = ST.map((r, i) => `<tr class="rv" id="st${i}"><td>${r[0]}</td><td class="num">${r[1]}</td><td class="rule">${r[2]}</td></tr>`).join('') + `<tr class="rv total" id="st${ST.length}"><td>체선료</td><td class="num" style="color:var(--red)">$6,875</td><td class="rule">3h × $55,000 / 24</td></tr>`;
+registerScene('statement', lt => { for (let i = 0; i <= ST.length; i++) rv($('st' + i), seg(lt, 0.4 + i * 0.75, 0.5), 8); });
+registerScene('agent', lt => { ['p1', 'p1a', 'p2', 'p2a', 'p3', 'p3a', 'p4'].forEach((id, i) => rv($(id), seg(lt, 0.4 + i * 0.6))); ['ch1', 'ch2', 'ch3'].forEach((id, i) => rv($(id), seg(lt, 5.2 + i * 1.0))); rv($('p-q'), seg(lt, 10.4)); });
+registerScene('summary', lt => { rv($('m1'), seg(lt, 0.4)); rv($('m2'), seg(lt, 2.4)); rv($('m3'), seg(lt, 5.4)); });
+</script>
+</body></html>

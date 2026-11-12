@@ -1,0 +1,1315 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>체선료 계산 탐색기 — vessel_journeys.csv</title>
+<style>
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+:root{color-scheme:light dark}
+.viz-root{
+  color-scheme:light;
+  --page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;
+  --grid:#e1e0d9;--axis:#c3c2b7;--border:rgba(11,11,11,.10);--hover:rgba(11,11,11,.05);
+  --s1:#2a78d6;--crit:#d03b3b;--crit-soft:rgba(208,59,59,.38);
+  --lay:#8f8e87;--pre:#d1d0c8;
+}
+@media (prefers-color-scheme:dark){
+  :root:where(:not([data-theme="light"])) .viz-root{
+    color-scheme:dark;
+    --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;
+    --grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);--hover:rgba(255,255,255,.06);
+    --s1:#3987e5;--crit:#d03b3b;--crit-soft:rgba(208,59,59,.45);
+    --lay:#77766f;--pre:#4a4944;
+  }
+}
+:root[data-theme="dark"] .viz-root{
+  color-scheme:dark;
+  --page:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;
+  --grid:#2c2c2a;--axis:#383835;--border:rgba(255,255,255,.10);--hover:rgba(255,255,255,.06);
+  --s1:#3987e5;--crit:#d03b3b;--crit-soft:rgba(208,59,59,.45);
+  --lay:#77766f;--pre:#4a4944;
+}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 56px}
+h1{font-size:20px;font-weight:600;margin:0 0 4px}
+h2{font-size:15px;font-weight:600;margin:0}
+.sub{margin:0;color:var(--ink2);max-width:780px}
+code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--hover);padding:1px 5px;border-radius:4px}
+.top{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;margin-bottom:16px}
+.tools{display:flex;gap:14px;align-items:center;color:var(--ink2);font-size:13px}
+.tools label{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+button{font:inherit;color:inherit}
+.btn{font-size:12.5px;padding:5px 11px;background:transparent;color:var(--ink2);border:1px solid var(--axis);border-radius:8px;cursor:pointer}
+.btn:hover{background:var(--hover)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.card+.card,details.card{margin-top:12px}
+.filters{display:grid;gap:14px;margin-bottom:12px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px 22px}
+.field label{display:block;font-size:12px;color:var(--ink2);margin-bottom:2px}
+.field .num{display:flex;align-items:baseline;gap:6px}
+.field input[type=number]{width:104px;font:inherit;font-size:17px;font-weight:600;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--axis);padding:2px 2px;border-radius:0}
+.field input[type=number]:focus{outline:2px solid var(--s1);outline-offset:2px;border-bottom-color:transparent}
+.field .u{color:var(--ink2);font-size:12.5px}
+.field input[type=range]{width:100%;accent-color:var(--s1);margin:6px 0 0}
+.toggles{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;border-top:1px solid var(--grid);padding-top:12px}
+.seg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink2)}
+.seg .btns{display:inline-flex;border:1px solid var(--axis);border-radius:8px;overflow:hidden}
+.seg button{font-size:12.5px;padding:5px 11px;background:transparent;color:var(--ink2);border:0;cursor:pointer}
+.seg button+button{border-left:1px solid var(--axis)}
+.seg button:hover{background:var(--hover)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--surface);font-weight:600}
+.kpis{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.45fr;gap:12px;margin-bottom:18px}
+.kpis .card+.card{margin-top:0}
+@media(max-width:1020px){.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.kpis{grid-template-columns:1fr}}
+.tile .lbl{color:var(--ink2);font-size:12.5px}
+.tile .val{font-size:28px;font-weight:600;letter-spacing:-.01em;margin-top:4px;line-height:1.15}
+.tile.hero .val{font-size:52px;line-height:1.05}
+.tile .unit{font-size:14px;font-weight:500;color:var(--ink2);margin-left:6px;letter-spacing:0}
+.tile .note{color:var(--ink2);font-size:12.5px;margin-top:6px}
+.segbar{display:flex;height:8px;gap:2px;margin-top:12px;background:var(--surface)}
+.segbar span{display:block;min-width:2px}
+.segbar span:first-child{border-radius:4px 0 0 4px}.segbar span:last-child{border-radius:0 4px 4px 0}
+.segbar span:only-child{border-radius:4px}
+.sw-wait{background:var(--crit)}.sw-svc{background:var(--crit-soft)}
+.irows{display:grid;gap:9px;margin-top:8px}
+.irow{display:grid;gap:3px;background:none;border:0;padding:0;text-align:left;cursor:pointer;width:100%}
+.irow .t{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--ink2)}
+.irow .t b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.irow .fill{display:block;height:8px;border-radius:4px;background:var(--lay);min-width:3px}
+.irow[aria-pressed=true] .fill{background:var(--s1)}
+.irow[aria-pressed=true] .t{color:var(--ink)}
+.irow:hover .fill{filter:brightness(1.08)}
+.irow:focus-visible{outline:2px solid var(--s1);outline-offset:3px;border-radius:4px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--axis);margin-bottom:14px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 14px;color:var(--ink2);cursor:pointer;font-size:14px;margin-bottom:-1px}
+.tabs button[aria-selected=true]{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
+.cardhead{display:flex;flex-wrap:wrap;gap:10px 18px;justify-content:space-between;align-items:center;margin-bottom:4px}
+.cardhead .ctl{display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--ink2)}
+.cardhead select,.subctl select{font:inherit;font-size:12.5px;padding:4px 8px;background:var(--surface);color:var(--ink);border:1px solid var(--axis);border-radius:8px}
+.lead{margin:2px 0 0;color:var(--ink2);font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink2);margin:10px 0 8px;align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.key{display:inline-block;width:14px;height:10px;border-radius:2px}
+.k-pre{background:var(--pre)}.k-lay{background:var(--lay)}.k-dem{background:var(--crit)}
+.key.ops{height:4px;border-radius:1px;background:var(--ink)}
+.chartwrap{width:100%;overflow-x:auto}
+svg text{font-family:inherit}
+.t-ink{fill:var(--ink)}.t-ink2{fill:var(--ink2)}.t-muted{fill:var(--muted)}.t-dark{fill:#0b0b0b}
+.fs11{font-size:11px}.fs12{font-size:12px}.fs105{font-size:10.5px}
+.gridl{stroke:var(--grid);stroke-width:1}
+.axisl{stroke:var(--axis);stroke-width:1}
+.seg-pre{fill:var(--pre)}.seg-lay{fill:var(--lay)}.seg-dem{fill:var(--crit)}
+.ops{fill:var(--ink)}
+.mk{fill:var(--ink);stroke:var(--surface);stroke-width:2;paint-order:stroke}
+.critmk{fill:var(--crit)}
+.row{cursor:pointer;outline:none}
+.row .rowbg{fill:transparent}
+.row:hover .rowbg,.row.sel .rowbg{fill:var(--hover)}
+.row:focus-visible .rowbg{stroke:var(--ink);stroke-width:1.5}
+.row.sel .selbar{fill:var(--ink)}
+.row .selbar{fill:transparent}
+.vg{outline:none}
+.vg:hover .vbar,.vg:focus-visible .vbar{filter:brightness(.92)}
+[data-texture=on] .seg-dem{fill:url(#hatch45)}
+[data-texture=on] .seg-lay{fill:url(#hatch135)}
+[data-texture=on] .k-dem{background:repeating-linear-gradient(45deg,var(--crit) 0 3px,var(--surface) 3px 5px)}
+[data-texture=on] .k-lay{background:repeating-linear-gradient(135deg,var(--lay) 0 3px,var(--surface) 3px 5px)}
+@media print,(forced-colors:active){.seg-dem{fill:url(#hatch45)}.seg-lay{fill:url(#hatch135)}}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--axis);border-radius:8px;padding:9px 11px;box-shadow:0 6px 18px rgba(0,0,0,.16);font-size:12.5px;min-width:210px;max-width:340px}
+.tip[hidden]{display:none}
+.tip .hd{font-weight:600}
+.tip .meta{color:var(--ink2);font-size:12px;margin:1px 0 5px}
+.tip .r{display:flex;align-items:center;gap:8px;margin-top:3px}
+.tip .tk{display:inline-block;width:12px;height:3px;border-radius:2px;flex:none}
+.tip .v{font-weight:600;font-variant-numeric:tabular-nums}
+.tip .l{color:var(--ink2)}
+.tip .fl{color:var(--ink2);font-size:12px;margin-top:5px}
+.math{font-family:ui-serif,"Cambria Math","STIX Two Math",Georgia,"Times New Roman",serif;font-size:15px}
+.math i{font-style:italic}
+.math sub{font-size:.72em;vertical-align:-.28em;line-height:0}
+.formula{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:12px 22px;align-items:start;margin:6px 0 2px}
+@media(max-width:860px){.formula{grid-template-columns:minmax(0,1fr);gap:6px}}
+.formula .eq{display:grid;gap:4px;min-width:0}
+.formula .ex{color:var(--ink2);font-size:12.5px}
+.fxrow{display:flex;gap:8px;align-items:flex-start}
+.fxrow .tag{padding-top:1px;flex:none}
+.gchip{display:inline-block;font-size:11px;border:1px solid var(--axis);border-radius:999px;padding:0 7px;margin-right:6px;color:var(--ink2);white-space:nowrap}
+.gchip.b{border-color:var(--ink);color:var(--ink);font-weight:600}
+.accbox{margin-top:14px}
+.acchead{font-size:13px;color:var(--ink2);margin-bottom:4px;line-height:1.7}
+.acchead .gk{font-size:12px;color:var(--ink2);margin:0 6px 0 8px;font-weight:600}
+.ptable.acc{width:auto;min-width:240px}
+.ptable.acc th,.ptable.acc td{text-align:center}
+.ptable.acc th:first-child,.ptable.acc td:first-child{text-align:left}
+.ptable.acc input{width:auto}
+details.planwrap{margin-top:10px}
+details.planwrap>summary{font-size:13px;font-weight:600;color:var(--ink2)}
+.fx{display:inline-flex;flex-wrap:wrap;align-items:flex-start;row-gap:3px}
+.fv{display:inline-flex;flex-direction:column;align-items:center;margin:0 1px}
+.fs{white-space:pre;font-family:ui-serif,"Cambria Math","STIX Two Math",Georgia,"Times New Roman",serif;font-size:15px;line-height:1.25}
+.fs i{font-style:italic}.fs sub{font-size:.72em;vertical-align:-.28em;line-height:0}
+.fk{font-size:10.5px;line-height:1.2;color:var(--ink2);white-space:nowrap}
+.kr{font-size:13px;color:var(--ink)}
+.kr b{font-weight:600;color:var(--muted);font-size:11.5px;margin-right:8px}
+.tag{display:inline-block;min-width:44px;color:var(--muted);font:12px ui-monospace,SFMono-Regular,Menlo,monospace}
+.detail{margin-top:14px}
+.detailgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px 28px;margin-top:10px}
+@media(max-width:860px){.detailgrid{grid-template-columns:1fr}}
+.stmt{display:grid;grid-template-columns:minmax(40px,auto) minmax(110px,auto) auto 1fr;gap:5px 14px;font-size:13px;align-items:baseline}
+.stmt .y{color:var(--muted)}
+.stmt .k{color:var(--ink2)}
+.stmt .v{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stmt .n{color:var(--muted);font-size:12px}
+.stmt .sep{grid-column:1/-1;border-top:1px solid var(--grid);margin:3px 0}
+.stmt .hd3{grid-column:1/-1;font-size:12px;color:var(--muted);margin-top:4px}
+.stmt .strong{color:var(--ink)}
+.alt{display:grid;gap:6px;font-size:13px}
+.alt .a{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--grid);padding-bottom:5px}
+.alt .a.on b{color:var(--ink)}
+.alt .a span{color:var(--ink2)}
+.alt .a b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.alt .a.on span{color:var(--ink);font-weight:600}
+.flags{margin:10px 0 0;padding:0;list-style:none;font-size:12.5px;color:var(--ink2);display:grid;gap:4px}
+.flags code{margin-right:6px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-weight:500;color:var(--ink2);text-align:right;border-bottom:1px solid var(--axis);padding:6px 8px;white-space:nowrap}
+.tbl td{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:right;font-variant-numeric:tabular-nums}
+.tbl th:nth-child(-n+3),.tbl td:nth-child(-n+3){text-align:left}
+.tbl th:last-child,.tbl td:last-child{text-align:left;font-variant-numeric:normal}
+.tbl tr.sel td{background:var(--hover)}
+.tbl tbody tr{cursor:pointer}.tbl tbody tr:hover td{background:var(--hover)}
+details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸";color:var(--muted);font-size:12px}
+details[open]>summary::before{content:"▾"}
+summary h2,summary h3{display:inline;margin:0}
+details.sub2{margin-top:10px}
+details.sub2>summary{font-size:13px;font-weight:600;color:var(--ink2)}
+.sect{display:grid;gap:4px;margin-top:8px}
+.sect h3{margin:12px 0 2px;font-size:13px;font-weight:600;color:var(--ink2)}
+.mrow{display:grid;grid-template-columns:minmax(110px,auto) minmax(76px,auto) minmax(0,1fr);gap:3px 18px;font-size:13px;align-items:baseline}
+.mrow .kn{font-weight:600}
+.globals .gk{font-size:12px;color:var(--ink2)}
+.mrow .ds{color:var(--ink2)}
+.ptable{border-collapse:collapse;font-size:13px;width:100%;margin-top:8px}
+.ptable th{font-weight:500;color:var(--ink2);padding:4px 8px;text-align:right;border-bottom:1px solid var(--axis);vertical-align:bottom}
+.ptable th small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.ptable td{padding:4px 8px;text-align:right;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums}
+.ptable th:first-child,.ptable td:first-child{text-align:left}
+.ptable td.der{color:var(--ink2)}
+.ptable th,.ptable td{white-space:nowrap}
+.ptable input,.globals input{font:inherit;font-weight:600;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--axis);text-align:right;padding:1px 2px;border-radius:0;width:76px}
+.ptable input:focus,.globals input:focus{outline:2px solid var(--s1);outline-offset:2px}
+.globals{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:12px;font-size:13px;align-items:baseline}
+.globals .g{display:inline-flex;gap:8px;align-items:baseline;color:var(--ink2)}
+.globals .gv{font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.plan{border:1px solid var(--grid);border-radius:10px;padding:12px 14px;margin-top:12px}
+.plan.best{border-color:var(--ink)}
+.planhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px;align-items:baseline}
+.planhead .tt{font-weight:600}
+.planhead .cost{font-size:22px;font-weight:600}
+.badge{display:inline-block;font-size:11.5px;border:1px solid var(--ink);border-radius:999px;padding:0 8px;margin-left:8px;font-weight:600}
+.vscroll{max-height:360px;overflow:auto;border:1px solid var(--grid);border-radius:8px;margin-top:6px}
+.vt{border-collapse:collapse;font-size:12.5px;width:100%}
+.vt th{position:sticky;top:0;background:var(--surface);text-align:left;font-weight:500;color:var(--ink2);padding:4px 8px;border-bottom:1px solid var(--axis);white-space:nowrap}
+.vt td{padding:3px 8px;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums;vertical-align:baseline}
+.vt td.n,.vt th.n{text-align:right}
+.vt tr.grp td{background:var(--hover);padding:6px 8px}
+.vt tr.grp .tg{color:var(--muted);font:12px ui-monospace,SFMono-Regular,Menlo,monospace;margin-right:8px}
+.vt tr.grp .ex{color:var(--ink2);font-size:12px;margin-top:2px}
+.vt tr.grp .kr{margin-top:3px;font-size:12.5px}
+.vt tr.grp .fxrow{align-items:flex-start}
+.st-bind{font-weight:700;color:var(--ink)}
+.st-slack{color:var(--ink2)}
+.st-off{color:var(--muted)}
+.objline{margin-top:12px;font-size:13.5px;overflow-wrap:anywhere}
+.objline .tot{font-weight:600}
+.pre{font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--hover);border-radius:8px;padding:10px 12px;overflow:auto;max-height:440px;white-space:pre;margin:8px 0 0}
+.subctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:12.5px;color:var(--ink2);margin-top:8px}
+.subctl label.chk{display:inline-flex;gap:6px;align-items:center;cursor:pointer}
+footer{margin-top:22px;color:var(--ink2);font-size:12.5px;display:grid;gap:4px}
+.ok{color:var(--ink);font-weight:600}
+.warn{color:var(--crit);font-weight:600}
+[hidden]{display:none!important}
+</style>
+</head>
+<body class="viz-root">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <pattern id="hatch45" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" style="fill:var(--crit)"/><rect width="3" height="8" style="fill:var(--surface)"/></pattern>
+  <pattern id="hatch135" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(135)"><rect width="8" height="8" style="fill:var(--lay)"/><rect width="3" height="8" style="fill:var(--surface)"/></pattern>
+</defs></svg>
+
+<div class="wrap">
+<header class="top">
+  <div>
+    <h1>체선료 계산 탐색기</h1>
+    <p class="sub">vessel_journeys.csv 23항차. 허용 레이타임·요율은 CSV에 없는 <b>[가정]</b>이라 바꿔 볼 수 있습니다. 계산식은 <code>laytime_csv.py</code>와 같고, 아래 숫자는 그 값과 대조해 둔 것입니다.</p>
+  </div>
+  <div class="tools">
+    <label><input type="checkbox" id="texture"> 무늬로도 구분</label>
+    <button class="btn" id="theme" type="button" aria-label="화면 테마 전환">◐ 테마</button>
+  </div>
+</header>
+
+<section class="card filters" aria-label="계산 조건">
+  <div class="fields">
+    <div class="field"><label for="in-L">허용 레이타임 <span class="math">L</span></label><div class="num"><input id="in-L" type="number" min="1" max="240" step="1"><span class="u">시간</span></div><input id="rg-L" type="range" min="6" max="96" step="1" aria-label="허용 레이타임 슬라이더"></div>
+    <div class="field"><label for="in-rate">체선료율 <span class="math">r</span></label><div class="num"><input id="in-rate" type="number" min="0" step="1000"><span class="u">USD/일</span></div><input id="rg-rate" type="range" min="5000" max="150000" step="1000" aria-label="체선료율 슬라이더"></div>
+    <div class="field"><label for="in-notice">통지시간 <span class="math">n</span></label><div class="num"><input id="in-notice" type="number" min="0" max="48" step="0.5"><span class="u">시간</span></div><input id="rg-notice" type="range" min="0" max="12" step="0.5" aria-label="통지시간 슬라이더"></div>
+    <div class="field"><label for="in-lag">완료 → 호스 분리 <span class="math">λ</span></label><div class="num"><input id="in-lag" type="number" min="0" max="600" step="5"><span class="u">분</span></div><input id="rg-lag" type="range" min="0" max="180" step="5" aria-label="호스 분리 지연 슬라이더"></div>
+  </div>
+  <div class="toggles">
+    <div class="seg" role="group" aria-label="NOR 수령 기준"><span>NOR 수령 기준</span><span class="btns"><button type="button" data-k="norBasis" data-v="tender">제출 시각</button><button type="button" data-k="norBasis" data-v="accepted">승인 시각</button></span></div>
+    <div class="seg" role="group" aria-label="투묘 전에 낸 NOR"><span>투묘 전에 낸 NOR</span><span class="btns"><button type="button" data-k="norValidity" data-v="lenient">유효</button><button type="button" data-k="norValidity" data-v="strict">무효</button></span></div>
+    <div class="seg" role="group" aria-label="체선 중 이동"><span>체선 중 이동 시간</span><span class="btns"><button type="button" data-k="shift" data-v="count">산입</button><button type="button" data-k="shift" data-v="exclude">공제</button></span></div>
+    <div class="seg" role="group" aria-label="하역 중단 구간"><span>하역 중단 구간(J022)</span><span class="btns"><button type="button" data-k="gaps" data-v="count">산입</button><button type="button" data-k="gaps" data-v="exclude">제외</button></span></div>
+    <button class="btn" id="reset" type="button">기본값으로</button>
+  </div>
+</section>
+
+<section class="kpis" id="kpis" aria-label="요약"></section>
+
+<div class="tabs" role="tablist">
+  <button role="tab" id="tb-voyages" aria-selected="true" aria-controls="tab-voyages">항차별 체선</button>
+  <button role="tab" id="tb-order" aria-selected="false" aria-controls="tab-order">접안 순서 (수리계획법)</button>
+</div>
+
+<section id="tab-voyages" role="tabpanel">
+  <div class="card">
+    <div class="cardhead">
+      <div><h2>항차별 레이타임 소진과 체선</h2><p class="lead">NOR 제출 시각을 0으로 두고 호스 분리까지의 경과 시간 (h). 행을 누르면 아래에 계산서가 나옵니다.</p></div>
+      <div class="ctl">
+        <label>정렬 <select id="sort"><option value="id">항차 순서</option><option value="usd">체선료 큰 순</option></select></label>
+        <span class="seg"><span class="btns"><button type="button" data-k="view" data-v="chart">차트</button><button type="button" data-k="view" data-v="table">표</button></span></span>
+      </div>
+    </div>
+    <div class="legend" id="legend1">
+      <span><i class="key k-pre"></i>레이타임 개시 전</span>
+      <span><i class="key k-lay"></i>레이타임 소진</span>
+      <span><i class="key k-dem"></i>체선 <svg width="10" height="9" viewBox="0 0 10 9" aria-hidden="true"><path d="M5 0.5 L9.6 8.5 H0.4 Z" class="critmk"/></svg></span>
+      <span><i class="key ops"></i>선적·양하 작업</span>
+      <span><svg width="12" height="12" viewBox="-6 -6 12 12" aria-hidden="true"><path d="M0 -5 L5 0 L0 5 L-5 0 Z" class="mk"/></svg>접안 완료</span>
+    </div>
+    <div class="chartwrap" id="chart"></div>
+    <div class="chartwrap" id="tablewrap" hidden></div>
+  </div>
+  <div class="card detail" id="detail" aria-live="polite"></div>
+</section>
+
+<section id="tab-order" role="tabpanel" hidden>
+  <div class="card">
+    <div class="cardhead">
+      <div><h2>수리계획법 모델 — 식 · 파라미터 · 변수 · 풀이</h2>
+        <p class="lead">접안 순서와 선석 배정으로 총 체선료를 줄이는 MILP(혼합정수계획)입니다. ① 식을 읽고 ② 이 문제의 값을 보고 ③ 해에서 모든 변수와 제약식이 어떤 값인지 따라가고 ④ 솔버에 넣는 모델 전문까지 볼 수 있습니다. 값을 바꾸면 모델과 해가 같이 바뀝니다.</p></div>
+      <div class="ctl"><span class="seg"><span class="btns"><button type="button" data-k="inst" data-v="sc01">두 척 (SC-01) · 직접 입력</button><button type="button" data-k="inst" data-v="stress">실제 서비스 시간 8척 · 선석 3개</button></span></span></div>
+    </div>
+  </div>
+  <details class="card" id="m-formula" open><summary><h2>① 모델 — 식</h2></summary><div id="m-formula-body"></div></details>
+  <div class="card" id="m-params"><h2>② 파라미터 — 이 문제의 값</h2><div id="m-params-body"></div></div>
+  <div class="card" id="m-solve"><h2>③ 풀이 — 해에서의 변수와 제약식</h2><div id="m-solve-body"></div></div>
+  <details class="card" id="m-lp"><summary><h2>④ 모델 전문 (LP 형식)</h2></summary><div id="m-lp-body"></div></details>
+</section>
+
+<footer>
+  <div id="selftest">값 대조 중…</div>
+  <div>기본 해석은 NOR 제출 시각 + 통지시간이고, 승인 시각 기준과 투묘 전 NOR 무효는 위의 요약 막대에서 바로 바꿔 볼 수 있습니다. 판정하지 않고 같이 보여 줍니다.</div>
+  <div>이 화면은 자체 완결 파일입니다(외부 통신 없음). 다시 만들기: <code>python3 -I journeys/make_explorer.py</code></div>
+</footer>
+</div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script>
+const DATA = [{"jid":"J001","vessel":"GOLDEN PROCYON","op":"LOAD","berth":"SK #3","cargo":"YUBASE 6","qty":1950.0,"norT":13320,"norA":13785,"allfast":13730,"opsStart":13795,"opsEnd":14445,"anchorFirst":null,"shifts":[],"gaps":[],"flags":["INFERRED"]},{"jid":"J002","vessel":"HONG YANG WAN","op":"LOAD","berth":"SK #1-2","cargo":"SULPHUR MOLTEN","qty":3800.0,"norT":28120,"norA":38253,"allfast":38221,"opsStart":38345,"opsEnd":39415,"anchorFirst":28120,"shifts":[[38161,38221]],"gaps":[],"flags":[]},{"jid":"J003","vessel":"SUN VENUS","op":"LOAD","berth":"SK #5-4","cargo":"MDO-L","qty":2368.486,"norT":31265,"norA":33600,"allfast":33600,"opsStart":33950,"opsEnd":34325,"anchorFirst":31321,"shifts":[[33541,33600]],"gaps":[],"flags":["NOR-EARLY","MULTI-CALL"]},{"jid":"J004","vessel":"GOLDEN CYGNUS","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 299.64 MT YUBASE 6 300.080 MT","qty":2890.0,"norT":75300,"norA":76475,"allfast":76330,"opsStart":76485,"opsEnd":77150,"anchorFirst":75405,"shifts":[[76260,76330]],"gaps":[],"flags":["NOR-EARLY"]},{"jid":"J005","vessel":"SUN VENUS","op":"LOAD","berth":"SK #5-4","cargo":"MDO-L","qty":3406.714,"norT":109435,"norA":119990,"allfast":119990,"opsStart":120060,"opsEnd":120505,"anchorFirst":113000,"shifts":[[119940,119990]],"gaps":[],"flags":["NOR-EARLY","MULTI-CALL"]},{"jid":"J006","vessel":"SUN FLORA","op":"DISCHARGE","berth":"SK #4-1","cargo":"Toluene","qty":3499.729,"norT":161040,"norA":165425,"allfast":165425,"opsStart":165500,"opsEnd":166360,"anchorFirst":null,"shifts":[],"gaps":[],"flags":["WAIT-ALONGSIDE"]},{"jid":"J007","vessel":"GOLDEN PROCYON","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 & YUBASE 3 & YUBASE 4 & YUBASE 6","qty":3040.0,"norT":162690,"norA":163270,"allfast":163130,"opsStart":163280,"opsEnd":163990,"anchorFirst":null,"shifts":[],"gaps":[],"flags":[]},{"jid":"J008","vessel":"SUN FLORA","op":"DISCHARGE","berth":"SK #4-1","cargo":"UCO","qty":5000.677,"norT":177010,"norA":179340,"allfast":179340,"opsStart":179405,"opsEnd":180575,"anchorFirst":177010,"shifts":[[179285,179340]],"gaps":[],"flags":[]},{"jid":"J009","vessel":"SUN FLORA","op":"DISCHARGE","berth":"SK #4-1","cargo":"Toluene","qty":2001.911,"norT":190110,"norA":190950,"allfast":190950,"opsStart":191010,"opsEnd":191435,"anchorFirst":190445,"shifts":[[190915,190950]],"gaps":[],"flags":["NOR-EARLY"]},{"jid":"J010","vessel":"GOLDEN BETELGEUSE","op":"LOAD","berth":"SK #5-5","cargo":"PARAXYLENE","qty":10002.333,"norT":199710,"norA":202812,"allfast":202812,"opsStart":202885,"opsEnd":203765,"anchorFirst":null,"shifts":[[202755,202812]],"gaps":[],"flags":[]},{"jid":"J011","vessel":"GOLDEN PROCYON","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 & YUBASE 3 & YUBASE 4 & YUBASE 6","qty":2486.873,"norT":202665,"norA":202990,"allfast":202825,"opsStart":203000,"opsEnd":203580,"anchorFirst":null,"shifts":[],"gaps":[],"flags":[]},{"jid":"J012","vessel":"SUN VENUS","op":"LOAD","berth":"SK #5-4","cargo":"MDO-L","qty":3707.102,"norT":236865,"norA":254280,"allfast":254280,"opsStart":254360,"opsEnd":254945,"anchorFirst":236930,"shifts":[[254240,254280]],"gaps":[],"flags":["NOR-EARLY","MULTI-CALL"]},{"jid":"J013","vessel":"GOLDEN PROCYON","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 & YUBASE 3 & YUBASE 4","qty":1801.0,"norT":255220,"norA":257530,"allfast":257460,"opsStart":257540,"opsEnd":257895,"anchorFirst":255510,"shifts":[[257410,257460]],"gaps":[],"flags":["NOR-EARLY"]},{"jid":"J014","vessel":"GOLDEN BETELGEUSE","op":"LOAD","berth":"SK #3","cargo":"PARAXYLENE","qty":10000.0,"norT":279361,"norA":282882,"allfast":282882,"opsStart":282995,"opsEnd":283910,"anchorFirst":278250,"shifts":[[282830,282882]],"gaps":[],"flags":[]},{"jid":"J015","vessel":"GOLDEN WINGS","op":"LOAD","berth":"SK #1-2","cargo":"SULPHUR MOLTEN","qty":3300.0,"norT":280350,"norA":280940,"allfast":280940,"opsStart":281025,"opsEnd":282000,"anchorFirst":null,"shifts":[],"gaps":[],"flags":[]},{"jid":"J016","vessel":"SUN FLORA","op":"DISCHARGE","berth":"SK #4-1","cargo":"Toluene","qty":4632.027,"norT":305460,"norA":306885,"allfast":306885,"opsStart":306965,"opsEnd":307690,"anchorFirst":305720,"shifts":[[306848,306885]],"gaps":[],"flags":["NOR-EARLY","RE-ANCHOR"]},{"jid":"J017","vessel":"GOLDEN CYGNUS","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 & YUBASE 3 & YUBASE 4 & YUBASE 6","qty":3380.0,"norT":312138,"norA":312395,"allfast":312282,"opsStart":312405,"opsEnd":313125,"anchorFirst":null,"shifts":[],"gaps":[],"flags":[]},{"jid":"J018","vessel":"SUN FLORA","op":"DISCHARGE","berth":"SK #4-1","cargo":"Mixed Xylene","qty":3900.252,"norT":312365,"norA":313360,"allfast":313360,"opsStart":313455,"opsEnd":313860,"anchorFirst":312365,"shifts":[[313320,313360]],"gaps":[],"flags":[]},{"jid":"J019","vessel":"SUN VENUS","op":"LOAD","berth":"SK #5-4","cargo":"MDO-L","qty":3750.0,"norT":338925,"norA":340330,"allfast":340330,"opsStart":340425,"opsEnd":341165,"anchorFirst":339205,"shifts":[[340285,340330]],"gaps":[],"flags":["NOR-EARLY","MULTI-CALL"]},{"jid":"J020","vessel":"KOHSEI MARU","op":"LOAD","berth":"SK #1-2","cargo":"SULPHUR MOLTEN","qty":3449.529,"norT":357600,"norA":370584,"allfast":370569,"opsStart":370705,"opsEnd":371585,"anchorFirst":357600,"shifts":[[370536,370569]],"gaps":[],"flags":["RE-ANCHOR"]},{"jid":"J021","vessel":"GOLDEN PROCYON","op":"LOAD","berth":"SK #3","cargo":"YUBASE 2 & YUBASE 3","qty":2638.489,"norT":365460,"norA":365685,"allfast":365600,"opsStart":365695,"opsEnd":366215,"anchorFirst":null,"shifts":[],"gaps":[],"flags":[]},{"jid":"J022","vessel":"BAY YASU","op":"DISCHARGE","berth":"SK #3","cargo":"COMMODITY LUBE BASE OIL (YUBASE 4 PlUS)","qty":13506.1,"norT":391464,"norA":391745,"allfast":391584,"opsStart":391755,"opsEnd":396050,"anchorFirst":null,"shifts":[[395640,395718]],"gaps":[[393895,395800]],"flags":["RE-BERTH"]},{"jid":"J023","vessel":"SUN VENUS","op":"LOAD","berth":"SK #5-4","cargo":"MDO-L","qty":1684.379,"norT":418125,"norA":421500,"allfast":421500,"opsStart":421705,"opsEnd":421965,"anchorFirst":null,"shifts":[],"gaps":[],"flags":["MULTI-CALL","PIER-SHIFT"]}];
+const GOLDEN = [{"cfg":{"L":24,"rate":26000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[9495.0,171437.5,10935.0,0.0],"J003":[1260.0,22750.0,2700.0,0.0],"J004":[0.0,0.0,1420.0,70.0],"J005":[9270.0,167375.0,10710.0,0.0],"J006":[3520.0,63555.56,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[1765.0,31868.06,3205.0,0.0],"J009":[0.0,0.0,930.0,35.0],"J010":[2255.0,40715.28,3695.0,0.0],"J011":[0.0,0.0,755.0,0.0],"J012":[16279.999999999998,293944.44,17720.0,0.0],"J013":[875.0,15798.61,2315.0,0.0],"J014":[2749.0,49634.72,4189.0,0.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[393.0,7095.83,1833.0,37.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[395.0,7131.94,1835.0,45.0],"J020":[12185.0,220006.94,13625.0,0.0],"J021":[0.0,0.0,615.0,0.0],"J022":[3026.0,54636.11,4466.0,0.0],"J023":[2040.0,36833.33,3480.0,0.0]}},{"cfg":{"L":36,"rate":120000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[8775.0,731250.0,10935.0,0.0],"J003":[481.00000000000006,40083.33,2641.0,59.0],"J004":[0.0,0.0,1420.0,70.0],"J005":[8550.0,712500.0,10710.0,0.0],"J006":[2800.0,233333.33,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[990.0,82500.0,3150.0,55.0],"J009":[0.0,0.0,930.0,35.0],"J010":[1535.0,127916.67,3695.0,0.0],"J011":[0.0,0.0,755.0,0.0],"J012":[15559.999999999998,1296666.67,17720.0,0.0],"J013":[105.0,8750.0,2265.0,50.0],"J014":[2029.0000000000002,169083.33,4189.0,0.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[0.0,0.0,1833.0,37.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[0.0,0.0,1835.0,45.0],"J020":[11465.0,955416.67,13625.0,0.0],"J021":[0.0,0.0,615.0,0.0],"J022":[2306.0,192166.67,4466.0,0.0],"J023":[1320.0,110000.0,3480.0,0.0]}},{"cfg":{"L":24,"rate":26000,"notice":6,"lag":0,"norBasis":"accepted","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[0.0,0.0,1162.0,0.0],"J003":[0.0,0.0,725.0,0.0],"J004":[0.0,0.0,675.0,0.0],"J005":[0.0,0.0,515.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[0.0,0.0,1235.0,0.0],"J009":[0.0,0.0,485.00000000000006,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,665.0,0.0],"J013":[0.0,0.0,365.0,0.0],"J014":[0.0,0.0,1028.0,0.0],"J015":[0.0,0.0,1060.0,0.0],"J016":[0.0,0.0,805.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,835.0,0.0],"J020":[0.0,0.0,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[2865.0,51729.17,4305.0,0.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":24,"rate":26000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"strict","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[9495.0,171437.5,10935.0,0.0],"J003":[0.0,0.0,375.0,0.0],"J004":[0.0,0.0,665.0,0.0],"J005":[0.0,0.0,445.0,0.0],"J006":[3520.0,63555.56,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[1765.0,31868.06,3205.0,0.0],"J009":[0.0,0.0,425.0,0.0],"J010":[2255.0,40715.28,3695.0,0.0],"J011":[0.0,0.0,755.0,0.0],"J012":[0.0,0.0,585.0,0.0],"J013":[0.0,0.0,355.0,0.0],"J014":[2749.0,49634.72,4189.0,0.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[0.0,0.0,725.0,0.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[0.0,0.0,740.0,0.0],"J020":[12185.0,220006.94,13625.0,0.0],"J021":[0.0,0.0,615.0,0.0],"J022":[3026.0,54636.11,4466.0,0.0],"J023":[2040.0,36833.33,3480.0,0.0]}},{"cfg":{"L":24,"rate":26000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[9435.0,170354.17,10875.0,60.0],"J003":[1201.0,21684.72,2641.0,59.0],"J004":[0.0,0.0,1420.0,70.0],"J005":[9220.0,166472.22,10660.0,50.0],"J006":[3520.0,63555.56,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[1710.0,30875.0,3150.0,55.0],"J009":[0.0,0.0,930.0,35.0],"J010":[2198.0,39686.11,3638.0,57.0],"J011":[0.0,0.0,755.0,0.0],"J012":[16240.000000000002,293222.22,17680.0,40.0],"J013":[825.0,14895.83,2265.0,50.0],"J014":[2697.0,48695.83,4137.0,52.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[393.0,7095.83,1833.0,37.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[395.0,7131.94,1835.0,45.0],"J020":[12152.0,219411.11,13592.0,33.0],"J021":[0.0,0.0,615.0,0.0],"J022":[2948.0,53227.78,4388.0,78.0],"J023":[2040.0,36833.33,3480.0,0.0]}},{"cfg":{"L":24,"rate":26000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"exclude"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[9495.0,171437.5,10935.0,0.0],"J003":[1260.0,22750.0,2700.0,0.0],"J004":[0.0,0.0,1420.0,70.0],"J005":[9270.0,167375.0,10710.0,0.0],"J006":[3520.0,63555.56,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[1765.0,31868.06,3205.0,0.0],"J009":[0.0,0.0,930.0,35.0],"J010":[2255.0,40715.28,3695.0,0.0],"J011":[0.0,0.0,755.0,0.0],"J012":[16279.999999999998,293944.44,17720.0,0.0],"J013":[875.0,15798.61,2315.0,0.0],"J014":[2749.0,49634.72,4189.0,0.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[393.0,7095.83,1833.0,37.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[395.0,7131.94,1835.0,45.0],"J020":[12185.0,220006.94,13625.0,0.0],"J021":[0.0,0.0,615.0,0.0],"J022":[1121.0,20240.28,2561.0,1905.0],"J023":[2040.0,36833.33,3480.0,0.0]}},{"cfg":{"L":24,"rate":26000,"notice":0,"lag":30,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,1155.0,0.0],"J002":[9885.0,178479.17,11325.0,0.0],"J003":[1650.0,29791.67,3090.0,0.0],"J004":[370.0,6680.56,1810.0,70.0],"J005":[9660.0,174416.67,11100.0,0.0],"J006":[3910.0000000000005,70597.22,5350.0,0.0],"J007":[0.0,0.0,1330.0,0.0],"J008":[2155.0,38909.72,3595.0,0.0],"J009":[0.0,0.0,1320.0,35.0],"J010":[2645.0,47756.94,4084.9999999999995,0.0],"J011":[0.0,0.0,945.0,0.0],"J012":[16670.0,300986.11,18110.0,0.0],"J013":[1265.0,22840.28,2705.0,0.0],"J014":[3139.0,56676.39,4579.0,0.0],"J015":[240.0,4333.33,1680.0,0.0],"J016":[783.0,14137.5,2223.0,37.0],"J017":[0.0,0.0,1017.0,0.0],"J018":[45.0,812.5,1485.0,40.0],"J019":[785.0,14173.61,2225.0,45.0],"J020":[12575.0,227048.61,14015.0,0.0],"J021":[0.0,0.0,785.0,0.0],"J022":[3176.0,57344.44,4616.0,0.0],"J023":[2430.0,43875.0,3870.0,0.0]}},{"cfg":{"L":12,"rate":10000,"notice":12,"lag":180,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[175.0,1215.28,895.0,0.0],"J002":[10035.0,69687.5,10755.0,0.0],"J003":[1800.0,12500.0,2520.0,0.0],"J004":[520.0,3611.11,1240.0,70.0],"J005":[9810.0,68125.0,10530.0,0.0],"J006":[4060.0000000000005,28194.44,4780.0,0.0],"J007":[320.0,2222.22,1040.0,0.0],"J008":[2305.0,16006.94,3025.0,0.0],"J009":[30.0,208.33,750.0,35.0],"J010":[2795.0,19409.72,3515.0,0.0],"J011":[215.0,1493.06,935.0,0.0],"J012":[16820.0,116805.56,17540.0,0.0],"J013":[1415.0,9826.39,2135.0,0.0],"J014":[3289.0,22840.28,4009.0,0.0],"J015":[520.0,3611.11,1240.0,0.0],"J016":[933.0,6479.17,1653.0,37.0],"J017":[303.0,2104.17,1023.0,0.0],"J018":[195.0,1354.17,915.0,40.0],"J019":[935.0,6493.06,1655.0,45.0],"J020":[12725.0,88368.06,13445.0,0.0],"J021":[75.0,520.83,795.0,0.0],"J022":[3926.0,27263.89,4646.0,0.0],"J023":[2580.0,17916.67,3300.0,0.0]}},{"cfg":{"L":48,"rate":26000,"notice":6,"lag":0,"norBasis":"accepted","norValidity":"strict","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[0.0,0.0,1162.0,0.0],"J003":[0.0,0.0,375.0,0.0],"J004":[0.0,0.0,665.0,0.0],"J005":[0.0,0.0,445.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[0.0,0.0,1235.0,0.0],"J009":[0.0,0.0,425.0,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,585.0,0.0],"J013":[0.0,0.0,355.0,0.0],"J014":[0.0,0.0,1028.0,0.0],"J015":[0.0,0.0,1060.0,0.0],"J016":[0.0,0.0,725.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,740.0,0.0],"J020":[0.0,0.0,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[0.0,0.0,2400.0,1905.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":6,"rate":5000,"notice":6,"lag":90,"norBasis":"accepted","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[390.0,1354.17,750.0,0.0],"J002":[892.0,3097.22,1252.0,0.0],"J003":[455.0,1579.86,815.0,0.0],"J004":[405.0,1406.25,765.0,0.0],"J005":[244.99999999999997,850.69,605.0,0.0],"J006":[665.0,2309.03,1025.0,0.0],"J007":[450.0,1562.5,810.0,0.0],"J008":[964.9999999999999,3350.69,1325.0,0.0],"J009":[215.0,746.53,575.0,0.0],"J010":[683.0,2371.53,1043.0,0.0],"J011":[320.0,1111.11,680.0,0.0],"J012":[395.0,1371.53,755.0,0.0],"J013":[95.0,329.86,455.0,0.0],"J014":[758.0,2631.94,1118.0,0.0],"J015":[790.0,2743.06,1150.0,0.0],"J016":[535.0,1857.64,895.0,0.0],"J017":[460.0,1597.22,820.0,0.0],"J018":[230.0,798.61,590.0,0.0],"J019":[565.0,1961.81,925.0,0.0],"J020":[731.0,2538.19,1091.0,0.0],"J021":[260.0,902.78,620.0,0.0],"J022":[4035.0,14010.42,4395.0,0.0],"J023":[195.0,677.08,555.0,0.0]}},{"cfg":{"L":88,"rate":46000,"notice":9,"lag":15,"norBasis":"accepted","norValidity":"strict","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,675.0,0.0],"J002":[0.0,0.0,1177.0,0.0],"J003":[0.0,0.0,390.0,0.0],"J004":[0.0,0.0,680.0,0.0],"J005":[0.0,0.0,460.0,0.0],"J006":[0.0,0.0,950.0,0.0],"J007":[0.0,0.0,735.0,0.0],"J008":[0.0,0.0,1250.0,0.0],"J009":[0.0,0.0,440.0,0.0],"J010":[0.0,0.0,968.0,0.0],"J011":[0.0,0.0,605.0,0.0],"J012":[0.0,0.0,600.0,0.0],"J013":[0.0,0.0,370.0,0.0],"J014":[0.0,0.0,1043.0,0.0],"J015":[0.0,0.0,1075.0,0.0],"J016":[0.0,0.0,740.0,0.0],"J017":[0.0,0.0,745.0,0.0],"J018":[0.0,0.0,515.0,0.0],"J019":[0.0,0.0,755.0,0.0],"J020":[0.0,0.0,1016.0,0.0],"J021":[0.0,0.0,545.0,0.0],"J022":[0.0,0.0,4242.0,78.0],"J023":[0.0,0.0,480.0,0.0]}},{"cfg":{"L":94,"rate":140000,"notice":12,"lag":45,"norBasis":"tender","norValidity":"strict","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,760.0,0.0],"J002":[4920.0,478333.33,10560.0,60.0],"J003":[0.0,0.0,420.0,0.0],"J004":[0.0,0.0,710.0,0.0],"J005":[0.0,0.0,489.99999999999994,0.0],"J006":[0.0,0.0,4645.0,0.0],"J007":[0.0,0.0,905.0,0.0],"J008":[0.0,0.0,2835.0,55.0],"J009":[0.0,0.0,470.0,0.0],"J010":[0.0,0.0,3323.0,57.0],"J011":[0.0,0.0,800.0,0.0],"J012":[0.0,0.0,630.0,0.0],"J013":[0.0,0.0,400.0,0.0],"J014":[0.0,0.0,3822.0,52.0],"J015":[0.0,0.0,1105.0,0.0],"J016":[0.0,0.0,770.0,0.0],"J017":[0.0,0.0,888.0,0.0],"J018":[0.0,0.0,780.0,40.0],"J019":[0.0,0.0,785.0,0.0],"J020":[7637.0,742486.11,13277.0,33.0],"J021":[0.0,0.0,660.0,0.0],"J022":[0.0,0.0,4433.0,78.0],"J023":[0.0,0.0,3165.0,0.0]}},{"cfg":{"L":74,"rate":97000,"notice":9,"lag":0,"norBasis":"tender","norValidity":"strict","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,715.0,0.0],"J002":[6255.0,421343.75,10695.0,60.0],"J003":[0.0,0.0,375.0,0.0],"J004":[0.0,0.0,665.0,0.0],"J005":[0.0,0.0,445.0,0.0],"J006":[340.0,22902.78,4780.0,0.0],"J007":[0.0,0.0,860.0,0.0],"J008":[0.0,0.0,2970.0,55.0],"J009":[0.0,0.0,425.0,0.0],"J010":[0.0,0.0,3458.0,57.0],"J011":[0.0,0.0,755.0,0.0],"J012":[0.0,0.0,585.0,0.0],"J013":[0.0,0.0,355.0,0.0],"J014":[0.0,0.0,3957.0,52.0],"J015":[0.0,0.0,1110.0,0.0],"J016":[0.0,0.0,725.0,0.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,915.0,40.0],"J019":[0.0,0.0,740.0,0.0],"J020":[8972.0,604363.89,13412.0,33.0],"J021":[0.0,0.0,615.0,0.0],"J022":[0.0,0.0,4388.0,78.0],"J023":[0.0,0.0,3300.0,0.0]}},{"cfg":{"L":50,"rate":45000,"notice":3,"lag":15,"norBasis":"tender","norValidity":"strict","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,960.0,0.0],"J002":[8130.0,254062.5,11130.0,0.0],"J003":[0.0,0.0,390.0,0.0],"J004":[0.0,0.0,680.0,0.0],"J005":[0.0,0.0,460.0,0.0],"J006":[2155.0,67343.75,5155.0,0.0],"J007":[0.0,0.0,1135.0,0.0],"J008":[345.0,10781.25,3345.0,55.0],"J009":[0.0,0.0,440.0,0.0],"J010":[833.0,26031.25,3833.0,57.0],"J011":[0.0,0.0,770.0,0.0],"J012":[0.0,0.0,600.0,0.0],"J013":[0.0,0.0,370.0,0.0],"J014":[1384.0,43250.0,4384.0,0.0],"J015":[0.0,0.0,1485.0,0.0],"J016":[0.0,0.0,740.0,0.0],"J017":[0.0,0.0,858.0,0.0],"J018":[0.0,0.0,1290.0,40.0],"J019":[0.0,0.0,755.0,0.0],"J020":[10820.0,338125.0,13820.0,0.0],"J021":[0.0,0.0,630.0,0.0],"J022":[1481.0,46281.25,4481.0,0.0],"J023":[675.0,21093.75,3675.0,0.0]}},{"cfg":{"L":59,"rate":63000,"notice":0,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,1125.0,0.0],"J002":[7695.0,336656.25,11235.0,60.0],"J003":[0.0,0.0,3001.0,59.0],"J004":[0.0,0.0,1780.0,70.0],"J005":[7480.0,327250.0,11020.0,50.0],"J006":[1780.0,77875.0,5320.0,0.0],"J007":[0.0,0.0,1300.0,0.0],"J008":[0.0,0.0,3510.0,55.0],"J009":[0.0,0.0,1290.0,35.0],"J010":[458.0,20037.5,3998.0000000000005,57.0],"J011":[0.0,0.0,915.0,0.0],"J012":[14500.0,634375.0,18040.0,40.0],"J013":[0.0,0.0,2625.0,50.0],"J014":[957.0,41868.75,4497.0,52.0],"J015":[0.0,0.0,1650.0,0.0],"J016":[0.0,0.0,2193.0,37.0],"J017":[0.0,0.0,987.0,0.0],"J018":[0.0,0.0,1455.0,40.0],"J019":[0.0,0.0,2195.0,45.0],"J020":[10412.0,455525.0,13952.0,33.0],"J021":[0.0,0.0,755.0,0.0],"J022":[968.0,42350.0,4508.0,78.0],"J023":[300.0,13125.0,3840.0,0.0]}},{"cfg":{"L":36,"rate":66000,"notice":3,"lag":15,"norBasis":"accepted","norValidity":"lenient","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,675.0,0.0],"J002":[0.0,0.0,1177.0,0.0],"J003":[0.0,0.0,740.0,0.0],"J004":[0.0,0.0,690.0,0.0],"J005":[0.0,0.0,530.0,0.0],"J006":[0.0,0.0,950.0,0.0],"J007":[0.0,0.0,735.0,0.0],"J008":[0.0,0.0,1250.0,0.0],"J009":[0.0,0.0,500.00000000000006,0.0],"J010":[0.0,0.0,968.0,0.0],"J011":[0.0,0.0,605.0,0.0],"J012":[0.0,0.0,680.0,0.0],"J013":[0.0,0.0,380.0,0.0],"J014":[0.0,0.0,1043.0,0.0],"J015":[0.0,0.0,1075.0,0.0],"J016":[0.0,0.0,820.0,0.0],"J017":[0.0,0.0,745.0,0.0],"J018":[0.0,0.0,515.0,0.0],"J019":[0.0,0.0,850.0,0.0],"J020":[0.0,0.0,1016.0,0.0],"J021":[0.0,0.0,545.0,0.0],"J022":[255.0,11687.5,2415.0,1905.0],"J023":[0.0,0.0,480.0,0.0]}},{"cfg":{"L":52,"rate":82000,"notice":3,"lag":120,"norBasis":"tender","norValidity":"lenient","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,1065.0,0.0],"J002":[8055.0,458687.5,11175.0,60.0],"J003":[0.0,0.0,2941.0,59.0],"J004":[0.0,0.0,1720.0,70.0],"J005":[7839.999999999999,446444.44,10960.0,50.0],"J006":[2140.0,121861.11,5260.0,0.0],"J007":[0.0,0.0,1240.0,0.0],"J008":[330.0,18791.67,3450.0,55.0],"J009":[0.0,0.0,1230.0,35.0],"J010":[818.0,46580.56,3938.0000000000005,57.0],"J011":[0.0,0.0,875.0,0.0],"J012":[14860.0,846194.44,17980.0,40.0],"J013":[0.0,0.0,2565.0,50.0],"J014":[1317.0,74995.83,4437.0,52.0],"J015":[0.0,0.0,1590.0,0.0],"J016":[0.0,0.0,2133.0,37.0],"J017":[0.0,0.0,963.0,0.0],"J018":[0.0,0.0,1395.0,40.0],"J019":[0.0,0.0,2135.0,45.0],"J020":[10772.0,613405.56,13892.0,33.0],"J021":[0.0,0.0,735.0,0.0],"J022":[1388.0,79038.89,4508.0,78.0],"J023":[660.0,37583.33,3780.0,0.0]}},{"cfg":{"L":45,"rate":127000,"notice":0,"lag":15,"norBasis":"accepted","norValidity":"strict","shiftCounts":true,"gaps":"exclude"},"res":{"J001":[0.0,0.0,675.0,0.0],"J002":[0.0,0.0,1177.0,0.0],"J003":[0.0,0.0,390.0,0.0],"J004":[0.0,0.0,680.0,0.0],"J005":[0.0,0.0,460.0,0.0],"J006":[0.0,0.0,950.0,0.0],"J007":[0.0,0.0,735.0,0.0],"J008":[0.0,0.0,1250.0,0.0],"J009":[0.0,0.0,440.0,0.0],"J010":[0.0,0.0,968.0,0.0],"J011":[0.0,0.0,605.0,0.0],"J012":[0.0,0.0,600.0,0.0],"J013":[0.0,0.0,370.0,0.0],"J014":[0.0,0.0,1043.0,0.0],"J015":[0.0,0.0,1075.0,0.0],"J016":[0.0,0.0,740.0,0.0],"J017":[0.0,0.0,745.0,0.0],"J018":[0.0,0.0,515.0,0.0],"J019":[0.0,0.0,755.0,0.0],"J020":[0.0,0.0,1016.0,0.0],"J021":[0.0,0.0,545.0,0.0],"J022":[0.0,0.0,2415.0,1905.0],"J023":[0.0,0.0,480.0,0.0]}},{"cfg":{"L":66,"rate":17000,"notice":12,"lag":15,"norBasis":"tender","norValidity":"lenient","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,730.0,0.0],"J002":[6570.0,77562.5,10530.0,60.0],"J003":[0.0,0.0,2296.0,59.0],"J004":[0.0,0.0,1075.0,70.0],"J005":[6355.0,75024.31,10315.0,50.0],"J006":[655.0,7732.64,4615.0,0.0],"J007":[0.0,0.0,875.0,0.0],"J008":[0.0,0.0,2805.0,55.0],"J009":[0.0,0.0,585.0,35.0],"J010":[0.0,0.0,3293.0,57.0],"J011":[0.0,0.0,770.0,0.0],"J012":[13375.0,157899.31,17335.0,40.0],"J013":[0.0,0.0,1920.0,50.0],"J014":[0.0,0.0,3792.0,52.0],"J015":[0.0,0.0,1075.0,0.0],"J016":[0.0,0.0,1488.0,37.0],"J017":[0.0,0.0,858.0,0.0],"J018":[0.0,0.0,750.0,40.0],"J019":[0.0,0.0,1490.0,45.0],"J020":[9287.0,109638.19,13247.0,33.0],"J021":[0.0,0.0,630.0,0.0],"J022":[443.0,5229.86,4403.0,78.0],"J023":[0.0,0.0,3135.0,0.0]}},{"cfg":{"L":54,"rate":89000,"notice":0,"lag":45,"norBasis":"tender","norValidity":"strict","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,1170.0,0.0],"J002":[8040.0,496916.67,11280.0,60.0],"J003":[0.0,0.0,420.0,0.0],"J004":[0.0,0.0,710.0,0.0],"J005":[0.0,0.0,489.99999999999994,0.0],"J006":[2125.0,131336.81,5365.0,0.0],"J007":[0.0,0.0,1345.0,0.0],"J008":[315.0,19468.75,3555.0,55.0],"J009":[0.0,0.0,470.0,0.0],"J010":[803.0,49629.86,4043.0000000000005,57.0],"J011":[0.0,0.0,960.0,0.0],"J012":[0.0,0.0,630.0,0.0],"J013":[0.0,0.0,400.0,0.0],"J014":[1302.0,80470.83,4542.0,52.0],"J015":[0.0,0.0,1695.0,0.0],"J016":[0.0,0.0,770.0,0.0],"J017":[0.0,0.0,1032.0,0.0],"J018":[0.0,0.0,1500.0,40.0],"J019":[0.0,0.0,785.0,0.0],"J020":[10757.0,664842.36,13997.0,33.0],"J021":[0.0,0.0,800.0,0.0],"J022":[1313.0,81150.69,4553.0,78.0],"J023":[645.0,39864.58,3885.0,0.0]}},{"cfg":{"L":35,"rate":132000,"notice":12,"lag":45,"norBasis":"accepted","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,705.0,0.0],"J002":[0.0,0.0,1207.0,0.0],"J003":[0.0,0.0,770.0,0.0],"J004":[0.0,0.0,720.0,0.0],"J005":[0.0,0.0,560.0,0.0],"J006":[0.0,0.0,979.9999999999999,0.0],"J007":[0.0,0.0,765.0,0.0],"J008":[0.0,0.0,1280.0,0.0],"J009":[0.0,0.0,530.0,0.0],"J010":[0.0,0.0,998.0,0.0],"J011":[0.0,0.0,635.0,0.0],"J012":[0.0,0.0,710.0,0.0],"J013":[0.0,0.0,410.0,0.0],"J014":[0.0,0.0,1073.0,0.0],"J015":[0.0,0.0,1105.0,0.0],"J016":[0.0,0.0,850.0,0.0],"J017":[0.0,0.0,775.0,0.0],"J018":[0.0,0.0,545.0,0.0],"J019":[0.0,0.0,880.0,0.0],"J020":[0.0,0.0,1046.0,0.0],"J021":[0.0,0.0,575.0,0.0],"J022":[2250.0,206250.0,4350.0,0.0],"J023":[0.0,0.0,510.0,0.0]}},{"cfg":{"L":81,"rate":141000,"notice":3,"lag":120,"norBasis":"tender","norValidity":"strict","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,1065.0,0.0],"J002":[6315.0,618343.75,11175.0,60.0],"J003":[0.0,0.0,495.0,0.0],"J004":[0.0,0.0,785.0,0.0],"J005":[0.0,0.0,565.0,0.0],"J006":[400.0,39166.67,5260.0,0.0],"J007":[0.0,0.0,1240.0,0.0],"J008":[0.0,0.0,3450.0,55.0],"J009":[0.0,0.0,545.0,0.0],"J010":[0.0,0.0,3938.0000000000005,57.0],"J011":[0.0,0.0,875.0,0.0],"J012":[0.0,0.0,705.0,0.0],"J013":[0.0,0.0,475.0,0.0],"J014":[0.0,0.0,4437.0,52.0],"J015":[0.0,0.0,1590.0,0.0],"J016":[0.0,0.0,845.0,0.0],"J017":[0.0,0.0,963.0,0.0],"J018":[0.0,0.0,1395.0,40.0],"J019":[0.0,0.0,860.0,0.0],"J020":[9032.0,884383.33,13892.0,33.0],"J021":[0.0,0.0,735.0,0.0],"J022":[0.0,0.0,4508.0,78.0],"J023":[0.0,0.0,3780.0,0.0]}},{"cfg":{"L":54,"rate":115000,"notice":12,"lag":15,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"exclude"},"res":{"J001":[0.0,0.0,730.0,0.0],"J002":[7350.0,586979.17,10590.0,0.0],"J003":[0.0,0.0,2296.0,59.0],"J004":[0.0,0.0,1075.0,70.0],"J005":[7125.0,569010.42,10365.0,0.0],"J006":[1375.0,109809.03,4615.0,0.0],"J007":[0.0,0.0,875.0,0.0],"J008":[0.0,0.0,2805.0,55.0],"J009":[0.0,0.0,585.0,35.0],"J010":[53.0,4232.64,3293.0,57.0],"J011":[0.0,0.0,770.0,0.0],"J012":[14135.0,1128836.81,17375.0,0.0],"J013":[0.0,0.0,1920.0,50.0],"J014":[552.0,44083.33,3792.0,52.0],"J015":[0.0,0.0,1075.0,0.0],"J016":[0.0,0.0,1488.0,37.0],"J017":[0.0,0.0,858.0,0.0],"J018":[0.0,0.0,750.0,40.0],"J019":[0.0,0.0,1490.0,45.0],"J020":[10040.0,801805.56,13280.0,0.0],"J021":[0.0,0.0,630.0,0.0],"J022":[0.0,0.0,2576.0,1905.0],"J023":[0.0,0.0,3135.0,0.0]}},{"cfg":{"L":83,"rate":85000,"notice":6,"lag":0,"norBasis":"accepted","norValidity":"strict","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[0.0,0.0,1162.0,0.0],"J003":[0.0,0.0,375.0,0.0],"J004":[0.0,0.0,665.0,0.0],"J005":[0.0,0.0,445.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[0.0,0.0,1235.0,0.0],"J009":[0.0,0.0,425.0,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,585.0,0.0],"J013":[0.0,0.0,355.0,0.0],"J014":[0.0,0.0,1028.0,0.0],"J015":[0.0,0.0,1060.0,0.0],"J016":[0.0,0.0,725.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,740.0,0.0],"J020":[0.0,0.0,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[0.0,0.0,2400.0,1905.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":60,"rate":68000,"notice":6,"lag":0,"norBasis":"accepted","norValidity":"lenient","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[0.0,0.0,1162.0,0.0],"J003":[0.0,0.0,725.0,0.0],"J004":[0.0,0.0,675.0,0.0],"J005":[0.0,0.0,515.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[0.0,0.0,1235.0,0.0],"J009":[0.0,0.0,485.00000000000006,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,665.0,0.0],"J013":[0.0,0.0,365.0,0.0],"J014":[0.0,0.0,1028.0,0.0],"J015":[0.0,0.0,1060.0,0.0],"J016":[0.0,0.0,805.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,835.0,0.0],"J020":[0.0,0.0,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[0.0,0.0,2400.0,1905.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":43,"rate":62000,"notice":6,"lag":120,"norBasis":"accepted","norValidity":"strict","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,780.0,0.0],"J002":[0.0,0.0,1282.0,0.0],"J003":[0.0,0.0,495.0,0.0],"J004":[0.0,0.0,785.0,0.0],"J005":[0.0,0.0,565.0,0.0],"J006":[0.0,0.0,1055.0,0.0],"J007":[0.0,0.0,840.0,0.0],"J008":[0.0,0.0,1355.0,0.0],"J009":[0.0,0.0,545.0,0.0],"J010":[0.0,0.0,1073.0,0.0],"J011":[0.0,0.0,710.0,0.0],"J012":[0.0,0.0,705.0,0.0],"J013":[0.0,0.0,475.0,0.0],"J014":[0.0,0.0,1148.0,0.0],"J015":[0.0,0.0,1180.0,0.0],"J016":[0.0,0.0,845.0,0.0],"J017":[0.0,0.0,850.0,0.0],"J018":[0.0,0.0,620.0,0.0],"J019":[0.0,0.0,860.0,0.0],"J020":[0.0,0.0,1121.0,0.0],"J021":[0.0,0.0,650.0,0.0],"J022":[1845.0,79437.5,4425.0,0.0],"J023":[0.0,0.0,585.0,0.0]}},{"cfg":{"L":60,"rate":49000,"notice":9,"lag":0,"norBasis":"accepted","norValidity":"lenient","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[0.0,0.0,1162.0,0.0],"J003":[0.0,0.0,725.0,0.0],"J004":[0.0,0.0,675.0,0.0],"J005":[0.0,0.0,515.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[0.0,0.0,1235.0,0.0],"J009":[0.0,0.0,485.00000000000006,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,665.0,0.0],"J013":[0.0,0.0,365.0,0.0],"J014":[0.0,0.0,1028.0,0.0],"J015":[0.0,0.0,1060.0,0.0],"J016":[0.0,0.0,805.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,835.0,0.0],"J020":[0.0,0.0,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[0.0,0.0,2400.0,1905.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":75,"rate":107000,"notice":0,"lag":120,"norBasis":"tender","norValidity":"lenient","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,1245.0,0.0],"J002":[6855.0,509364.58,11355.0,60.0],"J003":[0.0,0.0,3121.0,59.0],"J004":[0.0,0.0,1900.0,70.0],"J005":[6640.0,493388.89,11140.0,50.0],"J006":[940.0,69847.22,5440.0,0.0],"J007":[0.0,0.0,1420.0,0.0],"J008":[0.0,0.0,3630.0,55.0],"J009":[0.0,0.0,1410.0,35.0],"J010":[0.0,0.0,4118.0,57.0],"J011":[0.0,0.0,1035.0,0.0],"J012":[13660.0,1015013.89,18160.0,40.0],"J013":[0.0,0.0,2745.0,50.0],"J014":[117.0,8693.75,4617.0,52.0],"J015":[0.0,0.0,1770.0,0.0],"J016":[0.0,0.0,2313.0,37.0],"J017":[0.0,0.0,1107.0,0.0],"J018":[0.0,0.0,1575.0,40.0],"J019":[0.0,0.0,2315.0,45.0],"J020":[9572.0,711252.78,14072.0,33.0],"J021":[0.0,0.0,875.0,0.0],"J022":[0.0,0.0,2801.0,1905.0],"J023":[0.0,0.0,3960.0,0.0]}},{"cfg":{"L":19,"rate":20000,"notice":0,"lag":45,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"exclude"},"res":{"J001":[30.0,416.67,1170.0,0.0],"J002":[10200.0,141666.67,11340.0,0.0],"J003":[1965.0,27291.67,3105.0,0.0],"J004":[685.0,9513.89,1825.0,70.0],"J005":[9975.0,138541.67,11115.0,0.0],"J006":[4225.0,58680.56,5365.0,0.0],"J007":[205.0,2847.22,1345.0,0.0],"J008":[2470.0,34305.56,3610.0,0.0],"J009":[195.0,2708.33,1335.0,35.0],"J010":[2960.0,41111.11,4100.0,0.0],"J011":[0.0,0.0,960.0,0.0],"J012":[16985.0,235902.78,18125.0,0.0],"J013":[1580.0,21944.44,2720.0,0.0],"J014":[3454.0,47972.22,4594.0,0.0],"J015":[555.0,7708.33,1695.0,0.0],"J016":[1135.0,15763.89,2275.0,0.0],"J017":[0.0,0.0,1032.0,0.0],"J018":[360.0,5000.0,1500.0,40.0],"J019":[1145.0,15902.78,2285.0,0.0],"J020":[12890.0,179027.78,14030.0,0.0],"J021":[0.0,0.0,800.0,0.0],"J022":[1586.0,22027.78,2726.0,1905.0],"J023":[2745.0,38125.0,3885.0,0.0]}},{"cfg":{"L":13,"rate":41000,"notice":9,"lag":15,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,730.0,0.0],"J002":[9990.0,284437.5,10770.0,0.0],"J003":[1755.0,49968.75,2535.0,0.0],"J004":[475.0,13524.31,1255.0,70.0],"J005":[9765.0,278031.25,10545.0,0.0],"J006":[4015.0000000000005,114315.97,4795.0,0.0],"J007":[95.0,2704.86,875.0,0.0],"J008":[2260.0,64347.22,3040.0,0.0],"J009":[0.0,0.0,765.0,35.0],"J010":[2750.0,78298.61,3530.0,0.0],"J011":[0.0,0.0,770.0,0.0],"J012":[16775.0,477621.53,17555.0,0.0],"J013":[1370.0,39006.94,2150.0,0.0],"J014":[3244.0,92363.89,4024.0,0.0],"J015":[345.0,9822.92,1125.0,0.0],"J016":[925.0,26336.81,1705.0,0.0],"J017":[78.0,2220.83,858.0,0.0],"J018":[150.0,4270.83,930.0,40.0],"J019":[935.0,26621.53,1715.0,0.0],"J020":[12680.0,361027.78,13460.0,0.0],"J021":[0.0,0.0,630.0,0.0],"J022":[3701.0,105375.69,4481.0,0.0],"J023":[2535.0,72177.08,3315.0,0.0]}},{"cfg":{"L":65,"rate":34000,"notice":6,"lag":0,"norBasis":"tender","norValidity":"lenient","shiftCounts":true,"gaps":"count"},"res":{"J001":[0.0,0.0,765.0,0.0],"J002":[7035.0,166104.17,10935.0,0.0],"J003":[0.0,0.0,2641.0,59.0],"J004":[0.0,0.0,1420.0,70.0],"J005":[6810.0,160791.67,10710.0,0.0],"J006":[1060.0,25027.78,4960.0,0.0],"J007":[0.0,0.0,940.0,0.0],"J008":[0.0,0.0,3150.0,55.0],"J009":[0.0,0.0,930.0,35.0],"J010":[0.0,0.0,3638.0,57.0],"J011":[0.0,0.0,755.0,0.0],"J012":[13820.0,326305.56,17720.0,0.0],"J013":[0.0,0.0,2265.0,50.0],"J014":[237.0,5595.83,4137.0,52.0],"J015":[0.0,0.0,1290.0,0.0],"J016":[0.0,0.0,1833.0,37.0],"J017":[0.0,0.0,843.0,0.0],"J018":[0.0,0.0,1095.0,40.0],"J019":[0.0,0.0,1835.0,45.0],"J020":[9725.0,229618.06,13625.0,0.0],"J021":[0.0,0.0,615.0,0.0],"J022":[566.0,13363.89,4466.0,0.0],"J023":[0.0,0.0,3480.0,0.0]}},{"cfg":{"L":16,"rate":116000,"notice":0,"lag":0,"norBasis":"accepted","norValidity":"lenient","shiftCounts":true,"gaps":"exclude"},"res":{"J001":[0.0,0.0,660.0,0.0],"J002":[202.0,16272.22,1162.0,0.0],"J003":[0.0,0.0,725.0,0.0],"J004":[0.0,0.0,675.0,0.0],"J005":[0.0,0.0,515.0,0.0],"J006":[0.0,0.0,935.0,0.0],"J007":[0.0,0.0,720.0,0.0],"J008":[275.0,22152.78,1235.0,0.0],"J009":[0.0,0.0,485.00000000000006,0.0],"J010":[0.0,0.0,953.0,0.0],"J011":[0.0,0.0,590.0,0.0],"J012":[0.0,0.0,665.0,0.0],"J013":[0.0,0.0,365.0,0.0],"J014":[68.0,5477.78,1028.0,0.0],"J015":[100.0,8055.56,1060.0,0.0],"J016":[0.0,0.0,805.0,0.0],"J017":[0.0,0.0,730.0,0.0],"J018":[0.0,0.0,500.00000000000006,0.0],"J019":[0.0,0.0,835.0,0.0],"J020":[41.0,3302.78,1001.0,0.0],"J021":[0.0,0.0,530.0,0.0],"J022":[1440.0,116000.0,2400.0,1905.0],"J023":[0.0,0.0,465.0,0.0]}},{"cfg":{"L":78,"rate":59000,"notice":3,"lag":45,"norBasis":"accepted","norValidity":"lenient","shiftCounts":false,"gaps":"count"},"res":{"J001":[0.0,0.0,705.0,0.0],"J002":[0.0,0.0,1207.0,0.0],"J003":[0.0,0.0,770.0,0.0],"J004":[0.0,0.0,720.0,0.0],"J005":[0.0,0.0,560.0,0.0],"J006":[0.0,0.0,979.9999999999999,0.0],"J007":[0.0,0.0,765.0,0.0],"J008":[0.0,0.0,1280.0,0.0],"J009":[0.0,0.0,530.0,0.0],"J010":[0.0,0.0,998.0,0.0],"J011":[0.0,0.0,635.0,0.0],"J012":[0.0,0.0,710.0,0.0],"J013":[0.0,0.0,410.0,0.0],"J014":[0.0,0.0,1073.0,0.0],"J015":[0.0,0.0,1105.0,0.0],"J016":[0.0,0.0,850.0,0.0],"J017":[0.0,0.0,775.0,0.0],"J018":[0.0,0.0,545.0,0.0],"J019":[0.0,0.0,880.0,0.0],"J020":[0.0,0.0,1046.0,0.0],"J021":[0.0,0.0,575.0,0.0],"J022":[0.0,0.0,4272.0,78.0],"J023":[0.0,0.0,510.0,0.0]}},{"cfg":{"L":50,"rate":17000,"notice":9,"lag":45,"norBasis":"tender","norValidity":"strict","shiftCounts":false,"gaps":"exclude"},"res":{"J001":[0.0,0.0,760.0,0.0],"J002":[7740.0,91375.0,10740.0,60.0],"J003":[0.0,0.0,420.0,0.0],"J004":[0.0,0.0,710.0,0.0],"J005":[0.0,0.0,489.99999999999994,0.0],"J006":[1825.0,21545.14,4825.0,0.0],"J007":[0.0,0.0,905.0,0.0],"J008":[15.0,177.08,3015.0,55.0],"J009":[0.0,0.0,470.0,0.0],"J010":[503.0,5938.19,3503.0,57.0],"J011":[0.0,0.0,800.0,0.0],"J012":[0.0,0.0,630.0,0.0],"J013":[0.0,0.0,400.0,0.0],"J014":[1002.0,11829.17,4002.0,52.0],"J015":[0.0,0.0,1155.0,0.0],"J016":[0.0,0.0,770.0,0.0],"J017":[0.0,0.0,888.0,0.0],"J018":[0.0,0.0,960.0,40.0],"J019":[0.0,0.0,785.0,0.0],"J020":[10457.0,123450.69,13457.0,33.0],"J021":[0.0,0.0,660.0,0.0],"J022":[0.0,0.0,2606.0,1905.0],"J023":[345.0,4072.92,3345.0,0.0]}}];
+const GOLDEN2 = [{"p":{"X":{"a":2,"sigma":0,"p":16,"L":24,"rate":48000},"Y":{"a":4,"sigma":0,"p":10,"L":12,"rate":96000},"free":6,"gout":1,"gin":1,"notice":6},"res":[52000.0,6000.0]},{"p":{"X":{"a":3.9,"sigma":0,"p":10.3,"L":6,"rate":10000},"Y":{"a":9.9,"sigma":0,"p":9.9,"L":6,"rate":26000},"free":0.4,"gout":1.0,"gin":1.0,"notice":0},"res":[12841.666666666668,13475.000000000002]},{"p":{"X":{"a":2.9,"sigma":1.5,"p":10.8,"L":6,"rate":26000},"Y":{"a":7.6,"sigma":1.5,"p":19.2,"L":36,"rate":10000},"free":9.8,"gout":0.5,"gin":1.5,"notice":0},"res":[14300.000000000002,37266.666666666664]},{"p":{"X":{"a":3.5,"sigma":0,"p":12.7,"L":24,"rate":26000},"Y":{"a":1.2,"sigma":1.5,"p":14.2,"L":24,"rate":10000},"free":5.5,"gout":0.5,"gin":1.5,"notice":0},"res":[3833.3333333333317,9099.999999999998]},{"p":{"X":{"a":7.4,"sigma":1.0,"p":14.9,"L":36,"rate":48000},"Y":{"a":5.6,"sigma":1.0,"p":9.8,"L":12,"rate":26000},"free":7.0,"gout":0.5,"gin":0.5,"notice":12},"res":[3791.6666666666665,0.0]},{"p":{"X":{"a":3.6,"sigma":1.0,"p":18.0,"L":36,"rate":48000},"Y":{"a":7.3,"sigma":0,"p":5.9,"L":36,"rate":26000},"free":7.6,"gout":0.5,"gin":1.0,"notice":6},"res":[0.0,0.0]},{"p":{"X":{"a":0.5,"sigma":0,"p":16.2,"L":24,"rate":48000},"Y":{"a":8.3,"sigma":1.5,"p":11.9,"L":36,"rate":10000},"free":8.4,"gout":1.0,"gin":1.0,"notice":12},"res":[0.0,6800.000000000011]},{"p":{"X":{"a":8.0,"sigma":0,"p":15.7,"L":24,"rate":96000},"Y":{"a":3.4,"sigma":1.0,"p":18.2,"L":24,"rate":10000},"free":9.4,"gout":1.0,"gin":0.5,"notice":12},"res":[2041.666666666666,5199.999999999989]},{"p":{"X":{"a":1.4,"sigma":0,"p":7.5,"L":24,"rate":26000},"Y":{"a":8.9,"sigma":1.0,"p":10.3,"L":36,"rate":10000},"free":1.7,"gout":1.0,"gin":1.5,"notice":6},"res":[0.0,0.0]},{"p":{"X":{"a":10.6,"sigma":1.0,"p":17.8,"L":24,"rate":96000},"Y":{"a":11.8,"sigma":1.0,"p":19.3,"L":12,"rate":10000},"free":1.8,"gout":0.5,"gin":1.5,"notice":0},"res":[11208.333333333336,68241.66666666669]},{"p":{"X":{"a":0.1,"sigma":1.5,"p":6.9,"L":24,"rate":10000},"Y":{"a":1.7,"sigma":1.5,"p":9.9,"L":24,"rate":26000},"free":6.9,"gout":0.5,"gin":1.0,"notice":12},"res":[0.0,0.0]}];
+const STRESS = [{"stagger":1.0,"inst":{"vessels":[{"name":"J001","a":0.0,"sigma":0.0,"p":11.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J010","a":1.0,"sigma":0.95,"p":15.883333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J004","a":2.0,"sigma":1.1666666666666667,"p":13.666666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J007","a":3.0,"sigma":0.0,"p":14.333333333333334,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J014","a":4.0,"sigma":0.8666666666666667,"p":17.133333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J013","a":5.0,"sigma":0.8333333333333334,"p":7.25,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J019","a":6.0,"sigma":0.75,"p":13.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J023","a":7.0,"sigma":0.0,"p":7.75,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]}],"n":6.0,"gout":1.0,"gin":1.0,"free":{"SK #3":6.0,"SK #5-4":6.0,"SK #5-5":6.0}},"milp":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #3","J007":"SK #5-4","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #3","J023":"SK #5-4"},"s":{"J001":7.0,"J004":20.916666666666664,"J019":36.58333333333333,"J010":7.0,"J014":24.883333333333333,"J013":7.0,"J007":16.25,"J023":32.583333333333336}},"cost":27787.499999999833,"nVars":75,"nBin":54,"nRows":145},"fcfs":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #5-4","J007":"SK #3","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #5-4","J023":"SK #3"},"s":{"J001":7.0,"J010":7.0,"J004":7.0,"J007":20.916666666666664,"J014":24.883333333333333,"J013":22.666666666666664,"J019":31.916666666666664,"J023":37.25}},"cost":28690.27777777777}},{"stagger":1.5,"inst":{"vessels":[{"name":"J001","a":0.0,"sigma":0.0,"p":11.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J010","a":1.5,"sigma":0.95,"p":15.883333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J004","a":3.0,"sigma":1.1666666666666667,"p":13.666666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J007","a":4.5,"sigma":0.0,"p":14.333333333333334,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J014","a":6.0,"sigma":0.8666666666666667,"p":17.133333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J013","a":7.5,"sigma":0.8333333333333334,"p":7.25,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J019","a":9.0,"sigma":0.75,"p":13.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J023","a":10.5,"sigma":0.0,"p":7.75,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]}],"n":6.0,"gout":1.0,"gin":1.0,"free":{"SK #3":6.0,"SK #5-4":6.0,"SK #5-5":6.0}},"milp":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #3","J007":"SK #5-4","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #5-4","J023":"SK #3"},"s":{"J001":7.0,"J004":20.916666666666664,"J023":36.58333333333333,"J010":7.0,"J014":24.883333333333333,"J007":7.0,"J013":23.333333333333336,"J019":32.583333333333336}},"cost":17495.833333333372,"nVars":75,"nBin":54,"nRows":145},"fcfs":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #5-4","J007":"SK #3","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #5-4","J023":"SK #3"},"s":{"J001":7.0,"J010":7.0,"J004":7.0,"J007":20.916666666666664,"J014":24.883333333333333,"J013":22.666666666666664,"J019":31.916666666666664,"J023":37.25}},"cost":17856.944444444438}},{"stagger":2.0,"inst":{"vessels":[{"name":"J001","a":0.0,"sigma":0.0,"p":11.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J010","a":2.0,"sigma":0.95,"p":15.883333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J004","a":4.0,"sigma":1.1666666666666667,"p":13.666666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J007","a":6.0,"sigma":0.0,"p":14.333333333333334,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J014","a":8.0,"sigma":0.8666666666666667,"p":17.133333333333333,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-5"]},{"name":"J013","a":10.0,"sigma":0.8333333333333334,"p":7.25,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J019","a":12.0,"sigma":0.75,"p":13.916666666666666,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]},{"name":"J023","a":14.0,"sigma":0.0,"p":7.75,"L":24.0,"rate":26000.0,"berths":["SK #3","SK #5-4"]}],"n":6.0,"gout":1.0,"gin":1.0,"free":{"SK #3":6.0,"SK #5-4":6.0,"SK #5-5":6.0}},"milp":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #5-4","J007":"SK #3","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #5-4","J023":"SK #3"},"s":{"J001":7.0,"J007":20.916666666666664,"J023":37.25,"J010":7.0,"J014":24.883333333333333,"J004":7.0,"J013":22.666666666666664,"J019":31.916666666666664}},"cost":7836.111111111342,"nVars":75,"nBin":54,"nRows":145},"fcfs":{"plan":{"berth":{"J001":"SK #3","J010":"SK #5-5","J004":"SK #5-4","J007":"SK #3","J014":"SK #5-5","J013":"SK #5-4","J019":"SK #5-4","J023":"SK #3"},"s":{"J001":7.0,"J010":7.0,"J004":7.0,"J007":20.916666666666664,"J014":24.883333333333333,"J013":22.666666666666664,"J019":31.916666666666664,"J023":37.25}},"cost":7836.111111111104}}];
+const SC01 = {"X":{"a":2,"sigma":0,"p":16,"L":24,"rate":48000},"Y":{"a":4,"sigma":0,"p":10,"L":12,"rate":96000},"free":6,"gout":1,"gin":1,"notice":6};
+const FLAGTEXT = {"NOR-EARLY":"NOR이 투묘보다 빠름 — 엄격하게 보면 무효 NOR(LAW-NOR-ARRIVAL)","MULTI-CALL":"가스부두 방문 구간은 이벤트가 없어 SK 구간만 계산","RE-BERTH":"하역 도중 이안 후 재접안 — 중단 구간 산입 여부 쟁점","RE-ANCHOR":"접안 전 재투묘(묘박지 이동) — 산입으로 계산","WAIT-ALONGSIDE":"대기 중 다른 부두에 접안해 있었음 — 하역 선석 접안 완료만 all fast로 봄","PIER-SHIFT":"대기 중 부두 간 이동(이선) — 부두 간 이동은 산입(cl.9)","LOW-MARGIN":"체선은 없지만 허용 시간 여유가 2시간 미만(ENG-LOW-MARGIN)","INFERRED":"시각만 있는 행의 날짜를 추정해 사용"};
+</script>
+
+<script>
+/*CORE-BEGIN*/
+const BASE_UTC = Date.UTC(2025, 0, 1);
+const pad2 = n => String(n).padStart(2, '0');
+function fmtT(min) {
+  const d = new Date(BASE_UTC + Math.round(min) * 60000);
+  return pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate()) + ' ' + pad2(d.getUTCHours()) + ':' + pad2(d.getUTCMinutes());
+}
+function fmtH(min) {
+  const m = Math.round(min), a = Math.abs(m);
+  return (m < 0 ? '−' : '') + Math.floor(a / 60) + 'h' + pad2(a % 60) + 'm';
+}
+function fmtUSD(x) { return Math.round(x).toLocaleString('en-US'); }
+
+// 개시 = 접안이 NOR 수령보다 앞서면 NOR 수령, 아니면 min(NOR 수령 + 통지시간, 접안 완료)   (laytime_csv.by_notice)
+function byNotice(recv, allfast, noticeMin) {
+  const exp = recv + noticeMin;
+  if (allfast < recv) return [recv, 'NOR_AFTER_BERTH'];
+  if (allfast <= exp) return [allfast, 'ALL_FAST'];
+  return [exp, 'NOTICE_EXPIRY'];
+}
+
+// start→end를 걸으며 레이타임 중의 이동(shift)·제외(excl)는 시계를 멈추고, 허용 시간을 다 쓴 뒤의 이동은 산입한다 (laytime_csv.walk)
+function walk(start, end, allowedMin, shifts, excls, shiftCounts) {
+  const cuts = [];
+  for (const [a, b] of shifts) cuts.push([Math.max(a, start), Math.min(b, end), 'shift']);
+  for (const [a, b] of excls) cuts.push([Math.max(a, start), Math.min(b, end), 'excl']);
+  const cs = cuts.filter(c => c[1] > c[0]).sort((p, q) => p[0] - q[0] || p[1] - q[1] || (p[2] < q[2] ? -1 : p[2] > q[2] ? 1 : 0));
+  const segs = [];
+  let t = start;
+  for (const [a0, b, k] of cs) {
+    const a = Math.max(a0, t);
+    if (b <= a) continue;
+    if (a > t) segs.push([t, a, 'count']);
+    segs.push([a, b, k]);
+    t = b;
+  }
+  if (end > t) segs.push([t, end, 'count']);
+  let lay = allowedMin > 0, usedLay = 0, dem = 0, ded = 0, shiftDem = 0;
+  let expiry = lay ? null : start;
+  for (const [a, b, k] of segs) {
+    const dur = b - a;
+    if (lay) {
+      if (k !== 'count') { ded += dur; continue; }
+      if (usedLay + dur >= allowedMin) {
+        const need = allowedMin - usedLay;
+        expiry = a + need; dem += dur - need; usedLay = allowedMin; lay = false;
+      } else usedLay += dur;
+    } else if (k === 'excl' || (k === 'shift' && !shiftCounts)) {
+      ded += dur;
+    } else {
+      dem += dur;
+      if (k === 'shift') shiftDem += dur;
+    }
+  }
+  return { used: usedLay + dem, ded, dem, expiry, shiftDem };
+}
+
+// 항차 c를 조건 o로 계산한다. 시각·시간은 모두 분 (laytime_csv.compute와 같은 식)
+function compute(c, o) {
+  const notice = o.notice * 60;
+  const hoseOff = c.opsEnd + o.lag;
+  const recv = (o.norBasis === 'accepted' && c.norA != null) ? c.norA : c.norT;
+  const early = c.anchorFirst != null && c.norT < c.anchorFirst;
+  let start, rule;
+  if (o.norValidity === 'strict' && early) { start = c.opsStart; rule = 'OPS_COMMENCED'; }
+  else { [start, rule] = byNotice(recv, c.allfast, notice); }
+  const allowed = o.L * 60;
+  const w = walk(start, hoseOff, allowed, c.shifts, o.gaps === 'exclude' ? c.gaps : [], o.shiftCounts);
+  const amount = Math.round(w.dem / 60 * o.rate / 24 * 100) / 100;
+  return {
+    start, rule, hoseOff, recv, early, elapsed: hoseOff - start, ded: w.ded, used: w.used, dem: w.dem,
+    expiry: w.expiry, shiftDem: w.shiftDem, amount, margin: w.dem === 0 ? allowed - w.used : null,
+    floor: Math.max(0, (hoseOff - c.allfast) - allowed),
+  };
+}
+
+// ---- 수리계획법: 선박 v = {name, a, sigma, p, L, rate}. 시각·시간은 시간(h) (berth_milp.demurrage_hours와 같은 식)
+const C6_EPS = 1e-4;
+function demH(v, s, n) {
+  const c = v.a + n, start = Math.max(v.a, Math.min(c, s));
+  let ded = 0;
+  if (v.sigma > 0) {
+    const aw = s - v.sigma;
+    if (Math.max(0, aw - start) < v.L) ded = Math.max(0, s - Math.max(aw, start));
+  }
+  return { d: Math.max(0, s + v.p - start - ded - v.L), ded, start };
+}
+// 한 선석에서 first → second 순서로 가장 이르게 접안시킨 일정 (berth_milp._schedule_berth)
+function scheduleOrder(first, second, prm) {
+  const s1 = Math.max(first.a + first.sigma, prm.free + prm.gin);
+  const s2 = Math.max(second.a + second.sigma, s1 + first.p + prm.gout + prm.gin);
+  const row = (v, s) => { const r = demH(v, s, prm.notice); return { name: v.name, s, e: s + v.p, d: r.d, cost: r.d * v.rate / 24 }; };
+  const rows = [row(first, s1), row(second, s2)];
+  return { rows, cost: rows[0].cost + rows[1].cost };
+}
+
+// 모델 조립 — berth_milp._build와 같은 변수·같은 제약 행(이름·계수·하한·상한). 행마다 tag와 대상(i, j, k)을 붙인다.
+function buildModel(inst) {
+  const V = inst.vessels, N = V.length, g = inst.gout + inst.gin, n = inst.n, free = inst.free || {};
+  const lbS = V.map(v => v.a + v.sigma);
+  const freeVals = Object.values(free);
+  const maxFree = freeVals.length ? Math.max(...freeVals) : -Infinity;
+  const smax = Math.max(Math.max(...lbS), maxFree + inst.gin) + V.reduce((t, v) => t + v.p + g, 0) + 48;
+  const big = smax - Math.min(...lbS) + Math.max(...V.map(v => v.p)) + g + 1;
+  const vars = [], rows = [];
+  const S = v => `s[${v.name}]`, D = v => `d[${v.name}]`, DL = v => `delta[${v.name}]`, Z = v => `z[${v.name}]`, Y = v => `y[${v.name}]`;
+  const X = (v, k) => `x[${v.name},${k}]`, O = (a, b) => `o[${a.name}<${b.name}]`;
+  const addVar = (name, lb, ub, kind, cost = 0) => vars.push({ name, lb, ub, kind, cost });
+  const addRow = (tag, name, coefs, lo, hi, meta = {}) => rows.push({ tag, name, coefs, lo, hi, ...meta });
+  V.forEach((v, i) => {
+    addVar(S(v), lbS[i], smax, 'cont');
+    addVar(D(v), Math.max(0, v.p - v.L), Infinity, 'cont', v.rate / 24);
+    if (v.sigma > 0) { addVar(DL(v), 0, v.sigma, 'cont'); addVar(Z(v), 0, 1, 'bin'); addVar(Y(v), 0, 1, 'bin'); }
+  });
+  V.forEach((v, i) => {
+    v.berths.forEach(k => addVar(X(v, k), v.berths.length === 1 ? 1 : 0, 1, 'bin'));
+    const c1 = {};
+    v.berths.forEach(k => { c1[X(v, k)] = 1; });
+    addRow('C1', `C1[${v.name}]`, c1, 1, 1, { i });
+    v.berths.forEach(k => {
+      if (k in free) addRow('C3', `C3[${v.name}|${k}]`, { [S(v)]: 1, [X(v, k)]: -big }, free[k] + inst.gin - big, Infinity, { i, k });
+    });
+  });
+  for (let i = 0; i < N; i++) for (let j = i + 1; j < N; j++) {
+    const a = V[i], b = V[j], common = a.berths.filter(k => b.berths.includes(k));
+    if (!common.length) continue;
+    addVar(O(a, b), 0, 1, 'bin');
+    const fixedPair = a.berths.length === 1 && b.berths.length === 1;
+    for (const k of common) {
+      const na = `C4a[${a.name}<${b.name}|${k}]`, nb = `C4b[${a.name}<${b.name}|${k}]`;
+      if (fixedPair) {
+        addRow('C4a', na, { [S(b)]: 1, [S(a)]: -1, [O(a, b)]: -big }, a.p + g - big, Infinity, { i, j, k });
+        addRow('C4b', nb, { [S(a)]: 1, [S(b)]: -1, [O(a, b)]: big }, b.p + g, Infinity, { i, j, k });
+      } else {
+        addRow('C4a', na, { [S(b)]: 1, [S(a)]: -1, [O(a, b)]: -big, [X(a, k)]: -big, [X(b, k)]: -big }, a.p + g - 3 * big, Infinity, { i, j, k });
+        addRow('C4b', nb, { [S(a)]: 1, [S(b)]: -1, [O(a, b)]: big, [X(a, k)]: -big, [X(b, k)]: -big }, b.p + g - 2 * big, Infinity, { i, j, k });
+      }
+    }
+  }
+  V.forEach((v, i) => {
+    const c = v.a + n;
+    if (v.sigma > 0) {
+      addRow('C5a', `C5a[${v.name}]`, { [D(v)]: 1, [S(v)]: -1, [DL(v)]: 1 }, v.p - c - v.L, Infinity, { i });
+      addRow('C6a', `C6a[${v.name}]`, { [DL(v)]: 1, [Z(v)]: -v.sigma }, -Infinity, 0, { i });
+      addRow('C6b', `C6b[${v.name}]`, { [DL(v)]: 1, [Y(v)]: -v.sigma }, -Infinity, 0, { i });
+      addRow('C6c', `C6c[${v.name}]`, { [DL(v)]: 1, [S(v)]: -1, [Y(v)]: big }, -Infinity, big - c, { i });
+      addRow('C6d', `C6d[${v.name}]`, { [S(v)]: 1, [Y(v)]: -big }, c - big, Infinity, { i });
+      addRow('C6e', `C6e[${v.name}]`, { [S(v)]: 1, [Z(v)]: big }, -Infinity, c + v.L + v.sigma - C6_EPS + big, { i });
+    } else {
+      addRow('C5a', `C5a[${v.name}]`, { [D(v)]: 1, [S(v)]: -1 }, v.p - c - v.L, Infinity, { i });
+    }
+  });
+  return { vars, rows, big, smax };
+}
+
+// 해(plan = {berth: {선박: 선석}, s: {선박: 접안 시각}})에서 모델의 모든 변수 값. 보조변수는 제약이 허용하는 가장 큰 공제를 택한다.
+function planValues(inst, plan) {
+  const n = inst.n, vals = {}, V = inst.vessels;
+  for (const v of V) {
+    const s = plan.s[v.name], c = v.a + n, k = plan.berth[v.name];
+    vals[`s[${v.name}]`] = s;
+    let ded = 0;
+    if (v.sigma > 0) {
+      const y = s >= c ? 1 : 0, z = s <= c + v.L + v.sigma - C6_EPS ? 1 : 0;
+      ded = (y && z) ? Math.min(v.sigma, s - c) : 0;
+      vals[`delta[${v.name}]`] = ded; vals[`z[${v.name}]`] = z; vals[`y[${v.name}]`] = y;
+    }
+    vals[`d[${v.name}]`] = Math.max(Math.max(0, v.p - v.L), s + v.p - c - v.L - ded);
+    for (const b of v.berths) vals[`x[${v.name},${b}]`] = b === k ? 1 : 0;
+  }
+  for (let i = 0; i < V.length; i++) for (let j = i + 1; j < V.length; j++) {
+    const a = V[i], b = V[j];
+    if (!a.berths.some(k => b.berths.includes(k))) continue;
+    vals[`o[${a.name}<${b.name}]`] = (plan.berth[a.name] === plan.berth[b.name] && plan.s[a.name] < plan.s[b.name]) ? 1 : 0;
+  }
+  return vals;
+}
+function rowActivity(row, vals) { let a = 0; for (const k in row.coefs) a += row.coefs[k] * vals[k]; return a; }
+function rowSlack(row, vals) {
+  const act = rowActivity(row, vals);
+  return { act, viol: Math.max(row.lo - act, act - row.hi, 0), slack: row.lo === row.hi ? 0 : Math.min(act - row.lo, row.hi - act) };
+}
+function objective(model, vals) { return model.vars.reduce((t, v) => t + v.cost * (vals[v.name] || 0), 0); }
+
+// LP 형식 모델 전문 (berth_milp._Model.to_lp와 같은 구조)
+function toLP(model, title) {
+  const mk = () => { const used = new Set(); return raw => {
+    let t = raw.replace(/[^0-9A-Za-z_]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '') || 'n';
+    if (/^[0-9]/.test(t)) t = 'n' + t;
+    let u = t, k = 1;
+    while (used.has(u)) u = t + '_' + (k++);
+    used.add(u); return u; }; };
+  const sv = mk(), sr = mk(), vn = {};
+  for (const v of model.vars) vn[v.name] = sv(v.name);
+  const g = x => String(Number(Math.abs(x).toPrecision(10)));
+  const expr = coefs => { const p = Object.entries(coefs).filter(([, c]) => c !== 0).map(([k, c]) => `${c < 0 ? '-' : '+'} ${g(c)} ${vn[k]}`); return p.length ? p.join(' ') : '0 ' + vn[model.vars[0].name]; };
+  const sg = x => (x < 0 ? '-' : '') + g(x);
+  const L = (title || '').split('\n').filter(Boolean).concat(LP_LEGEND).map(t => '\\ ' + t);
+  L.push('Minimize', ' obj: ' + expr(Object.fromEntries(model.vars.filter(v => v.cost).map(v => [v.name, v.cost]))), 'Subject To');
+  for (const r of model.rows) {
+    const lab = sr(r.name), e = expr(r.coefs);
+    if (r.lo === r.hi) L.push(` ${lab}: ${e} = ${sg(r.lo)}`);
+    else if (r.lo > -Infinity && r.hi < Infinity) L.push(` ${lab}: ${sg(r.lo)} <= ${e} <= ${sg(r.hi)}`);
+    else if (r.lo > -Infinity) L.push(` ${lab}: ${e} >= ${sg(r.lo)}`);
+    else L.push(` ${lab}: ${e} <= ${sg(r.hi)}`);
+  }
+  const bounds = [], bins = [];
+  for (const v of model.vars) {
+    if (v.kind === 'bin' && v.lb === 0 && v.ub === 1) bins.push(vn[v.name]);
+    else if (v.lb === v.ub) bounds.push(` ${vn[v.name]} = ${sg(v.lb)}`);
+    else bounds.push(v.ub === Infinity ? ` ${vn[v.name]} >= ${sg(v.lb)}` : ` ${sg(v.lb)} <= ${vn[v.name]} <= ${sg(v.ub)}`);
+  }
+  L.push('Bounds', ...bounds);
+  if (bins.length) L.push('Binaries', ' ' + bins.join(' '));
+  L.push('End', '');
+  return L.join('\n');
+}
+
+// ---- 기호 ↔ 한글. 식은 'sym{한글}'로 적는다. 한 문자열에서 (1) 기호 밑에 한글을 단 식과 (2) 한글만의 식을 둘 다 만들어 둘이 어긋나지 않는다.
+const SYM_KO = {   // 식·표·LP 어디서든 같은 이름을 쓴다
+  'i ∈ N': '선박 집합', 'k ∈ K': '선석 집합', 'B_i ⊆ K': '가능선석', 'a_ik': '접근가능', 'a_i': 'NOR제출', 'σ_i': '이동시간', 'p_i': '작업시간', 'L_i': '허용시간',
+  'r_i': '요율', 'n': '통지시간', 'c_i = a_i + n': '통지만료', 'g_out': '이안시간', 'g_in': '접안준비', 'F_k': '선석비움', 'M': '큰수', 'ε': '미소값',
+  's_i': '접안시각', 'd_i': '체선시간', 'δ_i': '이동공제', 'x_ik': '선석배정', 'o_ij': '앞뒤순서', 'z_i': '레이타임중', 'y_i': '만료후접안',
+};
+function parseFx(dsl) {
+  const out = [], re = /([A-Za-zσδεΣλ]+(?:_[A-Za-z0-9]+)?)\{([^}]+)\}/g;
+  let last = 0, m;
+  while ((m = re.exec(dsl))) {
+    if (m.index > last) out.push({ t: dsl.slice(last, m.index) });
+    out.push({ v: m[1], ko: m[2] });
+    last = re.lastIndex;
+  }
+  if (last < dsl.length) out.push({ t: dsl.slice(last) });
+  return out;
+}
+const koOf = dsl => parseFx(dsl).map(x => (x.t != null ? x.t : x.ko)).join('');
+
+// 항차 계산식 (laytime_csv.compute)
+const FORMULAS_VOY = [
+  { dsl: 't_0{레이타임개시} = min( a{NOR제출} + n{통지시간}, f{접안완료} )', ko: null, ex: '접안 f가 NOR a보다 먼저면 개시 t_0 = a' },
+  { dsl: 't_1{레이타임종료} = h{호스분리}', ko: null, ex: '종료는 호스 분리 시각' },
+  { dsl: 'U{사용시간} = ( t_1{레이타임종료} − t_0{레이타임개시} ) − δ{이동공제}', ko: null, ex: '이동공제 δ는 레이타임 중의 양묘→접안 이동 시간' },
+  { dsl: 'D{체선시간} = max( 0, U{사용시간} − L{허용시간} )', ko: null, ex: '허용시간을 넘은 만큼이 체선시간' },
+  { dsl: 'C{체선료} = D{체선시간} × r{요율} / 24', ko: null, ex: '요율은 USD/일이라 24로 나눠 시간당으로' },
+];
+// 수리계획법: 목적함수와 제약식 [태그, 기호식, 한글식(없으면 자동), 설명]
+const OBJ = { dsl: 'min Σ_i{선박별} ( r_i{요율} / 24 ) · d_i{체선시간}', ko: '총 체선료 최소화 = 선박별로 ( 요율 / 24 ) × 체선시간 을 더한 값', ex: '선박별 체선시간 × 시간당 요율의 합' };
+const MODEL_TAGS = [
+  ['C0', 'x_ik{선석배정} ≤ a_ik{접근가능}', '선석배정 ≤ 접근가능', '접근할 수 없는 선석에는 배정할 수 없다 (접근가능 = 0인 (선박, 선석) 쌍은 x 변수를 만들지 않고 0으로 둔다)'],
+  ['C1', 'Σ_k{선석별} x_ik{선석배정} = 1', '선석별 선석배정을 더하면 1', '한 배는 정확히 한 선석에 배정한다'],
+  ['C2', 's_i{접안시각} ≥ a_i{NOR제출} + σ_i{이동시간}', null, 'NOR 전·이동 중에는 접안할 수 없다 (접안시각의 하한)'],
+  ['C3', 's_i{접안시각} ≥ F_k{선석비움} + g_in{접안준비} − M{큰수}( 1 − x_ik{선석배정} )', null, '앞 선박이 선석을 비우기 전에는 접안할 수 없다 (선석배정 = 1일 때)'],
+  ['C4a', 's_j{뒤배접안} ≥ s_i{앞배접안} + p_i{앞배작업} + g_out{이안시간} + g_in{접안준비} − M{큰수}( 1 − o_ij{앞뒤순서} ) − M{큰수}( 2 − x_ik{앞배배정} − x_jk{뒤배배정} )', null,
+    '같은 선석에서 i가 j보다 먼저(앞뒤순서 = 1)면, j는 i가 끝나고 선석을 비운 뒤에야 접안'],
+  ['C4b', 's_i{뒤배접안} ≥ s_j{앞배접안} + p_j{앞배작업} + g_out{이안시간} + g_in{접안준비} − M{큰수}·o_ij{앞뒤순서} − M{큰수}( 2 − x_ik{뒤배배정} − x_jk{앞배배정} )', null,
+    '반대로 j가 먼저(앞뒤순서 = 0)면, i는 j가 끝난 뒤에야 접안'],
+  ['C5a', 'd_i{체선시간} ≥ s_i{접안시각} + p_i{작업시간} − c_i{통지만료} − L_i{허용시간} − δ_i{이동공제}', null,
+    '체선시간 — 호스 분리(접안시각 + 작업시간)가 통지만료 + 허용시간을 넘은 만큼'],
+  ['C5b', 'd_i{체선시간} ≥ max( 0, p_i{작업시간} − L_i{허용시간} )', null, '접안이 통지만료보다 빠르면 개시가 접안이라 작업시간만으로 넘는 몫 (체선시간의 하한)'],
+  ['C6a', 'δ_i{이동공제} ≤ σ_i{이동시간} · z_i{레이타임중}', null, '공제는 이동시간을 넘지 못하고, 레이타임중 = 0이면 0'],
+  ['C6b', 'δ_i{이동공제} ≤ σ_i{이동시간} · y_i{만료후접안}', null, '만료후접안 = 0(접안이 통지만료 이전)이면 공제 0'],
+  ['C6c', 'δ_i{이동공제} ≤ s_i{접안시각} − c_i{통지만료} + M{큰수}( 1 − y_i{만료후접안} )', null, '접안이 통지만료 뒤라면 공제는 접안시각 − 통지만료 이하 (이동의 일부가 개시 전)'],
+  ['C6d', 's_i{접안시각} ≥ c_i{통지만료} − M{큰수}( 1 − y_i{만료후접안} )', null, '만료후접안 = 1이면 접안시각 ≥ 통지만료'],
+  ['C6e', 's_i{접안시각} ≤ c_i{통지만료} + L_i{허용시간} + σ_i{이동시간} − ε{미소값} + M{큰수}( 1 − z_i{레이타임중} )', null,
+    '레이타임중 = 1이면 양묘 시점에 레이타임이 아직 남아 있음 (이미 체선이면 공제 안 함)'],
+];
+const LP_LEGEND = [
+  's_선박 접안시각(h) · d_선박 체선시간(h) · delta_선박 이동공제(h)',
+  'x_선박_선석 선석배정(0/1) · o_A_B 앞뒤순서(1이면 A가 B보다 먼저) · z, y 이동공제 판정 보조(0/1)',
+  'C1 선석 배정 · C3 선석 비움 · C4a/C4b 같은 선석 겹침 금지 · C5a 체선시간 · C6a~e 이동공제',
+  'C0 접근 불가(a_ik = 0)인 (선박, 선석) 쌍은 x 변수를 만들지 않는다 = 선석배정 0',
+];
+
+// 두 척 문제의 모든 (선석 배정, 순서) 조합을 가장 이르게 붙여 평가한다 (berth_milp.brute_force와 같은 방식, 접근 가능한 선석만)
+function enumPlans2(inst) {
+  const [X, Y] = inst.vessels, out = [];
+  const sched = (list, k) => {
+    let free = (k in inst.free ? inst.free[k] : -Infinity) + inst.gin;
+    const s = {};
+    for (const v of list) { s[v.name] = Math.max(v.a + v.sigma, free); free = s[v.name] + v.p + inst.gout + inst.gin; }
+    return s;
+  };
+  const cost = plan => inst.vessels.reduce((t, v) => t + demH(v, plan.s[v.name], inst.n).d * v.rate / 24, 0);
+  for (const kx of X.berths) for (const ky of Y.berths) {
+    if (kx === ky) {
+      for (const order of [[X, Y], [Y, X]]) {
+        const plan = { berth: { [X.name]: kx, [Y.name]: ky }, s: sched(order, kx), first: order[0].name };
+        plan.cost = cost(plan); out.push(plan);
+      }
+    } else {
+      const plan = { berth: { [X.name]: kx, [Y.name]: ky }, s: { ...sched([X], kx), ...sched([Y], ky) }, first: null };
+      plan.cost = cost(plan); out.push(plan);
+    }
+  }
+  return out;
+}
+/*CORE-END*/
+</script>
+
+<script>
+(function () {
+'use strict';
+const $ = (q, r = document) => r.querySelector(q);
+const NS = 'http://www.w3.org/2000/svg';
+function put(e, a) {
+  if (a) for (const k in a) {
+    const v = a[k];
+    if (v == null) continue;
+    if (typeof v === 'boolean' && k.startsWith('aria-')) { e.setAttribute(k, String(v)); continue; }
+    if (v === false) continue;
+    if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? '' : String(v));
+  }
+  return e;
+}
+function add(e, kids) {
+  for (const k of kids.flat(2)) { if (k == null || k === false) continue; e.append(k instanceof Node ? k : document.createTextNode(String(k))); }
+  return e;
+}
+const H = (t, a, ...k) => add(put(document.createElement(t), a), k);
+const V = (t, a, ...k) => add(put(document.createElementNS(NS, t), a), k);
+const clone = o => JSON.parse(JSON.stringify(o));
+const fnum = x => { if (!Number.isFinite(x)) return String(x); const t = Math.abs(x) < 5e-10 ? 0 : x; return String(+t.toFixed(3)); };
+const CLOCK = t => { const m = Math.round(t * 60), d = Math.floor(m / 1440), r = m - d * 1440; return `D${d + 1} ${pad2(Math.floor(r / 60))}:${pad2(r % 60)}`; };
+// 'x_ik' 같은 표기를 기울임 + 아래첨자로 (DOM으로만 만든다 — 문자열을 HTML로 넣지 않는다)
+function mathNode(str) {
+  const frag = document.createDocumentFragment(), re = /([A-Za-zσδεΣλ])_([A-Za-z0-9]+)/g;
+  let last = 0, m;
+  while ((m = re.exec(str))) {
+    if (m.index > last) frag.append(document.createTextNode(str.slice(last, m.index)));
+    frag.append(H('i', null, m[1]), H('sub', null, m[2]));
+    last = re.lastIndex;
+  }
+  if (last < str.length) frag.append(document.createTextNode(str.slice(last)));
+  return frag;
+}
+const M = (str, cls = 'math') => H('span', { class: cls }, mathNode(str));
+
+// ------------------------------------------------------------------ 상태
+const DEF = { L: 24, rate: 26000, notice: 6, lag: 0, norBasis: 'tender', norValidity: 'lenient', shiftCounts: true,
+              gaps: 'count', sort: 'id', view: 'chart', tab: 'voyages', sel: null, inst: 'sc01', stag: 1, plan: 'milp', showAll: false };
+const S = Object.assign({}, DEF);
+const FIELDS = [['L', 1, 240, 'in-L', 'rg-L'], ['rate', 0, 1e6, 'in-rate', 'rg-rate'],
+                ['notice', 0, 48, 'in-notice', 'rg-notice'], ['lag', 0, 600, 'in-lag', 'rg-lag']];
+const INTERP = [
+  { label: '기본 해석', tip: 'NOR 제출 시각 + 통지시간에 레이타임 개시. 투묘 전에 낸 NOR도 유효로 본다', nb: 'tender', nv: 'lenient' },
+  { label: 'NOR 승인 시각 기준', tip: 'NOR 승인 시각을 수령으로 본다. 승인은 접안과 같거나 늦어서 접안 전 대기는 산입되지 않는다', nb: 'accepted', nv: 'lenient' },
+  { label: '투묘 전 NOR 무효', tip: '투묘보다 먼저 낸 NOR은 무효로 보고 하역 개시부터 레이타임을 센다(LAW-NOR-ARRIVAL)', nb: 'tender', nv: 'strict' },
+];
+const START_NOTE = {
+  NOTICE_EXPIRY: '통지시간 만료가 접안 완료보다 먼저',
+  ALL_FAST: '접안 완료가 통지시간 만료보다 먼저',
+  NOR_AFTER_BERTH: '접안 뒤에 NOR을 수령 — NOR 수령부터',
+  OPS_COMMENCED: '투묘 전에 낸 NOR을 무효로 보고 하역 개시부터',
+};
+
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const num = (k, lo, hi) => { const v = parseFloat(p.get(k)); return Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : DEF[k]; };
+  const pick = (k, opts) => (opts.includes(p.get(k)) ? p.get(k) : DEF[k]);
+  for (const [k, lo, hi] of FIELDS) S[k] = num(k, lo, hi);
+  S.norBasis = pick('norBasis', ['tender', 'accepted']);
+  S.norValidity = pick('norValidity', ['lenient', 'strict']);
+  S.gaps = pick('gaps', ['count', 'exclude']);
+  S.sort = pick('sort', ['id', 'usd']);
+  S.view = pick('view', ['chart', 'table']);
+  S.tab = pick('tab', ['voyages', 'order']);
+  S.inst = pick('inst', ['sc01', 'stress']);
+  S.plan = pick('plan', ['milp', 'fcfs']);
+  S.stag = STRESS.some(m => String(m.stagger) === p.get('stag')) ? parseFloat(p.get('stag')) : DEF.stag;
+  S.shiftCounts = p.get('shift') !== 'exclude';
+  S.showAll = p.get('all') === '1';
+  S.sel = DATA.some(c => c.jid === p.get('sel')) ? p.get('sel') : null;
+}
+function writeHash() {
+  const p = new URLSearchParams();
+  for (const k of ['L', 'rate', 'notice', 'lag', 'norBasis', 'norValidity', 'gaps', 'sort', 'view', 'tab', 'inst', 'stag', 'plan']) if (S[k] !== DEF[k]) p.set(k, S[k]);
+  if (!S.shiftCounts) p.set('shift', 'exclude');
+  if (S.showAll) p.set('all', '1');
+  if (S.sel) p.set('sel', S.sel);
+  try { history.replaceState(null, '', p.toString() ? '#' + p.toString() : location.pathname + location.search); } catch (e) { /* file:// 등에서 막히면 무시 */ }
+}
+
+// ------------------------------------------------------------------ 계산 묶음
+const calc = (o = S) => DATA.map(c => ({ c, r: compute(c, o) }));
+function totals(rows, o = S) {
+  let usd = 0, dem = 0, n = 0, wait = 0;
+  for (const { r } of rows) {
+    usd += r.dem / 60 * o.rate / 24; dem += r.dem; if (r.dem > 0) n++;
+    wait += Math.max(0, r.dem - r.floor) / 60 * o.rate / 24;
+  }
+  return { usd, dem, n, wait, svc: usd - wait };
+}
+const BASE_USD = totals(calc(DEF), DEF).usd;
+const topJid = rows => rows.reduce((m, x) => (x.r.amount > m.r.amount ? x : m)).c.jid;
+
+// ------------------------------------------------------------------ 툴팁
+const TIP = $('#tip');
+function tipShow(node, x, y) {
+  TIP.replaceChildren(node); TIP.hidden = false;
+  const w = TIP.offsetWidth, h = TIP.offsetHeight;
+  let l = x + 14, t = y + 14;
+  if (l + w > innerWidth - 8) l = x - w - 14;
+  if (t + h > innerHeight - 8) t = y - h - 14;
+  TIP.style.left = Math.max(8, l) + 'px'; TIP.style.top = Math.max(8, t) + 'px';
+}
+const tipHide = () => { TIP.hidden = true; };
+
+// ------------------------------------------------------------------ 요약
+function renderKpis(rows) {
+  const t = totals(rows), box = $('#kpis'); box.replaceChildren();
+  const diff = (t.usd - BASE_USD) / BASE_USD, same = Math.abs(t.usd - BASE_USD) < 0.5;
+  const hero = H('div', { class: 'card tile hero' },
+    H('div', { class: 'lbl' }, '총 체선료'),
+    H('div', { class: 'val' }, fmtUSD(t.usd), H('span', { class: 'unit' }, 'USD')),
+    H('div', { class: 'note' }, same ? '기본 설정(24h · 26,000 USD/일 · NOR 제출 기준)과 같음'
+      : (diff > 0 ? '▲ ' : '▼ ') + Math.abs(diff * 100).toFixed(1) + '% · 기본 설정 ' + fmtUSD(BASE_USD) + ' USD 대비'));
+  const tile2 = H('div', { class: 'card tile' },
+    H('div', { class: 'lbl' }, '체선 시간'),
+    H('div', { class: 'val' }, fmtUSD(t.dem / 60), H('span', { class: 'unit' }, '시간')),
+    H('div', { class: 'note' }, rows.length + '항차 중 ' + t.n + '항차에서 체선'));
+  const share = t.usd > 0 ? t.wait / t.usd : 0;
+  const tile3 = H('div', { class: 'card tile' },
+    H('div', { class: 'lbl' }, '접안 전 대기가 만든 몫'),
+    H('div', { class: 'val' }, Math.round(share * 100), H('span', { class: 'unit' }, '%')),
+    H('div', { class: 'segbar', role: 'img', 'aria-label': '체선료 중 대기가 만든 몫 ' + Math.round(share * 100) + '%' },
+      t.wait > 0 ? H('span', { class: 'sw-wait', style: 'flex:' + t.wait }) : null, t.svc > 0.5 ? H('span', { class: 'sw-svc', style: 'flex:' + t.svc }) : null),
+    H('div', { class: 'note' }, fmtUSD(t.wait) + ' USD 대기 · ' + fmtUSD(t.svc) + ' USD 작업 시간만으로 허용 초과'));
+  const sums = INTERP.map(i => totals(calc({ ...S, norBasis: i.nb, norValidity: i.nv }), S).usd), mx = Math.max(...sums, 1);
+  const tile4 = H('div', { class: 'card tile' }, H('div', { class: 'lbl' }, '해석에 따른 총액 — 눌러서 적용'),
+    H('div', { class: 'irows' }, INTERP.map((i, k) => H('button', {
+      type: 'button', class: 'irow', title: i.tip, 'aria-pressed': S.norBasis === i.nb && S.norValidity === i.nv,
+      onclick: () => { S.norBasis = i.nb; S.norValidity = i.nv; render(); },
+    }, H('span', { class: 't' }, H('span', null, i.label), H('b', null, fmtUSD(sums[k]) + ' USD')),
+       H('span', { class: 'fill', style: 'width:' + Math.max(0.5, sums[k] / mx * 100) + '%' })))));
+  box.append(hero, tile2, tile3, tile4);
+}
+
+// ------------------------------------------------------------------ 항차 차트
+function barPath(x0, x1, y, hgt, rl, rr) {
+  const mr = Math.min(4, (x1 - x0) / 2, hgt / 2);
+  rl = rl ? mr : 0; rr = rr ? mr : 0;
+  return `M${x0 + rl},${y}H${x1 - rr}` + (rr ? `A${rr},${rr} 0 0 1 ${x1},${y + rr}` : '') + `V${y + hgt - rr}`
+    + (rr ? `A${rr},${rr} 0 0 1 ${x1 - rr},${y + hgt}` : '') + `H${x0 + rl}`
+    + (rl ? `A${rl},${rl} 0 0 1 ${x0},${y + hgt - rl}` : '') + `V${y + rl}` + (rl ? `A${rl},${rl} 0 0 1 ${x0 + rl},${y}` : '') + 'Z';
+}
+const opLabel = c => (c.op === 'LOAD' ? '선적' : '양하');
+function rowTip(c, r) {
+  const wait = c.allfast - c.norT;
+  const line = (cls, val, lab) => H('div', { class: 'r' }, H('i', { class: 'tk ' + cls }), H('span', { class: 'v' }, val), H('span', { class: 'l' }, lab));
+  const box = H('div', null, H('div', { class: 'hd' }, c.jid + ' ' + c.vessel),
+    H('div', { class: 'meta' }, [c.berth, opLabel(c), c.cargo, c.qty ? fmtUSD(c.qty) + ' t' : ''].filter(Boolean).join(' · ')));
+  if (r.dem > 0) box.append(line('k-dem', fmtH(r.dem) + ' · ' + fmtUSD(r.amount) + ' USD', '체선'));
+  box.append(line('k-lay', fmtH(r.used - r.dem), '레이타임 소진' + (r.ded > 0 ? ' (공제 ' + fmtH(r.ded) + ' 제외)' : '')),
+    line('k-pre', fmtH(r.start - c.norT), '레이타임 개시 전'),
+    H('div', { class: 'fl' }, 'NOR → 접안 완료 ' + fmtH(wait)));
+  if (c.flags.length) box.append(H('div', { class: 'fl' }, c.flags.join(' · ')));
+  return box;
+}
+function renderChart(rows) {
+  const host = $('#chart'); host.replaceChildren();
+  const W = Math.max(520, host.clientWidth || 940), narrow = W < 760, RH = 30, top = 34, bottom = 36,
+    left = narrow ? 168 : 212, right = narrow ? 124 : 176;
+  const n = rows.length, Ht = top + n * RH + bottom, pw = W - left - right;
+  const maxH = Math.max(24, ...rows.map(({ c, r }) => (r.hoseOff - c.norT) / 60));
+  const step = [12, 24, 48, 72, 96].find(s => maxH / s <= 9) || 120, xmax = Math.ceil(maxH / step) * step;
+  const X = hh => left + hh / xmax * pw;
+  const tot = totals(rows);
+  const svg = V('svg', { viewBox: `0 0 ${W} ${Ht}`, width: '100%', role: 'img',
+    'aria-label': `항차별 레이타임 소진과 체선. ${n}항차 중 ${tot.n}항차 체선, 합계 ${fmtUSD(tot.usd)} USD. 자세한 값은 표 보기에서 읽을 수 있습니다.` });
+  for (let t = 0; t <= xmax; t += step) {
+    svg.append(V('line', { x1: X(t), x2: X(t), y1: top - 8, y2: Ht - bottom + 2, class: t === 0 ? 'axisl' : 'gridl' }),
+      V('text', { x: X(t), y: Ht - bottom + 18, 'text-anchor': 'middle', class: 't-muted fs11' }, t + 'h'));
+  }
+  svg.append(V('text', { x: left, y: top - 14, class: 't-muted fs11' }, 'NOR 제출 후 경과 시간'));
+  rows.forEach(({ c, r }, i) => {
+    const cy = top + i * RH + RH / 2, y0 = cy - 8, hgt = 16;
+    const g = V('g', { class: 'row' + (c.jid === S.sel ? ' sel' : ''), tabindex: 0, role: 'button',
+      'aria-label': `${c.jid} ${c.vessel}, 체선 ${fmtH(r.dem)}, ${fmtUSD(r.amount)} USD`, 'aria-pressed': c.jid === S.sel });
+    g.append(V('rect', { class: 'rowbg', x: 4, y: cy - RH / 2 + 1, width: W - 8, height: RH - 2, rx: 6 }),
+      V('rect', { class: 'selbar', x: 4, y: cy - RH / 2 + 5, width: 3, height: RH - 10, rx: 1.5 }),
+      V('text', { x: left - 10, y: cy - 1, 'text-anchor': 'end', class: 't-ink fs12' }, c.jid + ' ' + c.vessel),
+      V('text', { x: left - 10, y: cy + 11, 'text-anchor': 'end', class: 't-muted fs105' },
+        c.berth + ' · ' + opLabel(c) + (c.flags.includes('NOR-EARLY') ? ' · ⚑' : '')));
+    const xs = X((r.start - c.norT) / 60), xe = X((r.hoseOff - c.norT) / 60);
+    const xx = r.dem > 0 && r.expiry != null ? X((r.expiry - c.norT) / 60) : xe;
+    const segs = [];
+    if (xs - X(0) > 0.5) segs.push(['seg-pre', X(0), xs]);
+    if (xx - xs > 0.5) segs.push(['seg-lay', xs, xx]);
+    if (r.dem > 0 && xe - xx > 0.5) segs.push(['seg-dem', xx, xe]);
+    segs.forEach(([cls, a, b], k) => g.append(V('path', { class: cls,
+      d: barPath(a + (k > 0 ? 1 : 0), b - (k < segs.length - 1 ? 1 : 0), y0, hgt, false, k === segs.length - 1) })));
+    const legs = [c.opsStart, ...c.gaps.flat(), c.opsEnd];
+    for (let k = 0; k + 1 < legs.length; k += 2) {
+      const a = X((legs[k] - c.norT) / 60), b = X((legs[k + 1] - c.norT) / 60);
+      g.append(V('rect', { class: 'ops', x: a, y: cy - 2, width: Math.max(2, b - a), height: 4, rx: 1 }));
+    }
+    const mx = X((c.allfast - c.norT) / 60);
+    g.append(V('path', { class: 'mk', d: `M${mx},${cy - 5}L${mx + 5},${cy}L${mx},${cy + 5}L${mx - 5},${cy}Z` }));
+    if (r.dem > 0) {
+      g.append(V('path', { class: 'critmk', d: `M${xe + 11},${cy - 4.5}L${xe + 15.6},${cy + 3.5}H${xe + 6.4}Z` }),
+        V('text', { x: xe + 22, y: cy + 4, class: 't-ink2 fs12' }, narrow ? fmtUSD(r.amount) : fmtUSD(r.amount) + ' USD · ' + (r.dem / 60).toFixed(1) + 'h'));
+    } else {
+      g.append(V('text', { x: xe + 10, y: cy + 4, class: 't-muted fs11' }, '체선 없음'));
+    }
+    g.addEventListener('pointermove', e => tipShow(rowTip(c, r), e.clientX, e.clientY));
+    g.addEventListener('pointerleave', tipHide);
+    g.addEventListener('focus', () => { const b = g.getBoundingClientRect(); tipShow(rowTip(c, r), b.left + 240, b.top + b.height / 2 - 20); });
+    g.addEventListener('blur', tipHide);
+    g.addEventListener('click', () => { S.sel = c.jid; render(); });
+    g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); S.sel = c.jid; render(); } });
+    svg.append(g);
+  });
+  host.append(svg);
+}
+
+function renderTable(rows) {
+  const host = $('#tablewrap'); host.replaceChildren();
+  const th = (t) => H('th', { scope: 'col' }, t);
+  const body = H('tbody', null, rows.map(({ c, r }) => H('tr', { class: c.jid === S.sel ? 'sel' : '', tabindex: 0,
+    onclick: () => { S.sel = c.jid; render(); }, onkeydown: e => { if (e.key === 'Enter') { S.sel = c.jid; render(); } } },
+    H('td', null, c.jid), H('td', null, c.vessel), H('td', null, c.berth),
+    H('td', null, ((c.allfast - c.norT) / 60).toFixed(1)), H('td', null, (r.used / 60).toFixed(1)),
+    H('td', null, (r.dem / 60).toFixed(1)), H('td', null, fmtUSD(r.amount)), H('td', null, c.flags.join(' ')))));
+  host.append(H('table', { class: 'tbl' }, H('caption', { class: 't-muted', style: 'text-align:left;font-size:12px;padding-bottom:6px' }, '항차별 값 (시간은 h, 금액은 USD)'),
+    H('thead', null, H('tr', null, th('항차'), th('선박'), th('하역 부두'), th('NOR→접안(h)'), th('사용(h)'), th('체선(h)'), th('체선료(USD)'), th('플래그'))), body));
+}
+
+// ------------------------------------------------------------------ 계산서 (기호식 + 입력값 + 계산)
+function stmtRow(sym, k, v, n, strong) {
+  return [H('div', { class: 'y' }, M(sym)), H('div', { class: 'k' + (strong ? ' strong' : '') }, k), H('div', { class: 'v' + (strong ? ' strong' : '') }, v), H('div', { class: 'n' }, mathNode(n || ''))];
+}
+// 변수 아래에 한글 이름을 단 식 — 같은 'sym{한글}' 문자열에서 만들어 기호와 한글이 어긋나지 않는다
+function fx(dsl) {
+  const box = H('span', { class: 'fx' });
+  for (const x of parseFx(dsl)) {
+    if (x.t != null) { if (x.t) box.append(H('span', { class: 'fv' }, H('span', { class: 'fs' }, x.t), H('span', { class: 'fk' }, ' '))); }
+    else box.append(H('span', { class: 'fv' }, H('span', { class: 'fs' }, mathNode(x.v)), H('span', { class: 'fk' }, x.ko)));
+  }
+  return box;
+}
+// 기호식(변수 밑에 한글) 아래에 한글 식 한 줄
+function fxBlock(dsl, ko, tag) {
+  return H('div', { class: 'eq' }, H('div', { class: 'fxrow' }, tag ? H('span', { class: 'tag' }, '(' + tag + ')') : null, fx(dsl)),
+    H('div', { class: 'kr' }, H('b', null, '한글'), ko || koOf(dsl)));
+}
+function formulaBlock() {
+  return H('div', { class: 'formula', style: 'margin:8px 0 14px' }, FORMULAS_VOY.flatMap(f => [fxBlock(f.dsl, f.ko), H('div', { class: 'ex' }, mathNode(f.ex))]));
+}
+
+function renderDetail(rows) {
+  const host = $('#detail'); host.replaceChildren();
+  const hit = rows.find(x => x.c.jid === S.sel) || rows.find(x => x.c.jid === topJid(rows));
+  const { c, r } = hit, o = S;
+  const gapMin = c.gaps.reduce((s, [a, b]) => s + (b - a), 0);
+  const dedNote = !c.shifts.length ? '양묘 기록 없음'
+    : r.ded > 0 ? (o.gaps === 'exclude' && gapMin > 0 ? '이동 + 하역 중단 구간 제외' : '레이타임 중의 양묘→접안 이동')
+    : r.shiftDem > 0 ? '이동 ' + fmtH(r.shiftDem) + '은 이미 체선 중이라 산입' : '이동이 레이타임 개시 전이라 해당 없음';
+  const lines = [
+    H('div', { class: 'hd3' }, '입력 — 파라미터'),
+    ...stmtRow('a', 'NOR 제출', fmtT(c.norT), c.norA != null ? 'NOR 승인 ' + fmtT(c.norA) : 'NOR 승인 기록 없음'),
+    ...stmtRow('n', '통지시간', o.notice + 'h', 'NOR ' + (o.norBasis === 'accepted' && c.norA != null ? '승인' : '제출') + ' 시각에 더한다'),
+    ...stmtRow('f', '접안 완료 (all fast)', fmtT(c.allfast), c.shifts.length ? '양묘 ' + fmtT(c.shifts[0][0]) + ' → 접안 ' + fmtH(c.shifts[0][1] - c.shifts[0][0]) : ''),
+    ...stmtRow('h', '호스 분리', fmtT(r.hoseOff), '마지막 완료 ' + fmtT(c.opsEnd) + (o.lag ? ' + ' + o.lag + '분' : '')),
+    ...stmtRow('L', '허용 레이타임', fmtH(o.L * 60)),
+    ...stmtRow('r', '체선료율', fmtUSD(o.rate) + ' USD/일', '= ' + fmtUSD(o.rate / 24) + ' USD/h'),
+    H('div', { class: 'hd3' }, '계산'),
+    ...stmtRow('c', '통지시간 만료', fmtT(r.recv + o.notice * 60), 'c = a + n'),
+    ...stmtRow('t_0', '레이타임 개시', fmtT(r.start), START_NOTE[r.rule] || '', true),
+    ...stmtRow('t_1', '종료', fmtT(r.hoseOff), 't_1 = h', true),
+    ...stmtRow('', '경과', fmtH(r.elapsed), 't_1 − t_0'),
+    ...stmtRow('δ', '공제', '− ' + fmtH(r.ded), dedNote),
+    ...stmtRow('U', '사용', fmtH(r.used), '경과 − δ'),
+    ...(c.gaps.length ? stmtRow('', '하역 중단 구간', fmtH(gapMin), o.gaps === 'exclude' ? '제외(δ에 포함)' : '산입') : []),
+    ...stmtRow('D', '체선 시간', fmtH(r.dem), r.dem > 0 ? 'U − L' : '여유 ' + fmtH(r.margin), true),
+    ...stmtRow('C', '체선료', fmtUSD(r.amount) + ' USD', fmtH(r.dem) + ' × ' + fmtUSD(o.rate) + ' ÷ 24', true),
+  ];
+  const alts = [
+    ['지금 설정', r, true],
+    ...INTERP.map(i => [i.label + (i.nv === 'strict' && !r.early ? ' (이 항차는 해당 없음)' : ''), compute(c, { ...o, norBasis: i.nb, norValidity: i.nv }), false]),
+    ...(c.gaps.length ? [['하역 중단 구간 제외', compute(c, { ...o, gaps: 'exclude' }), false]] : []),
+  ];
+  const left = H('div', null, H('div', { class: 'stmt' }, lines));
+  const right = H('div', null, H('div', { style: 'font-size:12.5px;margin-bottom:6px;color:var(--ink2)' }, '같은 항차를 다른 해석으로 계산하면'),
+    H('div', { class: 'alt' }, alts.map(([lab, x, on]) => H('div', { class: 'a' + (on ? ' on' : '') }, H('span', null, lab), H('b', null, fmtUSD(x.amount) + ' USD · ' + (x.dem / 60).toFixed(1) + 'h')))),
+    c.flags.length ? H('ul', { class: 'flags' }, c.flags.map(f => H('li', null, H('code', null, f), FLAGTEXT[f] || ''))) : null);
+  host.append(H('div', { class: 'cardhead' }, H('div', null, H('h2', null, `${c.jid} ${c.vessel} 계산서`),
+    H('p', { class: 'lead' }, [c.berth, opLabel(c), c.cargo, c.qty ? fmtUSD(c.qty) + ' t' : ''].filter(Boolean).join(' · ')))),
+    H('div', { style: 'margin-top:8px;font-size:12.5px;color:var(--ink2)' }, '계산식'), formulaBlock(),
+    H('div', { class: 'detailgrid' }, left, right));
+}
+
+// ------------------------------------------------------------------ 수리계획법 탭
+const tagLabel = t => '(' + t + ')';
+
+// 식이 어느 쪽 제약인지 표시한다 — 선석(부두) 제약은 굵은 칩
+const TAG_GROUP = { C0: '선석', C1: '선석', C3: '선석', C4a: '선석', C4b: '선석', C2: '시각', C5a: '체선', C5b: '체선', C6a: '공제', C6b: '공제', C6c: '공제', C6d: '공제', C6e: '공제' };
+const gchip = tag => H('span', { class: 'gchip' + (TAG_GROUP[tag] === '선석' ? ' b' : '') }, TAG_GROUP[tag] || '');
+function renderFormula() {
+  const host = $('#m-formula-body'); host.replaceChildren();
+  // [기호, 설명] — 왼쪽에 기호와 한글 이름(SYM_KO)을 같이 둔다
+  const rows = items => H('div', { class: 'mrow' }, items.flatMap(([sy, ds]) => [H('div', null, M(sy)), H('div', { class: 'kn' }, SYM_KO[sy] || ''), H('div', { class: 'ds' }, mathNode(ds))]));
+  host.append(H('div', { class: 'sect' },
+    H('h3', null, '집합과 상수 — 정해진 값'),
+    rows([['i ∈ N', '선박'], ['k ∈ K', '선석(부두)'], ['a_ik', '선박 i가 선석 k에 들어갈 수 있으면 1 — 접근 가능. B_i = { k : a_ik = 1 }'], ['B_i ⊆ K', '선박 i가 들어갈 수 있는 선석'],
+      ['a_i', 'NOR 제출 시각 (h)'],
+      ['σ_i', '접안 직전 양묘 → 접안 이동 시간 (h). 선석에서 바로 오면 0'], ['p_i', '접안 완료 → 호스 분리 시간 (h)'],
+      ['L_i', '허용 레이타임 (h)'], ['r_i', '체선료율 (USD/일)'], ['n', '통지시간 (h)'], ['c_i = a_i + n', '통지시간이 끝나는 시각 (레이타임 개시 후보)'],
+      ['g_out', '호스 분리 → 선석 비움 (h)'], ['g_in', '선석 비움 → 다음 배 접안 완료 (h)'], ['F_k', '선석 k가 비는 시각'],
+      ['M', '충분히 큰 수 (big-M). 모델이 시간 범위에서 계산한다'], ['ε', 'C6e의 "<"를 "≤ −ε"로 쓰기 위한 아주 작은 수 (0.0001h)']]),
+    H('h3', null, '결정변수 — 솔버가 정하는 값'),
+    rows([['s_i', '접안 완료 시각 (연속)'], ['d_i', '체선 시간 (h, 연속, 0 이상)'], ['δ_i', '레이타임 중의 양묘→접안 이동이라 공제하는 시간 (연속, 0~σ_i)'],
+      ['x_ik', '선박 i를 선석 k에 배정하면 1 (이진)'], ['o_ij', '같은 선석에서 i가 j보다 먼저 접안하면 1 (이진)'],
+      ['z_i', '양묘 시점에 레이타임이 아직 남아 있으면 1 (이진, 공제 판정)'], ['y_i', '접안이 통지만료 뒤이면 1 (이진, 공제 판정)']]),
+    H('h3', null, '목적함수'),
+    H('div', { class: 'formula' }, fxBlock(OBJ.dsl, OBJ.ko), H('div', { class: 'ex' }, mathNode(OBJ.ex))),
+    H('h3', null, '제약식 — 기호식(변수 밑에 한글 이름)과 한글 식'),
+    H('p', { class: 'lead' }, '선석(부두) 제약은 굵은 "선석" 칩이 붙은 C0 접근 가능 · C1 한 선석 배정 · C3 선석이 비는 시각 · C4 같은 선석 겹침 금지입니다. 나머지는 시각(C2), 체선시간(C5), 이동공제(C6)를 계산하는 식입니다.'),
+    H('div', { class: 'formula' }, MODEL_TAGS.flatMap(([tag, dsl, ko, ex]) => [fxBlock(dsl, ko, tag), H('div', { class: 'ex' }, gchip(tag), mathNode(ex))])),
+    H('p', { class: 'lead', style: 'margin-top:10px' }, mathNode('읽는 법: 접근 가능(C0)은 a_ik = 0인 (선박, 선석) 쌍에 변수 x_ik를 아예 만들지 않는 방식으로 넣었습니다. 그래서 모델 행 목록에는 따로 나오지 않고 C1의 합과 C3·C4의 선석 범위에 반영되며, ③에서는 C0 줄로 따로 보여 줍니다. 비선형인 max(0, ·)는 체선시간 d_i ≥ (식)과 d_i ≥ 0으로 풉니다. 목적함수가 d_i를 최소로 누르므로 d_i가 그 max가 됩니다. 접안시각 s_i가 통지만료 c_i(= NOR제출 a_i + 통지시간 n)보다 빠르면(s_i < c_i) 레이타임 개시가 접안이라 사용시간이 작업시간 p_i이고, 늦으면 s_i + p_i − c_i − 이동공제 δ_i입니다. 둘 중 큰 값이 사용시간이라 C5a와 C5b 두 식이면 충분합니다. 이동공제 δ_i는 "양묘 시점에 레이타임이 남아 있을 때만"이라는 조건부 규칙이라 이진변수 z_i(레이타임중), y_i(만료후접안)가 필요합니다. M(큰수)이 들어간 식은 이진변수가 선택하지 않은 쪽에서 M 항으로 풀려 버립니다.'))));
+}
+
+// ---- 인스턴스: 두 척은 직접 입력(선석 1개 또는 2개 + 접근 가능 표), 8척은 내장한 실제 서비스 시간 시나리오
+const freshS2 = () => ({ ...clone(SC01), k2: false, free2: 6, acc: { X: { SK7: true, SK8: true }, Y: { SK7: true, SK8: true } } });
+let S2 = freshS2();
+const currentInst = () => {
+  if (S.inst === 'stress') return { ...(STRESS.find(m => m.stagger === S.stag) || STRESS[0]).inst, valid: true };
+  const ks = S2.k2 ? ['SK7', 'SK8'] : ['SK7'];
+  const vessels = ['X', 'Y'].map(nm => ({ name: nm, a: S2[nm].a, sigma: S2[nm].sigma, p: S2[nm].p, L: S2[nm].L, rate: S2[nm].rate, berths: ks.filter(k => S2.acc[nm][k]) }));
+  return { vessels, n: S2.notice, gout: S2.gout, gin: S2.gin, free: S2.k2 ? { SK7: S2.free, SK8: S2.free2 } : { SK7: S2.free }, valid: vessels.every(v => v.berths.length > 0) };
+};
+
+function renderParams() {
+  const host = $('#m-params-body'); host.replaceChildren();
+  const inst = currentInst(), edit = S.inst === 'sc01';
+  host.append(H('p', { class: 'lead' }, '시각·시간은 모두 시간(h)이고 D1 00:00을 0으로 셉니다. ' + (edit ? '굵은 칸은 입력입니다. 바꾸면 ③ 풀이가 바로 다시 계산됩니다. 회색은 입력에서 계산된 값입니다.' : '실제 CSV 항차의 작업시간(p)·이동시간(σ)을 쓰고, NOR 도착만 간격을 두고 몰아 넣은 합성 시나리오 [가정]입니다.')));
+  const th = (sym, ds) => H('th', null, M(sym), H('small', null, ds));
+  const head = H('tr', null, H('th', null, '선박'), th('a_i', 'NOR제출 (h)'), th('σ_i', '이동시간 (h)'), th('p_i', '작업시간 = 접안→호스분리 (h)'), th('L_i', '허용시간 (h)'),
+    th('r_i', '요율 (USD/일)'), th('r_i/24', '시간당 요율 (USD/h)'), th('c_i', '통지만료 = a_i + n'));
+  const onChange = () => { derived(); renderSolve(); renderLP(); };
+  const rows = inst.vessels.map(v => {
+    const cell = (key, step) => edit ? H('td', null, H('input', { type: 'number', step, value: S2[v.name][key], 'aria-label': `${v.name} ${key}`,
+      oninput: e => { const x = parseFloat(e.target.value); if (Number.isFinite(x)) { S2[v.name][key] = x; onChange(); } } })) : H('td', null, fnum(v[key]));
+    return H('tr', null, H('td', null, v.name), cell('a', 0.5), cell('sigma', 0.5), cell('p', 0.5), cell('L', 1), cell('rate', 1000),
+      H('td', { class: 'der', id: 'dv-' + v.name + '-r24' }, fnum(v.rate / 24)), H('td', { class: 'der', id: 'dv-' + v.name + '-c' }, fnum(v.a + inst.n)));
+  });
+  host.append(H('div', { style: 'overflow-x:auto' }, H('table', { class: 'ptable' }, H('thead', null, head), H('tbody', null, rows))));
+
+  // 접근 가능 a_ik — 선박이 선석에 들어갈 수 있나 (모델의 B_i)
+  const K = edit ? (S2.k2 ? ['SK7', 'SK8'] : ['SK7']) : Object.keys(inst.free);
+  const accRow = v => H('tr', null, H('td', null, v.name), K.map(k => edit
+    ? H('td', null, H('input', { type: 'checkbox', checked: S2.acc[v.name][k], 'aria-label': `${v.name}는 ${k}에 들어갈 수 있다`,
+        onchange: e => { S2.acc[v.name][k] = e.target.checked; renderOrderTab(); } }))
+    : H('td', null, v.berths.includes(k) ? '✓' : '–')));
+  host.append(H('div', { class: 'accbox' },
+    H('div', { class: 'acchead' }, M('a_ik'), H('span', { class: 'gk' }, '접근가능'), '— 선박이 선석에 들어갈 수 있으면 ✓(1), 없으면 –(0)'
+      + (edit ? '. 체크를 바꾸면 모델의 x 변수가 늘거나 줄어듭니다' : '. CSV에서 관측된 (화물군 → 하역 선석) 이력으로 만든 가정입니다 — 공식 선석별 접안 가능 제품표가 아닙니다')),
+    H('div', { style: 'overflow-x:auto' }, H('table', { class: 'ptable acc' }, H('thead', null, H('tr', null, H('th', null, '선박'), K.map(k => H('th', null, k)))), H('tbody', null, inst.vessels.map(accRow)))),
+    inst.valid ? null : H('p', { class: 'warn' }, '접근 가능한 선석이 없는 선박이 있습니다 — 선박마다 한 곳 이상 체크해야 풀 수 있습니다.')));
+
+  const g = [];
+  const gl = (sym, ko, val) => H('span', { class: 'g' }, M(sym), H('span', { class: 'gk' }, ko), val);
+  if (edit) {
+    const gi = (key, sym, ko, step) => H('span', { class: 'g' }, M(sym), H('span', { class: 'gk' }, ko), H('input', { type: 'number', step, value: S2[key], 'aria-label': key,
+      oninput: e => { const x = parseFloat(e.target.value); if (Number.isFinite(x)) { S2[key] = x; onChange(); } } }));
+    g.push(gi('notice', 'n', '통지시간', 0.5), gi('gout', 'g_out', '이안시간', 0.5), gi('gin', 'g_in', '접안준비', 0.5), gi('free', 'F_SK7', '선석비움', 0.5));
+    if (S2.k2) g.push(gi('free2', 'F_SK8', '선석비움', 0.5));
+  } else {
+    g.push(gl('n', '통지시간', H('b', { class: 'gv' }, fnum(inst.n))), gl('g_out', '이안시간', H('b', { class: 'gv' }, fnum(inst.gout))), gl('g_in', '접안준비', H('b', { class: 'gv' }, fnum(inst.gin))),
+      ...Object.entries(inst.free).map(([k, f]) => gl('F_k', '선석비움', H('b', { class: 'gv' }, k + ' = ' + fnum(f)))));
+  }
+  if (inst.valid) g.push(gl('M', '큰수', H('b', { class: 'gv', id: 'dv-M' }, fnum(buildModel(inst).big))), gl('ε', '미소값', H('b', { class: 'gv' }, '0.0001')));
+  host.append(H('div', { class: 'globals' }, g));
+  if (edit) {
+    host.append(H('div', { class: 'subctl' }, H('label', { class: 'chk' }, H('input', { type: 'checkbox', checked: S2.k2, onchange: e => { S2.k2 = e.target.checked; renderOrderTab(); } }),
+      '두 번째 선석 SK8도 사용 — 선석 배정 x가 의미를 갖고, 접근 가능 표가 해를 제한합니다')));
+  } else {
+    const sel = H('select', { id: 'stag', 'aria-label': '도착 간격', onchange: e => { S.stag = parseFloat(e.target.value); render(); } },
+      STRESS.map(m => H('option', { value: m.stagger, selected: m.stagger === S.stag }, m.stagger + '시간 간격')));
+    host.append(H('div', { class: 'subctl' }, H('label', null, 'NOR 도착 간격 ', sel),
+      H('span', null, '선석 3개(SK #3·#5-4·#5-5), 윤활기유 6척은 #3·#5-4, PX 2척은 #3·#5-5에만 들어갈 수 있다')));
+  }
+}
+function derived() {
+  if (S.inst !== 'sc01') return;
+  const inst = currentInst();
+  if (!inst.valid) return;
+  for (const v of inst.vessels) { const a = $('#dv-' + v.name + '-r24'), b = $('#dv-' + v.name + '-c'); if (a) a.textContent = fnum(v.rate / 24); if (b) b.textContent = fnum(v.a + inst.n); }
+  const m = $('#dv-M'); if (m) m.textContent = fnum(buildModel(inst).big);
+}
+
+// ---- 제약식 대입 (모델 행을 해에서 평가해 사람이 읽는 식으로)
+function describeAll(model, inst, vals) {
+  // 숫자 대입 줄은 숫자마다 한글 이름(식의 변수 밑 이름과 같다)을 붙인다
+  const Vs = inst.vessels, n = inst.n, g = inst.gout + inst.gin, f = fnum, out = [];
+  for (const r of model.rows) {
+    const A = r.i != null ? Vs[r.i] : null, B = r.j != null ? Vs[r.j] : null;
+    const sl = rowSlack(r, vals), d = { tag: r.tag, i: r.i, j: r.j, k: r.k, active: true, why: '', num: '', label: A ? A.name : '', slack: sl.slack, viol: sl.viol };
+    const s = nm => vals[`s[${nm}]`];
+    switch (r.tag) {
+      case 'C1': { const xs = A.berths.map(k => vals[`x[${A.name},${k}]`]); d.num = `선석배정 ${xs.join(' + ')} = ${xs.reduce((t, x) => t + x, 0)}`; break; }
+      case 'C3': { const x = vals[`x[${A.name},${r.k}]`], F = inst.free[r.k]; d.label = `${A.name} · ${r.k}`; d.active = x === 1;
+        if (d.active) d.num = `접안시각 ${f(s(A.name))} ≥ 선석비움 ${f(F)} + 접안준비 ${f(inst.gin)} = ${f(F + inst.gin)}`;
+        else d.why = `선석배정 x[${A.name},${r.k}] = 0이라 −M 항으로 풀림`; break; }
+      case 'C4a': case 'C4b': {
+        const first = r.tag === 'C4a' ? A : B, second = r.tag === 'C4a' ? B : A, want = r.tag === 'C4a' ? 1 : 0;
+        const xa = vals[`x[${A.name},${r.k}]`], xb = vals[`x[${B.name},${r.k}]`], o = vals[`o[${A.name}<${B.name}]`];
+        d.label = `${first.name} < ${second.name} · ${r.k}`; d.active = xa === 1 && xb === 1 && o === want;
+        if (d.active) d.num = `뒤배접안(${second.name}) ${f(s(second.name))} ≥ 앞배접안(${first.name}) ${f(s(first.name))} + 앞배작업 ${f(first.p)} + 이안시간 ${f(inst.gout)} + 접안준비 ${f(inst.gin)} = ${f(s(first.name) + first.p + g)}`;
+        else d.why = !(xa === 1 && xb === 1) ? '같은 선석이 아니라 M 항으로 풀림' : `앞뒤순서 o[${A.name}<${B.name}] = ${o}이라 반대 순서의 식이 적용됨`; break; }
+      case 'C5a': { const ded = A.sigma > 0 ? vals[`delta[${A.name}]`] : 0, c = A.a + n;
+        d.num = `체선시간 ${f(vals[`d[${A.name}]`])} ≥ 접안시각 ${f(s(A.name))} + 작업시간 ${f(A.p)} − 통지만료 ${f(c)} − 허용시간 ${f(A.L)} − 이동공제 ${f(ded)} = ${f(s(A.name) + A.p - c - A.L - ded)}`; break; }
+      case 'C6a': d.num = `이동공제 ${f(vals[`delta[${A.name}]`])} ≤ 이동시간 ${f(A.sigma)} × 레이타임중 ${vals[`z[${A.name}]`]} = ${f(A.sigma * vals[`z[${A.name}]`])}`; break;
+      case 'C6b': d.num = `이동공제 ${f(vals[`delta[${A.name}]`])} ≤ 이동시간 ${f(A.sigma)} × 만료후접안 ${vals[`y[${A.name}]`]} = ${f(A.sigma * vals[`y[${A.name}]`])}`; break;
+      case 'C6c': { const y = vals[`y[${A.name}]`], c = A.a + n; d.active = y === 1;
+        if (d.active) d.num = `이동공제 ${f(vals[`delta[${A.name}]`])} ≤ 접안시각 ${f(s(A.name))} − 통지만료 ${f(c)} = ${f(s(A.name) - c)}`;
+        else d.why = `만료후접안 y[${A.name}] = 0이라 M 항으로 풀림`; break; }
+      case 'C6d': { const y = vals[`y[${A.name}]`], c = A.a + n; d.active = y === 1;
+        if (d.active) d.num = `접안시각 ${f(s(A.name))} ≥ 통지만료 ${f(c)}`; else d.why = `만료후접안 y[${A.name}] = 0이라 M 항으로 풀림`; break; }
+      case 'C6e': { const z = vals[`z[${A.name}]`], c = A.a + n; d.active = z === 1;
+        if (d.active) d.num = `접안시각 ${f(s(A.name))} ≤ 통지만료 ${f(c)} + 허용시간 ${f(A.L)} + 이동시간 ${f(A.sigma)} − 미소값 = ${f(c + A.L + A.sigma - C6_EPS)}`;
+        else d.why = `레이타임중 z[${A.name}] = 0이라 M 항으로 풀림`; break; }
+    }
+    out.push(d);
+  }
+  // 변수 하한·정의역으로 들어간 식(C0, C2, C5b)은 모델 행이 아니라서 따로 만든다
+  const K = [...new Set([...Object.keys(inst.free), ...Vs.flatMap(v => v.berths)])];
+  Vs.forEach((v, i) => K.forEach(k => {      // C0: 접근 불가한 쌍은 x 변수 자체가 없다(= 0)
+    const a = v.berths.includes(k) ? 1 : 0, x = a ? vals[`x[${v.name},${k}]`] : 0;
+    out.push({ tag: 'C0', i, k, label: `${v.name} · ${k}`, active: true, why: '', slack: a - x, viol: Math.max(0, x - a),
+      num: `선석배정 ${x} ≤ 접근가능 ${a}` + (a ? '' : ' — 접근 불가라 x 변수를 만들지 않고 0으로 둔다'), st: !a ? '접근 불가' : x === 1 ? '배정됨' : '여유' });
+  }));
+  Vs.forEach((v, i) => {
+    const lbS = v.a + v.sigma, sv = vals[`s[${v.name}]`], dv = vals[`d[${v.name}]`], lbD = Math.max(0, v.p - v.L);
+    out.push({ tag: 'C2', i, label: v.name, active: true, why: '', slack: sv - lbS, viol: Math.max(0, lbS - sv), num: `접안시각 ${fnum(sv)} ≥ NOR제출 ${fnum(v.a)} + 이동시간 ${fnum(v.sigma)} = ${fnum(lbS)}` });
+    out.push({ tag: 'C5b', i, label: v.name, active: true, why: '', slack: dv - lbD, viol: Math.max(0, lbD - dv), num: `체선시간 ${fnum(dv)} ≥ max(0, 작업시간 ${fnum(v.p)} − 허용시간 ${fnum(v.L)}) = ${fnum(lbD)}` });
+  });
+  return out;
+}
+function decisionReasons(inst, rowsD) {
+  const Vs = inst.vessels, out = {};
+  for (const r of rowsD) {
+    if (!r.active || r.slack > 1e-6) continue;
+    let who = null, why = null;
+    if (r.tag === 'C2') { who = Vs[r.i]; why = 'NOR 도착 + 이동 (C2)'; }
+    else if (r.tag === 'C3') { who = Vs[r.i]; why = `선석 ${r.k}가 비는 시각 (C3)`; }
+    else if (r.tag === 'C4a') { who = Vs[r.j]; why = `앞 배 ${Vs[r.i].name}의 호스 분리·이안 (C4)`; }
+    else if (r.tag === 'C4b') { who = Vs[r.i]; why = `앞 배 ${Vs[r.j].name}의 호스 분리·이안 (C4)`; }
+    if (who) (out[who.name] = out[who.name] || []).push(why);
+  }
+  return out;
+}
+const tw = (str, px = 11) => [...str].reduce((t, ch) => t + (ch.charCodeAt(0) > 255 ? px : px * 0.58), 0);
+
+// ---- 간트 (선석별 한 줄, 대기선, 체선 시계)
+function gantt(inst, plan, vals, reasons, W) {
+  const Vs = inst.vessels, berths = [];
+  Vs.forEach(v => v.berths.forEach(k => { if (!berths.includes(k)) berths.push(k); }));
+  const left = 74, right = 64, top = 30, bottom = 26, rowH = 66;
+  const tmax = Math.max(...Vs.map(v => plan.s[v.name] + v.p)), tmin = Math.min(0, ...Vs.map(v => v.a));
+  const t0 = Math.floor(tmin / 6) * 6, t1 = Math.ceil((tmax + 3) / 6) * 6, pw = W - left - right, X = t => left + (t - t0) / (t1 - t0) * pw;
+  const Ht = top + berths.length * rowH + bottom;
+  const svg = V('svg', { viewBox: `0 0 ${W} ${Ht}`, width: '100%', role: 'img', 'aria-label': Vs.map(v => `${v.name} ${plan.berth[v.name]} 접안 ${CLOCK(plan.s[v.name])} 체선 ${fnum(vals[`d[${v.name}]`])}시간`).join(', ') });
+  for (let t = t0; t <= t1; t += 6) {
+    svg.append(V('line', { x1: X(t), x2: X(t), y1: top - 8, y2: Ht - bottom + 2, class: t === 0 ? 'axisl' : 'gridl' }),
+      V('text', { x: X(t), y: Ht - bottom + 16, 'text-anchor': 'middle', class: 't-muted fs105' }, ((t % 24) + 24) % 24 === 0 ? 'D' + (Math.floor(t / 24) + 1) : pad2(((t % 24) + 24) % 24)));
+  }
+  berths.forEach((k, bi) => {
+    const y0 = top + bi * rowH, cy = y0 + 40;
+    svg.append(V('text', { x: left - 8, y: cy + 4, 'text-anchor': 'end', class: 't-ink fs12' }, k));
+    if (k in inst.free) svg.append(V('line', { x1: X(inst.free[k]), x2: X(inst.free[k]), y1: y0 + 2, y2: y0 + rowH - 4, stroke: 'var(--muted)', 'stroke-width': 2 }));
+    const here = Vs.filter(v => plan.berth[v.name] === k).sort((p, q) => plan.s[p.name] - plan.s[q.name]);
+    here.forEach((v, j) => {
+      const s = plan.s[v.name], e = s + v.p, d = vals[`d[${v.name}]`], cost = d * v.rate / 24;
+      const g = V('g', { class: 'vg', tabindex: 0, role: 'img', 'aria-label': `${v.name} ${k} 접안 ${CLOCK(s)} 체선 ${fnum(d)}시간 ${fmtUSD(cost)} USD` });
+      const wy = y0 + 8 + 6 * j;
+      if (s > v.a) g.append(V('line', { x1: X(v.a), x2: X(s), y1: wy, y2: wy, stroke: 'var(--lay)', 'stroke-width': 2 }));
+      g.append(V('line', { x1: X(v.a), x2: X(v.a), y1: wy - 4, y2: wy + 4, stroke: 'var(--ink2)', 'stroke-width': 1.5 }),
+        V('path', { class: 'vbar seg-lay', d: barPath(X(s), X(e), cy - 12, 24, false, true) }));
+      if (d > 0) g.append(V('rect', { class: 'seg-dem', x: X(Math.max(e - d, t0)), y: cy + 7, width: Math.max(2, X(e) - X(Math.max(e - d, t0))), height: 5, rx: 1 }));
+      if (X(e) - X(s) >= tw(v.name, 11) + 10) g.append(V('text', { x: (X(s) + X(e)) / 2, y: cy + 3, 'text-anchor': 'middle', class: 't-dark fs11', style: 'font-weight:600' }, v.name));
+      const lab = d > 0 ? (cost >= 10000 ? fmtUSD(cost) : (cost / 1000).toFixed(1) + 'k') + '$' : '', next = here[j + 1];
+      if (lab && (!next || X(plan.s[next.name]) - X(e) >= tw(lab) + 10)) g.append(V('text', { x: X(e) + 6, y: cy + 4, class: 't-ink2 fs11' }, lab));
+      const tip = () => H('div', null, H('div', { class: 'hd' }, v.name + ' · ' + k),
+        H('div', { class: 'r' }, H('span', { class: 'v' }, CLOCK(s)), H('span', { class: 'l' }, '접안 완료 s')),
+        H('div', { class: 'r' }, H('span', { class: 'v' }, CLOCK(e)), H('span', { class: 'l' }, '호스 분리 s + p')),
+        H('div', { class: 'r' }, H('span', { class: 'v' }, fnum(s - v.a) + 'h'), H('span', { class: 'l' }, 'NOR 후 대기 s − a')),
+        d > 0 ? H('div', { class: 'r' }, H('i', { class: 'tk k-dem' }), H('span', { class: 'v' }, fnum(d) + 'h · ' + fmtUSD(cost) + ' USD'), H('span', { class: 'l' }, '체선')) : H('div', { class: 'r' }, H('span', { class: 'l' }, '체선 없음')),
+        reasons[v.name] ? H('div', { class: 'fl' }, '접안 시각을 정한 제약: ' + reasons[v.name].join(' · ')) : null);
+      g.addEventListener('pointermove', ev => tipShow(tip(), ev.clientX, ev.clientY));
+      g.addEventListener('pointerleave', tipHide);
+      g.addEventListener('focus', () => { const b = g.getBoundingClientRect(); tipShow(tip(), b.left + 20, b.bottom + 4); });
+      g.addEventListener('blur', tipHide);
+      svg.append(g);
+    });
+  });
+  return svg;
+}
+function ganttLegend() {
+  return H('div', { class: 'legend' },
+    H('span', null, H('i', { class: 'key k-lay' }), '접안 완료 → 호스 분리'), H('span', null, H('i', { class: 'key k-dem', style: 'height:5px' }), '체선 시계가 돌아간 구간'),
+    H('span', null, H('i', { class: 'key', style: 'height:2px;background:var(--lay)' }), 'NOR 후 대기 (| = NOR 제출)'), H('span', null, H('i', { class: 'key', style: 'width:2px;height:12px;background:var(--muted)' }), '선석이 비는 시각 F'));
+}
+
+// ---- 해 한 개의 패널: 간트 · 선박별 표 · 변수 값 · 제약식 대입 · 목적함수
+function planPanel(inst, plan, title, opts = {}) {
+  const model = buildModel(inst), vals = planValues(inst, plan), rowsD = describeAll(model, inst, vals);
+  const Vs = inst.vessels, obj = objective(model, vals), reasons = decisionReasons(inst, rowsD);
+  const bad = rowsD.filter(r => r.viol > 1e-6).length;
+  const W = Math.max(520, ($('#m-solve-body').clientWidth || 900) - 30);
+  const nAct = rowsD.filter(r => r.active).length, nBind = rowsD.filter(r => r.active && !r.st && r.slack <= 1e-6).length;
+
+  const sol = H('table', { class: 'vt' }, H('thead', null, H('tr', null, ['선박', '선석 x_ik=1', 'NOR제출 a', '접안시각 s', '호스분리 s+p', '대기 s−a', '체선시간 d (h)', '체선료 (USD)', '접안시각을 정한 제약'].map((t, i) => H('th', { class: i >= 2 && i <= 7 ? 'n' : '' }, t)))),
+    H('tbody', null, [...Vs].sort((p, q) => plan.s[p.name] - plan.s[q.name]).map(v => {
+      const s = plan.s[v.name], d = vals[`d[${v.name}]`];
+      return H('tr', null, H('td', null, v.name), H('td', null, plan.berth[v.name]), H('td', { class: 'n' }, fnum(v.a)), H('td', { class: 'n' }, fnum(s)),
+        H('td', { class: 'n' }, fnum(s + v.p)), H('td', { class: 'n' }, fnum(s - v.a)), H('td', { class: 'n' }, fnum(d)), H('td', { class: 'n' }, fmtUSD(d * v.rate / 24)),
+        H('td', null, (reasons[v.name] || ['—']).join(' · ')));
+    })));
+
+  const kindText = v => v.kind === 'bin' ? (v.lb === v.ub ? '이진, 고정 ' + v.lb : '이진 {0, 1}') : '연속 [' + fnum(v.lb) + ', ' + (v.ub === Infinity ? '∞' : fnum(v.ub)) + ']';
+  const meaning = nm => nm[0] === 's' ? '접안시각' : nm[0] === 'd' ? '체선시간 (h)' : nm.startsWith('delta') ? '이동공제 (h)' : nm[0] === 'z' ? '레이타임중 (양묘 시점에 레이타임이 남음)' : nm[0] === 'y' ? '만료후접안 (접안이 통지만료 뒤)' : nm[0] === 'x' ? '선석배정' : '앞뒤순서 (앞 < 뒤)';
+  const vtab = H('table', { class: 'vt' }, H('thead', null, H('tr', null, H('th', null, '변수'), H('th', null, '한글 이름 · 뜻'), H('th', null, '종류 · 범위'), H('th', { class: 'n' }, '값'))),
+    H('tbody', null, model.vars.map(v => {
+      let val = vals[v.name];
+      if (v.name.startsWith('o[')) { const [a, b] = v.name.slice(2, -1).split('<'); if (plan.berth[a] !== plan.berth[b]) val = null; }
+      return H('tr', null, H('td', null, v.name), H('td', null, meaning(v.name) + (val === null ? ' — 다른 선석이라 영향 없음' : '')), H('td', null, kindText(v)), H('td', { class: 'n' }, val === null ? '—' : fnum(val)));
+    })));
+
+  const hidden = rowsD.filter(r => !r.active).length;
+  const ctab = H('table', { class: 'vt' }, H('thead', null, H('tr', null, H('th', null, '대상'), H('th', null, '숫자 대입 (숫자마다 한글 이름)'), H('th', { class: 'n' }, '여유'), H('th', null, '상태'))));
+  const tb = H('tbody', null);
+  for (const [tag, dsl, ko, ex] of MODEL_TAGS) {
+    const list = rowsD.filter(r => r.tag === tag && (r.active || S.showAll));
+    if (!list.length) continue;
+    tb.append(H('tr', { class: 'grp' }, H('td', { colspan: 4 }, H('div', { class: 'fxrow' }, H('span', { class: 'tg' }, tagLabel(tag)), fx(dsl)),
+      H('div', { class: 'kr' }, H('b', null, '한글'), ko || koOf(dsl)), H('div', { class: 'ex' }, gchip(tag), mathNode(ex)))));
+    for (const r of list) {
+      const bind = r.active && !r.st && r.slack <= 1e-6, eq = r.tag === 'C1';
+      tb.append(H('tr', null, H('td', null, r.label), H('td', { class: r.active ? '' : 'st-off' }, r.active ? r.num : r.why),
+        H('td', { class: 'n' }, r.active ? fnum(r.slack) : '—'),
+        H('td', { class: r.active ? (bind ? 'st-bind' : 'st-slack') : 'st-off' }, !r.active ? '풀림' : r.st ? r.st : eq ? '충족' : bind ? '등호 ●' : '여유')));
+    }
+  }
+  ctab.append(tb);
+
+  const costed = model.vars.filter(v => v.cost), nz = costed.filter(v => vals[v.name] > 1e-9);
+  const shown = costed.length <= 3 || !nz.length ? costed : nz;      // 선박이 많으면 체선이 있는 항만 적는다
+  const terms = shown.map(v => `${v.name.slice(2, -1)}: ${fnum(v.cost)} × ${fnum(vals[v.name])}`);
+  const zeroNote = shown.length < costed.length ? ` (체선이 없는 ${costed.length - shown.length}척은 체선시간 0이라 생략)` : '';
+  return H('div', { class: 'plan' + (opts.best ? ' best' : '') },
+    H('div', { class: 'planhead' }, H('span', { class: 'tt' }, title, opts.best ? H('span', { class: 'badge' }, '✓ 최적') : null), H('span', { class: 'cost' }, fmtUSD(obj) + ' USD')),
+    opts.sub ? H('div', { class: 'lead' }, opts.sub) : null,
+    H('div', { class: 'chartwrap' }, gantt(inst, plan, vals, reasons, W)),
+    H('div', { style: 'overflow-x:auto;margin-top:8px' }, sol),
+    H('div', { class: 'objline' }, '총 체선료 ', M('Σ_i (r_i / 24) · d_i'), ' = 선박별 (시간당 요율 × 체선시간)의 합 = ', terms.join(' + '), ' = ', H('span', { class: 'tot' }, fmtUSD(obj) + ' USD'), zeroNote),
+    H('details', { class: 'sub2', open: !!opts.open }, H('summary', null, `변수 값 — ${model.vars.length}개 (이진 ${model.vars.filter(v => v.kind === 'bin' && v.lb !== v.ub).length}개)`), H('div', { class: 'vscroll' }, vtab)),
+    H('details', { class: 'sub2', open: !!opts.open }, H('summary', null, `제약식에 대입 — 활성 ${nAct}개 중 등호 ${nBind}개` + (hidden ? ` · 풀린 ${hidden}개 ${S.showAll ? '표시 중' : '숨김'}` : '') + (bad ? ` · 위반 ${bad}개!` : ' · 위반 0개')),
+      H('div', { class: 'subctl' }, H('label', { class: 'chk' }, H('input', { type: 'checkbox', checked: S.showAll, onchange: e => { S.showAll = e.target.checked; renderSolve(); writeHash(); } }), 'big-M으로 풀린 식도 보기'),
+        H('span', null, '등호 ● = 그 식이 해를 막고 있음(여유 0). 여유 = 좌변 − 우변')),
+      H('div', { class: 'vscroll' }, ctab)));
+}
+
+function renderSolve() {
+  const host = $('#m-solve-body'); host.replaceChildren();
+  host.append(ganttLegend());
+  if (S.inst === 'sc01') {
+    const inst = currentInst();
+    if (!inst.valid) { host.append(H('p', { class: 'warn' }, '접근 가능한 선석이 없는 선박이 있어 풀 수 없습니다. ② 접근가능 표에서 선박마다 선석을 하나 이상 체크하세요.')); return; }
+    const plans = enumPlans2(inst).sort((p, q) => p.cost - q.cost), best = plans[0].cost, worst = plans[plans.length - 1].cost;
+    const nm = pl => `X → ${pl.berth.X}, Y → ${pl.berth.Y}` + (pl.first ? ` · ${pl.first} 먼저 (o_XY = ${pl.first === 'X' ? 1 : 0})` : ' · 선석이 달라 순서 변수는 영향 없음');
+    host.append(H('p', { class: 'lead' }, mathNode(`선석 배정 x와 순서 o의 가능한 조합은 ${plans.length}가지이고, 목적함수는 ${plans.map(p => fmtUSD(p.cost)).join(' / ')} USD입니다. 솔버는 가장 작은 쪽을 고릅니다(분기한정법의 가지). 접근 불가 선석(a_ik = 0)은 가지로 만들지 않습니다.`)));
+    plans.forEach(pl => {
+      const isBest = pl.cost <= best + 1e-9;
+      const panel = planPanel(inst, pl, nm(pl), { best: isBest, open: isBest });
+      host.append(plans.length <= 2 ? panel : H('details', { class: 'planwrap', open: isBest }, H('summary', null, `${nm(pl)} — ${fmtUSD(pl.cost)} USD${isBest ? ' ✓ 최적' : ''}`), panel));
+    });
+    const same = !S2.k2 && S2.acc.X.SK7 && S2.acc.Y.SK7 && ['X', 'Y'].every(k => JSON.stringify(S2[k]) === JSON.stringify(SC01[k])) && ['free', 'gout', 'gin', 'notice'].every(k => S2[k] === SC01[k]);
+    host.append(H('p', { class: 'objline' }, H('b', null, '최적: ' + nm(plans[0])), ` — ${fmtUSD(best)} USD` + (worst - best > 1e-9 ? ` (가장 비싼 조합보다 ${fmtUSD(worst - best)} USD 적음)` : ' (모든 조합이 같음)'),
+      same ? ' SC-01 손계산 정답과 같은 값입니다: 순서 A(X 먼저) 52,000 · 순서 B(Y 먼저) 6,000.' : ''));
+  } else {
+    const m = STRESS.find(x => x.stagger === S.stag) || STRESS[0];
+    host.append(H('div', { class: 'subctl' }, H('span', null, '같은 모델에 두 가지 해를 넣어 비교합니다: 변수 ' + m.milp.nVars + '개(이진 ' + m.milp.nBin + '개) · 제약 ' + m.milp.nRows + '개'),
+      H('span', { class: 'seg' }, H('span', { class: 'btns' },
+        H('button', { type: 'button', 'data-k': 'plan', 'data-v': 'milp', 'aria-pressed': S.plan === 'milp', onclick: () => { S.plan = 'milp'; render(); } }, 'MILP 최적 해 ' + fmtUSD(m.milp.cost)),
+        H('button', { type: 'button', 'data-k': 'plan', 'data-v': 'fcfs', 'aria-pressed': S.plan === 'fcfs', onclick: () => { S.plan = 'fcfs'; render(); } }, '현업 Rule 해 ' + fmtUSD(m.fcfs.cost))))));
+    const pl = S.plan === 'milp' ? m.milp : m.fcfs;
+    host.append(planPanel(m.inst, pl.plan, S.plan === 'milp' ? 'MILP 최적 해 (HiGHS, 정수계획 최적)' : '현업 Rule 해 (도착 순서대로 가장 빨리 붙는 선석)',
+      { best: S.plan === 'milp', open: false, sub: S.plan === 'milp' ? '모든 제약을 만족하는 해 중 목적함수가 가장 작다 — 완전 탐색과 같은 값.' : '같은 제약을 모두 만족하는 해지만 목적함수가 ' + fmtUSD(m.fcfs.cost - m.milp.cost) + ' USD 더 큽니다.' }));
+  }
+}
+function renderLP() {
+  const host = $('#m-lp-body'); host.replaceChildren();
+  const inst = currentInst();
+  if (!inst.valid) { host.append(H('p', { class: 'warn' }, '접근 가능한 선석이 없는 선박이 있어 모델을 만들 수 없습니다.')); return; }
+  const model = buildModel(inst), title = (S.inst === 'sc01' ? 'SC-01 두 척 · ' + (S2.k2 ? '선석 SK7·SK8' : '한 부두') : '실제 서비스 시간 8척 · 선석 3개 (도착 간격 ' + S.stag + 'h)') + '\n접안 순서·선석 배정 MILP — 체선료 최소화';
+  const text = toLP(model, title);
+  host.append(H('p', { class: 'lead' }, 'CPLEX LP 형식입니다. HiGHS·CPLEX·Gurobi 같은 솔버에 그대로 넣을 수 있고, 화면의 식·변수·제약이 모두 이 파일의 한 줄입니다. 변수 이름의 대괄호·공백은 LP 규칙에 맞게 밑줄로 바뀝니다.'),
+    H('div', { class: 'subctl' }, H('span', null, `${model.vars.length}개 변수 · ${model.rows.length}개 제약`),
+      H('button', { class: 'btn', type: 'button', onclick: () => { const a = H('a', { href: URL.createObjectURL(new Blob([text], { type: 'text/plain' })), download: 'berth_model.lp' }); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); } }, '파일로 받기 (.lp)')),
+    H('pre', { class: 'pre' }, text));
+}
+function renderOrderTab() { renderFormula(); renderParams(); renderSolve(); renderLP(); }
+
+// ------------------------------------------------------------------ 조립
+function sync() {
+  for (const [k, , , idn, idr] of FIELDS) {
+    const n = $('#' + idn), r = $('#' + idr);
+    if (document.activeElement !== n) n.value = S[k];
+    r.value = S[k];
+  }
+  const state = { norBasis: S.norBasis, norValidity: S.norValidity, shift: S.shiftCounts ? 'count' : 'exclude', gaps: S.gaps, view: S.view, inst: S.inst, plan: S.plan };
+  for (const b of document.querySelectorAll('.seg button[data-k]')) b.setAttribute('aria-pressed', String(state[b.dataset.k] === b.dataset.v));
+  $('#sort').value = S.sort;
+  $('#chart').hidden = S.view !== 'chart'; $('#tablewrap').hidden = S.view !== 'table'; $('#legend1').hidden = S.view !== 'chart';
+  for (const t of ['voyages', 'order']) {
+    $('#tab-' + t).hidden = S.tab !== t;
+    $('#tb-' + t).setAttribute('aria-selected', String(S.tab === t));
+  }
+}
+function render() {
+  const rows = calc();
+  const sorted = S.sort === 'usd' ? [...rows].sort((a, b) => b.r.amount - a.r.amount || a.c.jid.localeCompare(b.c.jid)) : rows;
+  sync(); renderKpis(rows);
+  if (S.tab === 'voyages') { renderChart(sorted); renderTable(sorted); renderDetail(rows); } else renderOrderTab();
+  writeHash();
+}
+function selfTest() {
+  let n = 0, bad = 0;
+  for (const g of GOLDEN) for (const c of DATA) {
+    const exp = g.res[c.jid]; if (!exp) continue;
+    const r = compute(c, g.cfg); n++;
+    if (Math.abs(r.dem - exp[0]) > 1e-6 || Math.abs(r.amount - exp[1]) > 0.011 || Math.abs(r.used - exp[2]) > 1e-6 || Math.abs(r.ded - exp[3]) > 1e-6) bad++;
+  }
+  let n2 = 0;
+  for (const g of GOLDEN2) {
+    const X = { name: 'X', ...g.p.X }, Y = { name: 'Y', ...g.p.Y };
+    const a = scheduleOrder(X, Y, g.p).cost, b = scheduleOrder(Y, X, g.p).cost; n2++;
+    if (Math.abs(a - g.res[0]) > 0.01 || Math.abs(b - g.res[1]) > 0.01) bad++;
+  }
+  // 모델: 내장한 해가 모델의 모든 제약 행과 변수 범위를 만족하고, 목적함수가 Python의 MILP·현업 Rule 값과 같은지
+  let nm = 0, nrows = 0;
+  for (const m of STRESS) for (const key of ['milp', 'fcfs']) {
+    const model = buildModel(m.inst), vals = planValues(m.inst, m[key].plan); nm++;
+    for (const r of model.rows) { nrows++; if (rowSlack(r, vals).viol > 1e-6) bad++; }
+    for (const v of model.vars) if (vals[v.name] !== undefined && (vals[v.name] < v.lb - 1e-6 || vals[v.name] > v.ub + 1e-6)) bad++;
+    if (Math.abs(objective(model, vals) - m[key].cost) > 0.01) bad++;
+  }
+  window.__selfTest = { n, n2, nm, nrows, bad, configs: GOLDEN.length, configs2: GOLDEN2.length };
+  const el = $('#selftest');
+  el.className = bad ? 'warn' : '';
+  el.textContent = bad ? `⚠ Python 계산과 ${bad}건 다릅니다 — 이 화면의 숫자를 믿지 마세요.`
+    : `✓ laytime_csv.py가 계산한 ${GOLDEN.length}개 조건 × ${DATA.length}항차, berth_milp.py의 두 척 ${GOLDEN2.length}문제, 8척 모델 해 ${nm}개(제약 ${nrows}행)와 모두 일치`;
+}
+function init() {
+  readHash();
+  for (const [k, lo, hi, idn, idr] of FIELDS) {
+    const n = $('#' + idn), r = $('#' + idr);
+    const set = v => { v = Number(v); if (!Number.isFinite(v)) return; S[k] = Math.min(hi, Math.max(lo, v)); render(); };
+    n.addEventListener('input', () => { if (n.value !== '') set(n.value); });
+    r.addEventListener('input', () => set(r.value));
+  }
+  for (const b of document.querySelectorAll('.seg button[data-k]:not([data-k=plan])')) b.addEventListener('click', () => {
+    const k = b.dataset.k, v = b.dataset.v;
+    if (k === 'shift') S.shiftCounts = v === 'count'; else S[k] = v;
+    render();
+  });
+  $('#sort').addEventListener('change', e => { S.sort = e.target.value; render(); });
+  $('#reset').addEventListener('click', () => { Object.assign(S, DEF, { tab: S.tab, view: S.view, sel: S.sel, inst: S.inst, stag: S.stag, plan: S.plan, showAll: S.showAll }); S2 = freshS2(); render(); });
+  for (const t of ['voyages', 'order']) $('#tb-' + t).addEventListener('click', () => { S.tab = t; render(); });
+  $('#texture').addEventListener('change', e => { document.body.dataset.texture = e.target.checked ? 'on' : 'off'; });
+  $('#theme').addEventListener('click', () => {
+    const root = document.documentElement, cur = root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.dataset.theme = cur === 'dark' ? 'light' : 'dark';
+  });
+  let tm; addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(render, 120); });
+  render(); selfTest();
+}
+init();
+})();
+</script>
+</body>
+</html>

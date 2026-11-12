@@ -1,0 +1,29 @@
+<section id="m3-start" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M3 · 개시 시점</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">개시 = min( NOR 수령 + 6h , 접안 완료 )</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<p style="font-size:26px;color:#0F1A26;font-weight:600">A · 선석이 차 있을 때 — NOR 14:00, 접안은 다음 날</p>
+<div style="position:relative;height:72px;background:#E9EEF3;border-radius:12px">
+<div style="position:absolute;left:0;top:0;width:380px;height:72px;background:#C6CED8;border-radius:12px 0 0 12px"></div>
+<div style="position:absolute;left:380px;top:0;width:1284px;height:72px;background:#3987E5;border-radius:0 12px 12px 0"></div>
+<p style="position:absolute;left:16px;top:18px;width:340px;font-size:24px;color:#0F1A26;font-weight:600">통지시간 6h · 14:00→20:00</p>
+<p style="position:absolute;left:400px;top:18px;width:900px;font-size:24px;color:#F5F7F9;font-weight:600">개시 20:00 → 대기도 산입된다</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<p style="font-size:26px;color:#0F1A26;font-weight:600">B · 선석이 비어 있을 때 — NOR 14:00, 15:30 접안 완료</p>
+<div style="position:relative;height:72px;background:#E9EEF3;border-radius:12px">
+<div style="position:absolute;left:0;top:0;width:96px;height:72px;background:#C6CED8;border-radius:12px 0 0 12px"></div>
+<div style="position:absolute;left:96px;top:0;width:1568px;height:72px;background:#3987E5;border-radius:0 12px 12px 0"></div>
+<p style="position:absolute;left:116px;top:18px;width:1200px;font-size:24px;color:#F5F7F9;font-weight:600">개시 15:30 (all fast) → 남은 통지시간 4h 30m은 사라진다</p>
+</div>
+</div>
+<div style="display:flex;gap:28px">
+<div style="flex:1;background:#E9EEF3;padding:24px 28px;border-radius:16px"><p style="font-size:25px;color:#3A4654;line-height:1.45">접안 완료 = 부두는 all fast, SBM은 finished mooring. 수령(received) 시각이 기준이며 제출 시각이 아니다.</p></div>
+<div style="flex:1;background:#E9EEF3;padding:24px 28px;border-radius:16px"><p style="font-size:25px;color:#3A4654;line-height:1.45">선주 계산서가 접안이 먼저인데도 NOR+6h를 개시로 쓰면 이중 계산이다(차이 사유 NOTICE_DOUBLE).</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M3 · 18 · 시뮬레이터 V1·V2 비교</p>
+<aside>두 막대를 비교하며 설명하세요. A는 대기가 레이타임에 들어가는 경우, B는 접안이 먼저라 통지시간이 사라지는 경우입니다. 시뮬레이터의 HANRIVER STAR가 B, ULSAN GLORY가 A에 해당합니다. 연습 7-3을 바로 풀게 합니다.</aside>
+</section>

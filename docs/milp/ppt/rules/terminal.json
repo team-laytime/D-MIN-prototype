@@ -1,0 +1,912 @@
+{
+ "version": "ulsan-clx/ppt-v1",
+ "source": {
+  "berths": "Sample data.xlsx — '부두별 제원', '부두 별 접안 가능 제품 그룹' (값 그대로)",
+  "ship_classes": "Sample data.xlsx — '선박 제원 Sample' (DWT 구간 평균, 참고용이라고 적혀 있음. F열 머리글은 'epeo'로 적혀 있어 PBL로 읽었다)",
+  "rules": "SKALA 현업 멘토링 PPT 07~12쪽"
+ },
+ "product_classes": {
+  "CR": "원유선",
+  "PP": "석유제품선",
+  "PC": "화학제품선",
+  "LB": "윤활유제품선",
+  "SP": "특수제품선"
+ },
+ "biz": {
+  "EX": "수출",
+  "IM": "수입",
+  "DI": "내수 매입",
+  "DO": "내수 판매"
+ },
+ "berths": [
+  {
+   "id": "#1-1",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 7500,
+   "max_draft": 6.5,
+   "max_loa": 110,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "SULF": "SP",
+    "ASPH": "SP",
+    "C-HX": "PC",
+    "기유(양하)": "LB",
+    "YUBASE": "LB",
+    "FO": "PP",
+    "1.3 BD": "PC"
+   }
+  },
+  {
+   "id": "#1-2",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 7500,
+   "max_draft": 6.5,
+   "max_loa": 110,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "SULF": "SP",
+    "DSL": "PP",
+    "SLO": "SP",
+    "ASPH": "SP",
+    "R-G": "PP",
+    "KERO": "PP"
+   }
+  },
+  {
+   "id": "#2-1",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 3000,
+   "max_draft": 3.6,
+   "max_loa": 55,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "FO": "PP",
+    "MDO": "LB",
+    "DSL": "PP"
+   }
+  },
+  {
+   "id": "#2-2",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 5000,
+   "max_draft": 6.7,
+   "max_loa": 110,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "R-G": "PP",
+    "AROMA": "PP",
+    "JET": "PP",
+    "FO": "PP"
+   }
+  },
+  {
+   "id": "#2-4",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 5000,
+   "max_draft": 7,
+   "max_loa": 110,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "R-G": "PP",
+    "FO": "PP",
+    "KERO": "PP",
+    "SLO": "SP"
+   }
+  },
+  {
+   "id": "#2-5",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 3000,
+   "max_draft": 7,
+   "max_loa": 100,
+   "min_loa": 10,
+   "min_pbl": null,
+   "groups": {
+    "FO": "PP",
+    "R-G": "PP",
+    "DSL": "PP"
+   }
+  },
+  {
+   "id": "#2-6",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 4000,
+   "max_draft": 7,
+   "max_loa": 110,
+   "min_loa": 25,
+   "min_pbl": null,
+   "groups": {
+    "R-G": "PP",
+    "DSL": "PP",
+    "KERO": "PP",
+    "LPG": "PP"
+   }
+  },
+  {
+   "id": "#2-7",
+   "size": "소형",
+   "shift_group": "#1~2",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 9000,
+   "max_draft": 7,
+   "max_loa": 115,
+   "min_loa": 25,
+   "min_pbl": null,
+   "groups": {
+    "LPG": "PP",
+    "KERO": "PP",
+    "DSL": "PP",
+    "FO": "PP",
+    "ASPH": "SP",
+    "ETHYLENE": "PC",
+    "JET": "PP"
+   }
+  },
+  {
+   "id": "#3",
+   "size": "대형",
+   "shift_group": "#3",
+   "switching_h": 1.5,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 50000,
+   "max_draft": 11.8,
+   "max_loa": 230,
+   "min_loa": 100,
+   "min_pbl": 40,
+   "groups": {
+    "기유(양하)": "LB",
+    "MEOH": "PC",
+    "YUBASE": "LB",
+    "UCO": "LB",
+    "BENZENE": "PC",
+    "PX": "PC"
+   }
+  },
+  {
+   "id": "#4-1",
+   "size": "소형",
+   "shift_group": "#4",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 10000,
+   "max_draft": 8.6,
+   "max_loa": 160,
+   "min_loa": 80,
+   "min_pbl": 10,
+   "groups": {
+    "TOL": "PC",
+    "C9+ARO (JX)": "PC",
+    "XYL": "PC",
+    "DSL": "PP",
+    "BENZENE": "PC"
+   }
+  },
+  {
+   "id": "#4-2",
+   "size": "소형",
+   "shift_group": "#4",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 4000,
+   "max_draft": 8.3,
+   "max_loa": 120,
+   "min_loa": 80,
+   "min_pbl": 14,
+   "groups": {
+    "BENZENE": "PC",
+    "FO": "PP",
+    "XYL": "PC",
+    "TOL": "PC",
+    "MEOH": "PC",
+    "DSL": "PP"
+   }
+  },
+  {
+   "id": "#4-3",
+   "size": "소형",
+   "shift_group": "#4",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 4000,
+   "max_draft": 6.5,
+   "max_loa": 160,
+   "min_loa": 80,
+   "min_pbl": 10,
+   "groups": {
+    "FO": "PP",
+    "DSL": "PP"
+   }
+  },
+  {
+   "id": "#5-1",
+   "size": "소형",
+   "shift_group": "#5-5",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": true,
+   "max_dwt": 2000,
+   "max_draft": 5.4,
+   "max_loa": 80,
+   "min_loa": 60,
+   "min_pbl": 24,
+   "groups": {
+    "O-1": "PC",
+    "FO": "PP"
+   }
+  },
+  {
+   "id": "#5-2",
+   "size": "소형",
+   "shift_group": "#5-5",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": true,
+   "max_dwt": 2000,
+   "max_draft": 5.4,
+   "max_loa": 80,
+   "min_loa": 60,
+   "min_pbl": 24,
+   "groups": {
+    "FO": "PP"
+   }
+  },
+  {
+   "id": "#5-3",
+   "size": "소형",
+   "shift_group": "#5-5",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": true,
+   "max_dwt": 5425,
+   "max_draft": 6.3,
+   "max_loa": 104,
+   "min_loa": 45,
+   "min_pbl": 18,
+   "groups": {
+    "R-G": "PP",
+    "BT-MIX": "PC",
+    "UCO": "LB",
+    "FO": "PP",
+    "BBR": "PC",
+    "DSL": "PP",
+    "JET": "PP",
+    "KERO": "PP",
+    "PROPYLENE": "PC"
+   }
+  },
+  {
+   "id": "#5-4",
+   "size": "소형",
+   "shift_group": "#5-5",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": true,
+   "max_dwt": 7500,
+   "max_draft": 6.7,
+   "max_loa": 128,
+   "min_loa": 60,
+   "min_pbl": 10,
+   "groups": {
+    "PX": "PC",
+    "YUBASE": "LB",
+    "UCO": "LB",
+    "MDO": "LB",
+    "SM": "PC",
+    "FO": "PP",
+    "DSL": "PP"
+   }
+  },
+  {
+   "id": "#5-5",
+   "size": "소형",
+   "shift_group": "#5-5",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 15000,
+   "max_draft": 8.2,
+   "max_loa": 150,
+   "min_loa": 71,
+   "min_pbl": 15,
+   "groups": {
+    "PX": "PC",
+    "SM": "PC",
+    "NAPH": "PP",
+    "R-G": "PP",
+    "DSL": "PP",
+    "JET": "PP",
+    "YUBASE": "LB",
+    "FO": "PP"
+   }
+  },
+  {
+   "id": "#6",
+   "size": "대형",
+   "shift_group": "#6",
+   "switching_h": 2.5,
+   "direction_h": 1.5,
+   "shift_assumed": false,
+   "max_dwt": 70000,
+   "max_draft": 13.3,
+   "max_loa": 280,
+   "min_loa": 105,
+   "min_pbl": 42,
+   "groups": {
+    "SRFO": "PP",
+    "SLO": "SP",
+    "L/S(고유동점)": "CR",
+    "FO": "PP",
+    "CRUDE": "CR",
+    "NAPH": "PP",
+    "KERO": "PP",
+    "R-G": "PP",
+    "DSL": "PP",
+    "JET": "PP",
+    "LPG": "PP"
+   }
+  },
+  {
+   "id": "#7",
+   "size": "대형",
+   "shift_group": "#7",
+   "switching_h": 2.5,
+   "direction_h": 1.5,
+   "shift_assumed": false,
+   "max_dwt": 130000,
+   "max_draft": 13.5,
+   "max_loa": 280,
+   "min_loa": 135,
+   "min_pbl": 45.5,
+   "groups": {
+    "YUBASE": "LB",
+    "MEOH": "PC",
+    "DSL": "PP",
+    "R-G": "PP",
+    "JET": "PP",
+    "NAPH": "PP",
+    "L/S(고유동점)": "CR",
+    "FO": "PP",
+    "CRUDE": "CR",
+    "SLO": "SP",
+    "SRFO": "PP"
+   }
+  },
+  {
+   "id": "#8",
+   "size": "대형",
+   "shift_group": "#8",
+   "switching_h": 2.5,
+   "direction_h": 1.5,
+   "shift_assumed": false,
+   "max_dwt": 169500,
+   "max_draft": 16.5,
+   "max_loa": 280,
+   "min_loa": 150,
+   "min_pbl": 60,
+   "groups": {
+    "SRFO": "PP",
+    "JET": "PP",
+    "SLO": "SP",
+    "KERO": "PP",
+    "DSL": "PP",
+    "FO": "PP",
+    "CRUDE": "CR",
+    "L/S(고유동점)": "CR"
+   }
+  },
+  {
+   "id": "BUOY2",
+   "size": "초대형",
+   "shift_group": "Buoy",
+   "switching_h": 1.0,
+   "direction_h": 1.5,
+   "shift_assumed": false,
+   "max_dwt": 325000,
+   "max_draft": 21.21,
+   "max_loa": null,
+   "min_loa": null,
+   "min_pbl": null,
+   "groups": {
+    "CRUDE": "CR",
+    "SRFO": "PP"
+   }
+  },
+  {
+   "id": "BUOY3",
+   "size": "초대형",
+   "shift_group": "Buoy",
+   "switching_h": 1.0,
+   "direction_h": 1.5,
+   "shift_assumed": false,
+   "max_dwt": 325000,
+   "max_draft": 22.1,
+   "max_loa": null,
+   "min_loa": null,
+   "min_pbl": null,
+   "groups": {
+    "SRFO": "PP",
+    "CRUDE": "CR"
+   }
+  },
+  {
+   "id": "GAS1",
+   "size": "소형",
+   "shift_group": "GAS1/2",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 8500,
+   "max_draft": 7,
+   "max_loa": 120,
+   "min_loa": 90,
+   "min_pbl": null,
+   "groups": {
+    "BUTENE": "PC",
+    "LPG": "PP",
+    "YUBASE": "LB",
+    "UCO": "LB",
+    "PROPYLENE": "PC"
+   }
+  },
+  {
+   "id": "GAS2",
+   "size": "소형",
+   "shift_group": "GAS1/2",
+   "switching_h": 1.0,
+   "direction_h": 1.0,
+   "shift_assumed": false,
+   "max_dwt": 5000,
+   "max_draft": 6.5,
+   "max_loa": 120,
+   "min_loa": 61,
+   "min_pbl": null,
+   "groups": {
+    "UCO": "LB",
+    "YUBASE": "LB",
+    "LPG": "PP",
+    "PROPYLENE": "PC"
+   }
+  }
+ ],
+ "ship_classes": [
+  {
+   "dwt_band": "0~1만",
+   "ships": 2595,
+   "grt": 3988,
+   "draft": 5.97,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "rate_usd_day": 9537,
+   "work_speed": 25163
+  },
+  {
+   "dwt_band": "1만~2만",
+   "ships": 1084,
+   "grt": 9585,
+   "draft": 8.87,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "rate_usd_day": 14610,
+   "work_speed": 7350
+  },
+  {
+   "dwt_band": "2만~3만",
+   "ships": 308,
+   "grt": 16633,
+   "draft": 10.39,
+   "loa": 164.3,
+   "pbl": 69.5,
+   "rate_usd_day": 21653,
+   "work_speed": 2197
+  },
+  {
+   "dwt_band": "3만~4만",
+   "ships": 606,
+   "grt": 25260,
+   "draft": 11.75,
+   "loa": 178.6,
+   "pbl": 81.9,
+   "rate_usd_day": 25966,
+   "work_speed": 5517
+  },
+  {
+   "dwt_band": "4만~5만",
+   "ships": 1752,
+   "grt": 29597,
+   "draft": 12.64,
+   "loa": 183,
+   "pbl": 85.5,
+   "rate_usd_day": 26252,
+   "work_speed": 11145
+  },
+  {
+   "dwt_band": "5만~6만",
+   "ships": 320,
+   "grt": 40442,
+   "draft": 12.72,
+   "loa": 202.8,
+   "pbl": 95.8,
+   "rate_usd_day": 24420,
+   "work_speed": 9165
+  },
+  {
+   "dwt_band": "6만~7만",
+   "ships": 80,
+   "grt": 42057,
+   "draft": 13.5,
+   "loa": 225.3,
+   "pbl": 116.9,
+   "rate_usd_day": 25197,
+   "work_speed": 10381
+  },
+  {
+   "dwt_band": "7만~8만",
+   "ships": 426,
+   "grt": 42141,
+   "draft": 14.16,
+   "loa": 227,
+   "pbl": 117.9,
+   "rate_usd_day": 24312,
+   "work_speed": 12319
+  },
+  {
+   "dwt_band": "8만~9만",
+   "ships": 61,
+   "grt": 56770,
+   "draft": 13.84,
+   "loa": 239.9,
+   "pbl": 113.1,
+   "rate_usd_day": 33389,
+   "work_speed": 13794
+  },
+  {
+   "dwt_band": "9만~10만",
+   "ships": 193,
+   "grt": 59702,
+   "draft": 14,
+   "loa": 237.6,
+   "pbl": 106,
+   "rate_usd_day": 35829,
+   "work_speed": 14578
+  },
+  {
+   "dwt_band": "10만~11만",
+   "ships": 549,
+   "grt": 59334,
+   "draft": 14.78,
+   "loa": 211.8,
+   "pbl": 93.7,
+   "rate_usd_day": 30074,
+   "work_speed": 16308
+  },
+  {
+   "dwt_band": "11만~12만",
+   "ships": 388,
+   "grt": 62708,
+   "draft": 15.07,
+   "loa": 249,
+   "pbl": 107.3,
+   "rate_usd_day": 32326,
+   "work_speed": 21091
+  },
+  {
+   "dwt_band": "12만~13만",
+   "ships": 13,
+   "grt": 69850,
+   "draft": 15.3,
+   "loa": 258,
+   "pbl": 118.1,
+   "rate_usd_day": 34600,
+   "work_speed": 16283
+  },
+  {
+   "dwt_band": "13만~15만",
+   "ships": 94,
+   "grt": 80537,
+   "draft": 16.48,
+   "loa": 283.8,
+   "pbl": 118.7,
+   "rate_usd_day": 34769,
+   "work_speed": 26302
+  },
+  {
+   "dwt_band": "15만~16만",
+   "ships": 398,
+   "grt": 82120,
+   "draft": 17.08,
+   "loa": 244.9,
+   "pbl": 119.4,
+   "rate_usd_day": 44407,
+   "work_speed": 27886
+  },
+  {
+   "dwt_band": "16만~17만",
+   "ships": 50,
+   "grt": 87463,
+   "draft": 17.16,
+   "loa": 275.1,
+   "pbl": 124.4,
+   "rate_usd_day": 41268,
+   "work_speed": 34983
+  },
+  {
+   "dwt_band": "17만~22만",
+   "ships": 26,
+   "grt": 111782,
+   "draft": 21.8,
+   "loa": 363.1,
+   "pbl": 105.2,
+   "rate_usd_day": 21912,
+   "work_speed": 12900
+  },
+  {
+   "dwt_band": "22만~27만",
+   "ships": 15,
+   "grt": 154417,
+   "draft": 21.37,
+   "loa": 310.1,
+   "pbl": 140.9,
+   "rate_usd_day": 48126,
+   "work_speed": 43868
+  },
+  {
+   "dwt_band": "27만~28만",
+   "ships": 32,
+   "grt": 151042,
+   "draft": 21.52,
+   "loa": 332.4,
+   "pbl": 139.6,
+   "rate_usd_day": 59848,
+   "work_speed": 43285
+  },
+  {
+   "dwt_band": "28만~29만",
+   "ships": 35,
+   "grt": 153693,
+   "draft": 21.42,
+   "loa": 332.9,
+   "pbl": 134.3,
+   "rate_usd_day": 52764,
+   "work_speed": 43315
+  },
+  {
+   "dwt_band": "29만~30만",
+   "ships": 420,
+   "grt": 156597,
+   "draft": 21.54,
+   "loa": 331.7,
+   "pbl": 133.5,
+   "rate_usd_day": 57965,
+   "work_speed": 45310
+  },
+  {
+   "dwt_band": "30만~31만",
+   "ships": 115,
+   "grt": 155953,
+   "draft": 21.72,
+   "loa": 329.7,
+   "pbl": 145.9,
+   "rate_usd_day": 62938,
+   "work_speed": 44229
+  },
+  {
+   "dwt_band": "31만~32만",
+   "ships": 215,
+   "grt": 163258,
+   "draft": 22.27,
+   "loa": 333.9,
+   "pbl": 140.9,
+   "rate_usd_day": 55271,
+   "work_speed": 43952
+  },
+  {
+   "dwt_band": "32만~45만",
+   "ships": 39,
+   "grt": 162531,
+   "draft": 22.5,
+   "loa": 321.1,
+   "pbl": 138.7,
+   "rate_usd_day": 56533,
+   "work_speed": 43519
+  }
+ ],
+ "shifting": {
+  "_ppt": "07쪽",
+  "table": {
+   "#1~2": {
+    "switching_h": 1.5,
+    "direction_h": 1.0
+   },
+   "#3": {
+    "switching_h": 1.5,
+    "direction_h": 1.0
+   },
+   "#4": {
+    "switching_h": 1.0,
+    "direction_h": 1.0
+   },
+   "#5-5": {
+    "switching_h": 1.0,
+    "direction_h": 1.0
+   },
+   "GAS1/2": {
+    "switching_h": 1.0,
+    "direction_h": 1.0
+   },
+   "#6": {
+    "switching_h": 2.5,
+    "direction_h": 1.5
+   },
+   "#7": {
+    "switching_h": 2.5,
+    "direction_h": 1.5
+   },
+   "#8": {
+    "switching_h": 2.5,
+    "direction_h": 1.5
+   },
+   "Buoy": {
+    "switching_h": 1.0,
+    "direction_h": 1.5
+   }
+  },
+  "assumed": {
+   "#5-1": "#5-5 값을 씀 (PPT 표에 없음)",
+   "#5-2": "#5-5 값을 씀 (PPT 표에 없음)",
+   "#5-3": "#5-5 값을 씀 (PPT 표에 없음)",
+   "#5-4": "#5-5 값을 씀 (PPT 표에 없음)"
+  }
+ },
+ "eligibility": {
+  "_ppt": "12쪽 2. 부두 정보",
+  "draft_check_biz": [
+   "IM"
+  ]
+ },
+ "night_pilotage": {
+  "_ppt": "08쪽 ②",
+  "last_pob": {
+   "subject_any": [
+    {
+     "grt_min": 75000
+    },
+    {
+     "grt_max": 30000,
+     "biz": [
+      "IM"
+     ],
+     "draft_min": 10.5
+    }
+   ],
+   "sunset_minus_h": [
+    {
+     "grt_max": 50000,
+     "h": 1.5
+    },
+    {
+     "grt_min_exclusive": 50000,
+     "h": 2.0
+    }
+   ],
+   "compare": "ETA",
+   "release": "08:00"
+  },
+  "dawn": {
+   "grt_min": 30000,
+   "from": "02:00",
+   "to": "08:00",
+   "release": "08:00"
+  }
+ },
+ "pair_rules": {
+  "_ppt": "07쪽 ① · 08쪽 ③",
+  "same_berth": {
+   "gap": "switching",
+   "fix_strict": true
+  },
+  "same_cargo_group": {
+   "berth_sets": [
+    [
+     "#6",
+     "#7",
+     "#8"
+    ],
+    [
+     "#1-1",
+     "#1-2",
+     "#2-7"
+    ]
+   ],
+   "release_before_etu_h": 2
+  },
+  "simultaneous": [
+   {
+    "berths": [
+     "#4-1",
+     "#4-2"
+    ],
+    "release_before_etu_h": 2,
+    "exempt_if_all_grt_le": 3000
+   }
+  ]
+ },
+ "restriction": {
+  "_ppt": "08쪽 ③ · 12쪽 4",
+  "release": "end + direction",
+  "scope": "BERTHING"
+ },
+ "work": {
+  "_ppt": "09쪽",
+  "setup_h": 1.0,
+  "hose_h": 0.5,
+  "departure_h": 2.0
+ },
+ "laytime": {
+  "_ppt": "09·10쪽",
+  "daylight_classes": [
+   "CR",
+   "PP"
+  ],
+  "notice_h": 6,
+  "before_laycan_hour": 6,
+  "before_laycan_hour_daylight": 7,
+  "daylight_hour": 7,
+  "factor": [
+   {
+    "class": "CR",
+    "cfr": false,
+    "factor": "1/2"
+   }
+  ]
+ },
+ "demurrage": {
+  "_ppt": "11쪽",
+  "weather_ratio": "1/2",
+  "weather_basis": "USED"
+ },
+ "location": {
+  "name": "울산",
+  "lat": 35.5384,
+  "lon": 129.3114,
+  "tz_hours": 9
+ }
+}

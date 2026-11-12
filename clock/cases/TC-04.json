@@ -1,0 +1,52 @@
+{
+  "case_id": "TC-04",
+  "title": "펌핑 워런티 미달로 선주 측 공제, 체선료 소멸",
+  "source": "docs/domain/04-worked-examples.md 예제 4 (TC-04)",
+  "base_date": "2026-11-03",
+  "port_call": {"call_id": "TC-04", "vessel_name": "PACIFIC MERIDIAN (가상)", "vessel_type": "AFRAMAX", "dwt": 100000,
+                "operation": "DISCHARGE", "cargo": "PRODUCTS", "berth_id": "SK7"},
+  "contract_terms": {
+    "form": "ASBATANKVOY", "layer": "CHARTER_PARTY",
+    "laytime_this_port_hours": 30, "notice_hours": 6,
+    "demurrage_rate_usd_day": 50000,
+    "half_rate_events": ["FIRE", "EXPLOSION", "STORM", "STRIKE", "PLANT_BREAKDOWN"],
+    "pumping_warranty_hours": 24, "pumping_warranty_psi": 100,
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK7", "berth_type": "PIER", "berthing_rules": ["ULS-SK38-DAYTIME"],
+    "daytime": {"start": "07:00", "end": "17:30"},
+    "berth_ready_at": "D1 06:00", "berth_ready_row": 1,
+    "berth_ready_ref": "SOF 1행 '선석 비어 있음'"
+  },
+  "pumping_log": {
+    "avg_manifold_psi": 60, "shore_restriction": false, "sof_rows": [6],
+    "evidence_ref": "SOF 6행 비고(평균 매니폴드 60 psi, 육상 배압 제한 없음)·터미널 '육상 제한 없음' 확인서"
+  },
+  "sof_events": [
+    {"event_id": "TC04-R01-ANCHORED", "row": 1, "event_type": "ANCHORED", "ts_local": "D1 06:00", "remarks": "묘박지 도착, NOR 제출·수령. 선석 비어 있음"},
+    {"event_id": "TC04-R01-NOR_TENDERED", "row": 1, "event_type": "NOR_TENDERED", "ts_local": "D1 06:00", "remarks": "묘박지 도착, NOR 제출·수령. 선석 비어 있음"},
+    {"event_id": "TC04-R01-NOR_RECEIVED", "row": 1, "event_type": "NOR_RECEIVED", "ts_local": "D1 06:00", "remarks": "묘박지 도착, NOR 제출·수령. 선석 비어 있음"},
+    {"event_id": "TC04-R02-ANCHOR_AWEIGH", "row": 2, "event_type": "ANCHOR_AWEIGH", "ts_local": "D1 06:30", "remarks": "양묘, 이동"},
+    {"event_id": "TC04-R03-ALL_FAST", "row": 3, "event_type": "ALL_FAST", "ts_local": "D1 08:00", "remarks": "접안 완료 (주간)"},
+    {"event_id": "TC04-R04-HOSES_CONNECTED", "row": 4, "event_type": "HOSES_CONNECTED", "ts_local": "D1 09:00", "remarks": "호스 연결"},
+    {"event_id": "TC04-R05-OPS_COMMENCED", "row": 5, "event_type": "OPS_COMMENCED", "ts_local": "D1 09:30", "remarks": "양하 개시"},
+    {"event_id": "TC04-R06-OPS_COMPLETED", "row": 6, "event_type": "OPS_COMPLETED", "ts_local": "D2 16:30", "remarks": "양하 완료 (31h). 펌핑 로그: 평균 매니폴드 압력 60 psi, 육상 배압 제한 없음"},
+    {"event_id": "TC04-R07-HOSES_DISCONNECTED", "row": 7, "event_type": "HOSES_DISCONNECTED", "ts_local": "D2 17:30", "remarks": "호스 분리"}
+  ],
+  "expected": {
+    "doc_ref": "04 예제 4 계산표, TC 요약표 TC-04",
+    "notice_expiry_at": "D1 12:00",
+    "laytime_start_at": "D1 08:00",
+    "laytime_end_at": "D2 17:30",
+    "elapsed_hours": "33.5",
+    "deduction_hours": {"SHIFTING": "0", "PUMPING_EXCESS": "7"},
+    "pumping_excess_hours": "7",
+    "used_hours": "26.5",
+    "demurrage_hours": "0",
+    "amount_usd": "0",
+    "issues": ["PUMPING-EVIDENCE"],
+    "no_review_issues": true,
+    "alternatives": {"PUMPING-EVIDENCE": {"amount_usd": "7292", "demurrage_hours": "3.5"}}
+  }
+}

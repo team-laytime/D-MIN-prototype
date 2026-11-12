@@ -1,0 +1,20 @@
+<section id="m6-mapping" data-transition="fade" style="background:#F5F7F9;color:#0F1A26;font-family:'IBM Plex Sans KR', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;color:#0F6E73;font-weight:600;letter-spacing:2px">M6 · 개념 → 데이터 → 룰</p>
+<h2 style="font-size:64px;font-weight:700;line-height:1.1;color:#0F1A26">모든 개념은 필드 하나와 룰 하나로 떨어진다</h2>
+</div>
+<table style="font-size:24px;color:#3A4654;width:1664px">
+<tr style="background:#E9EEF3"><th style="width:22%;text-align:left;color:#0F1A26">개념</th><th style="width:34%;text-align:left;color:#0F1A26">데이터 필드</th><th style="width:28%;text-align:left;color:#0F1A26">룰 ID</th><th style="width:16%;text-align:left;color:#0F1A26">모듈</th></tr>
+<tr><td style="font-weight:600;color:#0F1A26">허용 레이타임 · 가역</td><td>laytime_total_hours, laytime_this_port_hours, reversible</td><td>계약 Part I</td><td>CLOCK</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">개시 규칙</td><td>NOR_RECEIVED, ALL_FAST, notice_hours</td><td>ASB-06-NOR-START</td><td>CLOCK</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">이동 제외</td><td>ANCHOR_AWEIGH → ALL_FAST</td><td>ASB-07-SHIFTING-EXCL</td><td>CLOCK</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">야간 · 기상 접안 제한</td><td>BERTH.rules, 접안 불가 통보</td><td>ULS-SBM-NIGHT, ULS-SK38-DAYTIME</td><td>EXPLAIN</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">반액</td><td>OPS_STOPPED(WEATHER), EXTERNAL_OBS.wind</td><td>ASB-08-HALF-RATE</td><td>CLOCK</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">펌핑 워런티</td><td>pumping_warranty_hours / psi, 펌핑 로그, 배압</td><td>RIDER-PUMPING</td><td>CLAIM</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">시효 · 서류</td><td>time_bar_docs_days, required_documents, received_at</td><td>SV6 / BPV4-TIMEBAR</td><td>CLAIM</td></tr>
+<tr><td style="font-weight:600;color:#0F1A26">ETB 변경 영향</td><td>BERTH_PLAN.planned_* 버전 차이</td><td>(계산)</td><td>EXPLAIN</td></tr>
+</table>
+<p style="font-size:25px;color:#5B6775">연습 7-11: 검역, 용선주 지시 이동, 서류 대기 세 줄을 직접 채운다. 전체 표는 06-data-and-agent.md §1.</p>
+<p style="position:absolute;left:128px;bottom:64px;font-size:24px;color:#5B6775">체선료 도메인 집중 강의 · M6 · 33</p>
+<aside>이 표가 강의 전체의 요약입니다. 왼쪽 개념은 M1~M5에서 배운 것이고, 오른쪽 두 열은 데이터 사전과 조항 맵에서 왔습니다. 참가자에게 자기 역할의 열을 채우게 하고, 연습 7-11로 세 줄을 추가하게 하세요.</aside>
+</section>

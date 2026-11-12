@@ -1,0 +1,1858 @@
+{
+ "id": "SAMPLE-W46-WX",
+ "title": "샘플 주간 + 기상 악화 12시간 (11/12 06:00~18:00, 전 부두) [가정]",
+ "plan": {
+  "start": "2026-11-09T00:00",
+  "end": "2026-11-19T00:00"
+ },
+ "arrivals": [
+  {
+   "id": "S32",
+   "vessel": "중형 화학·윤활유선 (3만~4만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "MEOH",
+   "qty": 200000,
+   "eta": "2026-11-07T22:00",
+   "grt": 25260,
+   "dwt": 35000,
+   "loa": 178.6,
+   "pbl": 81.9,
+   "draft": 11.75,
+   "contract": {
+    "laycan_from": "2026-11-06T00:00",
+    "laycan_to": "2026-11-08T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 25966,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.5
+   },
+   "source_rows": [
+    32
+   ],
+   "status": "WORKING",
+   "fix": {
+    "berth": "#3",
+    "etb": "2026-11-08T20:00",
+    "etu": "2026-11-09T17:30"
+   }
+  },
+  {
+   "id": "S36",
+   "vessel": "소형 제품선 (1만~2만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "BENZENE",
+   "qty": 40320,
+   "eta": "2026-11-08T04:00",
+   "grt": 6000,
+   "dwt": 8000,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "draft": 8.3,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 14610,
+    "cfr": false
+   },
+   "work": {
+    "hours": 13.0
+   },
+   "source_rows": [
+    36
+   ],
+   "status": "WORKING",
+   "fix": {
+    "berth": "#4-1",
+    "etb": "2026-11-08T20:30",
+    "etu": "2026-11-09T12:30"
+   }
+  },
+  {
+   "id": "S28",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 36288,
+   "eta": "2026-11-04T04:00",
+   "grt": 5400,
+   "dwt": 7200,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-03T00:00",
+    "laycan_to": "2026-11-05T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 13.0
+   },
+   "source_rows": [
+    28
+   ]
+  },
+  {
+   "id": "S26",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 16128,
+   "eta": "2026-11-09T09:00",
+   "grt": 2400,
+   "dwt": 3200,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 8.0
+   },
+   "source_rows": [
+    26
+   ]
+  },
+  {
+   "id": "S23",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "R-G",
+   "qty": 20160,
+   "eta": "2026-11-08T09:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 4.0
+   },
+   "source_rows": [
+    23,
+    24,
+    25
+   ]
+  },
+  {
+   "id": "S41",
+   "vessel": "소형 제품선 (1만~2만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 60480,
+   "eta": "2026-11-08T23:00",
+   "grt": 9000,
+   "dwt": 12000,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "draft": 7.9,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 14610,
+    "cfr": false
+   },
+   "work": {
+    "hours": 19.0
+   },
+   "source_rows": [
+    41,
+    42
+   ]
+  },
+  {
+   "id": "S63",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "EX",
+   "cargo_group": "YUBASE",
+   "qty": 20160,
+   "eta": "2026-11-09T13:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 5.5
+   },
+   "source_rows": [
+    63,
+    64,
+    65,
+    66
+   ]
+  },
+  {
+   "id": "S18",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 12096,
+   "eta": "2026-11-09T00:00",
+   "grt": 1800,
+   "dwt": 2400,
+   "loa": 50,
+   "pbl": 37.5,
+   "draft": 3.3,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 0.5
+   },
+   "source_rows": [
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "id": "S22",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "JET",
+   "qty": 20160,
+   "eta": "2026-11-08T06:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 1.0
+   },
+   "source_rows": [
+    22
+   ]
+  },
+  {
+   "id": "S21",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 12096,
+   "eta": "2026-11-09T00:00",
+   "grt": 1800,
+   "dwt": 2400,
+   "loa": 50,
+   "pbl": 37.5,
+   "draft": 3.3,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 1.0
+   },
+   "source_rows": [
+    21
+   ]
+  },
+  {
+   "id": "S33",
+   "vessel": "중형 화학·윤활유선 (3만~4만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "MEOH",
+   "qty": 200000,
+   "eta": "2026-11-06T19:00",
+   "grt": 25260,
+   "dwt": 35000,
+   "loa": 178.6,
+   "pbl": 81.9,
+   "draft": 11.75,
+   "contract": {
+    "laycan_from": "2026-11-05T00:00",
+    "laycan_to": "2026-11-07T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 25966,
+    "cfr": false
+   },
+   "work": {
+    "hours": 21.0
+   },
+   "source_rows": [
+    33
+   ]
+  },
+  {
+   "id": "S67",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "EX",
+   "cargo_group": "YUBASE",
+   "qty": 20160,
+   "eta": "2026-11-09T20:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 9.0
+   },
+   "source_rows": [
+    67
+   ]
+  },
+  {
+   "id": "S03",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "FO",
+   "qty": 30240,
+   "eta": "2026-11-09T18:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 4.0
+   },
+   "source_rows": [
+    3,
+    4
+   ]
+  },
+  {
+   "id": "S38",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-06T00:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-05T00:00",
+    "laycan_to": "2026-11-07T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 2.0
+   },
+   "source_rows": [
+    38
+   ]
+  },
+  {
+   "id": "S05",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "FO",
+   "qty": 30240,
+   "eta": "2026-11-08T18:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 7.0
+   },
+   "source_rows": [
+    5
+   ]
+  },
+  {
+   "id": "S29",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 36288,
+   "eta": "2026-11-10T08:00",
+   "grt": 5400,
+   "dwt": 7200,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.0
+   },
+   "source_rows": [
+    29
+   ]
+  },
+  {
+   "id": "S43",
+   "vessel": "소형 제품선 (1만~2만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 60480,
+   "eta": "2026-11-08T04:00",
+   "grt": 9000,
+   "dwt": 12000,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "draft": 7.9,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 14610,
+    "cfr": false
+   },
+   "work": {
+    "hours": 14.0
+   },
+   "source_rows": [
+    43
+   ]
+  },
+  {
+   "id": "S11",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "R-G",
+   "qty": 30240,
+   "eta": "2026-11-09T18:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 15.0
+   },
+   "source_rows": [
+    11
+   ]
+  },
+  {
+   "id": "S45",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 300000,
+   "eta": "2026-11-10T15:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 26.5
+   },
+   "source_rows": [
+    45
+   ]
+  },
+  {
+   "id": "S34",
+   "vessel": "중형 화학·윤활유선 (3만~4만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "MEOH",
+   "qty": 200000,
+   "eta": "2026-11-08T06:00",
+   "grt": 25260,
+   "dwt": 35000,
+   "loa": 178.6,
+   "pbl": 81.9,
+   "draft": 11.75,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 25966,
+    "cfr": false
+   },
+   "work": {
+    "hours": 12.0
+   },
+   "source_rows": [
+    34
+   ]
+  },
+  {
+   "id": "S55",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "IM",
+   "cargo_group": "SLO",
+   "qty": 300000,
+   "eta": "2026-11-10T20:30",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 3.0
+   },
+   "source_rows": [
+    55
+   ]
+  },
+  {
+   "id": "S50",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "JET",
+   "qty": 450000,
+   "eta": "2026-11-09T00:01",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-08T00:00",
+    "laycan_to": "2026-11-10T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 17.5
+   },
+   "source_rows": [
+    50
+   ]
+  },
+  {
+   "id": "S68",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "EX",
+   "cargo_group": "YUBASE",
+   "qty": 20160,
+   "eta": "2026-11-11T00:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-12T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 6.0
+   },
+   "source_rows": [
+    68
+   ]
+  },
+  {
+   "id": "S30",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 36288,
+   "eta": "2026-11-10T00:00",
+   "grt": 5400,
+   "dwt": 7200,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 13.0
+   },
+   "source_rows": [
+    30,
+    31
+   ]
+  },
+  {
+   "id": "S12",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "R-G",
+   "qty": 30240,
+   "eta": "2026-11-08T00:10",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-07T00:00",
+    "laycan_to": "2026-11-09T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 15.5
+   },
+   "source_rows": [
+    12
+   ]
+  },
+  {
+   "id": "S60",
+   "vessel": "VLCC 원유선 (29만~30만)",
+   "class": "CR",
+   "biz": "IM",
+   "cargo_group": "CRUDE",
+   "qty": 2000000,
+   "eta": "2026-11-10T22:00",
+   "grt": 156597,
+   "dwt": 295000,
+   "loa": 331.7,
+   "pbl": 133.5,
+   "draft": 21.54,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 72,
+    "rate_usd_day": 57965,
+    "cfr": false
+   },
+   "work": {
+    "hours": 20.5
+   },
+   "source_rows": [
+    60
+   ]
+  },
+  {
+   "id": "S62",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "IM",
+   "cargo_group": "UCO",
+   "qty": 34272,
+   "eta": "2026-11-06T20:00",
+   "grt": 5100,
+   "dwt": 6800,
+   "loa": 95,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-05T00:00",
+    "laycan_to": "2026-11-07T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 9.5
+   },
+   "source_rows": [
+    62
+   ]
+  },
+  {
+   "id": "S69",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "EX",
+   "cargo_group": "YUBASE",
+   "qty": 20160,
+   "eta": "2026-11-11T10:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-12T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 6.0
+   },
+   "source_rows": [
+    69
+   ]
+  },
+  {
+   "id": "S37",
+   "vessel": "소형 제품선 (1만~2만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "BENZENE",
+   "qty": 40320,
+   "eta": "2026-11-11T01:00",
+   "grt": 6000,
+   "dwt": 8000,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "draft": 8.3,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-12T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 14610,
+    "cfr": false
+   },
+   "work": {
+    "hours": 26.0
+   },
+   "source_rows": [
+    37
+   ]
+  },
+  {
+   "id": "S56",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "JET",
+   "qty": 450000,
+   "eta": "2026-11-12T00:01",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 19.0
+   },
+   "source_rows": [
+    56
+   ]
+  },
+  {
+   "id": "S13",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-12T07:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 9.5
+   },
+   "source_rows": [
+    13
+   ]
+  },
+  {
+   "id": "S46",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "IM",
+   "cargo_group": "NAPH",
+   "qty": 300000,
+   "eta": "2026-11-10T10:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-09T00:00",
+    "laycan_to": "2026-11-11T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 38.5
+   },
+   "source_rows": [
+    46
+   ]
+  },
+  {
+   "id": "S59",
+   "vessel": "VLCC 원유선 (29만~30만)",
+   "class": "CR",
+   "biz": "IM",
+   "cargo_group": "CRUDE",
+   "qty": 2000000,
+   "eta": "2026-11-12T06:00",
+   "grt": 156597,
+   "dwt": 295000,
+   "loa": 331.7,
+   "pbl": 133.5,
+   "draft": 21.01,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 72,
+    "rate_usd_day": 57965,
+    "cfr": false
+   },
+   "work": {
+    "hours": 23.0
+   },
+   "source_rows": [
+    59
+   ]
+  },
+  {
+   "id": "S51",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 450000,
+   "eta": "2026-11-12T10:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.0
+   },
+   "source_rows": [
+    51
+   ]
+  },
+  {
+   "id": "S52",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "R-G",
+   "qty": 450000,
+   "eta": "2026-11-12T12:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 19.0
+   },
+   "source_rows": [
+    52
+   ]
+  },
+  {
+   "id": "S27",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 16128,
+   "eta": "2026-11-12T17:00",
+   "grt": 2400,
+   "dwt": 3200,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 11.5
+   },
+   "source_rows": [
+    27
+   ]
+  },
+  {
+   "id": "S14",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-12T11:30",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 7.0
+   },
+   "source_rows": [
+    14,
+    15
+   ]
+  },
+  {
+   "id": "S39",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "DO",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-13T00:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 10.5
+   },
+   "source_rows": [
+    39
+   ]
+  },
+  {
+   "id": "S44",
+   "vessel": "소형 제품선 (1만~2만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 60480,
+   "eta": "2026-11-13T00:00",
+   "grt": 9000,
+   "dwt": 12000,
+   "loa": 133.7,
+   "pbl": 57.8,
+   "draft": 7.9,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 14610,
+    "cfr": false
+   },
+   "work": {
+    "hours": 9.0
+   },
+   "source_rows": [
+    44
+   ]
+  },
+  {
+   "id": "S06",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "DI",
+   "cargo_group": "기유(양하)",
+   "qty": 30240,
+   "eta": "2026-11-13T00:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 25.5
+   },
+   "source_rows": [
+    6,
+    7
+   ]
+  },
+  {
+   "id": "S16",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-11T02:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-10T00:00",
+    "laycan_to": "2026-11-12T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 5.0
+   },
+   "source_rows": [
+    16,
+    17
+   ]
+  },
+  {
+   "id": "S57",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 450000,
+   "eta": "2026-11-13T00:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 28.5
+   },
+   "source_rows": [
+    57
+   ]
+  },
+  {
+   "id": "S08",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "FO",
+   "qty": 30240,
+   "eta": "2026-11-13T11:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 10.5
+   },
+   "source_rows": [
+    8
+   ]
+  },
+  {
+   "id": "S53",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "JET",
+   "qty": 450000,
+   "eta": "2026-11-12T19:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 26.5
+   },
+   "source_rows": [
+    53
+   ]
+  },
+  {
+   "id": "S54",
+   "vessel": "LR1 석유제품선 (7만~8만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "R-G",
+   "qty": 450000,
+   "eta": "2026-11-13T08:00",
+   "grt": 42141,
+   "dwt": 75000,
+   "loa": 227,
+   "pbl": 117.9,
+   "draft": 14.16,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 24312,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.0
+   },
+   "source_rows": [
+    54
+   ]
+  },
+  {
+   "id": "S40",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 30240,
+   "eta": "2026-11-14T00:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-13T00:00",
+    "laycan_to": "2026-11-15T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 10.5
+   },
+   "source_rows": [
+    40
+   ]
+  },
+  {
+   "id": "S70",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "LB",
+   "biz": "EX",
+   "cargo_group": "YUBASE",
+   "qty": 20160,
+   "eta": "2026-11-14T00:00",
+   "grt": 3000,
+   "dwt": 4000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-13T00:00",
+    "laycan_to": "2026-11-15T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 7.0
+   },
+   "source_rows": [
+    70
+   ]
+  },
+  {
+   "id": "S47",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "IM",
+   "cargo_group": "NAPH",
+   "qty": 300000,
+   "eta": "2026-11-13T10:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-12T00:00",
+    "laycan_to": "2026-11-14T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 20.5
+   },
+   "source_rows": [
+    47
+   ]
+  },
+  {
+   "id": "S61",
+   "vessel": "VLCC 원유선 (29만~30만)",
+   "class": "CR",
+   "biz": "IM",
+   "cargo_group": "CRUDE",
+   "qty": 2000000,
+   "eta": "2026-11-14T12:00",
+   "grt": 156597,
+   "dwt": 295000,
+   "loa": 331.7,
+   "pbl": 133.5,
+   "draft": 21.54,
+   "contract": {
+    "laycan_from": "2026-11-13T00:00",
+    "laycan_to": "2026-11-15T23:59",
+    "laytime_h": 72,
+    "rate_usd_day": 57965,
+    "cfr": false
+   },
+   "work": {
+    "hours": 45.5
+   },
+   "source_rows": [
+    61
+   ]
+  },
+  {
+   "id": "S35",
+   "vessel": "중형 화학·윤활유선 (3만~4만)",
+   "class": "PC",
+   "biz": "IM",
+   "cargo_group": "MEOH",
+   "qty": 200000,
+   "eta": "2026-11-14T18:00",
+   "grt": 25260,
+   "dwt": 35000,
+   "loa": 178.6,
+   "pbl": 81.9,
+   "draft": 11.75,
+   "contract": {
+    "laycan_from": "2026-11-13T00:00",
+    "laycan_to": "2026-11-15T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 25966,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.5
+   },
+   "source_rows": [
+    35
+   ]
+  },
+  {
+   "id": "S09",
+   "vessel": "소형 제품선 (0~1만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "FO",
+   "qty": 30240,
+   "eta": "2026-11-15T00:00",
+   "grt": 4500,
+   "dwt": 6000,
+   "loa": 85.4,
+   "pbl": 37.5,
+   "draft": 5.97,
+   "contract": {
+    "laycan_from": "2026-11-14T00:00",
+    "laycan_to": "2026-11-16T23:59",
+    "laytime_h": 24,
+    "rate_usd_day": 9537,
+    "cfr": false
+   },
+   "work": {
+    "hours": 6.0
+   },
+   "source_rows": [
+    9,
+    10
+   ]
+  },
+  {
+   "id": "S48",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "IM",
+   "cargo_group": "NAPH",
+   "qty": 300000,
+   "eta": "2026-11-12T00:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-11T00:00",
+    "laycan_to": "2026-11-13T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 18.5
+   },
+   "source_rows": [
+    48
+   ]
+  },
+  {
+   "id": "S49",
+   "vessel": "MR 석유제품선 (4만~5만)",
+   "class": "PP",
+   "biz": "EX",
+   "cargo_group": "DSL",
+   "qty": 300000,
+   "eta": "2026-11-15T00:00",
+   "grt": 29597,
+   "dwt": 45000,
+   "loa": 183,
+   "pbl": 85.5,
+   "draft": 12.64,
+   "contract": {
+    "laycan_from": "2026-11-14T00:00",
+    "laycan_to": "2026-11-16T23:59",
+    "laytime_h": 36,
+    "rate_usd_day": 26252,
+    "cfr": false
+   },
+   "work": {
+    "hours": 26.0
+   },
+   "source_rows": [
+    49
+   ]
+  },
+  {
+   "id": "S58",
+   "vessel": "Aframax 원유선 (10만~11만)",
+   "class": "CR",
+   "biz": "IM",
+   "cargo_group": "CRUDE",
+   "qty": 700000,
+   "eta": "2026-11-15T11:59",
+   "grt": 59334,
+   "dwt": 105000,
+   "loa": 211.8,
+   "pbl": 93.7,
+   "draft": 14.78,
+   "contract": {
+    "laycan_from": "2026-11-14T00:00",
+    "laycan_to": "2026-11-16T23:59",
+    "laytime_h": 72,
+    "rate_usd_day": 30074,
+    "cfr": false
+   },
+   "work": {
+    "hours": 53.0
+   },
+   "source_rows": [
+    58
+   ]
+  }
+ ],
+ "restrictions": [
+  {
+   "id": "WX-1112",
+   "reason": "WEATHER",
+   "berths": [
+    "*"
+   ],
+   "start": "2026-11-12T06:00",
+   "end": "2026-11-12T18:00"
+  }
+ ],
+ "inventory": [
+  {
+   "group": "CRUDE",
+   "opening": 5500000,
+   "min": 3000000,
+   "max": 10000000,
+   "flows": [
+    {
+     "from": "2026-11-09T00:00",
+     "to": "2026-11-19T00:00",
+     "use_per_h": 35000
+    }
+   ]
+  }
+ ],
+ "current_plan": [
+  {
+   "id": "S32",
+   "berth": "#3",
+   "etb": "2026-11-08T20:00",
+   "etu": "2026-11-09T17:30"
+  },
+  {
+   "id": "S36",
+   "berth": "#4-1",
+   "etb": "2026-11-08T20:30",
+   "etu": "2026-11-09T12:30"
+  },
+  {
+   "id": "S28",
+   "berth": "#2-7",
+   "etb": "2026-11-09T08:00",
+   "etu": "2026-11-10T00:00"
+  },
+  {
+   "id": "S26",
+   "berth": "#2-6",
+   "etb": "2026-11-09T09:00",
+   "etu": "2026-11-09T20:00"
+  },
+  {
+   "id": "S23",
+   "berth": "#2-4",
+   "etb": "2026-11-09T10:00",
+   "etu": "2026-11-09T17:00"
+  },
+  {
+   "id": "S41",
+   "berth": "#5-5",
+   "etb": "2026-11-09T12:00",
+   "etu": "2026-11-10T10:00"
+  },
+  {
+   "id": "S63",
+   "berth": "GAS2",
+   "etb": "2026-11-09T14:00",
+   "etu": "2026-11-09T22:30"
+  },
+  {
+   "id": "S18",
+   "berth": "#2-1",
+   "etb": "2026-11-09T15:00",
+   "etu": "2026-11-09T18:30"
+  },
+  {
+   "id": "S22",
+   "berth": "#2-2",
+   "etb": "2026-11-09T15:00",
+   "etu": "2026-11-09T19:00"
+  },
+  {
+   "id": "S21",
+   "berth": "#2-1",
+   "etb": "2026-11-09T19:00",
+   "etu": "2026-11-09T23:00"
+  },
+  {
+   "id": "S33",
+   "berth": "#3",
+   "etb": "2026-11-09T20:00",
+   "etu": "2026-11-10T20:00"
+  },
+  {
+   "id": "S67",
+   "berth": "GAS2",
+   "etb": "2026-11-09T23:30",
+   "etu": "2026-11-10T11:30"
+  },
+  {
+   "id": "S03",
+   "berth": "#1-1",
+   "etb": "2026-11-10T00:30",
+   "etu": "2026-11-10T07:30"
+  },
+  {
+   "id": "S38",
+   "berth": "#5-4",
+   "etb": "2026-11-10T00:30",
+   "etu": "2026-11-10T05:30"
+  },
+  {
+   "id": "S05",
+   "berth": "#1-1",
+   "etb": "2026-11-10T09:00",
+   "etu": "2026-11-10T19:00"
+  },
+  {
+   "id": "S29",
+   "berth": "#2-7",
+   "etb": "2026-11-10T09:00",
+   "etu": "2026-11-11T06:00"
+  },
+  {
+   "id": "S43",
+   "berth": "#5-5",
+   "etb": "2026-11-10T11:00",
+   "etu": "2026-11-11T04:00"
+  },
+  {
+   "id": "S11",
+   "berth": "#1-2",
+   "etb": "2026-11-10T14:00",
+   "etu": "2026-11-11T08:00"
+  },
+  {
+   "id": "S45",
+   "berth": "#6",
+   "etb": "2026-11-10T20:30",
+   "etu": "2026-11-12T02:00"
+  },
+  {
+   "id": "S34",
+   "berth": "#3",
+   "etb": "2026-11-10T21:00",
+   "etu": "2026-11-11T12:00"
+  },
+  {
+   "id": "S55",
+   "berth": "#8",
+   "etb": "2026-11-10T22:00",
+   "etu": "2026-11-11T04:00"
+  },
+  {
+   "id": "S50",
+   "berth": "#7",
+   "etb": "2026-11-10T22:30",
+   "etu": "2026-11-11T19:00"
+  },
+  {
+   "id": "S68",
+   "berth": "GAS2",
+   "etb": "2026-11-11T01:00",
+   "etu": "2026-11-11T10:00"
+  },
+  {
+   "id": "S30",
+   "berth": "#2-7",
+   "etb": "2026-11-11T07:00",
+   "etu": "2026-11-11T23:00"
+  },
+  {
+   "id": "S12",
+   "berth": "#1-2",
+   "etb": "2026-11-11T09:00",
+   "etu": "2026-11-12T03:30"
+  },
+  {
+   "id": "S60",
+   "berth": "BUOY3",
+   "etb": "2026-11-11T10:00",
+   "etu": "2026-11-12T09:30"
+  },
+  {
+   "id": "S62",
+   "berth": "GAS1",
+   "etb": "2026-11-11T11:00",
+   "etu": "2026-11-11T23:30"
+  },
+  {
+   "id": "S69",
+   "berth": "GAS2",
+   "etb": "2026-11-11T11:00",
+   "etu": "2026-11-11T20:00"
+  },
+  {
+   "id": "S37",
+   "berth": "#4-1",
+   "etb": "2026-11-11T12:00",
+   "etu": "2026-11-12T17:00"
+  },
+  {
+   "id": "S56",
+   "berth": "#8",
+   "etb": "2026-11-12T00:30",
+   "etu": "2026-11-12T22:30"
+  },
+  {
+   "id": "S13",
+   "berth": "#1-2",
+   "etb": "2026-11-12T08:00",
+   "etu": "2026-11-12T20:30"
+  },
+  {
+   "id": "S46",
+   "berth": "#6",
+   "etb": "2026-11-12T08:00",
+   "etu": "2026-11-14T01:30"
+  },
+  {
+   "id": "S59",
+   "berth": "BUOY2",
+   "etb": "2026-11-12T10:00",
+   "etu": "2026-11-13T12:00"
+  },
+  {
+   "id": "S51",
+   "berth": "#7",
+   "etb": "2026-11-12T11:30",
+   "etu": "2026-11-13T08:30"
+  },
+  {
+   "id": "S52",
+   "berth": "#7",
+   "etb": "2026-11-12T13:30",
+   "etu": "2026-11-13T11:30"
+  },
+  {
+   "id": "S27",
+   "berth": "#2-6",
+   "etb": "2026-11-12T18:00",
+   "etu": "2026-11-13T08:30"
+  },
+  {
+   "id": "S14",
+   "berth": "#1-2",
+   "etb": "2026-11-12T21:30",
+   "etu": "2026-11-13T07:30"
+  },
+  {
+   "id": "S39",
+   "berth": "#5-4",
+   "etb": "2026-11-13T01:00",
+   "etu": "2026-11-13T14:30"
+  },
+  {
+   "id": "S44",
+   "berth": "#5-5",
+   "etb": "2026-11-13T01:00",
+   "etu": "2026-11-13T13:00"
+  },
+  {
+   "id": "S06",
+   "berth": "#1-1",
+   "etb": "2026-11-13T08:00",
+   "etu": "2026-11-14T12:30"
+  },
+  {
+   "id": "S16",
+   "berth": "#1-2",
+   "etb": "2026-11-13T08:30",
+   "etu": "2026-11-13T16:30"
+  },
+  {
+   "id": "S57",
+   "berth": "#8",
+   "etb": "2026-11-13T09:00",
+   "etu": "2026-11-14T16:30"
+  },
+  {
+   "id": "S08",
+   "berth": "#1-1",
+   "etb": "2026-11-13T13:30",
+   "etu": "2026-11-14T03:00"
+  },
+  {
+   "id": "S53",
+   "berth": "#7",
+   "etb": "2026-11-13T14:00",
+   "etu": "2026-11-14T19:30"
+  },
+  {
+   "id": "S54",
+   "berth": "#7",
+   "etb": "2026-11-13T22:00",
+   "etu": "2026-11-14T19:00"
+  },
+  {
+   "id": "S40",
+   "berth": "#5-4",
+   "etb": "2026-11-14T01:00",
+   "etu": "2026-11-14T14:30"
+  },
+  {
+   "id": "S70",
+   "berth": "GAS2",
+   "etb": "2026-11-14T01:00",
+   "etu": "2026-11-14T11:00"
+  },
+  {
+   "id": "S47",
+   "berth": "#6",
+   "etb": "2026-11-14T08:00",
+   "etu": "2026-11-15T07:30"
+  },
+  {
+   "id": "S61",
+   "berth": "BUOY3",
+   "etb": "2026-11-14T13:30",
+   "etu": "2026-11-16T14:00"
+  },
+  {
+   "id": "S35",
+   "berth": "#3",
+   "etb": "2026-11-14T20:00",
+   "etu": "2026-11-15T17:30"
+  },
+  {
+   "id": "S09",
+   "berth": "#1-1",
+   "etb": "2026-11-15T01:00",
+   "etu": "2026-11-15T10:00"
+  },
+  {
+   "id": "S48",
+   "berth": "#6",
+   "etb": "2026-11-15T10:00",
+   "etu": "2026-11-16T07:30"
+  },
+  {
+   "id": "S49",
+   "berth": "#6",
+   "etb": "2026-11-15T10:00",
+   "etu": "2026-11-16T15:00"
+  },
+  {
+   "id": "S58",
+   "berth": "#8",
+   "etb": "2026-11-15T13:30",
+   "etu": "2026-11-17T21:30"
+  }
+ ],
+ "options": {
+  "max_wait_h": 120,
+  "grid_min": 30
+ },
+ "assumptions": [
+  "선박 제원     그 배가 쓴 부두의 크기에 맞는 '선박 제원 Sample' DWT 구간 평균. 소형 부두는 부두 제원 안으로 맞춘다",
+  "    제품 그룹     그 부두가 받는 그룹 중에서 고른다. 동일 화물 그룹 부두 묶음에서는 현행 계획에서 겹치는 배끼리 다르게 고른다",
+  "    계약          일 체선료 = DWT 구간 평균 일 체선료 · Laytime 원유 72h(CFR False → PPT 10쪽 규칙으로 36h) · 제품 36h · 소형 24h",
+  "                  LayCan = ETA 전날 00:00 ~ ETA 다음 날 23:59 · NOR Tender 없음 (ETANR = ETA)",
+  "    원유 탱크     PPT 12쪽 '30기, 1,000만 배럴' → 저장용량 1,000만 · 최소 허용 300만 · 처음 550만 · 공정 처리 시간당 3.5만 배럴",
+  "    FIX           샘플에 표시가 없어 없음. 계획 시작(11/09 00:00)에 이미 접안해 있는 배 2척만 '작업 중'으로 고정"
+ ]
+}

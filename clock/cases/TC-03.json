@@ -1,0 +1,52 @@
+{
+  "case_id": "TC-03",
+  "title": "묘박지에서 이미 체선 돌입, 체선 중 이동, 기상 중단 반액",
+  "source": "docs/domain/04-worked-examples.md 예제 3 (TC-03)",
+  "base_date": "2026-11-03",
+  "port_call": {"call_id": "TC-03", "vessel_name": "ULSAN GLORY (가상)", "vessel_type": "VLCC", "dwt": 310000,
+                "operation": "DISCHARGE", "cargo": "CRUDE", "berth_id": "SK2B"},
+  "contract_terms": {
+    "form": "ASBATANKVOY", "layer": "CHARTER_PARTY",
+    "laytime_this_port_hours": 36, "notice_hours": 6,
+    "demurrage_rate_usd_day": 120000,
+    "half_rate_events": ["FIRE", "EXPLOSION", "STORM", "STRIKE", "PLANT_BREAKDOWN"],
+    "shifting_counts_on_demurrage": "DISPUTED"
+  },
+  "terminal": {
+    "berth_id": "SK2B", "berth_type": "SBM", "berthing_rules": ["ULS-SBM-NIGHT"],
+    "daytime": {"start": "07:00", "end": "17:30"},
+    "berth_ready_at": "D2 19:00", "berth_ready_row": 3,
+    "berth_ready_ref": "SOF 3행 '앞 선박 이안' · 예제 3 조건 'SBM은 앞 VLCC가 D2 19:00까지 점유'"
+  },
+  "sof_events": [
+    {"event_id": "TC03-R01-ANCHORED", "row": 1, "event_type": "ANCHORED", "ts_local": "D1 10:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC03-R01-NOR_TENDERED", "row": 1, "event_type": "NOR_TENDERED", "ts_local": "D1 10:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC03-R01-NOR_RECEIVED", "row": 1, "event_type": "NOR_RECEIVED", "ts_local": "D1 10:00", "remarks": "묘박지 도착, NOR 제출·수령"},
+    {"event_id": "TC03-R05-ANCHOR_AWEIGH", "row": 5, "event_type": "ANCHOR_AWEIGH", "ts_local": "D3 07:00", "remarks": "양묘, SBM 이동 시작"},
+    {"event_id": "TC03-R06-ALL_FAST", "row": 6, "event_type": "ALL_FAST", "ts_local": "D3 09:00", "remarks": "계류 완료"},
+    {"event_id": "TC03-R07-HOSES_CONNECTED", "row": 7, "event_type": "HOSES_CONNECTED", "ts_local": "D3 10:00", "remarks": "호스 연결"},
+    {"event_id": "TC03-R08-OPS_COMMENCED", "row": 8, "event_type": "OPS_COMMENCED", "ts_local": "D3 10:30", "remarks": "양하 개시"},
+    {"event_id": "TC03-R09-OPS_STOPPED", "row": 9, "event_type": "OPS_STOPPED", "ts_local": "D3 22:00", "reason_code": "WEATHER", "source": "TERMINAL", "remarks": "강풍으로 터미널 지시에 따라 양하 중단"},
+    {"event_id": "TC03-R10-OPS_RESUMED", "row": 10, "event_type": "OPS_RESUMED", "ts_local": "D4 04:00", "remarks": "양하 재개 (중단 6h)"},
+    {"event_id": "TC03-R11-OPS_COMPLETED", "row": 11, "event_type": "OPS_COMPLETED", "ts_local": "D4 19:30", "remarks": "양하 완료 (실작업 27h)"},
+    {"event_id": "TC03-R12-HOSES_DISCONNECTED", "row": 12, "event_type": "HOSES_DISCONNECTED", "ts_local": "D4 20:30", "remarks": "호스 분리"}
+  ],
+  "doc_rows_not_events": [
+    {"row": 2, "text": "D1 16:00 (계산) 통지시간 만료 → 레이타임 개시 (대기)", "why": "계산 결과 — expected.notice_expiry_at·laytime_start_at"},
+    {"row": 3, "text": "D2 19:00 (선석 가용) 앞 선박 이안. 야간이라 계류 불가, 계속 대기", "why": "다른 배의 이안이라 06 이벤트가 아님 — terminal.berth_ready_at(행 3)으로 옮김(06 §9 berth_ready_at)"},
+    {"row": 4, "text": "D3 04:00 (계산) 허용 레이타임 36h 소진 → 체선 개시 (묘박지에서)", "why": "계산 결과 — expected.demurrage_start_at"}
+  ],
+  "expected": {
+    "doc_ref": "04 예제 3 계산표, TC 요약표 TC-03",
+    "notice_expiry_at": "D1 16:00",
+    "laytime_start_at": "D1 16:00",
+    "demurrage_start_at": "D3 04:00",
+    "laytime_end_at": "D4 20:30",
+    "demurrage_hours": "40.5",
+    "full_rate_hours": "34.5",
+    "half_rate_hours": "6",
+    "amount_usd": "187500",
+    "issues": ["DISPUTE-SHIFT-ON-DEM", "DISPUTE-NIGHT-WAIT"],
+    "alternatives": {"DISPUTE-SHIFT-ON-DEM": {"amount_usd": "177500"}}
+  }
+}

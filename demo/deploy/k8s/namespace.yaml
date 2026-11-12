@@ -1,0 +1,7 @@
+# namespace 생성 권한이 있고 팀 namespace가 아직 없을 때만 적용한다.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demurrage
+  labels:
+    app.kubernetes.io/part-of: demurrage

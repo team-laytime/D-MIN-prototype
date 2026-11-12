@@ -1,0 +1,144 @@
+{
+  "id": "GC-12",
+  "title": "세 척·두 부두 — 기준안 28,500 vs 1안 10,500 · 2안 12,000 · 3안 12,500",
+  "requirements": [
+    "FR-34",
+    "FR-35",
+    "FR-38",
+    "FR-51"
+  ],
+  "rule_ids": [
+    "OPT-01",
+    "OPT-02",
+    "ETB-01",
+    "LAY-05",
+    "DEM-03"
+  ],
+  "hand_calc": "#1-1(Direction 1h·Switching 1.5h), #6(1.5h·2.5h). A: ETA 00:00·허용 12h·시간당 2,000·작업 10h / B: 01:00·24h·1,000·20h / C: 02:00·6h·3,000·6h, 호스 1h. 부두를 나누는 일정 12가지는 손으로 모두 계산, 한 부두에 몰아넣는 12가지는 대표(#1-1: C→A→B = 40,000)만 손으로 계산하고 나머지는 완전 탐색으로 확인(demo/docs/06 GC-12 표)",
+  "defaults": {
+    "scenario": {
+      "horizon": {
+        "start": "2026-11-10 00:00",
+        "end": "2026-11-13 00:00"
+      },
+      "berths": [
+        "#1-1",
+        "#6"
+      ]
+    },
+    "vessel": {
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 20000,
+      "dwt": 30000,
+      "loa": 180,
+      "pbl": 85,
+      "draft": 10,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 30000,
+      "status": "PLANNED",
+      "contract": {
+        "type": "CP",
+        "laycan_from": "2026-11-09",
+        "laycan_to": "2026-11-12"
+      },
+      "work": {
+        "hose_term_h": 1
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "기준안과 후보 3개",
+      "scenario": {
+        "vessels": [
+          {
+            "id": "A",
+            "eta": "2026-11-10 00:00",
+            "contract": {
+              "laytime_h": 12,
+              "demurrage_rate_usd_day": 48000
+            },
+            "work": {
+              "hours": 10
+            }
+          },
+          {
+            "id": "B",
+            "eta": "2026-11-10 01:00",
+            "contract": {
+              "laytime_h": 24,
+              "demurrage_rate_usd_day": 24000
+            },
+            "work": {
+              "hours": 20
+            }
+          },
+          {
+            "id": "C",
+            "eta": "2026-11-10 02:00",
+            "contract": {
+              "laytime_h": 6,
+              "demurrage_rate_usd_day": 72000
+            },
+            "work": {
+              "hours": 6
+            }
+          }
+        ]
+      },
+      "expect": {
+        "plans": {
+          "FCFS": {
+            "total_usd": "28500",
+            "vessels": {
+              "A": {
+                "berth": "#1-1",
+                "etb": "2026-11-10 01:00",
+                "amount_usd": "0"
+              },
+              "B": {
+                "berth": "#6",
+                "etb": "2026-11-10 02:30",
+                "amount_usd": "0"
+              },
+              "C": {
+                "berth": "#1-1",
+                "etb": "2026-11-10 15:30",
+                "laytime_end": "2026-11-10 14:00",
+                "hose_off": "2026-11-10 23:30",
+                "amount_usd": "28500"
+              }
+            }
+          }
+        },
+        "optimizer": {
+          "baseline_total_usd": "28500",
+          "candidate_totals_usd": [
+            "10500",
+            "12000",
+            "12500"
+          ],
+          "savings_usd": "18000",
+          "violations": 0,
+          "best_signature": [
+            [
+              "#1-1",
+              [
+                "C",
+                "B"
+              ]
+            ],
+            [
+              "#6",
+              [
+                "A"
+              ]
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "requirements_note": "팀 구글 문서 '프로젝트정의 요구사항서(최종)' 탭 번호"
+}

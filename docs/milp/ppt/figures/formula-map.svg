@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1100" viewBox="0 0 1520 1100" role="img">
+<title>PPT 계산식이 수리계획법에 들어가는 길</title><desc>멘토링 PPT 06~12쪽의 규칙을 계산식 P1~P23으로 옮기고, 그 값이 팀 최종본 본체 식 (1)~(8)의 입력 Ω·F·C·q가 된다. 본체 식은 바꾸지 않는다.</desc>
+<defs><marker id="mk" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0E1726"/></marker><marker id="mg" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#667085"/></marker><marker id="mo" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#D9620B"/></marker><marker id="mb" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#1B5FD9"/></marker><marker id="mt" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#0B8B7B"/></marker><marker id="mp" viewBox="0 0 10 10" refX="8.2" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M1 1.2 L9 5 L1 8.8 Z" fill="#5B4BC4"/></marker></defs>
+<rect x="0" y="0" width="1520" height="1100" rx="14" fill="#F6F8FB"/>
+<text x="28.0" y="40.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="20" font-weight="700" fill="#0E1726" text-anchor="start">PPT 계산식이 수리계획법에 들어가는 길</text>
+<text x="28.0" y="63.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="400" fill="#667085" text-anchor="start">PPT 06~12쪽 규칙은 모두 &#x27;솔버에 넣기 전의 값&#x27;이 된다 · 팀 최종본 본체 식 (1)~(8)은 한 글자도 바꾸지 않는다</text>
+<rect x="1324.0" y="24.0" width="113.4" height="26.0" rx="13.0" fill="#E3F4F1" stroke="none" stroke-width="1"/>
+<text x="1336.0" y="41.3" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#0B8B7B" text-anchor="start">본체 식 변경 0줄</text>
+<text x="26.0" y="104.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#667085" text-anchor="start">① 멘토링 PPT</text>
+<text x="26.0" y="123.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#667085" text-anchor="start">무엇을 정했나</text>
+<text x="374.0" y="104.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#1B5FD9" text-anchor="start">② 계산식 P1~P23</text>
+<text x="374.0" y="123.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#667085" text-anchor="start">PPT를 식으로 (pptcalc · planner)</text>
+<text x="826.0" y="104.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#5B4BC4" text-anchor="start">③ 솔버 입력</text>
+<text x="826.0" y="123.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#667085" text-anchor="start">풀기 전에 정해지는 숫자</text>
+<text x="1174.0" y="104.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="15" font-weight="700" fill="#0B8B7B" text-anchor="start">④ 본체 식 (1)~(8)</text>
+<text x="1174.0" y="123.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="400" fill="#667085" text-anchor="start">팀 최종본 그대로 (solver.py)</text>
+<path d="M332.0 112.0 L362.0 112.0" fill="none" stroke="#667085" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mg)"/>
+<path d="M784.0 112.0 L814.0 112.0" fill="none" stroke="#667085" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mg)"/>
+<path d="M1132.0 112.0 L1162.0 112.0" fill="none" stroke="#667085" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mg)"/>
+<rect x="24.0" y="141.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="140.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="154.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="168.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">06쪽</text>
+<text x="40.0" y="198.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">ETB = 조건별 접안 가능 시각의 교집합</text>
+<text x="40.0" y="220.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">FIX 선박은 자동 산출에서 제외</text>
+<rect x="24.0" y="257.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="256.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="270.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="284.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">07쪽</text>
+<text x="40.0" y="314.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">이전 선박 ETU + Switching / ETA + Direction</text>
+<text x="40.0" y="336.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">Shifting 표 · FIX 앞에 못 끼면 접안불가</text>
+<rect x="24.0" y="373.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="372.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="386.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="400.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">08쪽</text>
+<text x="40.0" y="430.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">야간 도선 → 다가오는 08시</text>
+<text x="40.0" y="452.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">동일 화물 그룹 · 동시 접안 ETU − 2h · 부두 제약</text>
+<rect x="24.0" y="489.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="488.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="502.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="516.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">09쪽</text>
+<text x="40.0" y="546.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">작업시작 +1h · 이안 +2h · 호스분리 +30분</text>
+<text x="40.0" y="568.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">ETANR · 정박개시 (Daylight 미적용)</text>
+<rect x="24.0" y="605.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="604.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="618.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="632.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">10쪽</text>
+<text x="40.0" y="662.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">정박개시 (Daylight 적용: 07시 · 일출·일몰)</text>
+<text x="40.0" y="684.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">정박종료 = 정박개시 + LayTime (원유·CFR False → ÷2)</text>
+<rect x="24.0" y="721.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="720.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="734.0" width="42.6" height="21.0" rx="10.5" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="47.0" y="748.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#0E1726" text-anchor="start">11쪽</text>
+<text x="40.0" y="778.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">Demurrage = 호스분리 − 정박종료</text>
+<text x="40.0" y="800.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">− 기상체선 시간 ÷ 2 · 체선료 = × Rate ÷ 24</text>
+<rect x="24.0" y="837.5" width="300.0" height="104.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="24.0" y="836.0" width="300.0" height="104.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<rect x="38.0" y="850.0" width="42.6" height="21.0" rx="10.5" fill="#FFF4DF" stroke="none" stroke-width="1"/>
+<text x="47.0" y="864.6" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="700" fill="#B26A00" text-anchor="start">12쪽</text>
+<text x="40.0" y="894.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#344054" text-anchor="start">선박·부두 제원, 접안 가능 제품, 일출·일몰</text>
+<text x="40.0" y="916.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#667085" text-anchor="start">기상 → 부두 제약 설정 · 조석 고려 안 함 · 탱크 재고</text>
+<rect x="372.0" y="141.5" width="404.0" height="73.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="140.0" width="404.0" height="73.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="166.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">부두 고르기</text>
+<rect x="721.5" y="151.0" width="38.5" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="729.5" y="164.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">12쪽</text>
+<text x="388.0" y="190.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P1   배정 가능 부두 = 제품 그룹 ∧ 제원 5종 (Draft는 수입선만)</text>
+<rect x="372.0" y="226.5" width="404.0" height="199.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="225.0" width="404.0" height="199.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="251.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">접안 시각 ETB</text>
+<rect x="690.2" y="236.0" width="69.8" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="698.2" y="249.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">06·07·08쪽</text>
+<text x="388.0" y="275.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P2   부두가 비어 있을 때: ETA + Direction</text>
+<text x="388.0" y="296.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P3   앞 배 뒤: 그 배 이안(ETU) + Switching</text>
+<text x="388.0" y="317.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P4   야간 도선 금지 구간 → 다가오는 08시</text>
+<text x="388.0" y="338.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P5   부두 제약(기상·공사) → 종료 + Direction</text>
+<text x="388.0" y="359.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P6   동일 화물 그룹 · 부두 동시 접안 → 상대 ETU − 2h</text>
+<text x="388.0" y="380.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P7   ETB = 금지 구간 밖 가장 이른 시각 (모든 제약 AND)</text>
+<text x="388.0" y="401.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P8   FIX 보호: 앞 배 이안 + Switching &lt; FIX ETB</text>
+<rect x="372.0" y="437.5" width="404.0" height="136.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="436.0" width="404.0" height="136.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="462.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">작업 시각</text>
+<rect x="721.5" y="447.0" width="38.5" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="729.5" y="460.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">09쪽</text>
+<text x="388.0" y="486.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P9   작업시작 = ETB + 1h</text>
+<text x="388.0" y="507.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P10  작업완료 = 작업시작 + 물량 ÷ 평균 Rate</text>
+<text x="388.0" y="528.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P11  호스분리 = 작업완료 + 30분</text>
+<text x="388.0" y="549.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P12  이안 ETU = 작업완료 + 2h</text>
+<rect x="372.0" y="585.5" width="404.0" height="136.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="584.0" width="404.0" height="136.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="610.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">계약 시간</text>
+<rect x="705.9" y="595.0" width="54.1" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="713.9" y="608.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">09·10쪽</text>
+<text x="388.0" y="634.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P13  ETANR = NVL(NOR Tender, ETA)</text>
+<text x="388.0" y="655.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P14  정박개시 (미적용): Early Loading · Miss · From 06시 · +6h</text>
+<text x="388.0" y="676.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P15  정박개시 (Daylight): From 07시 · 일출~일몰 · 07시</text>
+<text x="388.0" y="697.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P16  정박종료 = 정박개시 + LayTime (원유 · CFR False → ½)</text>
+<rect x="372.0" y="733.5" width="404.0" height="115.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="732.0" width="404.0" height="115.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="758.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">체선료</text>
+<rect x="721.5" y="743.0" width="38.5" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="729.5" y="756.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">11쪽</text>
+<text x="388.0" y="782.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P17  공제 = 기상체선 시간 × ½</text>
+<text x="388.0" y="803.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P18  체선시간 = max(0, 호스분리 − 정박종료 − 공제)</text>
+<text x="388.0" y="824.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P19  체선료 = 체선시간 × Rate ÷ 24</text>
+<rect x="372.0" y="860.5" width="404.0" height="136.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="372.0" y="859.0" width="404.0" height="136.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="388.0" y="885.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13.5" font-weight="700" fill="#1B5FD9" text-anchor="start">작업계획 만들기</text>
+<rect x="680.3" y="870.0" width="79.7" height="20.0" rx="10.0" fill="#EEF2F7" stroke="none" stroke-width="1"/>
+<text x="688.3" y="883.8" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="start">06쪽 &#x27;재확인&#x27;</text>
+<text x="388.0" y="909.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P20  Ω: PPT 식이 낼 수 있는 접안 시각 (큰 문제는 30분 눈금)</text>
+<text x="388.0" y="930.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P21  F: 같은 부두 · 동일 화물 그룹 · 동시 접안 · FIX</text>
+<text x="388.0" y="951.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P22  q · D: 하역 +, 선적 −, 공정 소비</text>
+<text x="388.0" y="972.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.4" font-weight="500" fill="#344054" text-anchor="start">P23  고른 조합을 PPT 식으로 다시 계산 · 위반 검사</text>
+<rect x="824.0" y="141.5" width="300.0" height="98.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="824.0" y="140.0" width="300.0" height="98.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="840.0" y="166.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#5B4BC4" text-anchor="start">Ω[i]  작업계획 집합</text>
+<text x="840.0" y="190.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">입항 건 × 부두 × 접안 시각</text>
+<text x="840.0" y="210.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">각 계획에 s·a·c·h·u (P9~P12)</text>
+<text x="1108.0" y="166.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="end">P1~P8 · P20</text>
+<rect x="824.0" y="253.5" width="300.0" height="98.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="824.0" y="252.0" width="300.0" height="98.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="840.0" y="278.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#5B4BC4" text-anchor="start">C[i,k]  체선료</text>
+<text x="840.0" y="302.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">작업계획 하나의 금액 (센트 정수)</text>
+<text x="840.0" y="322.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">근거: P13~P19 숫자 대입 그대로</text>
+<text x="1108.0" y="278.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="end">P9~P19</text>
+<rect x="824.0" y="365.5" width="300.0" height="98.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="824.0" y="364.0" width="300.0" height="98.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="840.0" y="390.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#5B4BC4" text-anchor="start">F  충돌 쌍</text>
+<text x="840.0" y="414.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">같이 고를 수 없는 두 계획</text>
+<text x="840.0" y="434.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">큰 문제는 &#x27;겹치는 묶음&#x27; 한 줄로</text>
+<text x="1108.0" y="390.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="end">P3 · P6 · P8 · P21</text>
+<rect x="824.0" y="477.5" width="300.0" height="98.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="824.0" y="476.0" width="300.0" height="98.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="840.0" y="502.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#5B4BC4" text-anchor="start">q[i,k,t] · D[t] · R⁰ · R_min · R_max</text>
+<text x="840.0" y="526.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">원유 탱크 1,000만 배럴 · 공정 처리</text>
+<text x="840.0" y="546.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">하역 시작~완료를 구간에 나눔</text>
+<text x="1108.0" y="502.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="end">P22 · 12쪽</text>
+<rect x="824.0" y="589.5" width="300.0" height="98.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="824.0" y="588.0" width="300.0" height="98.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="840.0" y="614.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.6" font-weight="700" fill="#5B4BC4" text-anchor="start">k_fix[i]  FIX · 작업 중</text>
+<text x="840.0" y="638.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">입력값 그대로 고정</text>
+<text x="840.0" y="658.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.2" font-weight="400" fill="#344054" text-anchor="start">앞에 못 끼는 계획은 Ω에서 뺌</text>
+<text x="1108.0" y="614.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="10.5" font-weight="600" fill="#667085" text-anchor="end">P8 · 06쪽</text>
+<rect x="1172.0" y="141.5" width="324.0" height="600.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="1172.0" y="140.0" width="324.0" height="600.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="1190.0" y="172.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(1)</text>
+<text x="1226.0" y="172.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">min  Σ_i Σ_k  C[i,k] · z[i,k]</text>
+<text x="1226.0" y="191.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">총 예상 체선료 (모든 입항 건)</text>
+<text x="1190.0" y="230.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(2)</text>
+<text x="1226.0" y="230.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">Σ_k z[i,k] = 1</text>
+<text x="1226.0" y="249.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">입항 건마다 작업계획 하나</text>
+<text x="1190.0" y="288.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(3)</text>
+<text x="1226.0" y="288.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">z[i,k] + z[j,l] ≤ 1   ∀ F</text>
+<text x="1226.0" y="307.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">충돌하는 계획은 같이 못 고름</text>
+<text x="1190.0" y="346.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(4)</text>
+<text x="1226.0" y="346.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">R[t+1] = R[t] + ΣΣ q·z − D[t]</text>
+<text x="1226.0" y="365.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">시간대별 원유 재고 수지</text>
+<text x="1190.0" y="404.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(5)</text>
+<text x="1226.0" y="404.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">R[0] = R⁰</text>
+<text x="1226.0" y="423.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">처음 재고</text>
+<text x="1190.0" y="462.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(6)</text>
+<text x="1226.0" y="462.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">R_min ≤ R[t] ≤ R_max</text>
+<text x="1226.0" y="481.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">최소 허용 재고 · 저장용량</text>
+<text x="1190.0" y="520.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(7)</text>
+<text x="1226.0" y="520.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">z ∈ {0,1}</text>
+<text x="1226.0" y="539.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">고르거나 안 고르거나</text>
+<text x="1190.0" y="578.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#0B8B7B" text-anchor="start">(8)</text>
+<text x="1226.0" y="578.0" font-family="'SF Mono',Menlo,monospace,Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="600" fill="#0E1726" text-anchor="start">z[i, k_fix] = 1</text>
+<text x="1226.0" y="597.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">FIX 입항 건</text>
+<line x1="1188" y1="614" x2="1480" y2="614" stroke="#E2E7EE"/>
+<text x="1190.0" y="642.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12.5" font-weight="700" fill="#D9620B" text-anchor="start">(+)</text>
+<text x="1226.0" y="642.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="600" fill="#0E1726" text-anchor="start">다음 후보안: 방금 고른 조합 금지</text>
+<text x="1226.0" y="661.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11" font-weight="400" fill="#667085" text-anchor="start">FR-42 · 2안·3안을 낼 때만 더한다</text>
+<rect x="1172.0" y="761.5" width="324.0" height="236.0" rx="10" fill="#101828" stroke="none" stroke-width="1" opacity="0.06"/>
+<rect x="1172.0" y="760.0" width="324.0" height="236.0" rx="10" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="1190.0" y="788.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="13" font-weight="700" fill="#0E1726" text-anchor="start">풀고 나서 (식 밖, 순서만)</text>
+<circle cx="1200.0" cy="816.0" r="10" fill="#0B8B7B"/>
+<text x="1200.0" y="820.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="1220.0" y="820.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="500" fill="#344054" text-anchor="start">1차 총 체선료 최소 → 2차 일찍 대는 쪽</text>
+<circle cx="1200.0" cy="850.0" r="10" fill="#0B8B7B"/>
+<text x="1200.0" y="854.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="1220.0" y="854.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="500" fill="#344054" text-anchor="start">고른 조합을 PPT 식으로 다시 계산 (P23)</text>
+<circle cx="1200.0" cy="884.0" r="10" fill="#0B8B7B"/>
+<text x="1200.0" y="888.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="1220.0" y="888.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="500" fill="#344054" text-anchor="start">규칙 위반 다시 검사 → 하나라도 있으면 멈춤</text>
+<circle cx="1200.0" cy="918.0" r="10" fill="#0B8B7B"/>
+<text x="1200.0" y="922.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="1220.0" y="922.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="500" fill="#344054" text-anchor="start">근거 = 입항 건마다 P7~P19 숫자 대입</text>
+<circle cx="1200.0" cy="952.0" r="10" fill="#0B8B7B"/>
+<text x="1200.0" y="956.2" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="12" font-weight="700" fill="#FFFFFF" text-anchor="middle">5</text>
+<text x="1220.0" y="956.5" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.8" font-weight="500" fill="#344054" text-anchor="start">LLM은 숫자를 만들지 않는다 (NFR-01)</text>
+<rect x="24.0" y="1044.0" width="1124.0" height="30.0" rx="15" fill="#FFFFFF" stroke="#E2E7EE" stroke-width="1"/>
+<text x="40.0" y="1063.0" font-family="Pretendard,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif" font-size="11.5" font-weight="500" fill="#344054" text-anchor="start">읽는 법: 왼쪽에서 오른쪽으로. PPT 한 장의 규칙은 ②의 식 몇 개가 되고, 그 식이 낸 숫자가 ③으로 모여 ④의 기호 자리에 들어간다.</text>
+</svg>

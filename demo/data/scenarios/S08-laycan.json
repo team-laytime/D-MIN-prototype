@@ -1,0 +1,160 @@
+{
+  "id": "S08-laycan",
+  "title": "Laycan 조기 도착 · Laycan Miss",
+  "description": "#6 한 부두에 휘발유·경유선 3척이 왔습니다. SOBAEK은 Laycan(11/12~14)보다 하루 일찍 왔고, GEUMGANG은 Laycan(11/08~10)이 지난 뒤에 왔으며, YEONGSAN만 Laycan 안에 왔습니다.",
+  "data_label": "가상 데이터",
+  "card": {
+    "category": "계약 조건",
+    "situation": "#6 한 부두에 휘발유·경유선 3척이 왔습니다. SOBAEK은 Laycan(11/12~14)보다 하루 일찍 왔고, GEUMGANG은 Laycan(11/08~10)이 지난 뒤에 왔으며, YEONGSAN만 Laycan 안에 왔습니다.",
+    "question": "정박시간이 아직 시작되지 않은 배를 먼저 붙일 이유가 있는가?",
+    "rules": [
+      "LAY-02",
+      "LAY-03",
+      "LAY-04",
+      "LAY-05"
+    ],
+    "clauses": [
+      "CT-2611-21 제5조",
+      "CT-2611-22 제5조",
+      "CT-2611-23 제5조"
+    ],
+    "watch": [
+      "조기 도착선의 정박개시가 Laycan 첫날 06:00인지",
+      "Laycan Miss 선박의 정박개시가 접안 시각인지",
+      "1안이 Laycan 안에 온 배를 먼저 붙이는지"
+    ],
+    "order": 7
+  },
+  "horizon": {
+    "start": "2026-11-10 00:00",
+    "end": "2026-11-14 00:00"
+  },
+  "berths": [
+    "#6"
+  ],
+  "vessels": [
+    {
+      "id": "L1",
+      "name": "MT SOBAEK",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 26500,
+      "dwt": 47000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 33000,
+      "eta": "2026-11-11 08:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-21",
+      "remarks": "Laycan보다 하루 일찍 도착"
+    },
+    {
+      "id": "L2",
+      "name": "MT GEUMGANG",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 26000,
+      "dwt": 46000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "DS-ULSD",
+      "qty": 40000,
+      "eta": "2026-11-11 02:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-22",
+      "remarks": "Laycan이 지난 뒤 도착"
+    },
+    {
+      "id": "L3",
+      "name": "MT YEONGSAN",
+      "vessel_type": "SPECIAL_PRODUCT",
+      "grt": 27500,
+      "dwt": 49000,
+      "loa": 183,
+      "pbl": 95,
+      "draft": 11.0,
+      "direction": "EXPORT",
+      "material_code": "PG-RG92",
+      "qty": 36000,
+      "eta": "2026-11-11 04:00",
+      "status": "PLANNED",
+      "contract_id": "CT-2611-23",
+      "remarks": "Laycan 안 도착, 허용 15시간·하루 $30,000"
+    }
+  ],
+  "restrictions": [],
+  "tide_windows": {
+    "_note": "가상 조석 시간창(고조 ±2시간). 공공데이터포털 조석예보 형식을 대신하는 값",
+    "Buoy": [
+      [
+        "2026-11-10 03:10",
+        "2026-11-10 07:10"
+      ],
+      [
+        "2026-11-10 15:35",
+        "2026-11-10 19:35"
+      ],
+      [
+        "2026-11-11 04:00",
+        "2026-11-11 08:00"
+      ],
+      [
+        "2026-11-11 16:25",
+        "2026-11-11 20:25"
+      ],
+      [
+        "2026-11-12 04:50",
+        "2026-11-12 08:50"
+      ],
+      [
+        "2026-11-12 17:15",
+        "2026-11-12 21:15"
+      ],
+      [
+        "2026-11-13 05:40",
+        "2026-11-13 09:40"
+      ],
+      [
+        "2026-11-13 18:05",
+        "2026-11-13 22:05"
+      ],
+      [
+        "2026-11-14 06:30",
+        "2026-11-14 10:30"
+      ],
+      [
+        "2026-11-14 18:55",
+        "2026-11-14 22:55"
+      ],
+      [
+        "2026-11-15 07:20",
+        "2026-11-15 11:20"
+      ],
+      [
+        "2026-11-15 19:45",
+        "2026-11-15 23:45"
+      ],
+      [
+        "2026-11-16 08:10",
+        "2026-11-16 12:10"
+      ],
+      [
+        "2026-11-16 20:35",
+        "2026-11-17 00:35"
+      ]
+    ]
+  },
+  "inventory": [
+    {
+      "group": "CRUDE",
+      "unit": "kl",
+      "capacity": 850000,
+      "opening": 600000,
+      "daily_net": -120000,
+      "minimum": 0
+    }
+  ]
+}

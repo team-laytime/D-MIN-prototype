@@ -1,0 +1,7 @@
+# 복사: cp backend.hcl.example backend.hcl
+# 이 버킷은 이 Terraform 구성 밖에서 먼저 준비한다(버전 관리·암호화·접근 제한).
+bucket       = "replace-with-provided-terraform-state-bucket"
+key          = "demurrage/dev/terraform.tfstate"
+region       = "ap-northeast-2"
+encrypt      = true
+use_lockfile = true

@@ -1,0 +1,172 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="lib.css">
+<style>
+.scene.on{display:flex;flex-direction:column;justify-content:center}
+.grid3{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:26px;align-items:start;margin-top:26px}
+.tiles{display:flex;align-items:center;gap:18px;justify-content:center;margin-top:60px}
+.tiles .card{min-width:230px;text-align:center}
+.op{font-size:36px;color:var(--muted);font-weight:500}
+.layers{display:grid;grid-template-columns:1fr 150px 1fr 150px 1fr;align-items:center;margin-top:70px}
+.layers .card{text-align:center}
+.arrow{text-align:center}
+.arrow svg{display:block;margin:0 auto}
+.arrow .sub{font-size:16px;margin-top:4px}
+table.skt{border-collapse:collapse;width:100%;font-size:18px}
+table.skt th{text-align:left;color:var(--muted);font-size:13px;letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;border-bottom:1px solid var(--line2)}
+table.skt td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.skt td:first-child{font-weight:600}
+.sum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;margin-top:34px}
+.sum .card{min-height:170px}
+.sum .n{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:15px;margin-bottom:8px}
+.sum .t{font-size:26px;font-weight:600;line-height:1.3}
+.sum .d{color:var(--muted);font-size:17px;margin-top:8px;line-height:1.4}
+</style></head><body>
+<div class="topbar"><div><b>체선료 입문</b> · 1편 레이타임 101</div><div>SKALA 최종 프로젝트 · 가상 데이터 · 규칙값 가정</div></div>
+<div class="stage">
+
+<section class="scene" id="s-title">
+  <div style="position:absolute;left:64px;top:80px;max-width:720px">
+    <div class="tag rv" id="t1-tag">체선료 입문 · 1편</div>
+    <div class="h rv" id="t1-h" style="font-size:66px;margin-top:20px">레이타임 101</div>
+    <div class="sub rv" id="t1-sub" style="margin-top:14px;font-size:24px">배가 항구에서 보내는 시간이 어떻게 돈이 되는가</div>
+    <div class="rv" id="t1-meta" style="margin-top:30px;color:var(--muted);font-size:16px">탱커 항해용선 · Asbatankvoy 기준 · 수치는 가정</div>
+  </div>
+  <svg id="t1-ship" viewBox="0 0 420 210" style="position:absolute;right:60px;top:90px;width:460px;height:230px"></svg>
+</section>
+
+<section class="scene" id="s-charter">
+  <div class="grid3">
+    <div class="card rv" id="c-owner"><div class="sub">Owner</div><div class="h" style="font-size:36px">선주</div><div class="sub" style="margin-top:8px;color:var(--fg)">배를 낸다</div></div>
+    <div class="card rv" id="c-cp" style="border-color:var(--accent)"><div class="sub">Charter Party · 항해용선</div><div class="h" style="font-size:32px">용선계약</div>
+      <div id="c-lay" class="rv" style="margin-top:14px;font-size:23px">Laytime <b class="mono" id="c-72" style="color:var(--fg)">72</b> running hours</div>
+      <div id="c-dem" class="rv" style="font-size:21px;color:var(--muted);margin-top:4px">Demurrage USD ·····/day</div></div>
+    <div class="card rv" id="c-chtr"><div class="sub">Charterer</div><div class="h" style="font-size:36px">용선주</div><div class="sub" style="margin-top:8px;color:var(--fg)">화물을 맡긴다</div></div>
+  </div>
+  <div id="c-note" class="rv" style="margin-top:46px;font-size:26px;text-align:center;line-height:1.4">레이타임 = 항구에서 추가 비용 없이 쓸 수 있도록 <b style="color:var(--accent)">미리 약속한 시간</b></div>
+</section>
+
+<section class="scene" id="s-clock">
+  <div style="margin-top:0" class="sub">허용 레이타임 <b class="mono" style="color:var(--fg)">36h</b> · 체선료율 <b class="mono" style="color:var(--fg)">USD 120,000 / 일</b> (가정)</div>
+  <svg id="k-svg" width="1152" height="185" style="margin-top:10px;display:block"></svg>
+  <div style="display:flex;gap:56px;margin-top:6px;align-items:flex-end">
+    <div><div class="sub">사용 시간</div><div class="big mono" id="k-used">0h 00m</div></div>
+    <div><div class="sub">체선 시간</div><div class="big mono" id="k-dem" style="color:var(--red)">0h 00m</div></div>
+    <div><div class="sub">체선료 = 시간 × 요율/24</div><div class="big mono" id="k-amt" style="color:var(--red)">$0</div></div>
+  </div>
+</section>
+
+<section class="scene" id="s-rate">
+  <div class="tiles">
+    <div class="card rv" id="r1"><div class="sub">VLCC 체선료율 (가정)</div><div class="big mono" id="r1v">$0</div><div class="sub">/ 일</div></div>
+    <div class="rv op" id="r2">÷ 24</div>
+    <div class="card rv" id="r3"><div class="sub">시간당</div><div class="big mono" id="r3v">$0</div><div class="sub">/ 시간</div></div>
+    <div class="rv op" id="r4">× 6h</div>
+    <div class="card rv" id="r5" style="border-color:var(--red)"><div class="sub">야간 계류 불가로 6시간 대기</div><div class="big mono" id="r5v" style="color:var(--red)">$0</div><div class="sub">사라진다</div></div>
+  </div>
+  <div id="r6" class="rv" style="text-align:center;margin-top:46px;font-size:22px;color:var(--muted)">2026년 VLCC 용선료 사상 최고 → 체선료율도 함께 오르는 경향 [추론]</div>
+</section>
+
+<section class="scene" id="s-despatch">
+  <svg id="d-svg" viewBox="0 0 1152 330" width="1152" height="330" style="display:block;margin-top:6px"></svg>
+  <div id="d-note" class="rv" style="text-align:center;font-size:24px;margin-top:6px">빨리 끝내도 보상 없음 · 늦으면 손해 → 터미널의 유일한 레버는 <b style="color:var(--accent)">지연을 막는 것</b></div>
+</section>
+
+<section class="scene" id="s-layers">
+  <div class="layers">
+    <div class="card rv" id="l1"><div class="sub">Owner</div><div class="h" style="font-size:34px">선주</div></div>
+    <div class="arrow rv" id="l2"><svg width="150" height="40" viewBox="0 0 150 40"><line x1="6" y1="20" x2="128" y2="20" stroke="#4fcfc3" stroke-width="3"/><path d="M128,10 L146,20 L128,30 z" fill="#4fcfc3"/></svg><div class="sub">용선계약 CP<br>체선료 청구</div></div>
+    <div class="card rv" id="l3" style="border-color:var(--accent)"><div class="sub">Charterer</div><div class="h" style="font-size:34px">용선주</div></div>
+    <div class="arrow rv" id="l4"><svg width="150" height="40" viewBox="0 0 150 40"><line x1="6" y1="20" x2="128" y2="20" stroke="#4fcfc3" stroke-width="3"/><path d="M128,10 L146,20 L128,30 z" fill="#4fcfc3"/></svg><div class="sub">매매계약 GTC<br>같은 조건으로 전가</div></div>
+    <div class="card rv" id="l5"><div class="sub">Counterparty</div><div class="h" style="font-size:34px">거래 상대방</div></div>
+  </div>
+  <div id="l6" class="rv" style="margin-top:44px;text-align:center;font-size:26px">두 계약의 레이타임·체선료 조건을 맞춰 손실 없이 넘기는 구조 = <b style="color:var(--accent)">back-to-back</b></div>
+</section>
+
+<section class="scene" id="s-sk">
+  <div style="display:grid;grid-template-columns:1fr 290px;gap:36px;align-items:center;margin-top:6px">
+    <table class="skt"><thead><tr><th>SK의 입장</th><th>선주에게 체선료를 내는 자</th><th>SK의 부담 경로</th></tr></thead><tbody>
+      <tr class="rv" id="sk1"><td>원유 수입 · FOB 매입 + 자가 용선</td><td>SK (용선주)</td><td>용선계약대로 직접 지급</td></tr>
+      <tr class="rv" id="sk2"><td>원유 수입 · DES/CFR 매입</td><td>매도인</td><td>매매계약 초과분을 매도인에게</td></tr>
+      <tr class="rv" id="sk3"><td>제품 수출 · FOB 매도</td><td>매수인</td><td>매수인이 선적항 지연분을 SK에 청구</td></tr>
+      <tr class="rv" id="sk4"><td>제품 수출 · CFR/CIF 매도</td><td>SK (용선주)</td><td>직접 지급, 양하항 지연은 역청구</td></tr>
+    </tbody></table>
+    <div class="card rv" id="sk-node" style="text-align:center;border-color:var(--red);padding:26px 20px"><div class="sub">SK 선석에서 대기가 생기면</div><div class="h" style="font-size:44px;margin-top:6px">SK 비용</div><div style="color:var(--red);font-size:20px;margin-top:6px">어느 경로로든</div></div>
+  </div>
+  <div id="sk-note" class="rv" style="margin-top:30px;text-align:center;font-size:24px">터미널 운영 효율과 체선료는 <b style="color:var(--accent)">같은 문제의 두 얼굴</b></div>
+</section>
+
+<section class="scene" id="s-summary">
+  <div class="sum">
+    <div class="card rv" id="m1"><div class="n">01 · LAYTIME</div><div class="t">레이타임은<br>약속한 하역 시간</div><div class="d">탱커 보통 72 running hours. NOR과 통지시간 뒤에 돌기 시작한다.</div></div>
+    <div class="card rv" id="m2"><div class="n">02 · DEMURRAGE</div><div class="t">체선료는<br>초과분의 값</div><div class="d">넘긴 시간 × 요율/24. 벌금이 아니라 약정 배상금. 탱커엔 조출료가 없다.</div></div>
+    <div class="card rv" id="m3"><div class="n">03 · BACK-TO-BACK</div><div class="t">비용은 두 겹 계약을<br>타고 SK에게</div><div class="d">용선계약과 매매계약. SK 선석의 대기는 어느 경로로든 SK 비용이 되기 쉽다.</div></div>
+  </div>
+  <div id="m4" class="rv" style="margin-top:34px;text-align:center;font-size:22px;color:var(--muted)">다음 편 → <b style="color:var(--fg)">NOR과 시계가 도는 순간</b>: 언제 시작하고, 무엇을 세고, 언제 멈추나</div>
+</section>
+
+</div>
+<div class="capbar"><div id="cap"></div></div>
+<div id="progwrap"><div id="prog"></div></div>
+<script src="lib.js"></script>
+<script>
+// ---- title: tanker silhouette drawn with stroke-dashoffset ----
+const shipPaths = ['M30,130 L70,180 L350,180 L392,130 Z', 'M300,130 L300,86 L352,86 L352,130', 'M318,86 L318,62 L336,62 L336,86', 'M90,130 L90,96 M60,130 L60,108', 'M8,198 Q48,184 88,198 T168,198 T248,198 T328,198 T408,198'];
+$('t1-ship').innerHTML = shipPaths.map((d, i) => `<path d="${d}" pathLength="1" fill="none" stroke="${i === 0 ? C.accent : i === 4 ? C.blue : C.muted}" stroke-width="${i === 0 ? 4 : 3}" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1" id="sp${i}"/>`).join('');
+registerScene('title', lt => {
+  rv($('t1-tag'), seg(lt, 0.2)); rv($('t1-h'), seg(lt, 0.6, 0.8)); rv($('t1-sub'), seg(lt, 1.4)); rv($('t1-meta'), seg(lt, 2.2));
+  const k = easeInOut(lin(lt, 0.4, 2.6)); for (let i = 0; i < 5; i++) $('sp' + i).setAttribute('stroke-dashoffset', String(1 - k));
+});
+// ---- charter ----
+registerScene('charter', lt => {
+  rv($('c-owner'), seg(lt, 0.4)); rv($('c-chtr'), seg(lt, 2.2)); rv($('c-cp'), seg(lt, 4.2));
+  rv($('c-lay'), seg(lt, 7.4)); rv($('c-dem'), seg(lt, 8.4)); rv($('c-note'), seg(lt, 10.2));
+  $('c-72').style.color = seg(lt, 9.4) > 0.5 ? C.accent : C.fg;
+});
+// ---- clock ----
+registerScene('clock', lt => {
+  const L = 24, R = 1128, hours = 48, x = h => L + h / hours * (R - L), allowed = 36, rate = 120000;
+  const cur = 46 * easeInOut(lin(lt, 0.6, 8.6));
+  let s = '';
+  for (let h = 0; h <= 48; h += 6) s += `<line x1="${x(h)}" y1="56" x2="${x(h)}" y2="150" stroke="${C.line}"/><text x="${x(h)}" y="172" text-anchor="middle" fill="${C.muted}" font-size="13" class="mono">${h}h</text>`;
+  s += `<rect x="${x(0)}" y="78" width="${x(48) - x(0)}" height="54" rx="8" fill="${C.surface2}"/>`;
+  const b1 = Math.min(cur, allowed);
+  if (b1 > 0) s += `<rect x="${x(0)}" y="78" width="${x(b1) - x(0)}" height="54" rx="8" fill="${C.blue}"/>`;
+  if (cur > allowed) s += `<rect x="${x(allowed)}" y="78" width="${x(cur) - x(allowed)}" height="54" fill="${C.red}"/>`;
+  s += `<line x1="${x(allowed)}" y1="62" x2="${x(allowed)}" y2="148" stroke="${C.fg}" stroke-width="2" stroke-dasharray="5 4"/><text x="${x(allowed)}" y="50" text-anchor="middle" fill="${C.fg}" font-size="16" font-weight="600">허용 레이타임 36h 소진</text>`;
+  if (b1 > 6) s += `<text x="${x(0) + 14}" y="111" fill="#fff" font-size="18" font-weight="600">레이타임 (산입)</text>`;
+  if (cur > allowed + 3) s += `<text x="${x(allowed) + 12}" y="111" fill="#fff" font-size="18" font-weight="600">체선</text>`;
+  s += `<line x1="${x(cur)}" y1="68" x2="${x(cur)}" y2="142" stroke="${C.accent}" stroke-width="3"/>`;
+  $('k-svg').innerHTML = s;
+  const dem = Math.max(0, cur - allowed);
+  $('k-used').textContent = fmtH(cur); $('k-dem').textContent = fmtH(dem); $('k-amt').textContent = fmtUSD(dem * rate / 24);
+});
+// ---- rate ----
+registerScene('rate', lt => {
+  rv($('r1'), seg(lt, 0.4)); $('r1v').textContent = fmtUSD(count(lt, 0.5, 1.4, 120000));
+  rv($('r2'), seg(lt, 2.6)); rv($('r3'), seg(lt, 3.2)); $('r3v').textContent = fmtUSD(count(lt, 3.3, 1.2, 5000));
+  rv($('r4'), seg(lt, 5.6)); rv($('r5'), seg(lt, 6.2)); $('r5v').textContent = fmtUSD(count(lt, 6.3, 1.4, 30000));
+  rv($('r6'), seg(lt, 10.4));
+});
+// ---- despatch: balance scale ----
+registerScene('despatch', lt => {
+  const a = 11 * easeInOut(lin(lt, 1.2, 2.6)) * Math.PI / 180; // right side goes down
+  const px = 576, py = 62, len = 330;
+  const rx = px + len * Math.cos(a), ry = py + len * Math.sin(a), lx = px - len * Math.cos(a), ly = py - len * Math.sin(a);
+  const k1 = seg(lt, 0.3), k2 = seg(lt, 4.4), k3 = seg(lt, 6.4);
+  let s = `<g opacity="${k1}"><rect x="${px - 10}" y="${py}" width="20" height="230" fill="${C.line2}"/><rect x="${px - 140}" y="286" width="280" height="14" rx="6" fill="${C.line2}"/>`;
+  s += `<line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="${C.muted}" stroke-width="8" stroke-linecap="round"/><circle cx="${px}" cy="${py}" r="12" fill="${C.accent}"/></g>`;
+  const pan = (cx, cy, title, lines, color, k) => { const w = 300, h = 120; return `<g opacity="${k}"><line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy + 60}" stroke="${C.muted}" stroke-width="3"/><rect x="${cx - w / 2}" y="${cy + 60}" width="${w}" height="${h}" rx="12" fill="${C.surface}" stroke="${color}" stroke-width="2"/><text x="${cx}" y="${cy + 92}" text-anchor="middle" fill="${C.muted}" font-size="15">${title}</text><text x="${cx}" y="${cy + 126}" text-anchor="middle" fill="${color}" font-size="26" font-weight="700">${lines[0]}</text><text x="${cx}" y="${cy + 156}" text-anchor="middle" fill="${C.fg}" font-size="16">${lines[1]}</text></g>`; };
+  s += pan(lx, ly, '레이타임을 아껴서 일찍 끝냄', ['보상 0', '탱커 계약엔 조출료가 없다'], C.muted, k2);
+  s += pan(rx, ry, '레이타임을 넘김', ['체선료 −$', '시간 × 요율, 분 단위로'], C.red, k3);
+  $('d-svg').innerHTML = s;
+  rv($('d-note'), seg(lt, 9.2));
+});
+// ---- layers ----
+registerScene('layers', lt => { rv($('l1'), seg(lt, 0.4)); rv($('l2'), seg(lt, 1.6)); rv($('l3'), seg(lt, 2.3)); rv($('l4'), seg(lt, 4.6)); rv($('l5'), seg(lt, 5.3)); rv($('l6'), seg(lt, 8.2)); });
+// ---- sk ----
+registerScene('sk', lt => { [1, 2, 3, 4].forEach(i => rv($('sk' + i), seg(lt, 0.4 + (i - 1) * 1.9))); rv($('sk-node'), seg(lt, 8.6)); rv($('sk-note'), seg(lt, 12.2)); });
+// ---- summary ----
+registerScene('summary', lt => { rv($('m1'), seg(lt, 0.4)); rv($('m2'), seg(lt, 2.4)); rv($('m3'), seg(lt, 4.6)); rv($('m4'), seg(lt, 8.4)); });
+</script>
+</body></html>
