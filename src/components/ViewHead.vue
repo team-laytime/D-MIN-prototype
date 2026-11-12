@@ -7,7 +7,7 @@ defineProps({
   step: { type: Number, default: 0 },
   kpis: { type: Array, default: () => [] },
 })
-const STEPS = ['입력 확인', '후보 비교', '리스크 확인', '담당자 선택', '보고서 작성']
+const STEPS = ['입력 확인', '후보 비교', '리스크 확인', '계획 확정', '보고서 작성']
 </script>
 
 <template>

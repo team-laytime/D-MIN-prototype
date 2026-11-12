@@ -2,13 +2,14 @@
 import { computed, ref, watch } from 'vue'
 import { risks, sensitivity } from '../lib/engine.js'
 import { money } from '../lib/time.js'
+import { activePlan, cancelPlan, fixPlan, markFieldDone, ws } from '../lib/workspace.js'
 import ViewHead from './ViewHead.vue'
 
 const props = defineProps({
   result: Object, scen: Object, focusId: String, checks: Object,
-  version: Number, current: Object, decisions: Array, role: Object,
+  version: Number, current: Object,
 })
-const emit = defineEmits(['focus', 'decide', 'next', 'open', 'go'])
+const emit = defineEmits(['focus', 'next', 'open', 'go'])
 
 const all = computed(() => [props.result.fcfs, ...props.result.candidates])
 const cand = computed(() => all.value.find((s) => s.id === props.focusId) ?? props.result.candidates[0])
@@ -22,16 +23,15 @@ const reason = ref('')
 const confirming = ref(false)
 watch(() => props.focusId, () => { confirming.value = false })
 
-const selectedHere = computed(() => props.current && props.current.candId === cand.value.id && props.current.version === props.version)
-const statusClass = computed(() => ({ '승인 대기': 'hit', '승인 완료': 'none', '현업 반영 완료': 'none', 반려: 'bad' })[props.current?.status])
-const base = () => ({ candId: cand.value.id, label: cand.value.label, total: cand.value.total })
+// 확정·취소는 스케줄러만 한다(HN-092). 이 화면은 스케줄러 메뉴에만 있다.
+const fixedHere = computed(() => props.current && props.current.candId === cand.value.id && props.current.version === props.version)
+const plan = computed(() => activePlan())
+const pendingReq = computed(() => ws.requests.filter((r) => r.status === '접수').length)
+const planLog = computed(() => ws.log.filter((l) => ['계획 확정', '확정 취소', '현업 반영 완료'].includes(l.action)).reverse())
 
-function choose(force) {
+function fix(force) {
   if (unchecked.value.length && !force) { confirming.value = true; return }
-  emit('decide', {
-    action: '선택', candId: cand.value.id, label: cand.value.label, total: cand.value.total,
-    reason: reason.value.trim() || '(사유 미입력)', uncheckedRisks: unchecked.value.map((r) => r.label),
-  })
+  fixPlan({ cand: cand.value, scen: props.scen, version: props.version, reason: reason.value.trim() || '(사유 미입력)', uncheckedRisks: unchecked.value.map((r) => r.label) })
   confirming.value = false
   reason.value = ''
 }
@@ -39,12 +39,12 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
 </script>
 
 <template>
-  <ViewHead title="리스크·선택" crumb="BERTH PLANNING > 리스크·선택" :step="selectedHere ? 4 : 3" desc="계산에 반영하지 못한 변수 확인 후 담당자가 후보를 선택합니다."
+  <ViewHead title="리스크·확정" crumb="BERTH PLANNING > 리스크·확정" :step="fixedHere ? 4 : 3" desc="계산에 반영하지 못한 변수를 확인하고 스케줄러가 계획을 확정합니다. 확정한 일정은 작업 지시·계약·정산 화면에 전달됩니다."
     :kpis="[
       { label: '보는 안', value: cand.id === 'FCFS' ? '기준안' : cand.label },
       { label: '확인할 리스크', value: `${needsCheck.length}건` },
       { label: '확인 완료', value: `${needsCheck.length - unchecked.length}건`, good: unchecked.length === 0 },
-      { label: '선택 상태', value: selectedHere ? current.status : '선택 전' },
+      { label: '적용 중 계획', value: current ? `${current.label} ${current.status}` : '확정 전' },
     ]" />
   <div class="layout">
     <div class="stack">
@@ -105,7 +105,7 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
 
     <aside class="side">
       <section class="panel decide">
-        <div class="panel-head"><h2>담당자 선택</h2></div>
+        <div class="panel-head"><h2>계획 확정</h2></div>
         <div class="panel-body stack">
           <div class="sum">
             <span class="strong">{{ cand.label }}</span>
@@ -115,56 +115,49 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
           <p class="small" :class="unchecked.length ? 'warn-text' : 'muted'">
             확인할 리스크 {{ needsCheck.length }}건 중 {{ needsCheck.length - unchecked.length }}건 확인
           </p>
+          <p v-if="pendingReq" class="small warn-text">
+            처리 대기 요청 {{ pendingReq }}건 · <button class="btn ghost" @click="emit('go', 'requests')">요청 처리</button>
+          </p>
 
-          <template v-if="selectedHere">
+          <template v-if="fixedHere">
             <div class="selected">
-              <span class="chip" :class="statusClass">{{ current.status }}</span>
-              <span class="small muted">{{ current.reqId }} · 요청 {{ current.who }}</span>
+              <span class="chip none">{{ current.status }}</span>
+              <span class="small muted">{{ plan.at }} · {{ plan.who }}</span>
             </div>
-            <p v-if="current.status === '승인 대기'" class="small muted">승인권자 결재 전입니다. 승인되어야 접안 계획 버전이 바뀝니다.</p>
-            <p v-if="current.rejection" class="small bad-text">반려 · {{ current.rejection.who }} · [{{ current.rejection.reasonType }}] {{ current.rejection.reason }}</p>
-            <p v-if="current.approval" class="small good-text">
-              승인 · {{ current.approval.who }} · 접안 계획 v{{ current.planNo }} 적용<template v-if="current.approval.requestedId !== current.approval.candId"> (요청 {{ current.approval.requestedLabel }} → {{ current.approval.label }})</template>
-            </p>
-            <div v-if="!role.approve" class="row">
-              <button v-if="current.status === '승인 대기'" class="btn" @click="emit('decide', { action: '요청 취소', ...base(), reason: '담당자 요청 취소' })">요청 취소</button>
-              <button v-if="current.status === '반려'" class="btn" @click="emit('decide', { action: '요청 취소', ...base(), reason: '반려 후 다시 선택' })">다시 선택</button>
-              <button v-if="current.status === '승인 완료'" class="btn" @click="emit('decide', { action: '현업 반영 완료', ...base(), reason: '현업 시스템에 반영함' })">현업 반영 완료 표시</button>
+            <p class="small muted">작업 지시자·계약·정산 담당은 이 확정 일정을 봅니다.</p>
+            <div class="row">
+              <button class="btn" @click="cancelPlan('스케줄러 확정 취소')">확정 취소</button>
+              <button v-if="!plan.fieldDone" class="btn" @click="markFieldDone">현업 반영 완료 표시</button>
             </div>
-            <button v-else-if="current.status === '승인 대기'" class="btn primary" @click="emit('go', 'approvals')">승인 관리에서 결재</button>
-            <button class="btn" :class="{ primary: !role.approve }" @click="emit('next')">보고서 초안</button>
-          </template>
-          <template v-else-if="role.approve">
-            <p class="small muted">후보 선택과 승인 요청은 스케줄러 계정이 합니다. 승인권자는 관리자메뉴 › 승인 관리에서 결재합니다.</p>
-            <button class="btn primary" @click="emit('go', 'approvals')">승인 관리</button>
+            <button class="btn primary" @click="emit('next')">보고서 초안</button>
           </template>
           <template v-else>
+            <p v-if="current" class="small warn-text">적용 중인 계획은 {{ current.label }} ({{ current.status }})입니다. 확정하면 새 버전으로 바뀝니다.</p>
             <div class="field">
-              <label for="reason">선택 사유 · 보고서에 포함</label>
+              <label for="reason">확정 사유 · 보고서에 포함</label>
               <textarea id="reason" v-model="reason" class="input" rows="3" placeholder="예: 기상 해제 직후 대형선 우선 접안, 체선료 절감 폭이 가장 큼" />
             </div>
             <div v-if="confirming" class="confirm">
-              <p class="small"><b>미확인 리스크 {{ unchecked.length }}건</b> ({{ unchecked.map((r) => r.label).join(', ') }}). 요청 시 기록에 함께 남습니다.</p>
+              <p class="small"><b>미확인 리스크 {{ unchecked.length }}건</b> ({{ unchecked.map((r) => r.label).join(', ') }}). 확정 기록에 함께 남습니다.</p>
               <div class="row">
                 <button class="btn" @click="confirming = false">돌아가기</button>
-                <button class="btn warn" @click="choose(true)">그래도 요청</button>
+                <button class="btn warn" @click="fix(true)">그래도 확정</button>
               </div>
             </div>
-            <button v-else class="btn primary" @click="choose(false)">선택 · 승인 요청</button>
+            <button v-else class="btn primary" @click="fix(false)">이 안으로 확정</button>
           </template>
-          <p class="faint small">Agent는 계획을 확정하지 않습니다. 담당자가 선택해 승인을 요청하고, 승인권자가 승인해야 접안 계획 버전이 바뀝니다.</p>
+          <p class="faint small">Agent는 계획을 확정하지 않습니다. 확정과 취소는 스케줄러만 할 수 있고, 모든 처리는 기록으로 남습니다.</p>
         </div>
       </section>
 
       <section class="panel">
-        <div class="panel-head"><h3>처리 이력</h3><span class="faint small">추가만 가능</span></div>
+        <div class="panel-head"><h3>확정 이력</h3><span class="faint small">추가만 가능</span></div>
         <div class="panel-body">
-          <p v-if="!decisions.length" class="muted small">기록 없음</p>
+          <p v-if="!planLog.length" class="muted small">기록 없음</p>
           <ol class="log">
-            <li v-for="(d, i) in [...decisions].reverse()" :key="i" class="small">
-              <div class="row"><b>{{ d.action }}</b><span>{{ d.label }}</span><span class="spacer" /><span class="faint">{{ d.reqId }} · 입력 v{{ d.version }}</span></div>
-              <div class="muted">{{ d.at }} · {{ d.who }} · {{ d.reasonType ? `[${d.reasonType}] ` : '' }}{{ d.reason }}</div>
-              <div v-if="d.uncheckedRisks?.length" class="warn-text">미확인 리스크: {{ d.uncheckedRisks.join(', ') }}</div>
+            <li v-for="(d, i) in planLog" :key="i" class="small">
+              <div class="row"><b>{{ d.action }}</b><span>{{ d.target }}</span></div>
+              <div class="muted">{{ d.at }} · {{ d.who }} · {{ d.detail }}</div>
             </li>
           </ol>
         </div>

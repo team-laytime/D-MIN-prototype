@@ -53,14 +53,14 @@ const notes = computed(() => {
   for (const s of states.value.filter((x) => x.ticking)) out.push({ tag: '체선', red: true, text: `${s.v.name} 체선 발생 · 누적 ${money(s.cents)}`, at: fmt(t.value).slice(6), vid: s.v.id })
   for (const r of openRisks.value) out.push({ tag: '리스크', text: `${r.label} ${r.state} · ${label(plan.value)}`, at: '확인 필요', go: 'risk' })
   out.push(props.current && props.current.version === props.version
-    ? { tag: '선택', text: `${props.current.label} ${props.current.status}`, at: '담당자', go: 'report' }
-    : { tag: '선택', text: '담당자 후보 선택 전', at: '대기', go: 'risk' })
+    ? { tag: '확정', text: `${props.current.label} ${props.current.status}`, at: '스케줄러', go: 'ops' }
+    : { tag: '확정', text: '접안 계획 확정 전', at: '대기', go: 'risk' })
   return out
 })
 const TILES = [
   { id: 'input', label: '시나리오\n입력', icon: ClipboardList },
   { id: 'compare', label: '후보\n비교', icon: Columns3 },
-  { id: 'risk', label: '리스크·\n선택', icon: ShieldAlert },
+  { id: 'risk', label: '리스크·\n확정', icon: ShieldAlert },
   { id: 'report', label: '접안계획\n보고서', icon: FileText },
   { id: 'verify', label: '계산\n검증', icon: BadgeCheck },
   { id: 'workflow', label: 'Agent\n워크플로우', icon: Workflow },
@@ -78,7 +78,7 @@ const kpis = computed(() => [
   { label: '도착순 기준안', value: money(fcfs.value.total), sub: '비교용 · 현행 실적 아님' },
   { label: `${best.value.label} (최저)`, value: money(best.value.total), sub: `기준안 대비 ${(((best.value.total - fcfs.value.total) / fcfs.value.total) * 100).toFixed(1)}%`, good: true },
   { label: '확인할 리스크', value: `${risks(best.value, props.scen).filter((r) => r.state !== '해당 없음').length}건`, sub: best.value.label, bad: true },
-  { label: '담당자 선택', value: props.current && props.current.version === props.version ? `${props.current.label} ${props.current.status}` : '선택 전' },
+  { label: '계획 확정', value: props.current && props.current.version === props.version ? `${props.current.label} ${props.current.status}` : '확정 전' },
 ])
 
 // 지도 표식 색은 PortWise 문법(빨강 입항·대기, 초록 계류, 회색 출항). 체선 발생은 빨간 점선 고리로 겹쳐 표시한다.

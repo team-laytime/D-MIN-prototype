@@ -57,8 +57,8 @@ const steps = computed(() => {
     { lane: 'writer', title: '초안 작성', out: '메일·보고서 초안', tab: 'report',
       input: '확정된 금액·시각, 리스크 판정', process: 'LLM은 문장 틀만 작성합니다. 금액과 시각은 규칙 엔진 결과를 그대로 넣고 재대조하며, 불일치 시 템플릿 문장으로 대체합니다.',
       output: '메일·보고서 초안 (담당자 검토용)', proto: '프로토타입은 LLM을 호출하지 않고 템플릿 문장으로 생성합니다.' },
-    { lane: 'human', title: '선택 · 승인', out: chosen.value ? `${chosen.value.label} ${chosen.value.status}` : '담당자 대기', tab: 'risk', waiting: !chosen.value,
-      input: '후보 비교, 리스크, 초안', process: '스케줄러가 리스크를 확인하고 후보를 선택해 승인을 요청하고, 승인권자가 관리자메뉴에서 승인 또는 반려합니다. Agent는 확정하지 않으며 모든 처리는 기록으로만 남습니다.',
+    { lane: 'human', title: '계획 확정', out: chosen.value ? `${chosen.value.label} ${chosen.value.status}` : '스케줄러 대기', tab: 'risk', waiting: !chosen.value,
+      input: '후보 비교, 리스크, 초안, 부서 요청', process: '스케줄러가 리스크와 작업 지시·생산 부서 요청을 확인하고 계획을 확정합니다. 확정 일정은 작업 지시·계약·정산 화면에 전달됩니다. Agent는 확정하지 않으며 모든 처리는 기록으로 남습니다.',
       output: chosen.value ? `${chosen.value.label} ${chosen.value.status}` : '선택 전' },
   ]
 })
