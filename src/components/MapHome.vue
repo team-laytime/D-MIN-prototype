@@ -4,6 +4,8 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { BadgeCheck, ChevronLeft, ChevronRight, CircleAlert, ClipboardList, Columns3, Database, Factory, FileText, Inbox, Moon, Pause, Play, Receipt, ScrollText, ShieldAlert, Ship, SkipBack, Workflow } from 'lucide-vue-next'
 import ViewHead from './ViewHead.vue'
+import LiveVesselCard from './LiveVesselCard.vue'
+import { fetchArrivals, fetchLive, liveColor } from '../lib/liveAis.js'
 import BerthBoard from './BerthBoard.vue'
 import { risks, stateAt } from '../lib/engine.js'
 import { MAP_CONTEXT } from '../lib/scenarios.js'
@@ -42,6 +44,8 @@ onBeforeUnmount(stop)
 
 const states = computed(() => stateAt(plan.value, props.scen, t.value).sort((a, b) => a.v.eta - b.v.eta))
 const accrued = computed(() => Object.fromEntries(plans.value.map((s) => [s.id, stateAt(s, props.scen, t.value).reduce((n, x) => n + x.cents, 0)])))
+// 아직 항해 중인 배는 지도 범위(울산항 앞바다) 밖이라 점으로 그릴 수 없다. ETA와 남은 시간을 지도 위 목록으로 보여 준다.
+const comingList = computed(() => states.value.filter((x) => x.phase === 'coming').map((x) => ({ id: x.v.id, name: x.v.name, eta: x.v.eta, left: x.v.eta - t.value, nm: Math.round(((x.v.eta - t.value) / 60) * NAV.coming.sog), prev: x.v.prevPort.split(',')[0] })))
 const w = computed(() => props.scen.env.weather)
 const weatherNow = computed(() => w.value && t.value >= w.value.start && t.value < w.value.end)
 const isNight = computed(() => !props.scen.env.days.some((d) => t.value >= d.sunrise && t.value < d.sunset))
@@ -121,6 +125,46 @@ const dayTicks = computed(() => {
   return out
 })
 
+// ── 실시간 AIS 모드 ──
+// 서버(/api/ais/vessels)가 있을 때만 버튼이 나온다. 켜면 가상 시나리오 선박 대신 울산항의 실제 선박을 그린다.
+const liveOn = ref(false)
+const liveAvail = ref(false)
+const live = ref(null) // { vessels, fetchedAt, stale, error, total }
+const liveErr = ref('')
+const liveSel = ref(null)
+let liveTimer = null
+async function pullLive() {
+  try {
+    live.value = await fetchLive()
+    liveErr.value = live.value.error ?? ''
+    liveAvail.value = true
+  } catch (e) {
+    liveErr.value = String(e.message ?? e)
+    if (!live.value) liveAvail.value = false
+  }
+}
+// 입항 예정(대리점 신고): 앞으로 24시간 안. 5분마다 새로 받는다(서버도 5분 캐시).
+const planned = ref([])
+const plannedErr = ref('')
+async function pullPlanned() {
+  try { planned.value = (await fetchArrivals({ hoursAhead: 24 })).arrivals.filter((a) => a.planned); plannedErr.value = '' } catch (e) { plannedErr.value = String(e.message ?? e) }
+}
+let plannedTimer = null
+const hhmm = (iso) => `${iso.slice(5, 10).replace('-', '/')} ${iso.slice(11, 16)}`
+function pickPlanned(a) {
+  const x = live.value?.vessels.find((v) => v.callSign === a.callSign)
+  if (x) { liveSel.value = x.mmsi; draw() }
+}
+async function toggleLive() {
+  liveOn.value = !liveOn.value
+  clearInterval(liveTimer)
+  clearInterval(plannedTimer)
+  if (liveOn.value) { await pullLive(); liveTimer = setInterval(pullLive, 30000); pullPlanned(); plannedTimer = setInterval(pullPlanned, 300000) }
+  draw()
+}
+onBeforeUnmount(() => { clearInterval(liveTimer); clearInterval(plannedTimer) })
+const liveSelected = computed(() => live.value?.vessels.find((x) => x.mmsi === liveSel.value) ?? null)
+
 // ── 지도 ──
 const mapEl = ref(null)
 const selected = ref(null)
@@ -131,7 +175,7 @@ let dyn = null
 const shipSvg = (fill, cog, sel, ring) =>
   `<svg width="22" height="22" viewBox="-11 -11 22 22">${ring ? '<circle r="10" fill="none" stroke="#e02424" stroke-width="2" stroke-dasharray="3 2"/>' : ''}<g transform="rotate(${cog})"><path d="M0 -8 L4 -3 L4 7 L-4 7 L-4 -3 Z" fill="${fill}" stroke="${sel ? '#111' : '#fff'}" stroke-width="${sel ? 1.8 : 1}" stroke-linejoin="round"/><rect x="-2.6" y="2" width="5.2" height="3" fill="#fff" opacity=".85"/></g></svg>`
 
-function shipMarker(pos, fill, cog, name, extra, sel, ring, onClick) {
+function shipMarker(pos, fill, cog, name, extra, sel, ring, onClick, tip) {
   const icon = L.divIcon({
     className: 'vmk-wrap',
     html: `<div class="vmk">${shipSvg(fill, cog, sel, ring)}<span class="lbl${sel ? ' sel' : ''}">${name}${extra ? ` <em>${extra}</em>` : ''}</span></div>`,
@@ -139,6 +183,7 @@ function shipMarker(pos, fill, cog, name, extra, sel, ring, onClick) {
   })
   const m = L.marker(pos, { icon, zIndexOffset: sel ? 1000 : 0 })
   if (onClick) m.on('click', onClick)
+  if (tip) m.bindTooltip(tip, { direction: 'right', offset: [14, 0], className: 'map-tip' })
   return m
 }
 function openCard(vid) {
@@ -161,6 +206,15 @@ function draw() {
       .addTo(dyn)
     if (legacy) shipMarker(b.moor, NAV.berthed.color, NAV.berthed.cog, b.occupiedBy, '', false, false).addTo(dyn)
   }
+  if (liveOn.value && live.value) {
+    for (const x of live.value.vessels) {
+      const cog = x.heading && x.heading < 360 ? x.heading : x.cog ?? 0
+      const sel = liveSel.value === x.mmsi
+      const tip = `<b>${x.name || x.mmsi}</b> · ${x.navStatus ?? '상태 없음'}<br>${x.sog ?? '-'} kn · ${Math.round(x.ageMin ?? 0)}분 전<br><span style="color:#888">눌러서 실시간 정보 보기</span>`
+      shipMarker([x.lat, x.lng], liveColor(x.navStatus), cog, x.name || '', '', sel, false, () => { liveSel.value = x.mmsi; draw() }, tip).addTo(dyn)
+    }
+    return
+  }
   for (const s of states.value) {
     if (s.phase === 'coming' || s.phase === 'left') continue
     let spot = 0
@@ -171,7 +225,8 @@ function draw() {
     const pos = positionOf(s, props.scen, spot)
     const sel = selected.value === s.v.id
     const extra = s.ticking ? money(s.cents).replace(/\.\d+$/, '') : ''
-    shipMarker(pos, color(s), NAV[s.phase].cog, s.v.name, extra, sel, s.ticking, () => openCard(s.v.id)).addTo(dyn)
+    const tip = `<b>${s.v.name}</b> · ${s.v.type}<br>${s.v.flag} · DWT ${s.v.dwt.toLocaleString()} · ${s.v.product} ${s.v.dir}<br>도착(ETA) ${fmt(s.v.eta)} · 접안(ETB) ${fmt(s.p.etb)}<br><span style="color:#888">눌러서 전체 제원 보기</span>`
+    shipMarker(pos, color(s), NAV[s.phase].cog, s.v.name, extra, sel, s.ticking, () => openCard(s.v.id), tip).addTo(dyn)
   }
 }
 
@@ -194,10 +249,15 @@ onMounted(() => {
     L.marker([a.center[0] + 0.0102, a.center[1]], { icon: L.divIcon({ className: 'anch-lbl', html: `<span>${a.label}</span>`, iconSize: [0, 0] }), interactive: false }).addTo(map)
   }
   dyn = L.layerGroup().addTo(map)
+  // 실시간 모드는 배가 170척 넘게 겹쳐서, 14단계 이상 확대했을 때만 이름을 보여 준다(이름은 마우스를 올리면 툴팁으로도 보인다).
+  const lblZoom = () => mapEl.value?.classList.toggle('hide-lbl', liveOn.value && map.getZoom() < 14)
+  map.on('zoomend', lblZoom)
+  watch(liveOn, lblZoom)
   draw()
+  pullLive() // 서버가 없으면 조용히 실패하고 버튼은 숨겨진다
 })
 onBeforeUnmount(() => { map?.remove(); map = null })
-watch([states, selected, () => props.scen], draw)
+watch([states, selected, () => props.scen, live], draw)
 
 function pick(vid) {
   selected.value = vid
@@ -261,6 +321,33 @@ function pick(vid) {
       <div class="row-map">
         <div class="map-box">
           <div ref="mapEl" class="map" />
+          <button v-if="liveAvail" :class="['live-btn', { on: liveOn }]" @click="toggleLive">
+            <i class="dot" />{{ liveOn ? `실시간 AIS 켜짐 · ${live?.count ?? 0}척` : '실시간 AIS 보기' }}
+          </button>
+          <div v-if="liveOn && live" class="live-info small">
+            울산항만공사 항내 선박위치 · {{ (live.fetchedAt || '').slice(11, 19) }} 수신 · 30분 안 갱신 {{ live.count }} / 전체 {{ live.total }}척
+            <b v-if="live.stale" class="bad"> · 공공 API 오류, 이전 값 표시</b>
+          </div>
+          <div v-if="liveOn" class="coming-box live-plan">
+            <h4>입항 예정 <small>대리점 신고 · 24시간 안 {{ planned.length }}척</small></h4>
+            <p v-if="plannedErr" class="small bad" style="margin:6px 10px">신고 조회 실패: {{ plannedErr }}</p>
+            <button v-for="a in planned.slice(0, 12)" :key="a.callSign + a.count" @click="pickPlanned(a)">
+              <span class="nm">{{ a.name }}</span>
+              <span class="eta num">ETA {{ hhmm(a.eta) }}</span>
+              <span class="rest">{{ a.facility ?? '-' }} · {{ a.prevPort ?? '-' }}발 · {{ a.grt ? a.grt.toLocaleString() + ' GT' : '' }} · {{ a.filing }}</span>
+            </button>
+          </div>
+          <div v-if="liveOn" class="live-legend">
+            <span><i style="background:#2b7de0" />항해</span><span><i style="background:#d4a017" />정박(앵커)</span><span><i style="background:#2ea043" />계류</span><span><i style="background:#8a63d2" />기타</span>
+          </div>
+          <div v-if="comingList.length && !liveOn" class="coming-box">
+            <h4>입항 예정 <small>항해 중 · 눌러서 제원 보기</small></h4>
+            <button v-for="c in comingList" :key="c.id" @click="openCard(c.id)">
+              <span class="nm">{{ c.name }}</span>
+              <span class="eta num">ETA {{ fmt(c.eta) }}</span>
+              <span class="rest">{{ c.left > 0 ? `${fmtDur(c.left)} 후 · 약 ${c.nm}nm` : '도착 시각 경과' }} · {{ c.prev }}발</span>
+            </button>
+          </div>
           <div v-if="isNight" class="night-tag small"><Moon :size="13" />야간 · 6만 DWT 이상 접안 불가</div>
           <div class="map-legend">
             <span><span v-html="shipSvg(NAV.waiting.color, 0, false, false)" />입항 예정 · 정박지 대기</span>
@@ -311,6 +398,8 @@ function pick(vid) {
         </aside>
       </div>
     </section>
+
+    <LiveVesselCard v-if="liveSelected" :vessel="liveSelected" :fetched-at="live?.fetchedAt" @close="liveSel = null; draw()" />
 
     <section class="panel">
       <div class="panel-head">
@@ -369,6 +458,22 @@ function pick(vid) {
 .row-map { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); border: 1px solid var(--line-strong); border-top: 2px solid var(--rule); background: #fff; }
 .map-box { position: relative; height: 580px; border-right: 1px solid var(--line-strong); }
 .map { position: absolute; inset: 0; background: #cfe3f1; }
+.live-btn { position: absolute; z-index: 901; top: 10px; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 14px; background: #fff; border: 1px solid var(--line-strong); font-size: 12.5px; font-weight: 700; color: #333; }
+.live-btn .dot { width: 9px; height: 9px; border-radius: 50%; background: #aaa; }
+.live-btn.on { background: #2b7de0; border-color: #2b7de0; color: #fff; }
+.live-btn.on .dot { background: #7dffa0; box-shadow: 0 0 0 3px rgba(125, 255, 160, 0.35); }
+.live-info { position: absolute; z-index: 900; top: 46px; left: 272px; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--line-strong); padding: 3px 10px; color: #444; white-space: nowrap; }
+.live-plan { top: 10px; left: 10px; }
+.live-legend { position: absolute; z-index: 900; left: auto; right: 10px; top: 46px; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--line-strong); padding: 4px 10px; font-size: 11.5px; display: flex; flex-direction: column; gap: 3px; }
+.live-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 2px; }
+.coming-box { position: absolute; z-index: 900; top: 10px; left: 10px; width: 250px; max-height: 300px; overflow: auto; background: rgba(255, 255, 255, 0.96); border: 1px solid var(--line-strong); }
+.coming-box h4 { margin: 0; padding: 6px 10px; font-size: 12.5px; background: #eef0f3; border-bottom: 1px solid var(--line-strong); display: flex; justify-content: space-between; align-items: baseline; }
+.coming-box h4 small { font-weight: 400; color: #888; font-size: 10.5px; }
+.coming-box button { display: grid; grid-template-columns: 1fr auto; gap: 1px 8px; width: 100%; text-align: left; padding: 5px 10px; border: 0; border-bottom: 1px solid #eceef1; background: none; font-size: 12px; }
+.coming-box button:hover { background: #e1f5f7; }
+.coming-box .nm { font-weight: 700; }
+.coming-box .eta { color: var(--bad); font-weight: 700; }
+.coming-box .rest { grid-column: 1 / -1; font-size: 11px; color: #777; }
 .night-tag { position: absolute; z-index: 900; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--line-strong); padding: 4px 10px; color: #444; }
 .map-legend { position: absolute; z-index: 900; left: 50%; transform: translateX(-50%); bottom: 76px; background: rgba(255, 255, 255, 0.95); border: 1px solid #c9ccd1; border-radius: 4px; padding: 4px 12px; font-size: 11.5px; color: #333; display: flex; gap: 14px; white-space: nowrap; }
 .map-legend > span { display: inline-flex; align-items: center; gap: 4px; }
@@ -415,6 +520,7 @@ function pick(vid) {
 :deep(.vmk svg) { display: block; overflow: visible; }
 :deep(.vmk .lbl) { position: absolute; left: 20px; top: 3px; white-space: nowrap; font-size: 10.5px; font-weight: 700; color: #1e2a3a; text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff; pointer-events: none; }
 :deep(.vmk .lbl em) { font-style: normal; color: var(--bad); }
+:deep(.hide-lbl .vmk .lbl:not(.sel)) { display: none; }
 :deep(.vmk .lbl.sel) { color: var(--accent); }
 :deep(.base-tiles) { filter: saturate(0.55) brightness(1.03); }
 :deep(.leaflet-bottom) { bottom: 66px; }

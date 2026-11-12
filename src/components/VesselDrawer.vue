@@ -49,6 +49,18 @@ const where = computed(() => {
   if (s.phase === 'berthed') return `${berth.value.name} 계류`
   return '출항'
 })
+// AIS 항해 정보(선장 입력): 목적지 · ETA. 계산 입력은 계획 ETA(대리점 통보)이고 AIS ETA는 '바뀌었는지 감지'에만 쓴다 (N-002).
+const aisEta = computed(() => v.value.eta + v.value.aisEtaDiff)
+const etaGap = computed(() => v.value.aisEtaDiff)
+const etaDrift = computed(() => Math.abs(etaGap.value) >= 120)
+const gapText = (m) => (m === 0 ? '계획과 같음' : `계획보다 ${fmtDur(Math.abs(m))} ${m > 0 ? '늦음' : '빠름'}`)
+const untilEta = computed(() => {
+  const s = state.value
+  if (!live.value || s.phase !== 'coming') return null
+  const min = v.value.eta - t.value
+  return { min, nm: (min / 60) * nav.value.sog }
+})
+const wxLabel = computed(() => ({ FULL: '기상 대기 전부 공제', HALF: '기상 대기 50% 공제', NONE: '공제 없음' })[v.value.contract.weather])
 const use = computed(() => {
   const s = state.value
   if (s.phase === 'berthed') return `${berth.value.name} 사용 중 (${fmt(p.value.etb)} ~)`
@@ -151,6 +163,41 @@ const flow = computed(() => {
           <div>Speed<b>{{ live ? `${nav.sog.toFixed(1)}kn` : '-' }}</b></div>
           <div>Course<b>{{ live ? `${nav.cog}°` : '-' }}</b></div>
         </div>
+
+        <div class="vc-sec">입항 · ETA <small>AIS 항해 정보 · 선장 입력</small></div>
+        <table class="kv">
+          <tbody>
+            <tr><th>목적지</th><td>{{ v.aisDest }} <span class="muted">(AIS 신고값)</span></td></tr>
+            <tr><th>계획 ETA</th><td class="num">{{ yy(v.eta) }} <span class="muted">(대리점 통보 · 계산에 쓰는 값)</span></td></tr>
+            <tr>
+              <th>AIS ETA</th>
+              <td class="num">{{ yy(aisEta) }}
+                <span :class="etaDrift ? 'bad b' : 'muted'">{{ gapText(etaGap) }}</span>
+                <template v-if="etaDrift"><br><span class="bad">2시간 넘게 달라 접안 계획을 다시 계산해야 합니다 (N-002)</span></template></td>
+            </tr>
+            <tr v-if="untilEta">
+              <th>도착까지</th>
+              <td class="num">{{ untilEta.min > 0 ? fmtDur(untilEta.min) : '도착 시각 경과' }}<template v-if="untilEta.min > 0"> · 약 {{ Math.round(untilEta.nm) }}nm <span class="muted">({{ nav.sog.toFixed(1) }}kn 기준)</span></template></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="vc-sec">선박 제원 <small>AIS 정적 정보 · 선박 원부 · 대리점 자료</small></div>
+        <table class="kv">
+          <tbody>
+            <tr><th>선종</th><td>{{ v.type }} <span class="muted">· {{ v.flag }} 선적 · {{ v.built }}년 건조 (선령 {{ 2026 - v.built }}년)</span></td></tr>
+            <tr><th>선급</th><td>{{ v.cls }}</td></tr>
+            <tr><th>톤수</th><td class="num">총톤수(GT) {{ v.grt.toLocaleString() }} · 순톤수(NT) {{ v.nt.toLocaleString() }} · DWT {{ v.dwt.toLocaleString() }} t</td></tr>
+            <tr><th>치수</th><td class="num">길이(LOA) {{ v.loa }} m · 폭 {{ v.beam }} m · 형심 {{ v.depth }} m · 흘수 {{ v.draft }} m</td></tr>
+            <tr><th>기관 · 속력</th><td>{{ v.engine }} <span class="muted">· 서비스 속력 {{ v.speedKn }}kn</span></td></tr>
+            <tr><th>화물창</th><td class="num">탱크 {{ v.tanks }}개 · 용량 {{ v.cargoM3.toLocaleString() }} ㎥ · 매니폴드 {{ v.manifold }}</td></tr>
+            <tr><th>양하 능력</th><td class="num">{{ v.pump.toLocaleString() }} t/h <span class="muted">(부대작업 포함 작업 시간 {{ hours(v.workMin) }})</span></td></tr>
+            <tr><th>소유 · 관리</th><td>{{ v.owner }}<br><span class="muted">관리사 {{ v.manager }}</span></td></tr>
+            <tr><th>기상 공제</th><td>{{ wxLabel }} <span class="muted">(계약 {{ v.contract.id }})</span></td></tr>
+          </tbody>
+        </table>
+        <p class="vc-note">선명 · MMSI · IMO · 소유사는 모두 가상입니다. 실제 솔루션에서는 AIS(위치·ETA·길이·폭), 울산항만공사 공공 API(항차·입출항), 대리점 자료(톤수·탱크·소유)에서 채웁니다.</p>
+
         <button class="vc-btn" @click="view = 'evidence'">체선료 산출 근거 보기</button>
       </div>
 
@@ -255,6 +302,7 @@ const flow = computed(() => {
 .vc-btn { width: 100%; height: 40px; border: 0; border-radius: 4px; background: var(--accent); color: #fff; font-size: 14px; font-weight: 700; }
 .vc-btn:hover { background: var(--accent-hover); }
 .vc-sec { font-size: 13px; font-weight: 700; color: #222; margin: 16px 0 6px; display: flex; justify-content: space-between; align-items: baseline; }
+.vc-note { margin: 8px 0 0; font-size: 11px; color: #888; line-height: 1.5; }
 .vc-sec small { font-weight: 400; color: #999; font-size: 11px; }
 .back { margin-bottom: 10px; }
 

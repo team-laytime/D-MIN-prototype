@@ -59,7 +59,7 @@ const vessels = () => [
     eta: at(14, 14), contract: { id: 'CA-2611-033', laytimeH: 26, rateUsd: 30000, norTurnH: 6, weather: 'FULL' } },
   { id: 'V6', name: 'BLUE CORAL', product: '벙커C', dir: '수출', dwt: 30000, draft: 9.8, ton: 25000, pump: 1800,
     eta: at(14, 20), contract: { id: 'CA-2611-041', laytimeH: 22, rateUsd: 18000, norTurnH: 6, weather: 'HALF' } },
-].map((v) => ({ ...v, ...SPECS[v.id], workMin: work(v.ton, v.pump) }))
+].map((v) => ({ ...v, ...SPECS[v.id], ...PARTICULARS[v.id], workMin: work(v.ton, v.pump) }))
 
 // 선박 카드용 제원(가상). 선명·MMSI·IMO·호출부호는 실제 선박과 무관하다.
 const SPECS = {
@@ -69,6 +69,18 @@ const SPECS = {
   V4: { flag: 'JP', mmsi: '431002345', imo: '9811222', callSign: 'JD4521', type: '석유제품 운반선 (연안)', grt: 7850, loa: 118, beam: 18.6, prevPort: 'BUSAN, KOREA', voyage: '2026-1130' },
   V5: { flag: 'KR', mmsi: '440318900', imo: '9745678', callSign: 'D7SL', type: '석유제품 운반선 (MR)', grt: 28100, loa: 180, beam: 32.0, prevPort: 'GWANGYANG, KOREA', voyage: '2026-1133' },
   V6: { flag: 'SG', mmsi: '563045210', imo: '9690011', callSign: '9VBC2', type: '석유제품 운반선 (Handy)', grt: 18900, loa: 162, beam: 27.4, prevPort: 'ONSAN, KOREA', voyage: '2026-1141' },
+}
+
+// 선박 카드 '제원' 칸(가상). 실제 솔루션에서는 AIS 정적 정보(길이·폭·선종·건조 연도 등)와
+// 대리점·선박 원부 자료(소유·관리사·선급·탱크)로 채운다 (console/docs/data-sources.md).
+// aisDest·aisEtaDiff는 AIS 항해 정보(선장 입력)를 흉내 낸 값: 계획 ETA보다 몇 분 어긋나 있다.
+const PARTICULARS = {
+  V1: { built: 2017, cls: 'KR', nt: 12900, depth: 19.1, speedKn: 13.5, engine: 'MAN B&W 6S50ME-C8.2 · 8,600kW', owner: 'Pacific Marine Ltd. (가상)', manager: '해성선박관리 (가상)', cargoM3: 54200, tanks: 12, manifold: '12in × 4', aisDest: 'KR USN', aisEtaDiff: 12 },
+  V2: { built: 2014, cls: 'LR', nt: 10800, depth: 18.2, speedKn: 13.0, engine: 'MAN B&W 6S50MC-C · 7,860kW', owner: 'Ocean Lily Shipping S.A. (가상)', manager: 'Aegean Ship Mgmt (가상)', cargoM3: 46800, tanks: 10, manifold: '12in × 4', aisDest: 'ULSAN', aisEtaDiff: -25 },
+  V3: { built: 2012, cls: 'ABS', nt: 15800, depth: 21.0, speedKn: 14.0, engine: 'MAN B&W 6S60ME-C8 · 11,300kW', owner: 'Golden Star Maritime (가상)', manager: 'Pacific Basin Tankers (가상)', cargoM3: 78500, tanks: 14, manifold: '16in × 4', aisDest: 'KRUSN', aisEtaDiff: 95 },
+  V4: { built: 2019, cls: 'NK', nt: 2690, depth: 9.4, speedKn: 11.5, engine: 'Yanmar 6EY22 · 2,100kW', owner: '하나해운 (가상)', manager: '하나해운 (가상)', cargoM3: 11200, tanks: 8, manifold: '8in × 3', aisDest: 'ULSAN KOREA', aisEtaDiff: 0 },
+  V5: { built: 2016, cls: 'KR', nt: 12000, depth: 18.8, speedKn: 13.0, engine: 'MAN B&W 6S50ME-B9 · 8,200kW', owner: 'Stella Tankers Co. (가상)', manager: '한서선박 (가상)', cargoM3: 51000, tanks: 12, manifold: '12in × 4', aisDest: 'KR USN', aisEtaDiff: 8 },
+  V6: { built: 2010, cls: 'DNV', nt: 8300, depth: 15.2, speedKn: 12.0, engine: 'Wärtsilä 6RT-flex50 · 7,100kW', owner: 'Blue Coral Pte. Ltd. (가상)', manager: 'Straits Tanker Mgmt (가상)', cargoM3: 34500, tanks: 10, manifold: '10in × 4', aisDest: 'ULSAN', aisEtaDiff: -40 },
 }
 
 const env = () => ({
