@@ -134,6 +134,44 @@ def create_app(store: Store = None, data_dir: Path = None) -> FastAPI:
                 "human_only_actions": list(HUMAN_ONLY_ACTIONS),
                 "notice": "가상 데이터 · 의사결정 보조용 · 최종 확정은 담당자"}
 
+    @app.get("/api/ais/vessels")
+    def ais_vessels(max_age_min: float = 60, bbox: Optional[str] = None):
+        """울산항 항내 선박 실시간 위치(공공데이터포털). bbox=남,서,북,동. 키는 서버에만 있다."""
+        from ..data import ais
+        box = None
+        if bbox:
+            try:
+                box = tuple(float(x) for x in bbox.split(","))
+                assert len(box) == 4
+            except (ValueError, AssertionError):
+                raise HTTPException(422, "bbox는 '남,서,북,동' 숫자 4개입니다")
+        try:
+            return ais.vessels(max_age_min=max_age_min, bbox=box)
+        except ais.AisError as e:
+            return JSONResponse({"error": str(e), "vessels": []}, status_code=503)
+
+    @app.get("/api/ais/voyage")
+    def ais_voyage(callsgn: str, year: str, voyage: Optional[str] = None):
+        """한 척의 입항·투묘·접안·이안·출항 기록(울산항만공사 운항정보). 미래 ETA는 없다."""
+        from ..data import ais
+        if not (1 <= len(callsgn) <= 12 and year.isdigit() and len(year) == 4):
+            raise HTTPException(422, "callsgn은 호출부호, year는 입항연도 4자리입니다")
+        try:
+            return ais.voyage_events(callsgn, year, voyage)
+        except ais.AisError as e:
+            return JSONResponse({"error": str(e), "events": []}, status_code=503)
+
+    @app.get("/api/entry/arrivals")
+    def entry_arrivals(callsgn: Optional[str] = None, hours_back: float = 0, hours_ahead: float = 48):
+        """울산 입항 신고(해양수산부 선박입출항신고). 입항일시가 지금보다 늦으면 대리점이 신고한 입항 예정(ETA에 해당)이다."""
+        from ..data import entry
+        if callsgn is not None and not (1 <= len(callsgn) <= 12):
+            raise HTTPException(422, "callsgn은 호출부호입니다")
+        try:
+            return entry.arrivals(callsgn=callsgn, hours_back=hours_back, hours_ahead=hours_ahead)
+        except entry.EntryError as e:
+            return JSONResponse({"error": str(e), "arrivals": []}, status_code=503)
+
     @app.get("/api/rules")
     def rules_tables():
         r = load_rules(data_dir=data)

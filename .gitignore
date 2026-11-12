@@ -16,3 +16,8 @@ dist/
 journeys/out/
 docs/milp/ppt/out/
 prototype/
+
+# 키·비밀번호 파일은 저장소에 올리지 않는다. 예시 파일(.env.example)만 올린다.
+.env
+.env.*
+!.env.example

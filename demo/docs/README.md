@@ -19,6 +19,7 @@
 | 12 | [화면 설계](12-ui-design.md) | FE·기획 — SEAGATE 개선 컨셉, 정보 구조, 디자인 원칙·토큰 |
 | 13 | [수리계획법](13-math-programming.md) | AI/DATA·모두 — 접안 계획을 변수·목적함수·제약식으로. 두 타입: [13a 주제 설명 문서 기준](13a-math-programming-brief.md) · [13b 멘토링 PPT 기준](13b-math-programming-ppt.md), 공유용 페이지는 assets/ |
 | 14 | [EKS 배포 준비](14-eks-architecture.md) | Infra·모두 — 설정 이유·현재 데모와 목표 구조·팀의 운영 작업, [배포 명령](../deploy/README.md) |
+| 16 | [실시간 공공 데이터 연결](16-live-data.md) | 모두 — 선박 위치·ETA 연결 현황, 예시 시나리오, Pain point·장애 지점, 키 관리 |
 | ADR | [결정 기록](adr/README.md) | 모두 — 트레이드오프 15개(014·015는 11-10에 덧붙인 Spring Boot + LangGraph 방향) |
 
 그림·산출물: [`assets/`](assets/) — 프로젝트·백엔드 아키텍처 다이어그램(SVG), 대표 데모(S05)의 기준안·1안 타임라인, 보고서(.md·.html), 메일 초안.
