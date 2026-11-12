@@ -202,8 +202,9 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
     </aside>
 
     <main class="main">
-      <div v-if="result.error && tab !== 'input' && tab !== 'verify'" class="notice danger">
-        <CircleAlert class="ico" :size="18" /><span><b>후보 계산 불가</b> — {{ result.error }}</span>
+      <!-- 후보 계산이 필요한 화면만 막는다. 확정 일정(스냅숏)·계약·정산·기준 정보·생산 화면은 계산 실패와 상관없이 열린다. -->
+      <div v-if="result.error && ['home', 'compare', 'risk', 'report', 'workflow'].includes(tab)" class="notice danger">
+        <CircleAlert class="ico" :size="18" /><span><b>후보 계산 불가</b> — {{ result.error }}<template v-if="ws.roleId === 'admin'"> · 「기준 정보」에서 부두 제원을 확인하십시오.</template></span>
       </div>
       <MapHome v-else-if="tab === 'home'" :key="resetKey" :result="result" :scen="plain" :current="current" :version="version"
         @go="tab = $event" @focus="focusId = $event" @open="openVessel" />

@@ -7,12 +7,16 @@ import { ArrowLeft, ArrowRight, Star, X } from 'lucide-vue-next'
 import { RULES, compatibleBerths, stateAt } from '../lib/engine.js'
 import { NAV, anchorageFor, positionOf } from '../lib/vesselState.js'
 import { fmt, fmtDur, money } from '../lib/time.js'
+import { PERMS, ws } from '../lib/workspace.js'
 
 const props = defineProps({
   sim: Object, vid: String, scen: Object, fcfs: Object,
   at: { type: Number, default: null }, // 지도에서 열면 그 시각, 다른 화면에서는 계획 기준
   mode: { type: String, default: 'card' },
 })
+// 계약 단가는 권한 표의 '계약 단가 · 체선료 금액 조회' 역할만 본다(HN-095). 나머지는 '비공개'.
+const rateOk = computed(() => PERMS.find((p) => p.act.startsWith('계약 단가')).roles.includes(ws.roleId))
+const rate = (cents) => (rateOk.value ? money(cents) : '비공개')
 const emit = defineEmits(['close'])
 
 const view = ref(props.mode)
@@ -63,7 +67,7 @@ const steps = computed(() => {
     { rule: x.clause.rule, k: '기상 공제', f: x.wxOverlap ? `대기 중 기상 악화 ${hours(x.wxOverlap)} × ${x.clause.ratio * 100}%` : '정박시간 중 기상 대기 없음', val: x.wxDeduct ? `− ${hours(x.wxDeduct)}` : '0' },
     { rule: '-', k: '산입 시간', f: `사용 ${hours(x.usedMin)} − 공제`, val: hours(x.countedMin) },
     { rule: '-', k: '체선 시간', f: `산입 − 허용 ${hours(x.allowMin)} (0 미만은 0)`, val: hours(x.excessMin) },
-    { rule: 'DEM-PRORATA', k: '체선료', f: `${hours(x.excessMin)} ÷ 24시간 × ${money(x.rateCents)}/일`, val: money(x.cents), strong: true },
+    { rule: 'DEM-PRORATA', k: '체선료', f: `${hours(x.excessMin)} ÷ 24시간 × ${rate(x.rateCents)}/일`, val: money(x.cents), strong: true },
   ]
 })
 
@@ -121,7 +125,7 @@ const flow = computed(() => {
             <tr><th>선박 위치</th><td class="num">{{ pos[0].toFixed(5) }}, {{ pos[1].toFixed(5) }}</td></tr>
             <tr><th>DWT · 흘수</th><td class="num">{{ v.dwt.toLocaleString() }} t · {{ v.draft }} m</td></tr>
             <tr><th>화물</th><td>{{ v.dir }} · {{ v.product }} · {{ v.ton.toLocaleString() }} t</td></tr>
-            <tr><th>계약</th><td>{{ v.contract.id }} · 허용 {{ v.contract.laytimeH }}h · 일 {{ money(v.contract.rateUsd * 100) }}</td></tr>
+            <tr><th>계약</th><td>{{ v.contract.id }} · 허용 {{ v.contract.laytimeH }}h · 일 {{ rate(v.contract.rateUsd * 100) }}</td></tr>
             <tr><th>시설 신청</th><td>{{ compatibleBerths(v, scen).map(berthName).join(', ') }} <span class="muted">(접안 가능 · 항차 {{ v.voyage }})</span></td></tr>
             <tr><th>시설 사용</th><td>{{ use }}</td></tr>
             <tr>
@@ -132,7 +136,7 @@ const flow = computed(() => {
             <tr>
               <th>예상 체선료</th>
               <td><b :class="d.cents > 0 ? 'bad' : 'ok'">{{ money(d.cents) }}</b>
-                <span class="muted">(체선 {{ hours(d.excessMin) }} · 일 {{ money(v.contract.rateUsd * 100) }})</span>
+                <span class="muted">(체선 {{ hours(d.excessMin) }} · 일 {{ rate(v.contract.rateUsd * 100) }})</span>
                 <template v-if="sim.id !== 'FCFS'"><br><span class="muted">도착순 기준안 {{ money(base.dem.cents) }}</span></template></td>
             </tr>
           </tbody>
@@ -187,7 +191,7 @@ const flow = computed(() => {
           </tbody>
         </table>
         <div class="formula">
-          체선료 = 체선 시간 {{ hours(d.excessMin) }} × 일 체선료 {{ money(d.rateCents) }} ÷ 24<br>
+          체선료 = 체선 시간 {{ hours(d.excessMin) }} × 일 체선료 {{ rate(d.rateCents) }} ÷ 24<br>
           <span class="res" :class="d.cents > 0 ? 'bad' : 'ok'">= {{ money(d.cents) }}</span>
           <span class="muted"> (선박별 센트 단위 한 번 반올림 · HALF_UP)</span>
         </div>
