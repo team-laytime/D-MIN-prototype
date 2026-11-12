@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { marked } from 'marked'
 import { Copy, Download } from 'lucide-vue-next'
 import { risks } from '../lib/engine.js'
 import { fmt, money } from '../lib/time.js'
@@ -73,6 +74,10 @@ const reportText = computed(() => {
   return L.join('\n')
 })
 
+// 보고서는 문서 모양으로 렌더링해 보여 준다. 복사·내려받기는 마크다운 원문 그대로.
+// 입력은 이 화면이 계산 결과로 만든 문자열뿐이라 외부 HTML이 섞이지 않는다.
+const reportHtml = computed(() => marked.parse(reportText.value))
+const reportView = ref('view')
 const copied = ref('')
 async function copy(which, text) {
   await navigator.clipboard.writeText(text)
@@ -118,11 +123,18 @@ function download() {
         <div class="panel-head">
           <h2>보고서 초안</h2>
           <div class="row">
+            <div class="seg" role="tablist" aria-label="보기 방식">
+              <button :class="{ on: reportView === 'view' }" @click="reportView = 'view'">문서 보기</button>
+              <button :class="{ on: reportView === 'raw' }" @click="reportView = 'raw'">마크다운 원문</button>
+            </div>
             <button class="btn" @click="copy('report', reportText)"><Copy :size="16" />{{ copied === 'report' ? '복사됨' : '복사' }}</button>
             <button class="btn" @click="download"><Download :size="16" />내려받기 (.md)</button>
           </div>
         </div>
-        <div class="panel-body"><pre class="doc">{{ reportText }}</pre></div>
+        <div class="panel-body">
+          <article v-if="reportView === 'view'" class="md" v-html="reportHtml" />
+          <pre v-else class="doc">{{ reportText }}</pre>
+        </div>
       </section>
     </div>
   </div>
@@ -139,4 +151,16 @@ function download() {
   background: #fafbfc; border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; max-height: 640px; overflow: auto;
 }
 .foot { padding: 0 18px 14px; }
+/* 마크다운 문서 보기: 포털 표 양식에 맞춘 제목·표·목록 */
+.md { max-height: 640px; overflow: auto; padding: 4px 6px 8px; font-size: 13px; line-height: 1.75; color: var(--text); }
+.md :deep(h1) { font-size: 19px; font-weight: 800; text-align: center; margin: 6px 0 4px; letter-spacing: -0.4px; }
+.md :deep(h1 + p) { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+.md :deep(h2) { font-size: 14.5px; font-weight: 700; margin: 20px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line-strong); }
+.md :deep(p) { margin: 0 0 8px; }
+.md :deep(table) { width: 100%; border-collapse: collapse; border-top: 2px solid #5b6575; border-bottom: 1px solid var(--line-strong); font-size: 12.5px; margin: 4px 0 8px; }
+.md :deep(th) { background: #eef0f3; color: #2b3445; font-weight: 600; padding: 6px 8px; border: 1px solid var(--line); border-top: 0; white-space: nowrap; }
+.md :deep(td) { padding: 6px 8px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.md :deep(ul) { margin: 0 0 8px; padding-left: 0; list-style: none; }
+.md :deep(li) { position: relative; padding-left: 16px; }
+.md :deep(li)::before { content: '○'; position: absolute; left: 0; color: #555; font-size: 11px; top: 2px; }
 </style>
