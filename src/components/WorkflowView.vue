@@ -89,25 +89,45 @@ const edges = computed(() =>
   }),
 )
 
-// 재생: 단계가 하나씩 켜진다.
-const head = ref(steps.value.length)
-const selected = ref(4)
+// 재생은 사용자가 직접 넘긴다. head = 지금까지 보여 준 단계 수.
+const head = ref(0)
+const selected = ref(-1)
+const auto = ref(false)
 let timer = null
-function play() {
-  clearInterval(timer)
-  head.value = 0
-  selected.value = 0
-  timer = setInterval(() => {
-    head.value++
-    if (head.value < steps.value.length) selected.value = head.value
-    if (head.value >= steps.value.length) clearInterval(timer)
-  }, 700)
+const total = computed(() => steps.value.length)
+function go(n) {
+  head.value = Math.max(0, Math.min(total.value, n))
+  selected.value = head.value - 1
 }
-onMounted(play)
-onBeforeUnmount(() => clearInterval(timer))
-const stateOf = (n) => (n.i < head.value ? (n.waiting && head.value >= steps.value.length ? 'waiting' : 'done') : n.i === head.value ? 'running' : 'pending')
-const sel = computed(() => steps.value[selected.value])
-const playing = computed(() => head.value < steps.value.length)
+const next = () => go(head.value + 1)
+const prev = () => go(head.value - 1)
+function stopAuto() {
+  clearInterval(timer)
+  auto.value = false
+}
+function toggleAuto() {
+  if (auto.value) return stopAuto()
+  if (head.value >= total.value) go(0)
+  auto.value = true
+  next()
+  timer = setInterval(() => {
+    next()
+    if (head.value >= total.value) stopAuto()
+  }, 1600)
+}
+function pick(i) {
+  stopAuto()
+  if (i >= head.value) head.value = i + 1
+  selected.value = i
+}
+function onKey(e) {
+  if (e.key === 'ArrowRight') { stopAuto(); next() }
+  if (e.key === 'ArrowLeft') { stopAuto(); prev() }
+}
+onMounted(() => window.addEventListener('keydown', onKey))
+onBeforeUnmount(() => { stopAuto(); window.removeEventListener('keydown', onKey) })
+const stateOf = (n) => (n.i < head.value ? (n.waiting && head.value >= total.value ? 'waiting' : 'done') : 'pending')
+const sel = computed(() => (selected.value >= 0 ? steps.value[selected.value] : null))
 </script>
 
 <template>
@@ -115,10 +135,18 @@ const playing = computed(() => head.value < steps.value.length)
     <section class="panel">
       <div class="panel-head">
         <div>
+          <p class="small muted">부록</p>
           <h2>Agent 워크플로우</h2>
-          <p class="muted small">지금 시나리오({{ scen.name }})가 어떤 순서로 계산됐는지 보여 줘요. 단계를 누르면 그 단계의 입력과 결과가 나와요.</p>
+          <p class="muted small">화면 뒤에서 지금 시나리오({{ scen.name }})가 어떤 순서로 계산되는지 보여 줘요. 직접 넘기면서 보세요.</p>
         </div>
-        <button class="btn" :disabled="playing" @click="play">{{ playing ? '재생 중…' : '▶ 처음부터 다시 재생' }}</button>
+        <div class="controls">
+          <button class="btn" :disabled="head === 0" @click="stopAuto(); go(0)">처음으로</button>
+          <button class="btn" :disabled="head === 0" @click="stopAuto(); prev()">← 이전</button>
+          <span class="counter num">{{ head }} / {{ total }}</span>
+          <button class="btn primary" :disabled="head >= total" @click="stopAuto(); next()">다음 단계 →</button>
+          <button class="btn" @click="toggleAuto">{{ auto ? '❚❚ 멈춤' : '▶ 자동 재생' }}</button>
+          <button class="btn ghost" :disabled="head >= total" @click="stopAuto(); go(total)">전체 보기</button>
+        </div>
       </div>
       <div class="panel-body">
         <svg :viewBox="`0 0 ${W} ${H}`" class="flow" role="img" aria-label="Agent 워크플로우">
@@ -137,17 +165,24 @@ const playing = computed(() => head.value < steps.value.length)
             <text x="16" :y="i * LANE_H + LANE_H / 2 + 14" class="lane-sub">{{ l.sub }}</text>
           </g>
           <path v-for="e in edges" :key="e.i" :d="e.d" :class="['edge', { on: e.i < head }]" :marker-end="e.i < head ? 'url(#arr-on)' : 'url(#arr)'" />
-          <g v-for="n in nodes" :key="n.i" :class="['node', n.lane, stateOf(n), { sel: n.i === selected }]" @click="selected = n.i">
+          <g v-for="n in nodes" :key="n.i" :class="['node', n.lane, stateOf(n), { sel: n.i === selected }]" @click="pick(n.i)">
             <rect :x="n.x" :y="n.y" :width="NODE_W" :height="NODE_H" rx="8" />
             <text :x="n.x + 12" :y="n.y + 23" class="node-title">{{ n.i + 1 }}. {{ n.title }}</text>
-            <text :x="n.x + 12" :y="n.y + 43" class="node-out">{{ stateOf(n) === 'pending' ? '대기' : stateOf(n) === 'running' ? '실행 중…' : n.out }}</text>
+            <text :x="n.x + 12" :y="n.y + 43" class="node-out">{{ stateOf(n) === 'pending' ? '아직' : n.out }}</text>
           </g>
         </svg>
       </div>
     </section>
 
     <div class="detail-grid">
-      <section class="panel detail">
+      <section v-if="!sel" class="panel detail">
+        <div class="panel-head"><h2>단계별로 따라가 보세요</h2></div>
+        <div class="panel-body">
+          <p>「다음 단계」를 누르거나 키보드 → 키로 한 단계씩 넘겨요. 각 단계가 무엇을 받아 무엇을 내놓는지, 이번 시나리오의 실제 결과가 이 칸에 나와요.</p>
+          <p class="muted small hint">위 그림의 상자를 바로 눌러도 돼요. 가로줄은 그 일을 맡는 주체예요.</p>
+        </div>
+      </section>
+      <section v-else class="panel detail">
         <div class="panel-head">
           <div>
             <p class="small muted">{{ selected + 1 }}단계 · {{ LANES.find((l) => l.id === sel.lane).label }}</p>
@@ -198,15 +233,15 @@ const playing = computed(() => head.value < steps.value.length)
 .node { cursor: pointer; }
 .node rect { fill: #fff; stroke: var(--line-strong); stroke-width: 1.5; transition: fill 0.3s, stroke 0.3s; }
 .node.done rect { fill: var(--cw); stroke: var(--c); }
-.node.running rect { fill: #fff; stroke: var(--c); stroke-width: 2.5; animation: pulse 0.7s ease-in-out infinite alternate; }
 .node.waiting rect { fill: #fff; stroke: var(--c); stroke-width: 2; stroke-dasharray: 5 4; }
 .node.sel rect { stroke-width: 3; }
 .node-title { font-size: 13.5px; font-weight: 700; fill: var(--text); }
 .node.pending .node-title { fill: var(--faint); }
 .node-out { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
 .node.done .node-out { fill: var(--c); font-weight: 650; }
-@keyframes pulse { from { stroke-opacity: 1; } to { stroke-opacity: 0.35; } }
-@media (prefers-reduced-motion: reduce) { .node.running rect { animation: none; } }
+.controls { display: flex; align-items: center; gap: 6px; flex: none; }
+.counter { min-width: 48px; text-align: center; font-weight: 650; color: var(--muted); }
+.hint { margin-top: 8px; }
 .detail-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; align-items: start; }
 .io { display: grid; grid-template-columns: 72px 1fr; gap: 10px 14px; margin: 0; }
 .io dt { color: var(--muted); font-weight: 600; }

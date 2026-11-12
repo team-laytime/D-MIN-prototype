@@ -30,7 +30,7 @@ const clause = { FULL: '전부 공제', HALF: '50% 공제', NONE: '공제 없음
 
 <template>
   <div class="stack">
-    <section class="panel">
+    <section class="panel answer-set">
       <div class="panel-head">
         <div>
           <h2>체선료 계산 정답 세트</h2>

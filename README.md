@@ -3,7 +3,7 @@
 울산 CLX 선박 체선료 최적화 Agent의 화면 흐름을 확인하려고 만든 버릴 코드다. 실제 프론트는 `D-MIN-front`에서 만든다.
 
 - 데모: https://team-laytime.github.io/D-MIN-prototype/
-- 흐름: 홈 → 시나리오 입력 → 후보 비교 → 리스크·선택 → 보고서 초안 → 검증, 그리고 Agent 워크플로우
+- 흐름: 홈 → 시나리오 입력 → 후보 비교 → 리스크·선택 → 보고서 초안 → 검증. 오른쪽 위 「사용법」은 화면을 하나씩 짚는 안내 투어이고, 「부록 · Agent 워크플로우」는 계산 순서를 단계별로 넘겨 본다.
 
 ```bash
 bun install && bun run dev   # http://localhost:5174

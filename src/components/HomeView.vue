@@ -4,7 +4,14 @@ import { risks } from '../lib/engine.js'
 import { fmt, fmtDur, money } from '../lib/time.js'
 
 const props = defineProps({ result: Object, scen: Object, current: Object, version: Number })
-const emit = defineEmits(['go', 'focus'])
+const emit = defineEmits(['go', 'focus', 'tour'])
+const USAGE = [
+  { tab: 'input', title: '조건 넣기', desc: '도착 시각·계약·기상을 넣거나 고쳐요' },
+  { tab: 'compare', title: '후보 비교', desc: '총 체선료와 타임라인을 나란히 봐요' },
+  { tab: 'compare', title: '근거 보기', desc: '선박을 누르면 계산 과정이 열려요' },
+  { tab: 'risk', title: '리스크 확인·선택', desc: '남은 리스크를 확인하고 후보를 골라요' },
+  { tab: 'report', title: '초안 받기', desc: '메일·보고서 초안을 복사해요' },
+]
 
 const fcfs = computed(() => props.result.fcfs)
 const best = computed(() => props.result.candidates[0])
@@ -68,7 +75,7 @@ const longest = computed(() => best.value.placements.reduce((a, b) => (b.waitMin
         </div>
         <div class="row cta">
           <button class="btn primary" @click="emit('go', 'compare')">후보 비교하기 →</button>
-          <button class="btn" @click="emit('go', 'workflow')">Agent가 어떻게 계산했는지 보기</button>
+          <button class="btn" @click="emit('tour')">처음이라면: 사용법 둘러보기</button>
         </div>
         <div class="stats">
           <div class="stat">
@@ -175,21 +182,22 @@ const longest = computed(() => best.value.placements.reduce((a, b) => (b.waitMin
 
     <section class="panel how">
       <div class="panel-head">
-        <h2>이 화면이 만들어지기까지</h2>
-        <button class="btn ghost" @click="emit('go', 'workflow')">워크플로우 자세히 →</button>
+        <div>
+          <h2>이렇게 써요</h2>
+          <p class="muted small">단계를 누르면 그 화면으로 가요. 처음이면 사용법 둘러보기로 화면을 하나씩 짚어 볼 수 있어요.</p>
+        </div>
+        <div class="row">
+          <button class="btn primary" @click="emit('tour')">사용법 둘러보기</button>
+          <button class="btn ghost" @click="emit('go', 'workflow')">부록: Agent 워크플로우 →</button>
+        </div>
       </div>
       <div class="panel-body flow">
-        <div class="flow-step"><span class="n">1</span><b>입력</b><span class="small muted">선박 {{ scen.vessels.length }}척 · 부두 {{ scen.berths.length }}곳 · 계약 {{ scen.vessels.length }}건</span></div>
-        <span class="arrow">→</span>
-        <div class="flow-step"><span class="n">2</span><b>체선료 계산</b><span class="small muted">계약 조항을 규칙으로 적용</span></div>
-        <span class="arrow">→</span>
-        <div class="flow-step"><span class="n">3</span><b>순서 탐색</b><span class="small muted">{{ result.explored.toLocaleString() }}안 시뮬레이션</span></div>
-        <span class="arrow">→</span>
-        <div class="flow-step"><span class="n">4</span><b>검증·리스크</b><span class="small muted">제약 위반 0 · 리스크 5항목</span></div>
-        <span class="arrow">→</span>
-        <div class="flow-step"><span class="n">5</span><b>초안</b><span class="small muted">숫자는 계산값 그대로</span></div>
-        <span class="arrow">→</span>
-        <div class="flow-step human"><span class="n">6</span><b>담당자 선택</b><span class="small muted">확정은 사람만</span></div>
+        <template v-for="(u, i) in USAGE" :key="u.title">
+          <span v-if="i" class="arrow">→</span>
+          <button class="flow-step" @click="emit('go', u.tab)">
+            <span class="n">{{ i + 1 }}</span><b>{{ u.title }}</b><span class="small muted">{{ u.desc }}</span>
+          </button>
+        </template>
       </div>
     </section>
   </div>
@@ -241,8 +249,8 @@ const longest = computed(() => best.value.placements.reduce((a, b) => (b.waitMin
 .warn-text { color: var(--warn); font-weight: 650; }
 .chip.tag { margin-right: 4px; }
 .flow { display: flex; align-items: stretch; gap: 8px; }
-.flow-step { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
-.flow-step.human { border-color: var(--accent); background: var(--accent-weak); }
+.flow-step { flex: 1; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; background: var(--panel); text-align: left; }
+.flow-step:hover { border-color: var(--accent); background: #f7fafb; }
 .flow-step .n { font-size: 11px; font-weight: 700; color: var(--accent); }
 .arrow { align-self: center; color: var(--faint); }
 </style>
