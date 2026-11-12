@@ -4,7 +4,7 @@
   "title": "Design System: D-MIN 체선료 비교",
   "extensions": {
     "colorMeta": {
-      "portal-red": { "role": "primary", "displayName": "Portal Red", "canonical": "#d6202f" },
+      "portal-teal": { "role": "primary", "displayName": "Portal Teal", "canonical": "#0e6b72" },
       "page-gray": { "role": "neutral", "displayName": "Page Gray", "canonical": "#f1f2f4" },
       "table-rule": { "role": "neutral", "displayName": "Table Rule", "canonical": "#555555" }
     },
@@ -20,7 +20,7 @@
       "refersTo": "button-primary",
       "description": "화면당 하나뿐인 주 동작.",
       "html": "<button class=\"ds-btn\">후보 비교</button>",
-      "css": ".ds-btn { height: 30px; padding: 0 12px; background: #d6202f; color: #fff; border: 1px solid #d6202f; border-radius: 2px; font: 12.5px 'Noto Sans KR', sans-serif; } .ds-btn:hover { background: #b81a27; }"
+      "css": ".ds-btn { height: 30px; padding: 0 12px; background: #0e6b72; color: #fff; border: 1px solid #0e6b72; border-radius: 2px; font: 12.5px 'Noto Sans KR', sans-serif; } .ds-btn:hover { background: #0a5359; }"
     },
     {
       "name": "Data Table",
@@ -32,10 +32,10 @@
   ],
   "narrative": {
     "northStar": "The Terminal Back Office",
-    "overview": "국내 정유·항만 사내 업무 포털 문법(BerthDesk 기준 화면). 회색 바탕, 진한 윗선 표, 빨강 1색 강조, 평면.",
-    "keyCharacteristics": ["2px 윗선 표", "빨강 1색", "2px 모서리, 그림자 없음", "명사형 라벨·합니다체 설명"],
+    "overview": "국내 정유·항만 사내 업무 포털 문법(BerthDesk 기준 화면). 회색 바탕, 진한 윗선 표, 딥 틸 1색 강조, 평면.",
+    "keyCharacteristics": ["2px 윗선 표", "딥 틸 1색", "2px 모서리, 그림자 없음", "명사형 라벨·합니다체 설명"],
     "rules": [{ "name": "The Meaning-Only Color Rule", "body": "상태 색은 정해진 뜻에만 쓴다.", "section": "colors" }],
-    "dos": ["정보를 표로 묶는다", "주 동작은 빨간 버튼 하나"],
+    "dos": ["정보를 표로 묶는다", "주 동작은 딥 틸 버튼 하나", "빨강은 체선·위반·경보 전용"],
     "donts": ["둥근·그림자 카드 금지", "~해요체 안내문 금지", "제목 위 꼬리표 금지"]
   }
 }

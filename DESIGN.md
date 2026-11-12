@@ -2,9 +2,9 @@
 name: D-MIN 체선료 비교
 description: 울산 CLX 접안 순서·체선료 비교 업무 포털 (프로토타입)
 colors:
-  portal-red: "#d6202f"
-  portal-red-deep: "#b81a27"
-  portal-red-wash: "#fdf0f1"
+  portal-teal: "#0e6b72"
+  portal-teal-deep: "#0a5359"
+  portal-teal-wash: "#e6f2f3"
   ink: "#222222"
   ink-muted: "#666666"
   ink-faint: "#999999"
@@ -56,13 +56,13 @@ spacing:
   page-x: "28px"
 components:
   button-primary:
-    backgroundColor: "{colors.portal-red}"
+    backgroundColor: "{colors.portal-teal}"
     textColor: "{colors.paper}"
     rounded: "{rounded.control}"
     height: "30px"
     padding: "0 12px"
   button-primary-hover:
-    backgroundColor: "{colors.portal-red-deep}"
+    backgroundColor: "{colors.portal-teal-deep}"
   button-default:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -97,16 +97,16 @@ components:
 
 **Key Characteristics:**
 - 진한 2px 윗선 + 회색 헤더 칸의 표가 기본 단위
-- 빨강 1색 강조, 상태는 배경 없이 글자색과 굵기
+- 딥 틸 1색 강조, 상태는 배경 없이 글자색과 굵기
 - 직각에 가까운 모서리(2px), 그림자 없음
 - 업무 도구 말투: 명사형 라벨, 설명은 합니다체 한 줄
 
 ## Colors
 
-빨강 한 색과 회색 계열 중립, 그리고 뜻이 정해진 상태 색.
+딥 틸 한 색과 회색 계열 중립, 그리고 뜻이 정해진 상태 색. 빨강은 브랜드 색으로 쓰지 않고 체선·위반·경보 전용으로 남긴다.
 
 ### Primary
-- **Portal Red** (#d6202f): 주 버튼, 현재 GNB·LNB 메뉴, 현재 단계, 선택 행의 배경(#fdf0f1), 브랜드 워드마크.
+- **Portal Teal** (#0e6b72): 주 버튼, 현재 GNB·LNB 메뉴, 현재 단계, 선택 행의 배경(#e6f2f3), 브랜드 워드마크(D- 딥 틸 + MIN #23a3a8).
 
 ### Neutral
 - **Ink** (#222222): 본문 글자.
@@ -137,7 +137,7 @@ components:
 
 - 유틸 바 30px · GNB 82px(좌우 48px 여백) · LNB 260px · 본문 좌우 28px · 본문 최대 1400px.
 - 구역 사이 28px. 구역 = 제목 줄(아래 8px) + 흰 본문(2px 윗선).
-- 계획 흐름 화면은 제목 아래 단계 표시(1. 입력 확인 › … › 5. 보고서 작성), 현재 단계 빨강 굵게.
+- 계획 흐름 화면은 제목 아래 단계 표시(1. 입력 확인 › … › 5. 보고서 작성), 현재 단계 딥 틸 굵게.
 - 최소 너비 1280px(데스크톱 업무 화면).
 
 ## Elevation & Depth
@@ -152,7 +152,7 @@ components:
 
 ### Buttons
 - **Shape:** 2px, 높이 30px, 12.5px 글자.
-- **Primary:** Portal Red 바탕 흰 글자, 화면당 주 동작 하나.
+- **Primary:** Portal Teal 바탕 흰 글자, 화면당 주 동작 하나.
 - **Default:** 흰 바탕 #cfd2d6 테두리.
 - **Ghost:** 파랑 밑줄 링크(표 안 "보기" 등).
 
@@ -160,13 +160,13 @@ components:
 - 해당·해당 없음·판단 불가·위반은 배경 없는 굵은 색 글자. 중립 태그만 회색 테두리 20px.
 
 ### Tables
-- 2px #555 윗선, #f4f5f7 머리 칸(가운데 정렬), 칸 사이 1px 세로선, 행 높이 38px, 선택 행 #fdf0f1.
+- 2px #5b6575 윗선, #eef0f3 머리 칸(가운데 정렬), 모든 칸 1px 선, 행 높이 36px, 선택 행 #e6f2f3.
 
 ### Inputs / Fields
 - 흰 바탕 #cfd2d6 1px, 2px 모서리, 높이 30px(표 안 26px). 포커스는 테두리 #888.
 
 ### Navigation
-- GNB: 가운데 정렬 메뉴, 현재 묶음 빨강. LNB: 영문 대문자 묶음 이름 + 사각 펼침 표식, 펼친 묶음은 흰 바탕·왼쪽 2px 빨강 선의 하위 메뉴.
+- GNB: 가운데 정렬 메뉴, 현재 묶음 딥 틸. LNB: 영문 대문자 묶음 이름 + 사각 펼침 표식, 펼친 묶음은 흰 바탕·왼쪽 2px 딥 틸 선의 하위 메뉴.
 
 ### Notice
 - 노란 띠(#fff8e1, #f0d58a 테두리) + 원형 경고 아이콘, 오른쪽 끝 밑줄 동작 링크. 발효 중인 경보는 빨간 띠.
@@ -178,7 +178,7 @@ components:
 
 ### Do:
 - **Do** 정보를 표로 묶고 표마다 2px 윗선을 둔다.
-- **Do** 주 동작은 화면당 빨간 버튼 하나로 둔다.
+- **Do** 주 동작은 화면당 딥 틸 버튼 하나로 둔다. 빨강은 체선·위반·경보에만 쓴다.
 - **Do** 라벨은 명사형, 설명은 합니다체 한 줄로 쓴다.
 - **Do** 모든 화면에 "가상 데이터"와 "의사결정 보조용"을 남긴다(푸터).
 

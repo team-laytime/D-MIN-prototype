@@ -1,5 +1,5 @@
-/* 국내 기업 업무 포털 양식(BerthDesk 기준 화면). 회색 바탕, 진한 윗선 표, 라벨 칸 폼, 빨간 주 버튼.
-   색은 뜻이 있을 때만 쓴다: 빨강=주 동작·선택·위반, 초록=정상·절감, 주황=대기·해당, 파랑=변경 값, 보라=판단 불가. */
+/* 국내 기업 업무 포털 양식(BerthDesk 기준 화면). 회색 바탕, 진한 윗선 표, 라벨 칸 폼, 딥 틸 주 버튼.
+   색은 뜻이 있을 때만 쓴다: 딥 틸=주 동작·선택·현재 메뉴, 빨강=체선·위반·경보, 초록=정상·절감, 주황=대기·해당, 파랑=변경 값, 보라=판단 불가. */
 :root {
   --bg: #f1f2f4;
   --panel: #ffffff;
@@ -12,9 +12,9 @@
   --faint: #999999;
   --navy: #2b3445;
   --sk: #ea7600;
-  --accent: #d6202f;
-  --accent-hover: #b81a27;
-  --accent-weak: #fdf0f1;
+  --accent: #0e6b72;
+  --accent-hover: #0a5359;
+  --accent-weak: #e6f2f3;
   --blue: #1f4e9c;
   --warn: #c77700;
   --warn-dot: #e2a12a;
@@ -41,7 +41,7 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 1280px; }
-::selection { background: #f6c9cd; color: var(--text); }
+::selection { background: #c9e4e6; color: var(--text); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 button { font: inherit; cursor: pointer; color: inherit; }
 input, select, textarea { font: inherit; color: inherit; }

@@ -218,7 +218,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .gnb { height: 82px; display: grid; grid-template-columns: 260px 1fr auto; align-items: center; padding: 0 48px; background: #fff; border-bottom: 1px solid var(--line-strong); }
 .brand { display: flex; align-items: baseline; border: 0; background: none; padding: 0; text-align: left; white-space: nowrap; }
 .brand b { font-size: 23px; font-weight: 800; color: var(--accent); letter-spacing: -0.6px; }
-.brand span { font-size: 23px; color: #e2672a; font-weight: 500; letter-spacing: -0.6px; }
+.brand span { font-size: 23px; color: #23a3a8; font-weight: 500; letter-spacing: -0.6px; }
 .brand small { margin-left: 8px; font-size: 12.5px; color: #777; }
 .gnb-nav { display: flex; justify-content: center; gap: 44px; }
 .gnb-nav button { border: 0; background: none; padding: 0; font-size: 16px; font-weight: 500; color: #333; height: 82px; border-bottom: 2px solid transparent; }
@@ -254,5 +254,5 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .foot-links { display: flex; gap: 0; margin-bottom: 6px; }
 .foot-links span { padding: 0 12px; border-left: 1px solid #666; color: #ddd; }
 .foot-links span:first-child { padding-left: 0; border-left: 0; }
-.foot-links .red { color: #ff6b6b; }
+.foot-links .red { color: #7fd0d3; }
 </style>

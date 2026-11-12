@@ -346,7 +346,7 @@ function pick(vid) {
 .vessel-list tr.dep td { background: #ececec; color: #666; }
 .vessel-list tr.berth td { background: #fff6c4; }
 .vessel-list tr.plan td { background: #e1f5f7; }
-.vessel-list tr.sel td { box-shadow: inset 0 0 0 9999px rgba(214, 32, 47, 0.08); }
+.vessel-list tr.sel td { box-shadow: inset 0 0 0 9999px rgba(14, 107, 114, 0.1); }
 .row-legend { margin-left: auto; display: flex; align-items: center; gap: 14px; color: #444; }
 .row-legend span { display: inline-flex; align-items: center; }
 .row-legend i { display: inline-block; width: 30px; height: 13px; margin-right: 6px; border: 1px solid rgba(0, 0, 0, 0.08); }
