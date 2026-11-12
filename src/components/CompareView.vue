@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import Timeline from './Timeline.vue'
+import ViewHead from './ViewHead.vue'
 import { risks, validate } from '../lib/engine.js'
 import { at, fmt, fmtDur, money } from '../lib/time.js'
 
@@ -30,46 +31,55 @@ const berthName = (id) => props.scen.berths.find((b) => b.id === id).name
 const fcfsBy = computed(() => Object.fromEntries(props.result.fcfs.placements.map((p) => [p.vid, p])))
 const rows = computed(() => [...focus.value.placements].sort((a, b) => vessel.value[a.vid].eta - vessel.value[b.vid].eta))
 const pctOf = (d) => (props.result.fcfs.total ? Math.round((d / props.result.fcfs.total) * 1000) / 10 : 0)
+const kpis = computed(() => {
+  const best = props.result.candidates[0]
+  const save = props.result.fcfs.total - best.total
+  return [
+    { label: '도착순 기준안', value: money(props.result.fcfs.total).replace(/\.\d+$/, '') },
+    { label: `${best.label} (최저)`, value: money(best.total).replace(/\.\d+$/, '') },
+    { label: '줄어드는 비율', value: `${pctOf(save)}%`, good: true },
+    { label: '돌려 본 조합', value: props.result.explored.toLocaleString() },
+  ]
+})
 </script>
 
 <template>
   <div class="stack">
+    <ViewHead title="후보 비교" crumb="BERTH PLANNING > 후보 비교" :step="2"
+      :desc="`순서·부두 조합 ${result.explored.toLocaleString()}개를 같은 규칙으로 계산, 제약을 지키는 배치 중 체선료 하위 ${result.candidates.length}개`"
+      :kpis="kpis" />
     <section class="panel">
       <div class="panel-head">
-        <div>
-          <h2>접안 순서 후보 비교</h2>
-          <p class="muted small">
-            {{ result.explored.toLocaleString() }}개 순서·부두 조합을 같은 규칙으로 돌려 서로 다른 배치 {{ result.distinct }}개를 얻었고,
-            그중 총 예상 체선료가 낮은 후보 {{ result.candidates.length }}개를 남겼어요. 모두 제약 검증을 다시 통과한 안이에요.
-          </p>
-        </div>
+        <h2>기준안과 후보</h2>
         <div class="row">
           <span class="chip unknown">결과 신뢰: 가정값 포함</span>
           <span class="chip">최선 탐색 결과 (최적 증명 아님)</span>
         </div>
       </div>
-      <div class="panel-body cards">
-        <button v-for="c in cards" :key="c.sim.id" :class="['card', { on: c.sim.id === focus.id, base: c.sim.id === 'FCFS' }]"
-          @click="emit('focus', c.sim.id)">
-          <div class="card-top">
-            <span class="strong">{{ c.sim.label }}</span>
-            <span v-if="c.sim.id === 'A'" class="chip accent">체선료 최저</span>
-            <span v-if="c.sim.id === 'FCFS'" class="faint small">비교용 · 현행 실적 아님</span>
-          </div>
-          <div class="total num">{{ money(c.sim.total) }}</div>
-          <div class="delta num" :class="{ good: c.delta < 0 }">
-            <template v-if="c.sim.id === 'FCFS'">기준</template>
-            <template v-else>{{ money(c.delta) }} ({{ pctOf(c.delta) }}%)</template>
-          </div>
-          <div class="card-meta">
-            <span class="small muted">변경 선박 {{ c.sim.changed.length }}척</span>
-            <span class="small" :class="c.violations ? 'bad-text' : 'muted'">제약 위반 {{ c.violations }}</span>
-          </div>
-          <div class="card-risk">
-            <span class="chip" :class="c.hit ? 'hit' : 'none'">리스크 해당 {{ c.hit }}</span>
-            <span v-if="c.unknown" class="chip unknown">판단 불가 {{ c.unknown }}</span>
-          </div>
-        </button>
+      <div class="cards">
+        <table class="grid cmp">
+          <thead>
+            <tr>
+              <th>안</th><th class="r">총 예상 체선료</th><th class="r">기준안 대비</th><th class="r">변경 선박</th>
+              <th class="r">제약 위반</th><th>리스크</th><th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="c in cards" :key="c.sim.id" :class="['clickable', { on: c.sim.id === focus.id }]" tabindex="0"
+              @click="emit('focus', c.sim.id)" @keydown.enter="emit('focus', c.sim.id)">
+              <td><span class="radio" /><span class="strong">{{ c.sim.label }}</span></td>
+              <td class="r num strong">{{ money(c.sim.total) }}</td>
+              <td class="r num" :class="{ 'good-text': c.delta < 0 }">{{ c.sim.id === 'FCFS' ? '—' : `${money(c.delta)} (${pctOf(c.delta)}%)` }}</td>
+              <td class="r num">{{ c.sim.changed.length }}척</td>
+              <td class="r num" :class="{ 'bad-text': c.violations }">{{ c.violations }}</td>
+              <td>
+                <span class="chip" :class="c.hit ? 'hit' : 'none'">해당 {{ c.hit }}</span>
+                <span v-if="c.unknown" class="chip unknown gap">판단 불가 {{ c.unknown }}</span>
+              </td>
+              <td class="small muted">{{ c.sim.id === 'FCFS' ? '비교용 · 현행 실적 아님' : c.sim.id === 'A' ? '체선료 최저' : '' }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
@@ -84,7 +94,7 @@ const pctOf = (d) => (props.result.fcfs.total ? Math.round((d / props.result.fcf
           <span><i class="lg night" />야간</span>
           <span><i class="lg weather" />{{ scen.env.weather ? scen.env.weather.label : '기상 악화 없음' }}</span>
           <span><i class="lg maint" />설비 점검</span>
-          <span><i class="lg tide" />만조(1번 부두)</span>
+          <span><i class="lg tide" />만조(SK 6부두)</span>
         </div>
       </div>
       <div class="panel-body tls">
@@ -95,14 +105,14 @@ const pctOf = (d) => (props.result.fcfs.total ? Math.round((d / props.result.fcf
           </button>
           <Timeline :sim="s" :scen="scen" :range="range" :changed="s.changed" :axis="s.id === 'FCFS'" compact @pick="(vid) => emit('open', s.id, vid)" />
         </div>
-        <p class="faint small">막대를 누르면 그 선박의 체선료 산출 근거가 열려요.</p>
+        <p class="faint small">막대를 누르면 산출 근거 표시</p>
       </div>
     </section>
 
     <section class="panel">
       <div class="panel-head">
         <h2>{{ focus.label }} 선박별 결과</h2>
-        <button class="btn primary" @click="emit('next')">리스크 확인하고 고르기 →</button>
+        <button class="btn primary" @click="emit('next')">리스크 확인</button>
       </div>
       <div class="panel-body">
         <table class="grid">
@@ -114,7 +124,7 @@ const pctOf = (d) => (props.result.fcfs.total ? Math.round((d / props.result.fcf
           </thead>
           <tbody>
             <tr v-for="p in rows" :key="p.vid" class="clickable" @click="emit('open', focus.id, p.vid)">
-              <td class="strong">{{ vessel[p.vid].name }}<span v-if="focus.changed.includes(p.vid)" class="chip accent tiny">변경</span></td>
+              <td class="strong">{{ vessel[p.vid].name }}<span v-if="focus.changed.includes(p.vid)" class="chip tiny">변경</span></td>
               <td>{{ vessel[p.vid].product }} {{ vessel[p.vid].dir }}</td>
               <td>{{ berthName(p.bid) }}</td>
               <td class="num">{{ fmt(vessel[p.vid].eta) }}</td>
@@ -134,34 +144,25 @@ const pctOf = (d) => (props.result.fcfs.total ? Math.round((d / props.result.fcf
 </template>
 
 <style scoped>
-.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.card {
-  text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;
-}
-.card:hover { border-color: var(--line-strong); }
-.card.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.card.base { background: #fafbfc; }
-.card-top { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
-.total { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
-.delta { font-size: 13px; color: var(--muted); font-weight: 600; }
-.delta.good { color: var(--ok); }
-.card-meta { display: flex; gap: 12px; margin-top: 4px; }
-.card-risk { display: flex; gap: 6px; margin-top: 2px; }
+.cards { border-top: 1px solid var(--line); }
+.cmp tr.on td { background: var(--accent-weak); }
+.cmp .radio { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--line-strong); margin-right: 10px; vertical-align: -1px; }
+.cmp tr.on .radio { border: 4px solid var(--accent); }
+.gap { margin-left: 10px; }
 .bad-text { color: var(--bad); font-weight: 650; }
 .warn-text { color: var(--warn); font-weight: 650; }
 .good-text { color: var(--ok); font-weight: 650; }
-.tiny { margin-left: 6px; font-size: 11px; padding: 0 6px; }
+.tiny { margin-left: 8px; height: 18px; font-size: 11px; padding: 0 6px; }
 
 .tls { display: flex; flex-direction: column; gap: 6px; }
 .tl-row { display: grid; grid-template-columns: 120px 1fr; gap: 8px; padding: 6px 8px; border-radius: 6px; border: 1px solid transparent; }
-.tl-row.on { background: #f7fafb; border-color: var(--accent-weak); }
+.tl-row.on { background: var(--sunken); border-color: var(--line); }
 .tl-head { border: none; background: none; text-align: left; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 0; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
-.lg { display: inline-block; width: 16px; height: 10px; border-radius: 2px; }
-.lg.bar { background: var(--accent-weak); border: 1px solid #8fb7c7; }
+.lg { display: inline-block; width: 16px; height: 10px; border-radius: 1px; }
+.lg.bar { background: #e8eef8; border: 1px solid #9db3d9; }
 .lg.bar.dem { background: var(--warn-weak); border-color: #e2b26f; }
 .lg.bar.changed { border-width: 2px; }
 .lg.wait { height: 0; border-top: 2px dotted var(--faint); border-radius: 0; }

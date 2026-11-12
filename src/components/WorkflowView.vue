@@ -1,6 +1,8 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-vue-next'
 import { risks, validate } from '../lib/engine.js'
+import ViewHead from './ViewHead.vue'
 import { money } from '../lib/time.js'
 
 const props = defineProps({ result: Object, scen: Object, current: Object, version: Number })
@@ -32,32 +34,32 @@ const steps = computed(() => {
   const r = props.result
   return [
     { lane: 'human', title: '상황 입력', out: `${s.vessels.length}척 · ${s.berths.length}부두`, tab: 'input',
-      input: '선박 도착 일시와 계약, 부두 제원, 현재 접안 중인 선박', process: '스케줄러가 화면이나 파일로 대기 선박과 부두 상황을 넣어요.',
+      input: '선박 도착 일시와 계약, 부두 제원, 현재 접안 중인 선박', process: '스케줄러가 화면 또는 파일로 대기 선박과 부두 상황을 입력합니다.',
       output: `선박 ${s.vessels.length}척, 부두 ${s.berths.length}곳, 계약 ${s.vessels.length}건` },
     { lane: 'engine', title: '입력 검증', out: '검사 · 데이터 고정', tab: 'input',
-      input: '시나리오, 공공데이터(기상·조석·일출몰)', process: '필수값·시각·참조를 검사하고, 기상·조석 값의 출처와 버전을 이번 실행에 고정해요. 같은 입력이면 언제 다시 돌려도 같은 결과가 나와요.',
+      input: '시나리오, 공공데이터(기상·조석·일출몰)', process: '필수값·시각·참조를 검사하고 기상·조석 값의 출처와 버전을 실행 단위로 고정합니다. 같은 입력은 언제 재실행해도 같은 결과를 냅니다.',
       output: `기상: ${s.env.weather ? s.env.weather.label : '이상 없음'} · 만조 ${s.env.highTides.length}회 · 일출몰 ${s.env.days.length}일치` },
     { lane: 'engine', title: '규칙 준비', out: `계약 ${s.vessels.length}건 → 규칙`, tab: 'verify',
-      input: '선박별 계약 조항', process: '계약마다 다른 정박시간 개시 시점과 기상 공제 조항을 규칙 ID로 바꿔요. 규칙은 코드에 박지 않고 계약에서 읽어요.',
+      input: '선박별 계약 조항', process: '계약마다 다른 정박시간 개시 시점과 기상 공제 조항을 규칙 ID로 변환합니다. 규칙은 코드가 아니라 계약에서 읽습니다.',
       output: ruleSummary.value },
     { lane: 'engine', title: '도착순 기준안', out: money(r.fcfs.total), tab: 'compare',
-      input: '도착 순서, 부두별 가능 시각', process: '도착 순서대로 가장 빨리 댈 수 있는 부두에 붙여 비교 기준을 만들어요. 현행 실적이 아니라 비교용이에요.',
+      input: '도착 순서, 부두별 가능 시각', process: '도착 순서대로 가장 빨리 접안 가능한 부두에 배정해 비교 기준을 만듭니다. 현행 실적이 아닌 비교용입니다.',
       output: `총 예상 체선료 ${money(r.fcfs.total)}` },
     { lane: 'solver', title: '순서 탐색', out: `${r.explored.toLocaleString()}안 탐색`, tab: 'compare',
-      input: '규칙 엔진이 만든 선박별 가능 부두·작업 시간·비용표', process: '접안 순서와 부두 배정을 바꿔 가며 체선료가 낮은 배치를 찾아요. 솔버는 배치만 제안하고 금액은 확정하지 않아요.',
-      output: `서로 다른 배치 ${r.distinct}개`, proto: '프로토타입은 브라우저에서 6척의 모든 조합을 직접 돌려요. 실제로는 Python 솔버(OR-Tools 검토)가 맡아요.' },
+      input: '규칙 엔진이 만든 선박별 가능 부두·작업 시간·비용표', process: '접안 순서와 부두 배정을 바꿔 가며 체선료가 낮은 배치를 찾습니다. 솔버는 배치만 제안하고 금액은 확정하지 않습니다.',
+      output: `서로 다른 배치 ${r.distinct}개`, proto: '프로토타입은 브라우저에서 6척의 전체 조합을 직접 계산합니다. 실제 구현은 Python 솔버(OR-Tools 검토)가 담당합니다.' },
     { lane: 'engine', title: '재검증·확정', out: `후보 ${r.candidates.length}개 · 위반 ${violations.value}`, tab: 'compare',
-      input: '솔버가 낸 배치', process: '규칙 엔진이 모든 제약을 처음부터 다시 검사하고, 선박별 체선료를 센트 단위로 한 번만 확정해요. 통과한 안만 화면에 나가요.',
+      input: '솔버가 낸 배치', process: '규칙 엔진이 모든 제약을 처음부터 재검사하고 선박별 체선료를 센트 단위로 한 번만 확정합니다. 통과한 안만 화면에 표시합니다.',
       output: r.candidates.map((c) => `${c.label} ${money(c.total)}`).join(' · ') },
     { lane: 'engine', title: '리스크 점검', out: `해당 ${count(bestRisks.value, (x) => x.state === '해당')} · 불가 ${count(bestRisks.value, (x) => x.state === '판단 불가')}`, tab: 'risk',
-      input: '후보 배치, 기상·설비·탱크·출하 계획', process: '후보마다 날씨 급변·설비·탱크·긴급 출하·현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고, 도착 ±6시간·기상 변화에 순위가 바뀌는지 다시 계산해요.',
+      input: '후보 배치, 기상·설비·탱크·출하 계획', process: '후보마다 날씨 급변·설비·탱크·긴급 출하·현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고, 도착 ±6시간·기상 변화 시 순위 변동을 재계산합니다.',
       output: `${best.value.label}: ${bestRisks.value.map((x) => `${x.label} ${x.state}`).join(', ')}` },
     { lane: 'writer', title: '초안 작성', out: '메일·보고서 초안', tab: 'report',
-      input: '확정된 금액·시각, 리스크 판정', process: 'LLM은 문장 틀만 써요. 금액과 시각은 규칙 엔진 결과를 그대로 끼워 넣고 다시 대조해요. 어긋나면 템플릿 문장으로 바꿔요.',
-      output: '메일·보고서 초안 (담당자 검토용)', proto: '프로토타입은 LLM을 부르지 않고 템플릿 문장으로 만들어요.' },
+      input: '확정된 금액·시각, 리스크 판정', process: 'LLM은 문장 틀만 작성합니다. 금액과 시각은 규칙 엔진 결과를 그대로 넣고 재대조하며, 불일치 시 템플릿 문장으로 대체합니다.',
+      output: '메일·보고서 초안 (담당자 검토용)', proto: '프로토타입은 LLM을 호출하지 않고 템플릿 문장으로 생성합니다.' },
     { lane: 'human', title: '후보 선택', out: chosen.value ? `${chosen.value.label} ${chosen.value.status}` : '담당자 대기', tab: 'risk', waiting: !chosen.value,
-      input: '후보 비교, 리스크, 초안', process: '담당자가 리스크를 확인하고 후보를 골라요. Agent는 확정하지 않고, 선택·취소·반영 완료는 이력으로만 남아요.',
-      output: chosen.value ? `${chosen.value.label} 선택됨` : '아직 선택 전' },
+      input: '후보 비교, 리스크, 초안', process: '담당자가 리스크를 확인하고 후보를 선택합니다. Agent는 확정하지 않으며 선택·취소·반영 완료는 이력으로만 기록됩니다.',
+      output: chosen.value ? `${chosen.value.label} 선택됨` : '선택 전' },
   ]
 })
 
@@ -132,20 +134,17 @@ const sel = computed(() => (selected.value >= 0 ? steps.value[selected.value] : 
 
 <template>
   <div class="stack">
+    <ViewHead title="Agent 워크플로우" crumb="APPENDIX > Agent 워크플로우" :desc="`현재 시나리오(${scen.name})의 계산 순서와 단계별 담당 주체. 단계를 직접 넘겨 확인합니다.`" />
     <section class="panel">
       <div class="panel-head">
-        <div>
-          <p class="small muted">부록</p>
-          <h2>Agent 워크플로우</h2>
-          <p class="muted small">화면 뒤에서 지금 시나리오({{ scen.name }})가 어떤 순서로 계산되는지 보여 줘요. 직접 넘기면서 보세요.</p>
-        </div>
-        <div class="controls">
+        <h2>단계 흐름</h2>
+        <div class="row">
           <button class="btn" :disabled="head === 0" @click="stopAuto(); go(0)">처음으로</button>
-          <button class="btn" :disabled="head === 0" @click="stopAuto(); prev()">← 이전</button>
+          <button class="btn" :disabled="head === 0" @click="stopAuto(); prev()"><ChevronLeft :size="14" />이전</button>
           <span class="counter num">{{ head }} / {{ total }}</span>
-          <button class="btn primary" :disabled="head >= total" @click="stopAuto(); next()">다음 단계 →</button>
-          <button class="btn" @click="toggleAuto">{{ auto ? '❚❚ 멈춤' : '▶ 자동 재생' }}</button>
-          <button class="btn ghost" :disabled="head >= total" @click="stopAuto(); go(total)">전체 보기</button>
+          <button class="btn primary" :disabled="head >= total" @click="stopAuto(); next()">다음 단계<ChevronRight :size="14" /></button>
+          <button class="btn" @click="toggleAuto"><Pause v-if="auto" :size="14" /><Play v-else :size="14" />{{ auto ? '멈춤' : '자동 재생' }}</button>
+          <button class="btn" :disabled="head >= total" @click="stopAuto(); go(total)">전체 보기</button>
         </div>
       </div>
       <div class="panel-body">
@@ -176,19 +175,17 @@ const sel = computed(() => (selected.value >= 0 ? steps.value[selected.value] : 
 
     <div class="detail-grid">
       <section v-if="!sel" class="panel detail">
-        <div class="panel-head"><h2>단계별로 따라가 보세요</h2></div>
+        <div class="panel-head"><h2>단계 상세</h2></div>
         <div class="panel-body">
-          <p>「다음 단계」를 누르거나 키보드 → 키로 한 단계씩 넘겨요. 각 단계가 무엇을 받아 무엇을 내놓는지, 이번 시나리오의 실제 결과가 이 칸에 나와요.</p>
-          <p class="muted small hint">위 그림의 상자를 바로 눌러도 돼요. 가로줄은 그 일을 맡는 주체예요.</p>
+          <p>「다음 단계」 또는 → 키로 한 단계씩 진행합니다. 단계별 입력·처리·이번 시나리오 결과가 이 칸에 표시됩니다.</p>
+          <p class="muted small hint">그림의 상자를 직접 선택해도 됩니다. 가로줄은 해당 단계를 맡는 주체입니다.</p>
         </div>
       </section>
       <section v-else class="panel detail">
         <div class="panel-head">
-          <div>
-            <p class="small muted">{{ selected + 1 }}단계 · {{ LANES.find((l) => l.id === sel.lane).label }}</p>
-            <h2>{{ sel.title }}</h2>
-          </div>
-          <button class="btn ghost" @click="emit('go', sel.tab)">화면에서 보기 →</button>
+          <h2>{{ selected + 1 }}단계 · {{ sel.title }}</h2>
+          <span class="muted">{{ LANES.find((l) => l.id === sel.lane).label }}</span>
+          <button class="btn" @click="emit('go', sel.tab)">해당 화면</button>
         </div>
         <div class="panel-body">
           <dl class="io">
@@ -201,13 +198,13 @@ const sel = computed(() => (selected.value >= 0 ? steps.value[selected.value] : 
       </section>
 
       <section class="panel rules">
-        <div class="panel-head"><h3>역할을 나눈 이유</h3></div>
+        <div class="panel-head"><h2>역할 분리 원칙</h2></div>
         <div class="panel-body">
           <ul>
-            <li><span class="sw engine" /><b>금액·시각·제약은 규칙 엔진만</b> 계산해요. 같은 입력이면 늘 같은 숫자가 나와요.</li>
-            <li><span class="sw solver" /><b>솔버는 배치만 제안</b>해요. 규칙 엔진 재검증을 통과해야 화면에 나가요.</li>
-            <li><span class="sw writer" /><b>LLM은 문장만</b> 써요. 숫자를 바꾸거나 판정하지 않아요.</li>
-            <li><span class="sw human" /><b>확정은 사람만</b> 해요. Agent에는 계획을 확정하는 도구가 없어요.</li>
+            <li><span class="sw engine" /><span><b>금액·시각·제약은 규칙 엔진만</b> 계산합니다. 같은 입력이면 항상 같은 숫자입니다.</span></li>
+            <li><span class="sw solver" /><span><b>솔버는 배치만 제안</b>합니다. 규칙 엔진 재검증을 통과한 안만 표시합니다.</span></li>
+            <li><span class="sw writer" /><span><b>LLM은 문장만</b> 작성합니다. 숫자를 바꾸거나 판정하지 않습니다.</span></li>
+            <li><span class="sw human" /><span><b>확정은 담당자만</b> 합니다. Agent에는 계획 확정 도구가 없습니다.</span></li>
           </ul>
         </div>
       </section>

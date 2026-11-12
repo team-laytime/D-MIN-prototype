@@ -104,15 +104,15 @@ const rows = computed(() =>
 .tide { position: absolute; top: 0; width: 0; height: 0; transform: translateX(-5px); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #2f7fb0; }
 .wait { position: absolute; bottom: 4px; height: 0; border-top: 2px dotted var(--faint); }
 .bar {
-  position: absolute; top: 5px; bottom: 9px; border-radius: 4px; border: 1px solid #8fb7c7;
-  background: var(--accent-weak); color: var(--accent); padding: 0 6px; overflow: hidden;
+  position: absolute; top: 5px; bottom: 9px; border-radius: 2px; border: 1px solid #9db3d9;
+  background: #e8eef8; color: var(--blue); padding: 0 6px; overflow: hidden;
   display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 650; text-align: left; white-space: nowrap;
 }
 .compact .bar { top: 4px; bottom: 7px; font-size: 11px; }
 .bar:hover { filter: brightness(0.97); }
 .bar.dem { background: var(--warn-weak); border-color: #e2b26f; color: var(--warn); }
 .bar.changed { border-width: 2px; border-style: solid; }
-.bar.active { outline: 2px solid var(--text); outline-offset: 1px; }
+.bar.active { outline: 2px solid var(--accent); outline-offset: 1px; }
 .bar.occupied { background: #e9ebef; border-color: #d0d4da; color: var(--muted); cursor: default; }
 .bar-name { overflow: hidden; text-overflow: ellipsis; }
 .bar-dem { font-weight: 700; }

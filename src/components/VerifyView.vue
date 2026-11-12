@@ -4,6 +4,7 @@ import { ANSWER_SET } from '../lib/answerSet.js'
 import { demurrage, runSearch, validate } from '../lib/engine.js'
 import { SCENARIOS } from '../lib/scenarios.js'
 import { fmt, fmtDur, money } from '../lib/time.js'
+import ViewHead from './ViewHead.vue'
 
 const calc = computed(() =>
   ANSWER_SET.map((t) => {
@@ -30,16 +31,16 @@ const clause = { FULL: '전부 공제', HALF: '50% 공제', NONE: '공제 없음
 
 <template>
   <div class="stack">
+    <ViewHead title="계산 검증" crumb="QUALITY > 계산 검증" desc="손계산 정답과 자동 계산의 일치 여부, 시나리오별 도착순 기준안 대비 절감액과 제약 위반 수."
+      :kpis="[
+        { label: '정답 일치', value: `${okCount}/${calc.length}`, good: okCount === calc.length },
+        { label: '시나리오', value: `${scen.length}개` },
+        { label: '제약 위반', value: `${scen.reduce((n, s) => n + s.violations, 0)}건`, good: scen.every((s) => s.violations === 0) },
+      ]" />
     <section class="panel answer-set">
       <div class="panel-head">
-        <div>
-          <h2>체선료 계산 정답 세트</h2>
-          <p class="muted small">팀원이 손으로 계산한 값(Decimal, HALF_UP)과 자동 계산을 센트 단위로 비교해요.</p>
-        </div>
-        <div class="score">
-          <span class="num big" :class="okCount === calc.length ? 'ok' : 'bad'">{{ okCount }} / {{ calc.length }}</span>
-          <span class="muted small">일치 {{ Math.round((okCount / calc.length) * 100) }}%</span>
-        </div>
+        <h2>체선료 계산 정답 세트</h2>
+        <span class="muted">팀원 손계산 값(Decimal, HALF_UP)과 자동 계산을 센트 단위로 비교 · 일치 {{ okCount }} / {{ calc.length }}건</span>
       </div>
       <div class="panel-body">
         <table class="grid">
@@ -67,10 +68,8 @@ const clause = { FULL: '전부 공제', HALF: '50% 공제', NONE: '공제 없음
 
     <section class="panel">
       <div class="panel-head">
-        <div>
-          <h2>시나리오별 제안 효과</h2>
-          <p class="muted small">도착 순서대로 접안한 기준안과 체선료가 가장 낮은 후보를 같은 규칙으로 비교해요. 제약 위반은 탐색과 따로 짠 검사기로 다시 셌어요.</p>
-        </div>
+        <h2>시나리오별 제안 효과</h2>
+        <span class="muted">도착순 기준안과 최저 후보를 같은 규칙으로 비교 · 제약 위반은 탐색과 별도 검사기로 재집계</span>
       </div>
       <div class="panel-body">
         <table class="grid">
@@ -90,7 +89,7 @@ const clause = { FULL: '전부 공제', HALF: '50% 공제', NONE: '공제 없음
             </tr>
           </tbody>
         </table>
-        <p class="faint small note">6척은 모든 순서·부두 조합을 돌렸어요. 실제 규모(8~16척)에서는 솔버로 후보를 추리고 같은 검사기로 재검증해야 해요.</p>
+        <p class="faint small note">6척은 모든 순서·부두 조합을 전수 계산. 실제 규모(8~16척)는 솔버로 후보를 추린 뒤 같은 검사기로 재검증 필요.</p>
       </div>
     </section>
   </div>

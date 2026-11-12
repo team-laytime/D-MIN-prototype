@@ -8,7 +8,7 @@ export const RULES = {
   'BERTH-FREE': { label: '앞 선박 작업 종료 + 부두 전환 2시간' },
   'WX-BERTH': { label: '기상 악화 예보 구간에는 접안 금지' },
   'DAY-BERTH': { label: 'DWT 6만 톤 이상은 일출 ~ 일몰 1시간 전에만 접안' },
-  'TIDE-BERTH': { label: '1번 부두에 흘수 11.5m 이상은 만조 ±2시간에만 접안' },
+  'TIDE-BERTH': { label: 'SK 6부두에 흘수 11.5m 이상은 만조 ±2시간에만 접안' },
   'LT-START-NOR': { label: 'NOR 후 정해진 시간이 지나거나 접안한 때 중 빠른 시각부터 정박시간 계산' },
   'LT-START-IMM': { label: 'NOR 제출 즉시 정박시간 계산' },
   'LT-END-WORK': { label: '작업 종료(호스 분리) 시각에 정박시간 종료' },
@@ -49,14 +49,16 @@ function earliestEtb(v, b, from, env) {
   return { etb: null, blockers }
 }
 
-export function demurrage(v, etb, etu, env) {
+// until을 주면 그 시각까지 쌓인 값을 낸다(지도 시간 슬라이더용). 기본은 작업 종료까지의 최종값이다.
+export function demurrage(v, etb, etu, env, until = etu) {
   const c = v.contract
   const clause = WEATHER_CLAUSE[c.weather]
   const turnMin = c.norTurnH * 60
   const ltStart = turnMin > 0 ? Math.min(v.eta + turnMin, etb) : v.eta
-  const usedMin = etu - ltStart
+  const end = Math.min(until, etu)
+  const usedMin = Math.max(0, end - ltStart)
   const w = env.weather
-  const wxOverlap = w ? overlap(ltStart, etb, w.start, w.end) : 0
+  const wxOverlap = w ? overlap(ltStart, Math.min(etb, end), w.start, w.end) : 0
   const wxDeduct = wxOverlap * clause.ratio
   const countedMin = usedMin - wxDeduct
   const allowMin = c.laytimeH * 60
@@ -71,6 +73,17 @@ export function demurrage(v, etb, etu, env) {
     etb, etu, usedMin, wxOverlap, wxDeduct, clause, countedMin, allowMin, excessMin, rateCents, cents,
     rules: [turnMin > 0 ? 'LT-START-NOR' : 'LT-START-IMM', 'LT-END-WORK', clause.rule, 'DEM-PRORATA'],
   }
+}
+
+// 시각 t에 선박이 어디서 무엇을 하는지와 그때까지 쌓인 체선료.
+export function stateAt(sim, scen, t) {
+  const v = Object.fromEntries(scen.vessels.map((x) => [x.id, x]))
+  return sim.placements.map((p) => {
+    const vs = v[p.vid]
+    const phase = t < vs.eta ? 'coming' : t < p.etb ? 'waiting' : t < p.etu ? 'berthed' : 'left'
+    const cents = phase === 'coming' ? 0 : demurrage(vs, p.etb, p.etu, scen.env, t).cents
+    return { p, v: vs, phase, cents, ticking: cents > 0 && phase !== 'left', progress: phase === 'berthed' ? (t - p.etb) / (p.etu - p.etb) : 0 }
+  })
 }
 
 // order: 접안 우선순위, assign: 선박→부두. assign이 없으면 도착순 기준안처럼 가장 빨리 댈 수 있는 부두를 고른다.
@@ -164,7 +177,7 @@ export function runSearch(scen, maxCandidates = 3) {
   if (noBerth.length) return { error: `접안 가능한 부두가 없는 선박: ${noBerth.map((v) => v.name).join(', ')}` }
 
   const fcfs = simulate(fcfsOrder(scen), null, scen, compat)
-  if (!fcfs) return { error: '도착순 기준안도 만들 수 없어요. 입력을 확인해 주세요.' }
+  if (!fcfs) return { error: '도착순 기준안을 만들 수 없습니다. 입력값을 확인하십시오.' }
   const fcfsEtb = Object.fromEntries(fcfs.placements.map((p) => [p.vid, p]))
 
   const seen = new Map()
@@ -248,15 +261,15 @@ export function risks(sim, scen) {
   const out = []
 
   if (!w) {
-    out.push({ key: 'weather', label: '날씨 급변', state: '해당 없음', evidence: '계산 기간에 기상 악화 예보가 없어요.', alternative: '-', caution: '예보 갱신 때 다시 계산해 주세요.' })
+    out.push({ key: 'weather', label: '날씨 급변', state: '해당 없음', evidence: '계산 기간 내 기상 악화 예보 없음.', alternative: '-', caution: '예보 갱신 시 재계산.' })
   } else {
     const near = P.filter((p) => Math.abs(p.etb - w.start) <= 180 || Math.abs(p.etb - w.end) <= 180)
     out.push(near.length
       ? { key: 'weather', label: '날씨 급변', state: '해당',
-          evidence: `${near.map((p) => v[p.vid].name).join(', ')}의 접안이 기상 악화 구간 경계 3시간 안에 있어요. 예보가 앞당겨지거나 늘어나면 접안이 밀려요.`,
-          alternative: '기상 해제 직후 접안할 선박 순서를 미리 정하고, 도선사·예선 대기를 요청해 두세요.',
-          caution: '단기예보 갱신(05·11·17·23시)마다 같은 조건으로 다시 계산해 순위가 바뀌는지 보세요.' }
-      : { key: 'weather', label: '날씨 급변', state: '해당 없음', evidence: '기상 악화 구간 경계 3시간 안에 접안하는 선박이 없어요.', alternative: '-', caution: '예보 갱신 때 다시 계산해 주세요.' })
+          evidence: `${near.map((p) => v[p.vid].name).join(', ')} 접안이 기상 악화 구간 경계 3시간 이내. 예보가 앞당겨지거나 길어지면 접안이 밀립니다.`,
+          alternative: '기상 해제 직후 접안 순서를 미리 확정하고 도선사·예선 대기 요청.',
+          caution: '단기예보 갱신(05·11·17·23시)마다 같은 조건으로 재계산해 순위 변동 확인.' }
+      : { key: 'weather', label: '날씨 급변', state: '해당 없음', evidence: '기상 악화 구간 경계 3시간 이내 접안 없음.', alternative: '-', caution: '예보 갱신 시 재계산.' })
   }
 
   const maint = P.filter((p) => b[p.bid].facility.maintenance && overlap(p.etb, p.etu, b[p.bid].facility.maintenance.start, b[p.bid].facility.maintenance.end) > 0)
@@ -264,39 +277,39 @@ export function risks(sim, scen) {
   if (maint.length) {
     const m = b[maint[0].bid].facility.maintenance
     out.push({ key: 'facility', label: '설비', state: '해당',
-      evidence: `${maint.map((p) => v[p.vid].name).join(', ')} 작업이 ${b[maint[0].bid].name} ${m.label}과 겹쳐요.${unknown.length ? ` ${unknown.join(', ')}은 설비 일정이 입력되지 않았어요.` : ''}`,
-      alternative: '점검을 작업 종료 뒤로 미루거나, 점검 중에는 남은 로딩암 1기로 작업 시간을 늘려 다시 계산하세요.',
-      caution: '이 계산은 점검 중에도 펌프율이 같다고 가정했어요.' })
+      evidence: `${maint.map((p) => v[p.vid].name).join(', ')} 작업이 ${b[maint[0].bid].name} ${m.label}과 겹침.${unknown.length ? ` ${unknown.join(', ')} 설비 일정 미입력.` : ''}`,
+      alternative: '점검을 작업 종료 이후로 조정하거나, 점검 중 로딩암 1기 기준으로 작업 시간을 늘려 재계산.',
+      caution: '점검 중에도 펌프율이 같다고 가정한 계산입니다.' })
   } else if (unknown.length) {
-    out.push({ key: 'facility', label: '설비', state: '판단 불가', evidence: `${unknown.join(', ')}의 설비 점검 일정이 입력되지 않아 판단할 수 없어요.`, alternative: '설비팀에 해당 기간 점검 일정을 확인해 입력하세요.', caution: '확인 전에는 이 후보를 확정 대상으로 보지 마세요.' })
+    out.push({ key: 'facility', label: '설비', state: '판단 불가', evidence: `${unknown.join(', ')} 설비 점검 일정 미입력.`, alternative: '설비팀에 해당 기간 점검 일정 확인 후 입력.', caution: '확인 전에는 확정 대상에서 제외.' })
   } else {
-    out.push({ key: 'facility', label: '설비', state: '해당 없음', evidence: '접안 기간과 겹치는 설비 점검이 없어요.', alternative: '-', caution: '-' })
+    out.push({ key: 'facility', label: '설비', state: '해당 없음', evidence: '접안 기간과 겹치는 설비 점검 없음.', alternative: '-', caution: '-' })
   }
 
   const tankHits = scen.tanks.flatMap((t) => P.filter((p) => v[p.vid].dir === '수입' && v[p.vid].product === t.product && p.etb < t.readyAt && v[p.vid].ton > t.ullageTon).map((p) => ({ p, t })))
   out.push(tankHits.length
     ? { key: 'tank', label: '탱크', state: '해당',
-        evidence: `${v[tankHits[0].p.vid].name} 하역량 ${v[tankHits[0].p.vid].ton.toLocaleString()}톤이 ${tankHits[0].t.product} 탱크 여유 ${tankHits[0].t.ullageTon.toLocaleString()}톤보다 많아요. ${tankHits[0].t.note}.`,
-        alternative: '하역 속도를 낮춰 여유 확보 시각에 맞추거나, 하역 개시를 여유 확보 이후로 미룬 후보와 비교하세요.',
-        caution: '하역 속도를 바꾸면 작업 종료 시각과 체선료가 달라져요. 다시 계산하세요.' }
-    : { key: 'tank', label: '탱크', state: '해당 없음', evidence: '수입 선박 하역 시점의 탱크 여유가 충분해요.', alternative: '-', caution: '-' })
+        evidence: `${v[tankHits[0].p.vid].name} 하역량 ${v[tankHits[0].p.vid].ton.toLocaleString()}톤 > ${tankHits[0].t.product} 탱크 여유 ${tankHits[0].t.ullageTon.toLocaleString()}톤. ${tankHits[0].t.note}.`,
+        alternative: '하역 속도를 낮춰 여유 확보 시각에 맞추거나, 여유 확보 이후 하역을 시작하는 후보와 비교.',
+        caution: '하역 속도를 바꾸면 작업 종료 시각과 체선료가 달라지므로 재계산 필요.' }
+    : { key: 'tank', label: '탱크', state: '해당 없음', evidence: '수입 선박 하역 시점 탱크 여유 충분.', alternative: '-', caution: '-' })
 
   const late = scen.urgent.map((u) => ({ u, p: P.find((p) => p.vid === u.vid) })).filter(({ u, p }) => p && p.etu > u.deadline)
   out.push(!scen.urgent.length
-    ? { key: 'urgent', label: '긴급 출하', state: '판단 불가', evidence: '긴급 출하 계획이 입력되지 않았어요.', alternative: '출하팀에 긴급 출하 여부를 확인하세요.', caution: '-' }
+    ? { key: 'urgent', label: '긴급 출하', state: '판단 불가', evidence: '긴급 출하 계획 미입력.', alternative: '출하팀에 긴급 출하 여부 확인.', caution: '-' }
     : late.length
       ? { key: 'urgent', label: '긴급 출하', state: '해당',
-          evidence: late.map(({ u, p }) => `${v[u.vid].name}가 ${u.note} 납기보다 ${Math.round((p.etu - u.deadline) / 60)}시간 늦게 끝나요.`).join(' '),
-          alternative: '해당 선박을 앞당긴 후보와 체선료 차이를 비교하세요.', caution: '납기 위반 비용은 체선료 합계에 들어 있지 않아요.' }
-      : { key: 'urgent', label: '긴급 출하', state: '해당 없음', evidence: `긴급 출하(${scen.urgent.map((u) => v[u.vid].name).join(', ')})가 납기 안에 끝나요.`, alternative: '-', caution: '-' })
+          evidence: late.map(({ u, p }) => `${v[u.vid].name}: ${u.note} 납기 대비 ${Math.round((p.etu - u.deadline) / 60)}시간 지연.`).join(' '),
+          alternative: '해당 선박을 앞당긴 후보와 체선료 차이 비교.', caution: '납기 위반 비용은 체선료 합계에 포함되지 않음.' }
+      : { key: 'urgent', label: '긴급 출하', state: '해당 없음', evidence: `긴급 출하(${scen.urgent.map((u) => v[u.vid].name).join(', ')}) 납기 내 완료.`, alternative: '-', caution: '-' })
 
   const night = P.filter((p) => nightOf(p.etb, scen.env))
   out.push(night.length
     ? { key: 'safety', label: '현장 안전', state: '해당',
         evidence: `야간 접안 ${night.length}건: ${night.map((p) => v[p.vid].name).join(', ')}.`,
-        alternative: '야간 접안을 일출 뒤로 미룬 후보와 체선료 차이를 비교하세요.',
-        caution: '야간 도선·계류 인력 배치를 작업 지시 전에 확인하세요.' }
-    : { key: 'safety', label: '현장 안전', state: '해당 없음', evidence: '야간 접안이 없어요.', alternative: '-', caution: '-' })
+        alternative: '야간 접안을 일출 이후로 미룬 후보와 체선료 차이 비교.',
+        caution: '작업 지시 전 야간 도선·계류 인력 배치 확인.' }
+    : { key: 'safety', label: '현장 안전', state: '해당 없음', evidence: '야간 접안 없음.', alternative: '-', caution: '-' })
 
   return out
 }

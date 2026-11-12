@@ -20,14 +20,21 @@ function measure() {
   rect.value = el ? el.getBoundingClientRect() : null
 }
 
-// 단계가 바뀌면 화면 전환(탭·패널)이 그려진 뒤 대상을 찾아 가운데로 스크롤한다.
+// 단계가 바뀌면 화면 전환(탭·패널)이 그려진 뒤 대상을 찾아 스크롤한다.
+// 대상 아래에 카드가 들어갈 자리가 있으면 대상을 화면 위쪽에 붙이고, 없으면 가운데·옆 배치에 맡긴다.
 // 이전 강조 위치는 그대로 두고 새 위치로 옮겨 가게 한다.
 async function locate() {
   ready.value = false
   await nextTick()
   await new Promise((r) => setTimeout(r, 120))
   const el = step.value.target && document.querySelector(step.value.target)
-  if (el) el.scrollIntoView({ block: el.getBoundingClientRect().height > vh.value * 0.7 ? 'start' : 'center' })
+  if (el) {
+    const h = el.getBoundingClientRect().height
+    const fixed = getComputedStyle(el).position === 'fixed' || el.closest('.gnb, .drawer')
+    if (fixed) el.scrollIntoView({ block: 'nearest' })
+    else if (h + CARD_H + 48 < vh.value) window.scrollBy(0, el.getBoundingClientRect().top - 24)
+    else el.scrollIntoView({ block: h > vh.value * 0.7 ? 'start' : 'center' })
+  }
   await new Promise((r) => requestAnimationFrame(r))
   measure()
   ready.value = true
@@ -90,37 +97,37 @@ const last = computed(() => props.index === props.steps.length - 1)
         <p class="count small">{{ step.section }} · {{ index + 1 }} / {{ steps.length }}</p>
         <h3>{{ step.title }}</h3>
         <p class="body">{{ step.body }}</p>
-        <p v-if="step.try" class="try small"><b>해 보기</b> {{ step.try }}</p>
+        <p v-if="step.try" class="try small"><b>직접 해 보기</b> {{ step.try }}</p>
         <div class="actions">
-          <button class="btn ghost" @click="emit('close')">{{ last ? '닫기' : '그만 보기' }}</button>
+          <button class="btn ghost" @click="emit('close')">{{ last ? '닫기' : '건너뛰기' }}</button>
           <span class="spacer" />
           <button class="btn" :disabled="index === 0" @click="emit('prev')">이전</button>
-          <button class="btn primary" @click="last ? emit('close') : emit('next')">{{ last ? '직접 써 보기' : '다음' }}</button>
+          <button class="btn primary" @click="last ? emit('close') : emit('next')">{{ last ? '완료' : '다음' }}</button>
         </div>
-        <p class="keys faint small">← → 키로 넘기고 Esc로 닫아요</p>
+        <p class="keys faint small">← → 이동 · Esc 닫기</p>
       </div>
     </div>
   </Teleport>
 </template>
 
 <style scoped>
-.tour { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+.tour { position: fixed; inset: 0; z-index: 3000; pointer-events: none; }
 .spot {
-  position: fixed; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.52);
+  position: fixed; border-radius: 2px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
   outline: 2px solid #fff; transition: all 0.25s ease;
 }
-.dim { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.52); }
+.dim { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); }
 .card {
-  position: fixed; width: 360px; pointer-events: auto; background: var(--panel); border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25); padding: 16px 18px 12px; display: flex; flex-direction: column; gap: 8px;
+  position: fixed; width: 360px; pointer-events: auto; background: var(--panel); border-top: 2px solid var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); padding: 14px 18px 12px; display: flex; flex-direction: column; gap: 8px;
 }
 .card.hidden { visibility: hidden; }
-.progress { height: 3px; background: #eef0f3; border-radius: 2px; overflow: hidden; }
+.progress { height: 3px; background: #eef0f3; overflow: hidden; }
 .progress span { display: block; height: 100%; background: var(--accent); transition: width 0.25s; }
-.count { color: var(--accent); font-weight: 650; }
-.card h3 { font-size: 17px; }
+.count { color: var(--accent); font-weight: 700; font-size: 12px; }
+.card h3 { font-size: 16px; }
 .body { color: var(--text); line-height: 1.6; }
-.try { background: var(--accent-weak); color: var(--accent); border-radius: 6px; padding: 7px 10px; }
+.try { background: #fff8e1; border: 1px solid #f0d58a; color: #5c4200; padding: 7px 10px; }
 .try b { margin-right: 6px; }
 .actions { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
 .keys { text-align: right; }
