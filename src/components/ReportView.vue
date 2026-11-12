@@ -3,7 +3,8 @@ import { computed, ref } from 'vue'
 import { marked } from 'marked'
 import { Copy, Download } from 'lucide-vue-next'
 import { risks } from '../lib/engine.js'
-import { fmt, money } from '../lib/time.js'
+import { buildReport, reportPeriod } from '../lib/report.js'
+import { money } from '../lib/time.js'
 import ViewHead from './ViewHead.vue'
 
 const props = defineProps({ result: Object, scen: Object, focusId: String, current: Object, version: Number })
@@ -13,17 +14,11 @@ const chosen = computed(() => (props.current && props.current.version === props.
 const cand = computed(() => all.value.find((s) => s.id === (chosen.value?.candId ?? props.focusId)) ?? props.result.candidates[0])
 const fcfs = computed(() => props.result.fcfs)
 const v = computed(() => Object.fromEntries(props.scen.vessels.map((x) => [x.id, x])))
-const bn = (id) => props.scen.berths.find((b) => b.id === id).name
 const rs = computed(() => risks(cand.value, props.scen))
 const saving = computed(() => fcfs.value.total - cand.value.total)
 const savingPct = computed(() => (fcfs.value.total ? ((saving.value / fcfs.value.total) * 100).toFixed(1) : '0.0'))
-const period = computed(() => {
-  const ps = cand.value.placements
-  return `${fmt(Math.min(...ps.map((p) => p.etb))).slice(0, 5)} ~ ${fmt(Math.max(...ps.map((p) => p.etu))).slice(0, 5)}`
-})
+const period = computed(() => reportPeriod(cand.value))
 const hits = computed(() => rs.value.filter((r) => r.state !== '해당 없음'))
-const sorted = computed(() => [...cand.value.placements].sort((a, b) => a.etb - b.etb))
-const statusWord = computed(() => (chosen.value ? '선택' : '검토 중인'))
 
 const mail = computed(() => {
   const lines = [
@@ -59,20 +54,7 @@ const check = computed(() => {
   return { count: found.length, bad }
 })
 
-const reportText = computed(() => {
-  const L = []
-  L.push(`# 울산 CLX 접안 계획 검토 보고 (${period.value})`, '', '담당자 검토용 초안 · 가상 데이터 · 의사결정 보조용', '')
-  L.push('## 1. 결론', `${cand.value.label}을 ${statusWord.value} 안으로 제출합니다. 총 예상 체선료는 ${money(cand.value.total)}이며, 도착순 기준안 ${money(fcfs.value.total)} 대비 ${money(saving.value)}(${savingPct.value}%) 적습니다.`, '')
-  L.push('## 2. 후보 비교', '| 안 | 총 예상 체선료 | 기준안 대비 | 변경 선박 |', '| --- | ---: | ---: | ---: |')
-  for (const s of all.value) L.push(`| ${s.label} | ${money(s.total)} | ${s.id === 'FCFS' ? '-' : money(s.total - fcfs.value.total)} | ${s.changed.length}척 |`)
-  L.push('', `## 3. ${cand.value.label} 선박별 일정`, '| 선박 | 부두 | 도착 | 접안 | 작업 종료 | 예상 체선료 |', '| --- | --- | --- | --- | --- | ---: |')
-  for (const p of sorted.value) L.push(`| ${v.value[p.vid].name} | ${bn(p.bid)} | ${fmt(v.value[p.vid].eta)} | ${fmt(p.etb)} | ${fmt(p.etu)} | ${money(p.dem.cents)} |`)
-  L.push('', '## 4. 남은 리스크')
-  for (const r of rs.value) L.push(`- ${r.label} · ${r.state}: ${r.evidence}${r.alternative !== '-' ? ` 대안: ${r.alternative}` : ''}`)
-  if (chosen.value) L.push('', '## 5. 선택 사유', chosen.value.reason)
-  L.push('', '## 계산 기준', '- 체선료 = 초과 시간 ÷ 24시간 × 하루 체선료, 선박별 센트 단위 한 번 반올림(HALF_UP)', '- 정박시간 개시·기상 공제는 선박별 계약 조항을 따름', '- 기준안은 비교용 도착순 배치이며 현행 실적이 아님')
-  return L.join('\n')
-})
+const reportText = computed(() => buildReport({ result: props.result, scen: props.scen, cand: cand.value, reason: chosen.value?.reason ?? null }))
 
 // 보고서는 문서 모양으로 렌더링해 보여 준다. 복사·내려받기는 마크다운 원문 그대로.
 // 입력은 이 화면이 계산 결과로 만든 문자열뿐이라 외부 HTML이 섞이지 않는다.
@@ -132,7 +114,7 @@ function download() {
           </div>
         </div>
         <div class="panel-body">
-          <article v-if="reportView === 'view'" class="md" v-html="reportHtml" />
+          <article v-if="reportView === 'view'" class="md-doc" v-html="reportHtml" />
           <pre v-else class="doc">{{ reportText }}</pre>
         </div>
       </section>
@@ -151,16 +133,4 @@ function download() {
   background: #fafbfc; border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; max-height: 640px; overflow: auto;
 }
 .foot { padding: 0 18px 14px; }
-/* 마크다운 문서 보기: 포털 표 양식에 맞춘 제목·표·목록 */
-.md { max-height: 640px; overflow: auto; padding: 4px 6px 8px; font-size: 13px; line-height: 1.75; color: var(--text); }
-.md :deep(h1) { font-size: 19px; font-weight: 800; text-align: center; margin: 6px 0 4px; letter-spacing: -0.4px; }
-.md :deep(h1 + p) { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 14px; }
-.md :deep(h2) { font-size: 14.5px; font-weight: 700; margin: 20px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line-strong); }
-.md :deep(p) { margin: 0 0 8px; }
-.md :deep(table) { width: 100%; border-collapse: collapse; border-top: 2px solid #5b6575; border-bottom: 1px solid var(--line-strong); font-size: 12.5px; margin: 4px 0 8px; }
-.md :deep(th) { background: #eef0f3; color: #2b3445; font-weight: 600; padding: 6px 8px; border: 1px solid var(--line); border-top: 0; white-space: nowrap; }
-.md :deep(td) { padding: 6px 8px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
-.md :deep(ul) { margin: 0 0 8px; padding-left: 0; list-style: none; }
-.md :deep(li) { position: relative; padding-left: 16px; }
-.md :deep(li)::before { content: '○'; position: absolute; left: 0; color: #555; font-size: 11px; top: 2px; }
 </style>

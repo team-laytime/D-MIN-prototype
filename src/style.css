@@ -151,3 +151,24 @@ textarea.input { height: auto; padding: 6px 8px; }
 .notice.danger { background: var(--bad-weak); border-color: #f2b8b8; color: #8a1c1c; }
 .notice.danger .ico { color: var(--bad); }
 .notice.danger b { color: var(--bad); }
+.notice.done { background: var(--ok-weak); border-color: #b7dfc0; color: #1d5a2c; }
+.notice.done .ico { color: var(--ok); }
+.notice.done b { color: var(--ok); }
+
+/* 마크다운 문서 보기(보고서 화면 · 승인 처리 화면): 포털 표 양식에 맞춘 제목·표·목록 */
+.md-doc { max-height: 640px; overflow: auto; padding: 4px 6px 8px; font-size: 13px; line-height: 1.75; color: var(--text); }
+.md-doc h1 { font-size: 19px; font-weight: 800; text-align: center; margin: 6px 0 4px; letter-spacing: -0.4px; }
+.md-doc h1 + p { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+.md-doc h2 { font-size: 14.5px; font-weight: 700; margin: 20px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--line-strong); }
+.md-doc p { margin: 0 0 8px; }
+.md-doc table { width: 100%; border-collapse: collapse; border-top: 2px solid #5b6575; border-bottom: 1px solid var(--line-strong); font-size: 12.5px; margin: 4px 0 8px; }
+.md-doc th { background: #eef0f3; color: #2b3445; font-weight: 600; padding: 6px 8px; border: 1px solid var(--line); border-top: 0; white-space: nowrap; }
+.md-doc td { padding: 6px 8px; border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.md-doc ul { margin: 0 0 8px; padding-left: 0; list-style: none; }
+.md-doc li { position: relative; padding-left: 16px; }
+.md-doc li::before { content: '○'; position: absolute; left: 0; color: #555; font-size: 11px; top: 2px; }
+
+/* 라벨 칸 표(결재 처리 등) */
+table.kv { width: 100%; border-collapse: collapse; background: var(--panel); border-top: 2px solid #5b6575; font-size: 12.5px; }
+table.kv th { width: 96px; background: #eef0f3; color: #2b3445; font-weight: 600; text-align: left; padding: 8px 10px; border: 1px solid var(--line); vertical-align: top; white-space: nowrap; }
+table.kv td { padding: 8px 10px; border: 1px solid var(--line); vertical-align: top; }

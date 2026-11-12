@@ -6,9 +6,9 @@ import ViewHead from './ViewHead.vue'
 
 const props = defineProps({
   result: Object, scen: Object, focusId: String, checks: Object,
-  version: Number, current: Object, decisions: Array,
+  version: Number, current: Object, decisions: Array, role: Object,
 })
-const emit = defineEmits(['focus', 'decide', 'next', 'open'])
+const emit = defineEmits(['focus', 'decide', 'next', 'open', 'go'])
 
 const all = computed(() => [props.result.fcfs, ...props.result.candidates])
 const cand = computed(() => all.value.find((s) => s.id === props.focusId) ?? props.result.candidates[0])
@@ -23,6 +23,8 @@ const confirming = ref(false)
 watch(() => props.focusId, () => { confirming.value = false })
 
 const selectedHere = computed(() => props.current && props.current.candId === cand.value.id && props.current.version === props.version)
+const statusClass = computed(() => ({ '승인 대기': 'hit', '승인 완료': 'none', '현업 반영 완료': 'none', 반려: 'bad' })[props.current?.status])
+const base = () => ({ candId: cand.value.id, label: cand.value.label, total: cand.value.total })
 
 function choose(force) {
   if (unchecked.value.length && !force) { confirming.value = true; return }
@@ -116,14 +118,25 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
 
           <template v-if="selectedHere">
             <div class="selected">
-              <span class="chip none">{{ current.status }}</span>
-              <span class="small muted">현재 선택된 후보</span>
+              <span class="chip" :class="statusClass">{{ current.status }}</span>
+              <span class="small muted">{{ current.reqId }} · 요청 {{ current.who }}</span>
             </div>
-            <div class="row">
-              <button class="btn" @click="emit('decide', { action: '취소', candId: cand.id, label: cand.label, total: cand.total, reason: '담당자 취소' })">선택 취소</button>
-              <button v-if="current.status === '선택됨'" class="btn" @click="emit('decide', { action: '현업 반영 완료', candId: cand.id, label: cand.label, total: cand.total, reason: '현업 시스템에 반영함' })">현업 반영 완료 표시</button>
+            <p v-if="current.status === '승인 대기'" class="small muted">승인권자 결재 전입니다. 승인되어야 접안 계획 버전이 바뀝니다.</p>
+            <p v-if="current.rejection" class="small bad-text">반려 · {{ current.rejection.who }} · [{{ current.rejection.reasonType }}] {{ current.rejection.reason }}</p>
+            <p v-if="current.approval" class="small good-text">
+              승인 · {{ current.approval.who }} · 접안 계획 v{{ current.planNo }} 적용<template v-if="current.approval.requestedId !== current.approval.candId"> (요청 {{ current.approval.requestedLabel }} → {{ current.approval.label }})</template>
+            </p>
+            <div v-if="!role.approve" class="row">
+              <button v-if="current.status === '승인 대기'" class="btn" @click="emit('decide', { action: '요청 취소', ...base(), reason: '담당자 요청 취소' })">요청 취소</button>
+              <button v-if="current.status === '반려'" class="btn" @click="emit('decide', { action: '요청 취소', ...base(), reason: '반려 후 다시 선택' })">다시 선택</button>
+              <button v-if="current.status === '승인 완료'" class="btn" @click="emit('decide', { action: '현업 반영 완료', ...base(), reason: '현업 시스템에 반영함' })">현업 반영 완료 표시</button>
             </div>
-            <button class="btn primary" @click="emit('next')">보고서 초안</button>
+            <button v-else-if="current.status === '승인 대기'" class="btn primary" @click="emit('go', 'approvals')">승인 관리에서 결재</button>
+            <button class="btn" :class="{ primary: !role.approve }" @click="emit('next')">보고서 초안</button>
+          </template>
+          <template v-else-if="role.approve">
+            <p class="small muted">후보 선택과 승인 요청은 스케줄러 계정이 합니다. 승인권자는 관리자메뉴 › 승인 관리에서 결재합니다.</p>
+            <button class="btn primary" @click="emit('go', 'approvals')">승인 관리</button>
           </template>
           <template v-else>
             <div class="field">
@@ -131,26 +144,26 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
               <textarea id="reason" v-model="reason" class="input" rows="3" placeholder="예: 기상 해제 직후 대형선 우선 접안, 체선료 절감 폭이 가장 큼" />
             </div>
             <div v-if="confirming" class="confirm">
-              <p class="small"><b>미확인 리스크 {{ unchecked.length }}건</b> ({{ unchecked.map((r) => r.label).join(', ') }}). 선택 시 이력에 함께 기록됩니다.</p>
+              <p class="small"><b>미확인 리스크 {{ unchecked.length }}건</b> ({{ unchecked.map((r) => r.label).join(', ') }}). 요청 시 기록에 함께 남습니다.</p>
               <div class="row">
                 <button class="btn" @click="confirming = false">돌아가기</button>
-                <button class="btn warn" @click="choose(true)">그래도 선택</button>
+                <button class="btn warn" @click="choose(true)">그래도 요청</button>
               </div>
             </div>
-            <button v-else class="btn primary" @click="choose(false)">이 후보로 선택</button>
+            <button v-else class="btn primary" @click="choose(false)">선택 · 승인 요청</button>
           </template>
-          <p class="faint small">Agent는 계획을 확정하지 않습니다. 선택·취소·반영 완료는 담당자 이력으로만 기록됩니다.</p>
+          <p class="faint small">Agent는 계획을 확정하지 않습니다. 담당자가 선택해 승인을 요청하고, 승인권자가 승인해야 접안 계획 버전이 바뀝니다.</p>
         </div>
       </section>
 
       <section class="panel">
-        <div class="panel-head"><h3>선택 이력</h3><span class="faint small">추가만 가능</span></div>
+        <div class="panel-head"><h3>처리 이력</h3><span class="faint small">추가만 가능</span></div>
         <div class="panel-body">
           <p v-if="!decisions.length" class="muted small">기록 없음</p>
           <ol class="log">
             <li v-for="(d, i) in [...decisions].reverse()" :key="i" class="small">
-              <div class="row"><b>{{ d.action }}</b><span>{{ d.label }}</span><span class="spacer" /><span class="faint">입력 v{{ d.version }}</span></div>
-              <div class="muted">{{ d.at }} · {{ d.reason }}</div>
+              <div class="row"><b>{{ d.action }}</b><span>{{ d.label }}</span><span class="spacer" /><span class="faint">{{ d.reqId }} · 입력 v{{ d.version }}</span></div>
+              <div class="muted">{{ d.at }} · {{ d.who }} · {{ d.reasonType ? `[${d.reasonType}] ` : '' }}{{ d.reason }}</div>
               <div v-if="d.uncheckedRisks?.length" class="warn-text">미확인 리스크: {{ d.uncheckedRisks.join(', ') }}</div>
             </li>
           </ol>
@@ -182,5 +195,6 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
 .log .row { gap: 6px; }
 .warn-text { color: var(--warn); font-weight: 600; }
 .good-text { color: var(--ok); font-weight: 600; }
+.bad-text { color: var(--bad); font-weight: 600; }
 textarea.input { resize: vertical; }
 </style>

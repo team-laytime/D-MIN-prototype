@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { CircleAlert, CircleHelp, Minus, Network, Plus, UserRound } from 'lucide-vue-next'
+import { CircleAlert, CircleHelp, Layers, Minus, Network, Plus, UserRound } from 'lucide-vue-next'
 import { SCENARIOS } from './lib/scenarios.js'
 import { runSearch } from './lib/engine.js'
 import ScenarioInput from './components/ScenarioInput.vue'
@@ -12,6 +12,8 @@ import VesselDrawer from './components/VesselDrawer.vue'
 import MapHome from './components/MapHome.vue'
 import Tour from './components/Tour.vue'
 import WorkflowView from './components/WorkflowView.vue'
+import AdminApprovals from './components/AdminApprovals.vue'
+import AdminHistory from './components/AdminHistory.vue'
 
 const scenarioId = ref('S1')
 const scen = ref(SCENARIOS.S1())
@@ -33,20 +35,53 @@ const drawer = ref(null)
 const openVessel = (simId, vid, opts = {}) => { drawer.value = { simId, vid, at: opts.at ?? null, mode: opts.mode ?? 'card' } }
 const drawerSim = computed(() => drawer.value && all.value.find((s) => s.id === drawer.value.simId))
 
-// 담당자 선택 이력. 추가만 하고 고치지 않는다.
+// 시연용 사용자. 실제로는 로그인 계정이 정한다. 승인권자만 관리자메뉴를 쓴다.
+const ROLES = {
+  scheduler: { id: 'scheduler', name: '스케줄러 A', title: '접안 계획 담당', approve: false },
+  approver: { id: 'approver', name: '승인권자 B', title: '생산조정 팀장', approve: true },
+}
+const roleId = ref('scheduler')
+const role = computed(() => ROLES[roleId.value])
+
+// 처리 기록. 추가만 하고 고치지 않는다(선택·요청 취소·승인·반려·현업 반영 완료).
+// 스케줄러가 후보를 고르면 승인 요청 문서(RPT)가 생기고, 승인권자가 승인해야 접안 계획 버전이 올라간다.
 const decisions = ref([])
 const checks = reactive({})
 const current = computed(() => {
   let state = null
   for (const d of decisions.value) {
-    if (d.action === '선택') state = { ...d, status: '선택됨' }
-    else if (d.action === '취소') state = null
-    else if (d.action === '현업 반영 완료' && state) state = { ...state, status: '현업 반영 완료' }
+    if (d.action === '선택') state = { ...d, status: '승인 대기' }
+    else if (d.action === '요청 취소') state = null
+    else if (d.action === '승인' && state?.reqId === d.reqId) state = { ...state, candId: d.candId, label: d.label, total: d.total, status: '승인 완료', planNo: d.planNo, approval: d }
+    else if (d.action === '반려' && state?.reqId === d.reqId) state = { ...state, status: '반려', rejection: d }
+    else if (d.action === '현업 반영 완료' && state?.status === '승인 완료') state = { ...state, status: '현업 반영 완료' }
   }
   return state
 })
+// 승인 요청 문서. 새로 요청하면 앞선 대기 문서는 '재요청으로 대체'된다.
+const requests = computed(() => {
+  const out = []
+  for (const d of decisions.value) {
+    const open = out.find((r) => r.status === '승인 대기')
+    if (d.action === '선택') {
+      if (open) open.status = '재요청으로 대체'
+      out.push({ ...d, id: d.reqId, status: '승인 대기', decision: null })
+    } else if (d.action === '요청 취소' && open) open.status = '요청 취소'
+    else if ((d.action === '승인' || d.action === '반려')) {
+      const r = out.find((x) => x.id === d.reqId)
+      if (r) Object.assign(r, { status: d.action === '승인' ? '승인 완료' : '반려', decision: d })
+    }
+  }
+  return out
+})
+const planVersions = computed(() => decisions.value.filter((d) => d.action === '승인'))
 function decide(entry) {
-  decisions.value.push({ ...entry, at: new Date().toLocaleString('ko-KR', { hour12: false }), version: version.value })
+  const at = new Date().toLocaleString('ko-KR', { hour12: false })
+  const extra = {}
+  if (entry.action === '선택') extra.reqId = `RPT-1114-${String(decisions.value.filter((d) => d.action === '선택').length + 1).padStart(2, '0')}`
+  if (entry.action === '요청 취소' || entry.action === '현업 반영 완료') extra.reqId = current.value?.reqId
+  if (entry.action === '승인') extra.planNo = planVersions.value.length + 1
+  decisions.value.push({ ...entry, ...extra, at, version: version.value, who: role.value.name, roleTitle: role.value.title })
 }
 
 // GNB 메뉴 = LNB 묶음. 화면(tab)은 묶음 안의 하위 메뉴다.
@@ -60,7 +95,12 @@ const NAV = [
   { key: 'REPORT', gnb: '보고서', items: [{ id: 'report', label: '접안계획 보고서' }] },
   { key: 'QUALITY', gnb: '검증', items: [{ id: 'verify', label: '계산 검증' }] },
   { key: 'APPENDIX', gnb: '부록', items: [{ id: 'workflow', label: 'Agent 워크플로우' }] },
+  { key: '관리자메뉴', gnb: '관리자', admin: true, items: [{ id: 'approvals', label: '승인 관리' }, { id: 'history', label: '승인 이력' }] },
 ]
+// 관리자메뉴는 승인권자만 연다. 다른 계정에서는 LNB에 흐리게 남기고 GNB에서는 뺀다.
+const canSee = (g) => !g.admin || role.value.approve
+const pending = computed(() => requests.value.filter((r) => r.status === '승인 대기').length)
+watch(role, (r) => { if (!r.approve && group.value?.admin) tab.value = 'home' })
 const group = computed(() => NAV.find((g) => g.items.some((i) => i.id === tab.value)))
 const open = reactive(Object.fromEntries(NAV.map((g) => [g.key, false])))
 // 화면을 옮기면 그 묶음만 펼친다(펼침 버튼으로 다른 묶음도 열 수 있다).
@@ -103,8 +143,8 @@ const TOUR = [
   { section: '리스크·선택', tab: 'risk', target: '.risks', title: '남은 리스크',
     body: '날씨 급변, 설비, 탱크, 긴급 출하, 현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고 대안을 붙입니다.',
     try: '「해당」 항목을 읽고 「확인」 체크' },
-  { section: '리스크·선택', tab: 'risk', target: '.decide', title: '후보 선택',
-    body: '사유를 적고 선택합니다. 확인하지 않은 리스크가 있으면 한 번 더 묻고, 선택·취소는 이력으로 남습니다. Agent는 계획을 확정하지 않습니다.' },
+  { section: '리스크·선택', tab: 'risk', target: '.decide', title: '선택 · 승인 요청',
+    body: '사유를 적고 선택하면 승인 요청이 올라갑니다. 확인하지 않은 리스크가 있으면 한 번 더 묻습니다. 승인은 오른쪽 위 사용자를 「승인권자 B」로 바꾸면 열리는 관리자메뉴에서 합니다. Agent는 계획을 확정하지 않습니다.' },
   { section: '보고서', tab: 'report', target: '.cols > .panel:first-child', title: '메일·보고서 초안',
     body: '선택한 후보로 초안을 만듭니다. 금액은 계산 결과를 그대로 넣고 자동 대조합니다.' },
   { section: '검증', tab: 'verify', target: '.answer-set', title: '계산 검증',
@@ -129,7 +169,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 
 <template>
   <div class="util">
-    <span><b>스케줄러 A</b>(접안 계획 담당)님</span>
+    <span><b>{{ role.name }}</b>({{ role.title }})님</span>
     <span class="sep" />
     <button class="util-link" @click="resetDemo">시연 초기화</button>
     <button class="util-link" @click="tab = 'home'">Home</button>
@@ -137,11 +177,17 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
   <header class="gnb">
     <button class="brand" @click="tab = 'home'"><b>D-</b><span>MIN</span><small>체선료 비교</small></button>
     <nav class="gnb-nav" aria-label="주 메뉴">
-      <button v-for="g in NAV" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
+      <button v-for="g in NAV.filter(canSee)" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
     </nav>
     <div class="gnb-right">
-      <label class="scen-pill">
+      <label class="scen-pill" title="사용자 (시연용 · 실제로는 로그인 계정)">
         <UserRound :size="14" />
+        <select id="role" v-model="roleId" aria-label="사용자">
+          <option v-for="r in ROLES" :key="r.id" :value="r.id">{{ r.name }}</option>
+        </select>
+      </label>
+      <label class="scen-pill">
+        <Layers :size="14" />
         <select id="scen" v-model="scenarioId" aria-label="시나리오">
           <option value="S1">S1 기상 악화일 집중</option>
           <option value="S2">S2 평시</option>
@@ -155,20 +201,26 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 
   <div class="body">
     <aside class="lnb" aria-label="하위 메뉴">
-      <div v-for="g in NAV" :key="g.key" :class="['lnb-group', { on: group?.key === g.key }]">
-        <button class="lnb-head" :aria-expanded="open[g.key]" @click="open[g.key] = !open[g.key]">
+      <div v-for="g in NAV" :key="g.key" :class="['lnb-group', { on: group?.key === g.key, off: !canSee(g) }]">
+        <button v-if="!canSee(g)" class="lnb-head" disabled title="승인권자만 사용할 수 있습니다">
+          <span>{{ g.key }}</span>
+          <span class="tog"><Plus :size="10" :stroke-width="3" /></span>
+        </button>
+        <button v-else class="lnb-head" :aria-expanded="open[g.key]" @click="open[g.key] = !open[g.key]">
           <span>{{ g.key }}</span>
           <span class="tog"><Minus v-if="open[g.key]" :size="10" :stroke-width="3" /><Plus v-else :size="10" :stroke-width="3" /></span>
         </button>
-        <ul v-if="open[g.key]" class="lnb-sub">
+        <ul v-if="open[g.key] && canSee(g)" class="lnb-sub">
           <li v-for="item in g.items" :key="item.id">
-            <button :class="{ on: tab === item.id }" :aria-current="tab === item.id ? 'page' : null" @click="tab = item.id">{{ item.label }}</button>
+            <button :class="{ on: tab === item.id }" :aria-current="tab === item.id ? 'page' : null" @click="tab = item.id">
+              {{ item.label }}<span v-if="item.id === 'approvals' && pending" class="cnt">{{ pending }}</span>
+            </button>
           </li>
         </ul>
       </div>
       <div class="lnb-status">
-        <p class="small muted">담당자 선택</p>
-        <p v-if="current" class="strong" :class="current.version === version ? 'ok' : 'warn'">
+        <p class="small muted">결재 상태</p>
+        <p v-if="current" class="strong" :class="current.version !== version || current.status === '반려' ? 'warn' : current.status === '승인 대기' ? '' : 'ok'">
           {{ current.label }} {{ current.status }}<span v-if="current.version !== version" class="small"> · 재확인 필요</span>
         </p>
         <p v-else class="strong muted">선택 전</p>
@@ -187,10 +239,13 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
       <CompareView v-else-if="tab === 'compare'" :result="result" :scen="plain" :focus-id="focusId"
         @focus="focusId = $event" @open="openVessel" @next="tab = 'risk'" />
       <RiskView v-else-if="tab === 'risk'" :result="result" :scen="plain" :focus-id="focusId" :checks="checks"
-        :version="version" :current="current" :decisions="decisions"
-        @focus="focusId = $event" @decide="decide" @next="tab = 'report'" @open="openVessel" />
+        :version="version" :current="current" :decisions="decisions" :role="role"
+        @focus="focusId = $event" @decide="decide" @next="tab = 'report'" @open="openVessel" @go="tab = $event" />
       <ReportView v-else-if="tab === 'report'" :result="result" :scen="plain" :focus-id="focusId" :current="current" :version="version" />
       <VerifyView v-else-if="tab === 'verify'" />
+      <AdminApprovals v-else-if="tab === 'approvals'" :requests="requests" :result="result" :scen="plain" :version="version"
+        :role="role" :plan-versions="planVersions" @decide="decide" @open="openVessel" @go="tab = $event" />
+      <AdminHistory v-else-if="tab === 'history'" :plan-versions="planVersions" :decisions="decisions" :requests="requests" />
     </main>
   </div>
 
@@ -237,11 +292,14 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .lnb-group.on .lnb-head { color: var(--accent); }
 .tog { width: 14px; height: 14px; display: grid; place-items: center; background: #c8cbd0; color: #fff; }
 .lnb-group.on .tog { background: var(--accent); }
+.lnb-group.off .lnb-head { color: #aaa; cursor: not-allowed; }
+.lnb-group.off .tog { background: #d5d8dc; }
 .lnb-sub { list-style: none; margin: 2px 0 12px -14px; padding: 4px 0 6px 14px; background: #fff; border-left: 2px solid var(--accent); }
 .lnb-sub button { width: 100%; border: 0; background: none; text-align: left; padding: 3px 0 3px 12px; font-size: 12px; color: #777; }
 .lnb-sub button::before { content: '· '; color: #aaa; }
 .lnb-sub button.on { color: var(--text); font-weight: 700; }
 .lnb-sub button:hover { color: var(--text); }
+.cnt { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: 6px; border-radius: 8px; background: var(--bad); color: #fff; font-size: 10.5px; font-weight: 700; vertical-align: 1px; }
 .lnb-status { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
 .lnb-status .ok { color: var(--ok); }
 .lnb-status .warn { color: var(--warn); }
