@@ -112,12 +112,18 @@ const open = reactive(Object.fromEntries(NAV.map((g) => [g.key, false])))
 // 화면을 옮기면 그 묶음만 펼친다(펼침 버튼으로 다른 묶음도 열 수 있다).
 watch(group, (g) => { for (const k of Object.keys(open)) open[k] = k === g?.key }, { immediate: true })
 // 시연 초기화: 처리 기록·리스크 확인·입력을 처음 값으로 되돌리고 스케줄러로 돌아간다.
+// 지도 시각·재생·선택 안은 MapHome을 새로 만들어(resetKey) 처음 값으로 돌린다. 이미 운영 현황에 있어도 적용된다.
+const resetKey = ref(0)
 function resetDemo() {
   decisions.value = []
   for (const k of Object.keys(checks)) delete checks[k]
   scen.value = SCENARIOS[scenarioId.value]()
   roleId.value = 'scheduler'
   drawer.value = null
+  tourIdx.value = null
+  loginOpen.value = false
+  focusId.value = 'A'
+  resetKey.value++
   tab.value = 'home'
 }
 
@@ -237,7 +243,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
       <div v-if="result.error && tab !== 'input' && tab !== 'verify'" class="notice danger">
         <CircleAlert class="ico" :size="18" /><span><b>후보 계산 불가</b> — {{ result.error }}</span>
       </div>
-      <MapHome v-else-if="tab === 'home'" :result="result" :scen="plain" :current="current" :version="version"
+      <MapHome v-else-if="tab === 'home'" :key="resetKey" :result="result" :scen="plain" :current="current" :version="version"
         @go="tab = $event" @focus="focusId = $event" @open="openVessel" />
       <WorkflowView v-else-if="tab === 'workflow'" :result="result" :scen="plain" :current="current" :version="version"
         @go="tab = $event" />
