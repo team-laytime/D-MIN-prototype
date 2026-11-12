@@ -6,6 +6,8 @@ const emit = defineEmits(['next', 'prev', 'close'])
 
 const step = computed(() => props.steps[props.index])
 const rect = ref(null)
+// 다음 대상을 찾는 동안에는 카드를 숨겨, 가운데에 잠깐 떴다가 옮겨 가는 깜빡임을 막는다.
+const ready = ref(false)
 const vw = ref(window.innerWidth)
 const vh = ref(window.innerHeight)
 const PAD = 6
@@ -19,19 +21,23 @@ function measure() {
 }
 
 // 단계가 바뀌면 화면 전환(탭·패널)이 그려진 뒤 대상을 찾아 가운데로 스크롤한다.
+// 이전 강조 위치는 그대로 두고 새 위치로 옮겨 가게 한다.
 async function locate() {
-  rect.value = null
+  ready.value = false
   await nextTick()
   await new Promise((r) => setTimeout(r, 120))
   const el = step.value.target && document.querySelector(step.value.target)
   if (el) el.scrollIntoView({ block: el.getBoundingClientRect().height > vh.value * 0.7 ? 'start' : 'center' })
   await new Promise((r) => requestAnimationFrame(r))
   measure()
+  ready.value = true
 }
 watch(() => props.index, locate)
 
+// Enter는 포커스된 버튼이 직접 처리하므로 여기서 받지 않는다(두 단계씩 넘어가는 문제).
 function onKey(e) {
-  if (e.key === 'ArrowRight' || e.key === 'Enter') emit('next')
+  if (e.target.closest?.('input, textarea, select')) return
+  if (e.key === 'ArrowRight') emit('next')
   else if (e.key === 'ArrowLeft') emit('prev')
   else if (e.key === 'Escape') emit('close')
 }
@@ -79,7 +85,7 @@ const last = computed(() => props.index === props.steps.length - 1)
     <div class="tour" role="dialog" aria-modal="true" :aria-label="step.title">
       <div v-if="spot" class="spot" :style="{ left: spot.left + 'px', top: spot.top + 'px', width: spot.width + 'px', height: spot.height + 'px' }" />
       <div v-else class="dim" />
-      <div class="card" :style="cardStyle">
+      <div :class="['card', { hidden: !ready }]" :style="cardStyle">
         <div class="progress"><span :style="{ width: ((index + 1) / steps.length) * 100 + '%' }" /></div>
         <p class="count small">{{ step.section }} · {{ index + 1 }} / {{ steps.length }}</p>
         <h3>{{ step.title }}</h3>
@@ -108,6 +114,7 @@ const last = computed(() => props.index === props.steps.length - 1)
   position: fixed; width: 360px; pointer-events: auto; background: var(--panel); border-radius: 10px;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25); padding: 16px 18px 12px; display: flex; flex-direction: column; gap: 8px;
 }
+.card.hidden { visibility: hidden; }
 .progress { height: 3px; background: #eef0f3; border-radius: 2px; overflow: hidden; }
 .progress span { display: block; height: 100%; background: var(--accent); transition: width 0.25s; }
 .count { color: var(--accent); font-weight: 650; }
