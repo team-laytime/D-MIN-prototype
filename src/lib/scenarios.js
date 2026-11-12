@@ -59,7 +59,17 @@ const vessels = () => [
     eta: at(14, 14), contract: { id: 'CA-2611-033', laytimeH: 26, rateUsd: 30000, norTurnH: 6, weather: 'FULL' } },
   { id: 'V6', name: 'BLUE CORAL', product: '벙커C', dir: '수출', dwt: 30000, draft: 9.8, ton: 25000, pump: 1800,
     eta: at(14, 20), contract: { id: 'CA-2611-041', laytimeH: 22, rateUsd: 18000, norTurnH: 6, weather: 'HALF' } },
-].map((v) => ({ ...v, workMin: work(v.ton, v.pump) }))
+].map((v) => ({ ...v, ...SPECS[v.id], workMin: work(v.ton, v.pump) }))
+
+// 선박 카드용 제원(가상). 선명·MMSI·IMO·호출부호는 실제 선박과 무관하다.
+const SPECS = {
+  V1: { flag: 'KR', mmsi: '440911201', imo: '9701234', callSign: 'D7PJ', type: '석유제품 운반선 (MR)', grt: 29800, loa: 183, beam: 32.2, prevPort: 'YEOSU, KOREA', voyage: '2026-1114' },
+  V2: { flag: 'PA', mmsi: '351204000', imo: '9655432', callSign: '3FOL5', type: '석유제품 운반선 (MR)', grt: 25400, loa: 176, beam: 31.0, prevPort: 'DAESAN, KOREA', voyage: '2026-1121' },
+  V3: { flag: 'MH', mmsi: '538009120', imo: '9588123', callSign: 'V7GS9', type: '석유제품 운반선 (LR1)', grt: 42100, loa: 228, beam: 32.3, prevPort: 'SINGAPORE', voyage: '2026-1087' },
+  V4: { flag: 'JP', mmsi: '431002345', imo: '9811222', callSign: 'JD4521', type: '석유제품 운반선 (연안)', grt: 7850, loa: 118, beam: 18.6, prevPort: 'BUSAN, KOREA', voyage: '2026-1130' },
+  V5: { flag: 'KR', mmsi: '440318900', imo: '9745678', callSign: 'D7SL', type: '석유제품 운반선 (MR)', grt: 28100, loa: 180, beam: 32.0, prevPort: 'GWANGYANG, KOREA', voyage: '2026-1133' },
+  V6: { flag: 'SG', mmsi: '563045210', imo: '9690011', callSign: '9VBC2', type: '석유제품 운반선 (Handy)', grt: 18900, loa: 162, beam: 27.4, prevPort: 'ONSAN, KOREA', voyage: '2026-1141' },
+}
 
 const env = () => ({
   switchingMin: 120,

@@ -2,10 +2,12 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { ChevronLeft, ChevronRight, CircleAlert, Moon, Pause, Play, SkipBack } from 'lucide-vue-next'
+import { BadgeCheck, ChevronLeft, ChevronRight, CircleAlert, ClipboardList, Columns3, FileText, Moon, Pause, Play, ShieldAlert, SkipBack, Workflow } from 'lucide-vue-next'
 import ViewHead from './ViewHead.vue'
+import BerthBoard from './BerthBoard.vue'
 import { risks, stateAt } from '../lib/engine.js'
 import { MAP_CONTEXT } from '../lib/scenarios.js'
+import { NAV, anchorageFor, positionOf } from '../lib/vesselState.js'
 import { at, fmt, fmtDur, money } from '../lib/time.js'
 
 const props = defineProps({ result: Object, scen: Object, current: Object, version: Number })
@@ -43,8 +45,31 @@ const w = computed(() => props.scen.env.weather)
 const weatherNow = computed(() => w.value && t.value >= w.value.start && t.value < w.value.end)
 const isNight = computed(() => !props.scen.env.days.some((d) => t.value >= d.sunrise && t.value < d.sunset))
 const openRisks = computed(() => risks(plan.value, props.scen).filter((r) => r.state !== '해당 없음'))
+
+// 지도 옆 알림 패널(console 대시보드 모양)과 바로가기 타일
+const notes = computed(() => {
+  const out = []
+  if (w.value) out.push({ tag: '기상', red: weatherNow.value, text: `${w.value.label} · ${fmt(w.value.start)}~${fmt(w.value.end).slice(6)} 접안 금지`, at: weatherNow.value ? '발효 중' : '예보' })
+  for (const s of states.value.filter((x) => x.ticking)) out.push({ tag: '체선', red: true, text: `${s.v.name} 체선 발생 · 누적 ${money(s.cents)}`, at: fmt(t.value).slice(6), vid: s.v.id })
+  for (const r of openRisks.value) out.push({ tag: '리스크', text: `${r.label} ${r.state} · ${label(plan.value)}`, at: '확인 필요', go: 'risk' })
+  out.push(props.current && props.current.version === props.version
+    ? { tag: '선택', text: `${props.current.label} ${props.current.status}`, at: '담당자', go: 'report' }
+    : { tag: '선택', text: '담당자 후보 선택 전', at: '대기', go: 'risk' })
+  return out
+})
+const TILES = [
+  { id: 'input', label: '시나리오\n입력', icon: ClipboardList },
+  { id: 'compare', label: '후보\n비교', icon: Columns3 },
+  { id: 'risk', label: '리스크·\n선택', icon: ShieldAlert },
+  { id: 'report', label: '접안계획\n보고서', icon: FileText },
+  { id: 'verify', label: '계산\n검증', icon: BadgeCheck },
+  { id: 'workflow', label: 'Agent\n워크플로우', icon: Workflow },
+]
+function onNote(n) {
+  if (n.vid) openCard(n.vid)
+  else if (n.go) emit('go', n.go)
+}
 const berthOf = (bid) => props.scen.berths.find((b) => b.id === bid)
-const anchorageFor = (v) => MAP_CONTEXT.anchorages.find((a) => v.dwt <= a.maxDwt)
 const weekday = (min) => ['일', '월', '화', '수', '목', '금', '토'][(6 + Math.floor(min / 1440)) % 7]
 const label = (s) => (s.id === 'FCFS' ? '도착순 기준안' : s.label)
 const best = computed(() => props.result.candidates[0])
@@ -56,13 +81,14 @@ const kpis = computed(() => [
   { label: '담당자 선택', value: props.current && props.current.version === props.version ? `${props.current.label} ${props.current.status}` : '선택 전' },
 ])
 
+// 지도 표식 색은 PortWise 문법(빨강 입항·대기, 초록 계류, 회색 출항). 체선 발생은 빨간 점선 고리로 겹쳐 표시한다.
 const PHASE = {
-  coming: { text: '입항 예정', color: '#999999' },
-  waiting: { text: '정박지 대기', color: '#e2a12a' },
-  berthed: { text: '작업 중', color: '#1f4e9c' },
-  left: { text: '출항', color: '#999999' },
+  coming: { text: '입항 예정', color: NAV.coming.color, row: 'plan' },
+  waiting: { text: '정박지 대기', color: NAV.waiting.color, row: 'plan' },
+  berthed: { text: '작업 중', color: NAV.berthed.color, row: 'berth' },
+  left: { text: '출항', color: NAV.left.color, row: 'dep' },
 }
-const color = (s) => (s.ticking ? '#e02424' : PHASE[s.phase].color)
+const color = (s) => PHASE[s.phase].color
 function stateText(s) {
   if (s.phase === 'coming') return `${fmt(s.v.eta)} 도착 예정`
   if (s.phase === 'waiting') return `${anchorageFor(s.v).label} ${fmtDur(t.value - s.v.eta)} · ${berthOf(s.p.bid).name} ${fmt(s.p.etb).slice(6)} 접안 예정`
@@ -92,18 +118,23 @@ const selected = ref(null)
 let map = null
 let dyn = null
 
-const shipSvg = (c, deg, sel) =>
-  `<svg width="14" height="28" viewBox="-2 -2 18 32" style="transform:rotate(${deg}deg)"><path d="M7 0 L14 8 L14 28 L0 28 L0 8 Z" fill="${c}" stroke="${sel ? '#101828' : '#fff'}" stroke-width="${sel ? 2.4 : 1.4}"/></svg>`
+// PortWise처럼 위에서 본 배 모양. ring = 체선 발생 중
+const shipSvg = (fill, cog, sel, ring) =>
+  `<svg width="22" height="22" viewBox="-11 -11 22 22">${ring ? '<circle r="10" fill="none" stroke="#e02424" stroke-width="2" stroke-dasharray="3 2"/>' : ''}<g transform="rotate(${cog})"><path d="M0 -8 L4 -3 L4 7 L-4 7 L-4 -3 Z" fill="${fill}" stroke="${sel ? '#111' : '#fff'}" stroke-width="${sel ? 1.8 : 1}" stroke-linejoin="round"/><rect x="-2.6" y="2" width="5.2" height="3" fill="#fff" opacity=".85"/></g></svg>`
 
-function shipMarker(pos, c, deg, name, extra, sel, onClick) {
+function shipMarker(pos, fill, cog, name, extra, sel, ring, onClick) {
   const icon = L.divIcon({
-    className: 'ship-mk',
-    html: `${shipSvg(c, deg, sel)}<span class="ship-lbl${sel ? ' sel' : ''}">${name}${extra ? ` <em>${extra}</em>` : ''}</span>`,
-    iconSize: [14, 28], iconAnchor: [7, 14],
+    className: 'vmk-wrap',
+    html: `<div class="vmk">${shipSvg(fill, cog, sel, ring)}<span class="lbl${sel ? ' sel' : ''}">${name}${extra ? ` <em>${extra}</em>` : ''}</span></div>`,
+    iconSize: [22, 22], iconAnchor: [11, 11],
   })
   const m = L.marker(pos, { icon, zIndexOffset: sel ? 1000 : 0 })
   if (onClick) m.on('click', onClick)
   return m
+}
+function openCard(vid) {
+  selected.value = vid
+  emit('open', plan.value.id, vid, { at: t.value })
 }
 
 function draw() {
@@ -115,26 +146,23 @@ function draw() {
     const legacy = b.occupiedUntil !== null && t.value < b.occupiedUntil
     const busy = !!occ || legacy
     const queue = plan.value.placements.filter((p) => p.bid === b.id).sort((x, y) => x.etb - y.etb)
-    const html = `<div class="sk-mk${busy ? ' busy' : ''}">${b.code}</div>`
+    const html = `<span class="bmk${busy ? ' busy' : ''}">${b.code}</span>`
     L.marker(b.pos, { icon: L.divIcon({ className: 'sk-wrap', html, iconSize: [0, 0] }), zIndexOffset: 500 })
       .bindTooltip(`<b>${b.name}</b> · ${b.maxDwt.toLocaleString()} DWT · 흘수 ${b.maxDraft}m<br>${b.products.join(', ')}<br><br><b>${label(plan.value)} 접안 순서</b><br>${queue.map((p) => `${fmt(p.etb)}  ${props.scen.vessels.find((v) => v.id === p.vid).name}`).join('<br>')}`, { direction: 'left', offset: [-16, 0], className: 'map-tip' })
       .addTo(dyn)
-    if (legacy) shipMarker(b.moor, '#999999', 20, b.occupiedBy, '', false).addTo(dyn)
+    if (legacy) shipMarker(b.moor, NAV.berthed.color, NAV.berthed.cog, b.occupiedBy, '', false, false).addTo(dyn)
   }
   for (const s of states.value) {
     if (s.phase === 'coming' || s.phase === 'left') continue
-    let pos
-    let deg = 20
-    if (s.phase === 'berthed') pos = berthOf(s.p.bid).moor
-    else {
+    let spot = 0
+    if (s.phase === 'waiting') {
       const a = anchorageFor(s.v)
-      const i = (anchorUse[a.id] = (anchorUse[a.id] ?? -1) + 1)
-      pos = a.spots[i % a.spots.length]
-      deg = 300
+      spot = anchorUse[a.id] = (anchorUse[a.id] ?? -1) + 1
     }
+    const pos = positionOf(s, props.scen, spot)
     const sel = selected.value === s.v.id
     const extra = s.ticking ? money(s.cents).replace(/\.\d+$/, '') : ''
-    shipMarker(pos, color(s), deg, s.v.name, extra, sel, () => { selected.value = s.v.id }).addTo(dyn)
+    shipMarker(pos, color(s), NAV[s.phase].cog, s.v.name, extra, sel, s.ticking, () => openCard(s.v.id)).addTo(dyn)
   }
 }
 
@@ -147,12 +175,12 @@ onMounted(() => {
   // SK 부두부터 E3 정박지까지 한 화면에 담는다.
   map.fitBounds([[35.402, 129.372], [35.505, 129.474]], { paddingTopLeft: [16, 16], paddingBottomRight: [16, 80] })
   for (const f of MAP_CONTEXT.facilities) {
-    L.marker(f.pos, { icon: L.divIcon({ className: 'sk-wrap', html: `<div class="sk-mk ctx">${f.code}</div>`, iconSize: [0, 0] }) })
+    L.marker(f.pos, { icon: L.divIcon({ className: 'sk-wrap', html: `<span class="bmk ctx">${f.code}</span>`, iconSize: [0, 0] }) })
       .bindTooltip('계산 대상 아님', { className: 'map-tip' }).addTo(map)
   }
   for (const a of MAP_CONTEXT.anchorages) {
-    L.circle(a.center, { radius: 900, color: '#667085', weight: 1, fillColor: '#667085', fillOpacity: 0.04, dashArray: '3 4' }).addTo(map)
-    L.marker([a.center[0] + 0.0102, a.center[1]], { icon: L.divIcon({ className: 'anch-lbl', html: `<span>${a.label}</span>`, iconSize: [0, 0] }) }).addTo(map)
+    L.circle(a.center, { radius: 900, color: '#b8942a', weight: 1, dashArray: '4 4', fillColor: '#f4e3a1', fillOpacity: 0.15, interactive: false }).addTo(map)
+    L.marker([a.center[0] + 0.0102, a.center[1]], { icon: L.divIcon({ className: 'anch-lbl', html: `<span>${a.label}</span>`, iconSize: [0, 0] }), interactive: false }).addTo(map)
   }
   dyn = L.layerGroup().addTo(map)
   draw()
@@ -207,45 +235,69 @@ function pick(vid) {
 
     <section class="panel">
       <div class="panel-head">
-        <h2>선박 위치</h2>
-        <span class="muted">{{ label(plan) }} · 기준 {{ fmt(t) }}</span>
-        <div class="legend small">
-          <span><i :style="{ background: PHASE.berthed.color }" />작업 중</span>
-          <span><i :style="{ background: PHASE.waiting.color }" />정박지 대기</span>
-          <span><i style="background:#e02424" />체선 발생</span>
-          <span><i class="sk" />SK 부두</span>
-        </div>
+        <h2>선석 작업현황</h2>
+        <span class="muted">{{ label(plan) }} · {{ fmt(t) }} 기준 · 선석을 누르면 선박 카드</span>
+        <span class="side-note small">진행률 배지: 초록 = 정상, 빨강 = 체선 예상</span>
       </div>
-      <div class="panel-body map-box">
-        <div ref="mapEl" class="map" />
-        <div v-if="isNight" class="night-tag small"><Moon :size="13" />야간 · 6만 DWT 이상 접안 불가</div>
-        <div class="time-dock">
-          <div class="ctrls">
-            <button class="icon-btn" title="처음으로" aria-label="처음으로" @click="stop(); t = START"><SkipBack :size="14" /></button>
-            <button class="icon-btn" title="1시간 전" aria-label="1시간 전" @click="step(-60)"><ChevronLeft :size="14" /></button>
-            <button class="icon-btn play" :title="playing ? '멈춤' : '재생'" :aria-label="playing ? '멈춤' : '재생'" @click="togglePlay">
-              <Pause v-if="playing" :size="14" /><Play v-else :size="14" />
-            </button>
-            <button class="icon-btn" title="1시간 후" aria-label="1시간 후" @click="step(60)"><ChevronRight :size="14" /></button>
+      <BerthBoard :sim="plan" :scen="scen" :t="t" @pick="openCard" />
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>선박 위치 · 알림</h2>
+        <span class="muted">{{ label(plan) }} · 기준 {{ fmt(t) }} · 배를 누르면 선박 카드</span>
+      </div>
+      <div class="row-map">
+        <div class="map-box">
+          <div ref="mapEl" class="map" />
+          <div v-if="isNight" class="night-tag small"><Moon :size="13" />야간 · 6만 DWT 이상 접안 불가</div>
+          <div class="map-legend">
+            <span><span v-html="shipSvg(NAV.waiting.color, 0, false, false)" />입항 예정 · 정박지 대기</span>
+            <span><span v-html="shipSvg(NAV.berthed.color, 0, false, false)" />부두 계류</span>
+            <span><span v-html="shipSvg(NAV.waiting.color, 0, false, true)" />체선 발생</span>
+            <span><span class="bmk-key">SK6</span>SK 부두</span>
           </div>
-          <div class="clock">
-            <span class="hm num">{{ fmt(t).slice(6) }}</span>
-            <span class="date num">{{ fmt(t).slice(0, 5) }} ({{ weekday(t) }})</span>
-          </div>
-          <div class="slider">
-            <div class="track">
-              <span v-for="b in bands" :key="b.k" :class="['band', b.cls]" :style="{ left: b.left + '%', width: b.width + '%' }" />
+          <div class="time-dock">
+            <div class="ctrls">
+              <button class="icon-btn" title="처음으로" aria-label="처음으로" @click="stop(); t = START"><SkipBack :size="14" /></button>
+              <button class="icon-btn" title="1시간 전" aria-label="1시간 전" @click="step(-60)"><ChevronLeft :size="14" /></button>
+              <button class="icon-btn play" :title="playing ? '멈춤' : '재생'" :aria-label="playing ? '멈춤' : '재생'" @click="togglePlay">
+                <Pause v-if="playing" :size="14" /><Play v-else :size="14" />
+              </button>
+              <button class="icon-btn" title="1시간 후" aria-label="1시간 후" @click="step(60)"><ChevronRight :size="14" /></button>
             </div>
-            <input v-model.number="t" type="range" :min="START" :max="END" step="10" aria-label="시각" @input="stop" />
-            <div class="ticks">
-              <span v-for="d in dayTicks" :key="d.m" :style="{ left: pct(d.m) + '%' }">{{ d.label }}</span>
+            <div class="clock">
+              <span class="hm num">{{ fmt(t).slice(6) }}</span>
+              <span class="date num">{{ fmt(t).slice(0, 5) }} ({{ weekday(t) }})</span>
             </div>
-          </div>
-          <div class="keys small">
-            <span><i class="wx-key" />기상 악화</span>
-            <span><i class="night-key" />야간</span>
+            <div class="slider">
+              <div class="track">
+                <span v-for="b in bands" :key="b.k" :class="['band', b.cls]" :style="{ left: b.left + '%', width: b.width + '%' }" />
+              </div>
+              <input v-model.number="t" type="range" :min="START" :max="END" step="10" aria-label="시각" @input="stop" />
+              <div class="ticks">
+                <span v-for="d in dayTicks" :key="d.m" :style="{ left: pct(d.m) + '%' }">{{ d.label }}</span>
+              </div>
+            </div>
           </div>
         </div>
+        <aside class="note-panel">
+          <div class="note">
+            <h3>알림 <small>{{ fmt(t) }}</small></h3>
+            <ul>
+              <li v-for="(n, i) in notes" :key="i" @click="onNote(n)">
+                <span class="tx"><span :class="['tg', { r: n.red }]">{{ n.tag }}</span>{{ n.text }}</span>
+                <span class="dt">{{ n.at }}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="tiles">
+            <button v-for="tl in TILES" :key="tl.id" @click="emit('go', tl.id)">
+              <component :is="tl.icon" :size="22" :stroke-width="1.6" />
+              <span>{{ tl.label }}</span>
+            </button>
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -253,6 +305,10 @@ function pick(vid) {
       <div class="panel-head">
         <h2>선박 현황</h2>
         <span class="muted">{{ label(plan) }} · {{ fmt(t) }} 기준 · 행 선택 시 지도 이동</span>
+        <div class="row-legend small">
+          <span><i class="dep" />출항</span><span><i class="berth" />작업중</span><span><i class="plan" />계획</span>
+          <span class="count">전체 조회 건수 <b>{{ states.length }}</b></span>
+        </div>
       </div>
       <div class="panel-body">
         <table class="grid vessel-list">
@@ -260,16 +316,16 @@ function pick(vid) {
             <tr><th>선박명</th><th>화물</th><th>상태</th><th>위치·예정</th><th>도착(NOR)</th><th>접안(ETB)</th><th>작업 종료</th><th>누적 체선료(USD)</th><th>산출 근거</th></tr>
           </thead>
           <tbody>
-            <tr v-for="s in states" :key="s.v.id" :class="['clickable', { on: selected === s.v.id, faded: s.phase === 'coming' || s.phase === 'left' }]" @click="pick(s.v.id)">
+            <tr v-for="s in states" :key="s.v.id" :class="['clickable', PHASE[s.phase].row, { sel: selected === s.v.id }]" @click="pick(s.v.id)">
               <td class="strong">{{ s.v.name }}</td>
               <td class="c">{{ s.v.product }} {{ s.v.dir }}</td>
-              <td class="c"><span class="phase" :style="{ color: s.ticking ? 'var(--bad)' : PHASE[s.phase].text === '작업 중' ? 'var(--blue)' : s.phase === 'waiting' ? 'var(--warn)' : 'var(--muted)' }">{{ s.ticking ? '체선 발생' : PHASE[s.phase].text }}</span></td>
+              <td class="c"><span class="phase" :class="{ bad: s.ticking }">{{ s.ticking ? '체선 발생' : PHASE[s.phase].text }}</span></td>
               <td class="small">{{ stateText(s) }}</td>
               <td class="c num">{{ fmt(s.v.eta) }}</td>
               <td class="c num">{{ fmt(s.p.etb) }}</td>
               <td class="c num">{{ fmt(s.p.etu) }}</td>
               <td class="r num" :class="{ bad: s.ticking, strong: s.cents > 0 }">{{ s.cents > 0 ? money(s.cents) : '0' }}</td>
-              <td class="c"><button class="btn ghost" @click.stop="emit('open', plan.id, s.v.id)">보기</button></td>
+              <td class="c"><button class="btn ghost" @click.stop="openCard(s.v.id)">선박 카드</button></td>
             </tr>
           </tbody>
         </table>
@@ -283,18 +339,44 @@ function pick(vid) {
 .good { color: var(--ok); }
 .bad { color: var(--bad); }
 .plan-table input[type='radio'] { margin: 0; }
-.vessel-list tr.faded td { color: var(--faint); }
-.vessel-list tr.faded td.strong { color: var(--muted); }
 .phase { font-weight: 700; font-size: 12.5px; }
+.side-note { margin-left: auto; color: var(--muted); }
 
-.legend { display: flex; gap: 14px; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 5px; }
-.legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
-.legend i.sk { width: 14px; height: 9px; border-radius: 0; background: var(--navy); }
+/* 상태 행 색 (출항 회색 · 작업중 노랑 · 계획 하늘) */
+.vessel-list tr.dep td { background: #ececec; color: #666; }
+.vessel-list tr.berth td { background: #fff6c4; }
+.vessel-list tr.plan td { background: #e1f5f7; }
+.vessel-list tr.sel td { box-shadow: inset 0 0 0 9999px rgba(214, 32, 47, 0.08); }
+.row-legend { margin-left: auto; display: flex; align-items: center; gap: 14px; color: #444; }
+.row-legend span { display: inline-flex; align-items: center; }
+.row-legend i { display: inline-block; width: 30px; height: 13px; margin-right: 6px; border: 1px solid rgba(0, 0, 0, 0.08); }
+.row-legend i.dep { background: #ececec; } .row-legend i.berth { background: #fff6c4; } .row-legend i.plan { background: #e1f5f7; }
+.count { color: #333; }
+.count b { color: var(--bad); font-size: 15px; margin-left: 4px; }
 
-.map-box { position: relative; padding: 0; height: 560px; }
-.map { position: absolute; inset: 0; background: #e8ecef; }
+/* 지도 + 알림 패널 */
+.row-map { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); border: 1px solid var(--line-strong); border-top: 2px solid var(--rule); background: #fff; }
+.map-box { position: relative; height: 580px; border-right: 1px solid var(--line-strong); }
+.map { position: absolute; inset: 0; background: #cfe3f1; }
 .night-tag { position: absolute; z-index: 900; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--line-strong); padding: 4px 10px; color: #444; }
+.map-legend { position: absolute; z-index: 900; left: 50%; transform: translateX(-50%); bottom: 76px; background: rgba(255, 255, 255, 0.95); border: 1px solid #c9ccd1; border-radius: 4px; padding: 4px 12px; font-size: 11.5px; color: #333; display: flex; gap: 14px; white-space: nowrap; }
+.map-legend > span { display: inline-flex; align-items: center; gap: 4px; }
+.map-legend :deep(svg) { display: block; }
+.bmk-key { background: #fff; border: 1px solid #666; font-size: 10px; font-weight: 700; padding: 0 3px; line-height: 13px; }
+.note-panel { display: flex; flex-direction: column; background: #2c3746; }
+.note { flex: 1; color: #fff; padding: 20px 22px; overflow: auto; }
+.note h3 { margin: 0 0 12px; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+.note h3 small { font-size: 11.5px; color: #aab3c0; font-weight: 400; }
+.note ul { list-style: none; margin: 0; padding: 0; }
+.note li { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; font-size: 12.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); cursor: pointer; }
+.note li:last-child { border-bottom: 0; }
+.note li:hover .tx { text-decoration: underline; }
+.note .tg { display: inline-block; font-size: 10.5px; padding: 0 5px; margin-right: 6px; border: 1px solid #7f8b9b; color: #d7dde5; }
+.note .tg.r { border-color: #ff8a8a; color: #ffb3b3; }
+.note .dt { color: #aab3c0; font-size: 11.5px; white-space: nowrap; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); background: #3a4657; }
+.tiles button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; color: #fff; font-size: 12px; text-align: center; padding: 12px 6px; border: 0; border-right: 1px solid rgba(255, 255, 255, 0.12); border-top: 1px solid rgba(255, 255, 255, 0.12); background: none; min-height: 84px; line-height: 1.35; white-space: pre-line; }
+.tiles button:hover { background: var(--accent); }
 
 .time-dock {
   position: absolute; z-index: 900; left: 10px; right: 10px; bottom: 10px; height: 56px;
@@ -318,30 +400,20 @@ function pick(vid) {
 .slider input::-moz-range-thumb { width: 12px; height: 16px; border-radius: 2px; background: #fff; border: 2px solid var(--navy); cursor: grab; }
 .ticks { position: absolute; left: 0; right: 0; bottom: -2px; height: 14px; }
 .ticks span { position: absolute; transform: translateX(-50%); font-size: 11px; color: var(--faint); white-space: nowrap; }
-.keys { display: flex; gap: 12px; color: var(--muted); margin-right: 40px; white-space: nowrap; }
-.keys span { display: inline-flex; align-items: center; gap: 5px; }
-.wx-key, .night-key { display: inline-block; width: 12px; height: 8px; background: var(--bad); }
-.night-key { background: #c9ccd1; }
+:deep(.vmk-wrap) { background: none; border: 0; }
+:deep(.vmk svg) { display: block; overflow: visible; }
+:deep(.vmk .lbl) { position: absolute; left: 20px; top: 3px; white-space: nowrap; font-size: 10.5px; font-weight: 700; color: #1e2a3a; text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 3px #fff; pointer-events: none; }
+:deep(.vmk .lbl em) { font-style: normal; color: var(--bad); }
+:deep(.vmk .lbl.sel) { color: var(--accent); }
 :deep(.leaflet-bottom) { bottom: 66px; }
 :deep(.leaflet-control-zoom) { border: 1px solid #cfd2d6 !important; border-radius: 2px !important; }
 :deep(.leaflet-control-zoom a) { color: #333; border-radius: 0 !important; }
 :deep(.map-tip) { font: inherit; font-size: 12px; line-height: 1.5; border-radius: 2px; border-color: var(--line-strong); }
 
 :deep(.sk-wrap) { background: none; border: 0; }
-:deep(.sk-mk) {
-  position: absolute; transform: translate(-50%, -50%); background: #fff; color: var(--navy); border: 1.5px solid var(--navy);
-  font-size: 11px; font-weight: 700; padding: 0 5px; line-height: 17px; white-space: nowrap;
-}
-:deep(.sk-mk.busy) { background: var(--navy); color: #fff; }
-:deep(.sk-mk.ctx) { border-color: #c9ccd1; color: #999; font-weight: 500; }
-:deep(.ship-mk) { background: none; border: 0; }
-:deep(.ship-mk svg) { overflow: visible; display: block; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
-:deep(.ship-lbl) {
-  position: absolute; left: 16px; top: 5px; white-space: nowrap; background: rgba(255, 255, 255, 0.95); padding: 0 4px;
-  font-size: 11px; font-weight: 700; color: var(--text); border: 1px solid var(--line-strong);
-}
-:deep(.ship-lbl em) { font-style: normal; color: var(--bad); margin-left: 2px; }
-:deep(.ship-lbl.sel) { border-color: var(--accent); color: var(--accent); }
+:deep(.bmk) { position: absolute; transform: translate(-50%, -50%); background: #fff; border: 1px solid #666; font-size: 10px; font-weight: 700; padding: 0 3px; line-height: 13px; color: #333; white-space: nowrap; }
+:deep(.bmk.busy) { border-color: #2c3746; background: #2c3746; color: #fff; }
+:deep(.bmk.ctx) { border-color: #b3b6bb; color: #999; font-weight: 500; }
 :deep(.anch-lbl) { background: none; border: 0; }
-:deep(.anch-lbl span) { position: absolute; transform: translate(-50%, -50%); color: #555; font-size: 11.5px; font-weight: 700; white-space: nowrap; text-shadow: 0 0 3px #fff, 0 0 3px #fff; }
+:deep(.anch-lbl span) { position: absolute; transform: translate(-50%, -50%); color: #7a5d00; font-size: 10.5px; white-space: nowrap; text-shadow: 0 0 3px #fff; }
 </style>

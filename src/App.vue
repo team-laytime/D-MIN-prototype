@@ -29,7 +29,8 @@ const focusId = ref('A')
 watch(result, (r) => { if (!r.error && !r.candidates.some((c) => c.id === focusId.value)) focusId.value = r.candidates[0]?.id ?? 'FCFS' })
 
 const drawer = ref(null)
-const openVessel = (simId, vid) => { drawer.value = { simId, vid } }
+// 선박 카드. at = 지도 시각(지도에서 열 때만), mode = 'card' | 'evidence'
+const openVessel = (simId, vid, opts = {}) => { drawer.value = { simId, vid, at: opts.at ?? null, mode: opts.mode ?? 'card' } }
 const drawerSim = computed(() => drawer.value && all.value.find((s) => s.id === drawer.value.simId))
 
 // 담당자 선택 이력. 추가만 하고 고치지 않는다.
@@ -98,7 +99,7 @@ const TOUR = [
     body: '막대 하나가 선박 한 척의 접안부터 작업 종료까지입니다. 주황은 체선 발생, 빗금은 기상 악화, 회색 띠는 야간, 점선은 도착 후 대기입니다.' },
   { section: '후보 비교', tab: 'compare', target: '.drawer', title: '산출 근거',
     body: '정박시간 개시, 기상 공제, 적용한 계약 규칙, 접안이 밀린 이유를 단계별로 보여 줍니다.',
-    do: () => openVessel(result.value.candidates[0].id, sampleVessel()) },
+    do: () => openVessel(result.value.candidates[0].id, sampleVessel(), { mode: 'evidence' }) },
   { section: '리스크·선택', tab: 'risk', target: '.risks', title: '남은 리스크',
     body: '날씨 급변, 설비, 탱크, 긴급 출하, 현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고 대안을 붙입니다.',
     try: '「해당」 항목을 읽고 「확인」 체크' },
@@ -134,7 +135,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
     <button class="util-link" @click="tab = 'home'">Home</button>
   </div>
   <header class="gnb">
-    <button class="brand" @click="tab = 'home'"><b>D-MIN</b><span>체선료 비교</span></button>
+    <button class="brand" @click="tab = 'home'"><b>D-</b><span>MIN</span><small>체선료 비교</small></button>
     <nav class="gnb-nav" aria-label="주 메뉴">
       <button v-for="g in NAV" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
     </nav>
@@ -204,8 +205,8 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
     </div>
   </footer>
 
-  <VesselDrawer v-if="drawer && drawerSim" :sim="drawerSim" :vid="drawer.vid" :scen="plain" :fcfs="result.fcfs"
-    @close="drawer = null" />
+  <VesselDrawer v-if="drawer && drawerSim" :key="`${drawer.simId}-${drawer.vid}-${drawer.mode}`" :sim="drawerSim" :vid="drawer.vid" :scen="plain" :fcfs="result.fcfs"
+    :at="drawer.at" :mode="drawer.mode" @close="drawer = null" />
   <Tour v-if="tourIdx !== null" :steps="TOUR" :index="tourIdx" @next="tourNext" @prev="tourPrev" @close="endTour" />
 </template>
 
@@ -215,9 +216,10 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .util-link { border: 0; background: none; padding: 0; color: #777; font-size: 12px; }
 .util-link:hover { color: var(--text); }
 .gnb { height: 82px; display: grid; grid-template-columns: 260px 1fr auto; align-items: center; padding: 0 48px; background: #fff; border-bottom: 1px solid var(--line-strong); }
-.brand { display: flex; align-items: baseline; gap: 8px; border: 0; background: none; padding: 0; text-align: left; }
-.brand b { font-size: 24px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
-.brand span { font-size: 13px; color: #555; font-weight: 500; }
+.brand { display: flex; align-items: baseline; border: 0; background: none; padding: 0; text-align: left; white-space: nowrap; }
+.brand b { font-size: 23px; font-weight: 800; color: var(--accent); letter-spacing: -0.6px; }
+.brand span { font-size: 23px; color: #e2672a; font-weight: 500; letter-spacing: -0.6px; }
+.brand small { margin-left: 8px; font-size: 12.5px; color: #777; }
 .gnb-nav { display: flex; justify-content: center; gap: 44px; }
 .gnb-nav button { border: 0; background: none; padding: 0; font-size: 16px; font-weight: 500; color: #333; height: 82px; border-bottom: 2px solid transparent; }
 .gnb-nav button:hover { color: var(--accent); }
@@ -229,14 +231,14 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .map-btn { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #cfd2d6; background: #fff; font-size: 12px; color: #444; }
 .map-btn:hover { border-color: #999; }
 .body { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 112px); }
-.lnb { padding: 34px 16px 60px 28px; border-right: 1px solid var(--line-strong); background: var(--bg); }
-.lnb-group + .lnb-group { margin-top: 10px; }
-.lnb-head { width: 100%; display: flex; align-items: center; justify-content: space-between; border: 0; background: none; padding: 8px 0; font-size: 13.5px; color: #444; text-align: left; }
+.lnb { padding: 34px 22px 60px 40px; border-right: 1px solid var(--line-strong); background: var(--bg); }
+.lnb-group + .lnb-group { margin-top: 0; }
+.lnb-head { width: 100%; height: 44px; display: flex; align-items: center; justify-content: space-between; border: 0; background: none; padding: 0; font-size: 14.5px; letter-spacing: 0.2px; color: #333; text-align: left; }
 .lnb-group.on .lnb-head { color: var(--accent); }
 .tog { width: 14px; height: 14px; display: grid; place-items: center; background: #c8cbd0; color: #fff; }
 .lnb-group.on .tog { background: var(--accent); }
-.lnb-sub { list-style: none; margin: 6px 0 4px; padding: 6px 0; background: #fff; border-left: 2px solid var(--accent); }
-.lnb-sub button { width: 100%; border: 0; background: none; text-align: left; padding: 5px 12px; font-size: 12.5px; color: #666; }
+.lnb-sub { list-style: none; margin: 2px 0 12px -14px; padding: 4px 0 6px 14px; background: #fff; border-left: 2px solid var(--accent); }
+.lnb-sub button { width: 100%; border: 0; background: none; text-align: left; padding: 3px 0 3px 12px; font-size: 12px; color: #777; }
 .lnb-sub button::before { content: '· '; color: #aaa; }
 .lnb-sub button.on { color: var(--text); font-weight: 700; }
 .lnb-sub button:hover { color: var(--text); }
