@@ -1,0 +1,6 @@
+plugins {
+	// 호스트에 JDK 25가 없으면 Gradle이 받아 온다. 컨테이너 빌드는 이미지 안의 JDK 25를 쓴다.
+	id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'dmin-server'

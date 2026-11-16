@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: dmin-server
+  # DB 접속은 환경변수 SPRING_DATASOURCE_URL·USERNAME·PASSWORD (compose.yaml이 runtime/secrets.env의 앱 계정 값으로 넣는다)
+  datasource:
+    hikari:
+      maximum-pool-size: 5
+  flyway:
+    # 스키마는 마이그레이션 컨테이너(dmin-migrate, 마이그레이션 계정)만 바꾼다. 앱은 앱 계정으로 붙고 Flyway를 돌리지 않는다.
+    enabled: false
+    placeholders:
+      app_user: ${DMIN_DB_APP_USER:dmin_app}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+  task:
+    scheduling:
+      # poll()은 execute() 전체(솔버 수 분 포함)를 그 자리에서 돌린다. Spring Boot 기본 스레드 수는 1이라
+      # 스레드가 1개면 계산하는 동안 heartbeat()도 멈추고, 90초 뒤 failStale이 멀쩡한 실행을 FAILED로 바꾼다.
+      # 그래서 맥박이 쓸 스레드를 따로 둔다.
+      pool:
+        size: 4
+      thread-name-prefix: dmin-sched-
+
+server:
+  port: 8080
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        # readiness는 DB까지 본다. 에이전트가 죽어도 Spring은 화면·조회를 계속 준다(실행만 실패로 기록).
+        readiness:
+          include: readinessState, db
+  metrics:
+    distribution:
+      percentiles-histogram:
+        # 정의서 3.2절: p95는 히스토그램으로 집계한다 (Prometheus histogram_quantile이 쓸 _bucket 계열을 낸다)
+        http.server.requests: true
+
+springdoc:
+  paths-to-match: /api/**
+  api-docs:
+    path: /api/docs
+  swagger-ui:
+    path: /api/docs/ui
+
+dmin:
+  agent:
+    url: ${DMIN_AGENT_URL:http://localhost:8000}
+  public-data:
+    service-key: ${PUBLIC_DATA_SERVICE_KEY:}
+
+logging:
+  level:
+    # JDK HttpClient 디버그 로그에 키가 든 URL이 찍히지 않게 한다
+    jdk.internal.httpclient: WARN
+
+---
+spring:
+  config:
+    activate:
+      on-profile: migrate
+  main:
+    web-application-type: none
+  flyway:
+    enabled: true
+dmin:
+  runs:
+    worker-enabled: false
+
+---
+# 호스트에서 ./gradlew bootRun (컨테이너 없이): 앱이 직접 Flyway를 돌린다.
+spring:
+  config:
+    activate:
+      on-profile: local
+  flyway:
+    enabled: true
+management:
+  endpoint:
+    health:
+      show-details: always

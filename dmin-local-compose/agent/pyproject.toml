@@ -1,0 +1,25 @@
+[project]
+name = "dmin-agent"
+version = "0.1.0"
+description = "D-MIN Python agent server: team CP-SAT engine (berth_sim) + MILP solver behind Spring (local k8s reference)"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.120",
+    "uvicorn>=0.38",
+    "numpy>=2.3",
+    "scipy>=1.16",
+    "ortools>=9.12,<10",   # 팀원 코드(berth_sim) CP-SAT — 팀원 requirements.txt와 같은 범위
+]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.16",
+    "pytest>=8.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

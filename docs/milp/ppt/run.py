@@ -27,7 +27,7 @@ sys.path.insert(0, str(HERE))
 import scipy                                                          # noqa: E402
 
 from pptcalc import Rules, eligible_berths, explain, fmt, hours, iso, load_case, make_plan, parse, relation, usd   # noqa: E402
-from planner import baseline, forward, generate, start_order, tank_profile, total_cents, verify   # noqa: E402
+from planner import baseline, fixed_plans, forward, generate, start_order, tank_profile, total_cents, verify   # noqa: E402
 from solver import solve                                                  # noqa: E402
 
 ENGINE_VERSION = "ppt-milp/1.0"
@@ -173,7 +173,8 @@ def optimize(request, top=3, compare=False, time_limit=120.0):
         "notes": notes,
     }
     for rank, (cents, picks) in enumerate(merged, 1):
-        plans = {p.key: p for c in picks for p in c.plans}
+        plans = {p.key: p for p in fixed_plans(rules, case)}                  # FIX·작업 중 입항 건은 묶음이 없어도(전부 FIX) 넣는다
+        plans.update({p.key: p for c in picks for p in c.plans})
         plans = list(plans.values())
         resp["candidates"].append({"rank": rank, "status": "OPTIMAL" if all(c.status == "OPTIMAL" for c in picks) else "TIME_LIMIT",
                                    **schedule_json(rules, case, plans, base),

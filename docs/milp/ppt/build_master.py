@@ -22,6 +22,56 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
       "r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships"}
 
 
+# 규칙 해석 묶음 — 실행할 때 고르면 patch를 데이터의 rule_patch 위에 덮어쓴다(Spring Rules.withProfile · Python pptcalc.profile_patch)
+# team = 팀원 코드(berth_sim, 2026-11-16)가 고정해 둔 해석. 근거는 why에 파일 이름으로 적는다
+PROFILES = {
+    "_doc": "규칙 해석 묶음. 실행할 때 고르면 이 patch를 데이터의 rule_patch 위에 덮어쓴다(Spring·Python 같은 값). 'ppt'는 이 표 그대로",
+    "ppt": {
+        "title": "기존 해석 (PPT 글자 그대로)",
+        "patch": {}
+    },
+    "team": {
+        "title": "팀원 코드 해석 (berth_sim)",
+        "source": "팀원 berth_sim 2026-11-16 — step2_night_pilot.py · berth_fit.py · master_data.py · after_etb/s10_weather_hours.py",
+        "patch": {
+            "eligibility.draft_check_biz": [
+                "IM",
+                "EX",
+                "DI",
+                "DO"
+            ],
+            "eligibility.min_dwt_by_berth": {
+                "BUOY2": 80000,
+                "BUOY3": 80000
+            },
+            "night_pilotage.last_pob.subject_any": [
+                {
+                    "grt_min": 75000
+                },
+                {
+                    "grt_min": 30000,
+                    "biz": [
+                        "IM"
+                    ],
+                    "draft_min": 10.5
+                }
+            ],
+            "night_pilotage.last_pob.compare": "ETA_DAY",
+            "night_pilotage.dawn.scope": "SUBJECT",
+            "demurrage.weather_basis": "DEMURRAGE"
+        },
+        "why": {
+            "eligibility.draft_check_biz": "Draft를 수입·수출 모두 비교 (berth_fit.py: '현업 확인: 장표의 수입만보다 넓게')",
+            "eligibility.min_dwt_by_berth": "Buoy 최소 DWT 80,000 (master_data.py BERTH_SUPPLEMENT, 공개 부두 제원표)",
+            "night_pilotage.last_pob.subject_any": "PPT의 '3만톤 이하 AND 수입선'을 '3만톤 이상'으로 읽음 (step2_night_pilot.py 해석 1, 질문 Q1)",
+            "night_pilotage.last_pob.compare": "ETA를 그 날짜의 Last POB와만 비교 (step2_night_pilot.py)",
+            "night_pilotage.dawn.scope": "새벽 02~08시 금지를 야간 도선 대상 선박에만 (step2_night_pilot.py 3-(b))",
+            "demurrage.weather_basis": "기상체선 = 기상 제약 ∩ [정박종료, 호스분리] (after_etb/s10_weather_hours.py, 질문 Q7)"
+        }
+    }
+}
+
+
 def read_xlsx(path):
     """{시트 이름: {행 번호: {열 글자: 값}}}"""
     z = zipfile.ZipFile(path)
@@ -158,16 +208,20 @@ def main(xlsx):
         "ship_classes": ship_classes,
         "shifting": {"_ppt": "07쪽", "table": {k: {"switching_h": v[0], "direction_h": v[1]} for k, v in SHIFTING.items()},
                      "assumed": {k: f"{v} 값을 씀 (PPT 표에 없음)" for k, v in ASSUMED_SHIFT.items()}},
-        "eligibility": {"_ppt": "12쪽 2. 부두 정보", "draft_check_biz": ["IM"]},
+        "eligibility": {"_ppt": "12쪽 2. 부두 정보", "draft_check_biz": ["IM"], "min_dwt_by_berth": {},
+                        "_min_dwt_by_berth": "부두별 최소 DWT (예: Buoy 80,000 — 시트에 없고 공개 제원표에만 있음). 비어 있으면 비교하지 않는다"},
         "night_pilotage": {
             "_ppt": "08쪽 ②",
             "last_pob": {
                 "subject_any": [{"grt_min": 75000}, {"grt_max": 30000, "biz": ["IM"], "draft_min": 10.5}],
                 "sunset_minus_h": [{"grt_max": 50000, "h": 1.5}, {"grt_min_exclusive": 50000, "h": 2.0}],
                 "compare": "ETA",
+                "_compare": "ETA = ETA가 그날 Last POB 이후이거나 자정~08시 도착이면 다가오는 08시까지 금지 · ETA_DAY = ETA가 그 날짜의 Last POB 이후일 때만(자정~08시 도착은 새벽 규칙만) · 그 밖 = 매일 Last POB~08시 금지",
                 "release": "08:00",
             },
-            "dawn": {"grt_min": 30000, "from": "02:00", "to": "08:00", "release": "08:00"},
+            "dawn": {"grt_min": 30000, "scope": "GRT",
+                     "_scope": "GRT = GRT ≥ grt_min인 모든 선박 · SUBJECT = 야간 도선 대상(last_pob.subject_any)이면서 GRT ≥ grt_min인 선박만",
+                     "from": "02:00", "to": "08:00", "release": "08:00"},
         },
         "pair_rules": {
             "_ppt": "07쪽 ① · 08쪽 ③",
@@ -185,6 +239,7 @@ def main(xlsx):
         },
         "demurrage": {"_ppt": "11쪽", "weather_ratio": "1/2", "weather_basis": "USED"},
         "location": {"name": "울산", "lat": 35.5384, "lon": 129.3114, "tz_hours": 9},
+        "profiles": PROFILES,
     }
     (HERE / "rules").mkdir(exist_ok=True)
     (HERE / "rules" / "terminal.json").write_text(json.dumps(terminal, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

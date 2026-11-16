@@ -1,0 +1,20 @@
+# 입구 (쿠버네티스 판의 Ingress 자리). 주소 하나에서 / 는 Vue, /api 는 Spring으로 보낸다.
+# 로컬은 HTTP 8080만 쓴다. EC2에서는 ':8080' 자리에 도메인을 쓰고 auto_https off 를 빼면 Caddy가 HTTPS 인증서를 받아 온다.
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:8080 {
+	# /api 와 /api/… 만 Spring으로 (경로 조각 단위라 /apix 는 걸리지 않는다)
+	@api path /api /api/*
+	handle @api {
+		reverse_proxy dmin-server:8080
+	}
+
+	# 나머지는 전부 Vue(nginx). /internal/** · /actuator/** 도 여기로 가므로 밖에서는 Spring에 닿지 않는다
+	handle {
+		reverse_proxy dmin-front:8080
+	}
+}

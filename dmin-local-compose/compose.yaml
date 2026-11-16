@@ -1,0 +1,243 @@
+# D-MIN 로컬 실행판 (Docker Compose) — 쿠버네티스 없이, 'EC2 한 대 + Docker Compose' 배치안과 같은 모양.
+# 띄우기는 make up (scripts/up.sh: 비밀값 → 이미지 → DB → 마이그레이션 → 앱 순서). 직접 docker compose up -d 를 해도 같은 순서로 뜬다.
+# 값은 두 파일에서 온다(둘 다 커밋 안 됨): .env(공공데이터 키·포트) · runtime/secrets.env(DB·Grafana 비밀번호, 자동 생성).
+#
+# 누가 누구에게 닿는가 = 아래 networks 목록 그대로다 (쿠버네티스 판의 NetworkPolicy 12장 자리).
+#   web      caddy ↔ Vue                       api      caddy ↔ Spring
+#   agent    Spring ↔ Python (둘뿐)            db       Spring·마이그레이션 ↔ Postgres
+#   jobs     수집 타이머 → Spring               metrics  Prometheus → Spring, Grafana → Prometheus
+#   public   호스트 포트를 여는 컨테이너만(caddy·grafana)     outbound  Spring만: 공공데이터포털로 나가는 길
+# internal: true 인 네트워크는 바깥(인터넷·호스트)으로 나가는 길이 없다 → Python·Postgres·Prometheus는 인터넷에 못 나간다.
+name: dmin
+
+# 쿠버네티스 판 securityContext 자리: 읽기 전용 파일 시스템 · 권한 전부 제거 · 권한 상승 금지 · 죽으면 다시 띄움
+x-hardened: &hardened
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  restart: unless-stopped
+
+services:
+  # ── 입구: 호스트 127.0.0.1:18089 → / 는 Vue, /api 는 Spring. /internal·/actuator 는 넘기지 않는다(Vue가 받는다) ──
+  caddy:
+    <<: *hardened
+    image: caddy:2.11.7-alpine
+    container_name: dmin-caddy
+    user: "65532:65532"
+    # caddy 실행 파일에 '낮은 포트 열기' 권한이 붙어 있어, 이 권한 하나는 되돌려 놓아야 실행된다(전부 빼면 'operation not permitted')
+    cap_add: [NET_BIND_SERVICE]
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    tmpfs: [/data, /config, /tmp]
+    ports:
+      - "127.0.0.1:${DMIN_PORT:-18089}:8080"
+    networks: [public, web, api]
+    depends_on:
+      dmin-front: { condition: service_healthy }
+      dmin-server: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+    mem_limit: 128m
+
+  # ── Vue 화면 (nginx-unprivileged 8080, root 아님) ──
+  dmin-front:
+    <<: *hardened
+    build: ./front
+    image: dmin-compose-front:local
+    container_name: dmin-front
+    tmpfs: [/tmp]
+    networks: [web]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+    mem_limit: 128m
+
+  # ── Spring: API · 실행 지휘(작업 큐) · 규칙 계산(재검증) · 공공데이터 어댑터. DB에는 앱 계정으로만 붙는다 ──
+  dmin-server:
+    <<: *hardened
+    build: ./server
+    image: dmin-compose-server:local
+    container_name: dmin-server
+    hostname: dmin-server          # /api/system/status 와 실행 목록의 '처리 컨테이너'에 이 이름이 나온다
+    init: true                     # tini가 1번 프로세스 → JVM이 죽으면 컨테이너가 끝나고 restart 정책이 다시 띄운다
+    tmpfs: ["/tmp:size=256m"]
+    environment:
+      DMIN_AGENT_URL: http://dmin-agent:8000
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=60 -XX:+UseSerialGC -XX:TieredStopAtLevel=1
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dmin-postgres:5432/dmin
+      SPRING_DATASOURCE_USERNAME: dmin_app
+      SPRING_DATASOURCE_PASSWORD: ${APP_PASSWORD:?runtime/secrets.env가 없습니다 - make up 으로 띄우세요}
+      PUBLIC_DATA_SERVICE_KEY: ${PUBLIC_DATA_SERVICE_KEY:-}
+    networks: [api, agent, db, jobs, metrics, outbound]
+    depends_on:
+      dmin-postgres: { condition: service_healthy }
+      dmin-migrate: { condition: service_completed_successfully }   # 마이그레이션이 실패하면 Spring을 바꾸지 않는다
+    healthcheck:   # 이미지에 curl·wget이 없어 bash의 /dev/tcp로 readiness(DB 포함)를 본다
+      test:
+        - CMD
+        - bash
+        - -c
+        - |
+          exec 3<>/dev/tcp/127.0.0.1/8080 || exit 1
+          printf 'GET /actuator/health/readiness HTTP/1.0\r\nHost: localhost\r\n\r\n' >&3
+          grep -q '"status":"UP"' <&3
+      interval: 5s
+      timeout: 4s
+      retries: 6
+      start_period: 120s
+    stop_grace_period: 30s
+    mem_limit: 640m
+
+  # ── Python 에이전트: 솔버(팀 엔진 CP-SAT · 기존 엔진 HiGHS). agent 네트워크에만 있어 Spring만 부를 수 있고 인터넷·DB에 못 간다 ──
+  dmin-agent:
+    <<: *hardened
+    build: ./agent
+    image: dmin-compose-agent:local
+    container_name: dmin-agent
+    tmpfs: ["/tmp:size=128m"]
+    networks: [agent]
+    healthcheck:
+      test: ["CMD", "/app/.venv/bin/python", "-c", "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 9
+      start_period: 30s
+    mem_limit: 2560m               # 기존 엔진이 54척을 팀 해석으로 풀 때 약 1.5GiB (쿠버네티스 판에서 잰 값)
+
+  # ── DB: RDS for PostgreSQL 17 + pgvector 자리. 데이터는 볼륨 dmin_pgdata에 남는다(make down 해도 남고, make clean 이면 지워진다) ──
+  dmin-postgres:
+    image: pgvector/pgvector:pg17
+    container_name: dmin-postgres
+    user: "999:999"
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dmin
+      POSTGRES_USER: dmin_owner
+      POSTGRES_PASSWORD: ${OWNER_PASSWORD:?runtime/secrets.env가 없습니다 - make up 으로 띄우세요}
+      APP_DB_PASSWORD: ${APP_PASSWORD:?runtime/secrets.env가 없습니다 - make up 으로 띄우세요}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    networks: [db]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U dmin_owner -d dmin"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    mem_limit: 384m
+
+  # ── DB 마이그레이션(Flyway): 테이블 주인 계정(dmin_owner)으로 한 번 돌고 끝난다. 앱 계정에는 결정 이력 UPDATE·DELETE가 없다 ──
+  dmin-migrate:
+    image: dmin-compose-server:local
+    container_name: dmin-migrate
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: "no"
+    command: ["--migrate"]
+    tmpfs: [/tmp]
+    environment:
+      SPRING_PROFILES_ACTIVE: migrate
+      DMIN_DB_APP_USER: dmin_app
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=60 -XX:TieredStopAtLevel=1
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dmin-postgres:5432/dmin
+      SPRING_DATASOURCE_USERNAME: dmin_owner
+      SPRING_DATASOURCE_PASSWORD: ${OWNER_PASSWORD:?runtime/secrets.env가 없습니다 - make up 으로 띄우세요}
+    networks: [db]
+    depends_on:
+      dmin-postgres: { condition: service_healthy }
+    mem_limit: 512m
+
+  # ── 수집 타이머: 매일 06:00 KST에 Spring의 내부 수집 경로를 깨운다(쿠버네티스 판의 CronJob 자리). DB·키를 갖지 않는다 ──
+  dmin-collector:
+    <<: *hardened
+    image: curlimages/curl:8.11.1
+    container_name: dmin-collector
+    entrypoint: ["/bin/sh", "/collector.sh"]
+    command: ["loop"]
+    volumes:
+      - ./scripts/collector.sh:/collector.sh:ro
+    environment:
+      COLLECT_URL: http://dmin-server:8080/internal/collect/eta
+      COLLECT_AT_KST: "06:00"
+    networks: [jobs]
+    depends_on:
+      dmin-server: { condition: service_healthy }
+    mem_limit: 32m
+
+  # ── 관측: Prometheus가 Spring의 /actuator/prometheus를 모으고(3일 보관) Grafana가 보여 준다 (정의서 3.2절) ──
+  prometheus:
+    <<: *hardened
+    image: prom/prometheus:v3.13.5
+    container_name: dmin-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=3d
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - promdata:/prometheus
+    networks: [metrics]
+    depends_on:
+      dmin-server: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9090/-/healthy"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    mem_limit: 384m
+
+  grafana:
+    image: grafana/grafana:13.3.1
+    container_name: dmin-grafana
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:?runtime/secrets.env가 없습니다 - make up 으로 띄우세요}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/dmin-server.json
+    volumes:
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    ports:
+      - "127.0.0.1:${GRAFANA_PORT:-13000}:3000"
+    networks: [public, metrics]
+    depends_on:
+      prometheus: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 30s
+    mem_limit: 512m                # Grafana 13은 가만히 있어도 약 250MiB를 쓴다 (256m이면 한도에 붙어 돈다)
+
+networks:
+  public: {}
+  outbound: {}
+  web: { internal: true }
+  api: { internal: true }
+  agent: { internal: true }
+  db: { internal: true }
+  jobs: { internal: true }
+  metrics: { internal: true }
+
+volumes:
+  pgdata: {}
+  promdata: {}
+  grafanadata: {}

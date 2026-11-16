@@ -1,0 +1,682 @@
+{
+ "request_id": "REQ-20261112-001",
+ "request_hash": "24f1d0d618acafcd",
+ "case_id": "EXAMPLE-3",
+ "title": "API 예시 — #6·#7·#8 석유제품선 3척 + FIX 1척 + 기상 악화 [가상]",
+ "engine": {
+  "version": "berth_sim-cpsat/d755c3eb1ced",
+  "rules_version": "ulsan-clx/ppt-v1",
+  "solver": "OR-Tools CP-SAT 9.15.6755",
+  "python": "3.13.15",
+  "formulas": "팀원 코드 berth_sim 그대로 — ETB 규칙 step1~3 · ETB 이후 after_etb s1~s12 · cpsat_model (고치지 않음)",
+  "objective": "체선료 합 최소 ≫ 부두 변경 최소 ≫ 일찍 접안 (팀원 코드 그대로, 5분 칸, 불필요한 대기 금지)",
+  "source_sha256": "d755c3eb1ced565e54689e5239ab3ee3446ab2dcf0fbe3ecd4f1a1b5c16b4ebf"
+ },
+ "status": "OK",
+ "plan_window": {
+  "start": "2026-11-10T00:00",
+  "end": "2026-11-16T00:00"
+ },
+ "baseline": {
+  "total_usd": 9252.07,
+  "plans": [
+   {
+    "arrival_id": "A",
+    "vessel": "MR-DSL (4만~5만)",
+    "class": "PP",
+    "biz": "EX",
+    "cargo_group": "DSL",
+    "status": "PLANNED",
+    "berth": "#6",
+    "eta": "2026-11-10T06:00",
+    "etb": "2026-11-10T07:30",
+    "work_start": "2026-11-10T08:30",
+    "work_end": "2026-11-11T11:26",
+    "hose_off": "2026-11-11T11:56",
+    "etu": "2026-11-11T13:26",
+    "laytime_start": "2026-11-10T07:00",
+    "laytime_rule": "Daylight",
+    "laytime_end": "2026-11-11T19:00",
+    "allowed_hours": 36.0,
+    "weather_hours": 0.0,
+    "deduction_hours": 0.0,
+    "demurrage_hours": 0.0,
+    "demurrage_usd": 0.0,
+    "wait_hours": 1.5,
+    "why_etb": "ETA + Direction",
+    "trace": [
+     {
+      "rule": "P7",
+      "text": "접안 ETB = 11/10 07:30 — ETA + Direction"
+     },
+     {
+      "rule": "P9",
+      "text": "작업시작 = ETB 11/10 07:30 + 1h = 11/10 08:30"
+     },
+     {
+      "rule": "P10",
+      "text": "작업완료 = 11/10 08:30 + 작업시간 26.93h = 11/11 11:26"
+     },
+     {
+      "rule": "P11",
+      "text": "호스분리 = 작업완료 + 0.5h = 11/11 11:56"
+     },
+     {
+      "rule": "P12",
+      "text": "이안 ETU = 작업완료 + 2h = 11/11 13:26"
+     },
+     {
+      "rule": "P13",
+      "text": "ETANR = 11/10 06:00 (NOR 없음 → ETA)"
+     },
+     {
+      "rule": "P15",
+      "text": "정박개시 = 11/10 07:00 — 일출 전 → ETANR 날의 07시 (10쪽)"
+     },
+     {
+      "rule": "P16",
+      "text": "정박종료 = 정박개시 + Laytime 36h = 11/11 19:00"
+     },
+     {
+      "rule": "P17",
+      "text": "기상체선 시간 0h × 1/2 = 공제 0h"
+     },
+     {
+      "rule": "P18",
+      "text": "체선시간 = max(0, 11/11 11:56 − 11/11 19:00 − 0h) = 0h"
+     },
+     {
+      "rule": "P19",
+      "text": "체선료 = 0h × $26,252.00/일 ÷ 24 = $0.00"
+     }
+    ]
+   },
+   {
+    "arrival_id": "B",
+    "vessel": "MR-RG (4만~5만)",
+    "class": "PP",
+    "biz": "EX",
+    "cargo_group": "R-G",
+    "status": "PLANNED",
+    "berth": "#7",
+    "eta": "2026-11-10T09:00",
+    "etb": "2026-11-10T17:30",
+    "work_start": "2026-11-10T18:30",
+    "work_end": "2026-11-11T21:26",
+    "hose_off": "2026-11-11T21:56",
+    "etu": "2026-11-11T23:26",
+    "laytime_start": "2026-11-10T15:00",
+    "laytime_rule": "Daylight",
+    "laytime_end": "2026-11-12T03:00",
+    "allowed_hours": 36.0,
+    "weather_hours": 0.0,
+    "deduction_hours": 0.0,
+    "demurrage_hours": 0.0,
+    "demurrage_usd": 0.0,
+    "wait_hours": 8.5,
+    "why_etb": "ETA + Direction → 부두 제약 WX-1이라 그 끝으로",
+    "trace": [
+     {
+      "rule": "P7",
+      "text": "접안 ETB = 11/10 17:30 — ETA + Direction → 부두 제약 WX-1이라 그 끝으로"
+     },
+     {
+      "rule": "P9",
+      "text": "작업시작 = ETB 11/10 17:30 + 1h = 11/10 18:30"
+     },
+     {
+      "rule": "P10",
+      "text": "작업완료 = 11/10 18:30 + 작업시간 26.93h = 11/11 21:26"
+     },
+     {
+      "rule": "P11",
+      "text": "호스분리 = 작업완료 + 0.5h = 11/11 21:56"
+     },
+     {
+      "rule": "P12",
+      "text": "이안 ETU = 작업완료 + 2h = 11/11 23:26"
+     },
+     {
+      "rule": "P13",
+      "text": "ETANR = 11/10 09:00 (NOR 없음 → ETA)"
+     },
+     {
+      "rule": "P15",
+      "text": "정박개시 = 11/10 15:00 — 일출~일몰 사이 → ETANR + 6h (10쪽)"
+     },
+     {
+      "rule": "P16",
+      "text": "정박종료 = 정박개시 + Laytime 36h = 11/12 03:00"
+     },
+     {
+      "rule": "P17",
+      "text": "기상체선 시간 0h × 1/2 = 공제 0h"
+     },
+     {
+      "rule": "P18",
+      "text": "체선시간 = max(0, 11/11 21:56 − 11/12 03:00 − 0h) = 0h"
+     },
+     {
+      "rule": "P19",
+      "text": "체선료 = 0h × $26,252.00/일 ÷ 24 = $0.00"
+     }
+    ]
+   },
+   {
+    "arrival_id": "C",
+    "vessel": "LR1-JET (7만~8만)",
+    "class": "PP",
+    "biz": "EX",
+    "cargo_group": "JET",
+    "status": "PLANNED",
+    "berth": "#8",
+    "eta": "2026-11-10T07:00",
+    "etb": "2026-11-10T08:30",
+    "work_start": "2026-11-10T09:30",
+    "work_end": "2026-11-11T22:02",
+    "hose_off": "2026-11-11T22:32",
+    "etu": "2026-11-12T00:02",
+    "laytime_start": "2026-11-10T08:30",
+    "laytime_rule": "ETB가 더 이름",
+    "laytime_end": "2026-11-11T20:30",
+    "allowed_hours": 36.0,
+    "weather_hours": 0.0,
+    "deduction_hours": 0.0,
+    "demurrage_hours": 2.0333,
+    "demurrage_usd": 2059.77,
+    "wait_hours": 1.5,
+    "why_etb": "ETA + Direction",
+    "trace": [
+     {
+      "rule": "P7",
+      "text": "접안 ETB = 11/10 08:30 — ETA + Direction"
+     },
+     {
+      "rule": "P9",
+      "text": "작업시작 = ETB 11/10 08:30 + 1h = 11/10 09:30"
+     },
+     {
+      "rule": "P10",
+      "text": "작업완료 = 11/10 09:30 + 작업시간 36.53h = 11/11 22:02"
+     },
+     {
+      "rule": "P11",
+      "text": "호스분리 = 작업완료 + 0.5h = 11/11 22:32"
+     },
+     {
+      "rule": "P12",
+      "text": "이안 ETU = 작업완료 + 2h = 11/12 00:02"
+     },
+     {
+      "rule": "P13",
+      "text": "ETANR = 11/10 07:00 (NOR 없음 → ETA)"
+     },
+     {
+      "rule": "P15",
+      "text": "정박개시 = 11/10 08:30 — 일출~일몰 사이 → ETANR + 6h = 11/10 13:00보다 ETB가 이름 → 정박개시 = ETB (10쪽)"
+     },
+     {
+      "rule": "P16",
+      "text": "정박종료 = 정박개시 + Laytime 36h = 11/11 20:30"
+     },
+     {
+      "rule": "P17",
+      "text": "기상체선 시간 0h × 1/2 = 공제 0h"
+     },
+     {
+      "rule": "P18",
+      "text": "체선시간 = max(0, 11/11 22:32 − 11/11 20:30 − 0h) = 2.03h"
+     },
+     {
+      "rule": "P19",
+      "text": "체선료 = 2.03h × $24,312.00/일 ÷ 24 = $2,059.77"
+     }
+    ]
+   },
+   {
+    "arrival_id": "F",
+    "vessel": "LR1-DSL (7만~8만)",
+    "class": "PP",
+    "biz": "EX",
+    "cargo_group": "DSL",
+    "status": "FIX",
+    "berth": "#8",
+    "eta": "2026-11-11T20:00",
+    "etb": "2026-11-12T08:00",
+    "work_start": "2026-11-12T09:00",
+    "work_end": "2026-11-14T01:36",
+    "hose_off": "2026-11-14T02:06",
+    "etu": "2026-11-14T03:36",
+    "laytime_start": "2026-11-12T07:00",
+    "laytime_rule": "Daylight",
+    "laytime_end": "2026-11-13T19:00",
+    "allowed_hours": 36.0,
+    "weather_hours": 0.0,
+    "deduction_hours": 0.0,
+    "demurrage_hours": 7.1,
+    "demurrage_usd": 7192.3,
+    "wait_hours": 12.0,
+    "why_etb": "FIX (입력값)",
+    "trace": [
+     {
+      "rule": "P7",
+      "text": "접안 ETB = 11/12 08:00 — FIX (입력값)"
+     },
+     {
+      "rule": "P9",
+      "text": "작업시작 = ETB 11/12 08:00 + 1h = 11/12 09:00"
+     },
+     {
+      "rule": "P10",
+      "text": "작업완료 = 11/12 09:00 + 작업시간 40.6h = 11/14 01:36"
+     },
+     {
+      "rule": "P11",
+      "text": "호스분리 = 작업완료 + 0.5h = 11/14 02:06"
+     },
+     {
+      "rule": "P12",
+      "text": "이안 ETU = 작업완료 + 2h = 11/14 03:36"
+     },
+     {
+      "rule": "P13",
+      "text": "ETANR = 11/11 20:00 (NOR 없음 → ETA)"
+     },
+     {
+      "rule": "P15",
+      "text": "정박개시 = 11/12 07:00 — 일몰 뒤 → ETANR 다음 날의 07시 (10쪽)"
+     },
+     {
+      "rule": "P16",
+      "text": "정박종료 = 정박개시 + Laytime 36h = 11/13 19:00"
+     },
+     {
+      "rule": "P17",
+      "text": "기상체선 시간 0h × 1/2 = 공제 0h"
+     },
+     {
+      "rule": "P18",
+      "text": "체선시간 = max(0, 11/14 02:06 − 11/13 19:00 − 0h) = 7.1h"
+     },
+     {
+      "rule": "P19",
+      "text": "체선료 = 7.1h × $24,312.00/일 ÷ 24 = $7,192.30"
+     }
+    ]
+   }
+  ],
+  "violations": []
+ },
+ "current_plan": null,
+ "candidates": [
+  {
+   "rank": 1,
+   "status": "OPTIMAL",
+   "total_usd": 9252.07,
+   "plans": [
+    {
+     "arrival_id": "A",
+     "vessel": "MR-DSL (4만~5만)",
+     "class": "PP",
+     "biz": "EX",
+     "cargo_group": "DSL",
+     "status": "PLANNED",
+     "berth": "#6",
+     "eta": "2026-11-10T06:00",
+     "etb": "2026-11-10T07:30",
+     "work_start": "2026-11-10T08:30",
+     "work_end": "2026-11-11T11:26",
+     "hose_off": "2026-11-11T11:56",
+     "etu": "2026-11-11T13:26",
+     "laytime_start": "2026-11-10T07:00",
+     "laytime_rule": "ETANR <= 일출 06:53 → ETANR날 07:00",
+     "laytime_end": "2026-11-11T19:00",
+     "allowed_hours": 36.0,
+     "weather_hours": 0.0,
+     "deduction_hours": 0.0,
+     "demurrage_hours": 0.0,
+     "demurrage_usd": 0.0,
+     "wait_hours": 1.5,
+     "why_etb": "ETB 11/10 07:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 도착 전 (ETA + Direction))",
+     "trace": [
+      {
+       "rule": "ETB",
+       "text": "ETB 11/10 07:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 도착 전 (ETA + Direction))",
+       "src": "berth_sim/feasibility.py · cpsat_model.py"
+      },
+      {
+       "rule": "P9",
+       "text": "작업시작 = ETB 11/10 07:30 + 1h = 11/10 08:30",
+       "src": "after_etb/s1_work_start.py"
+      },
+      {
+       "rule": "P10",
+       "text": "작업완료 = 작업시작 + 물량 ÷ 평균 Rate 11,138.61/h = 11/11 11:26 (평균 Rate는 요청의 Rate·작업시간을 과거 실적 한 줄로 넣어 구함 — 팀원 코드는 원래 과거 Shipment에서 구한다)",
+       "src": "after_etb/s2_work_finish.py"
+      },
+      {
+       "rule": "P11",
+       "text": "호스분리 = 작업완료 + 30분 = 11/11 11:56",
+       "src": "after_etb/s4_hose_off.py"
+      },
+      {
+       "rule": "P12",
+       "text": "이안 ETU = 작업완료 + 2h = 11/11 13:26",
+       "src": "after_etb/s3_etu.py"
+      },
+      {
+       "rule": "P13",
+       "text": "ETANR = NVL(NOR, ETA) = 11/10 06:00",
+       "src": "after_etb/s5_etanr.py"
+      },
+      {
+       "rule": "P14·P15",
+       "text": "정박개시 11/10 07:00 — ETANR <= 일출 06:53 → ETANR날 07:00 (Daylight 적용)",
+       "src": "after_etb/s8_laytime_start_daylight.py"
+      },
+      {
+       "rule": "P16",
+       "text": "정박종료 = 정박개시 + 허용 36h = 11/11 19:00",
+       "src": "after_etb/s9_laytime_end.py"
+      },
+      {
+       "rule": "P17",
+       "text": "기상체선 = 기상 제약 ∩ [정박종료, 호스분리] = 0h → ½ 공제",
+       "src": "after_etb/s10_weather_hours.py"
+      },
+      {
+       "rule": "P18",
+       "text": "체선시간 = max(0, 호스분리 − 정박종료 − 기상체선/2) = 0h",
+       "src": "after_etb/s11_demurrage_time.py"
+      },
+      {
+       "rule": "P19",
+       "text": "체선료 = 체선시간 × $26,252/일 ÷ 24 = $0.00",
+       "src": "after_etb/s12_demurrage_fee.py"
+      }
+     ]
+    },
+    {
+     "arrival_id": "B",
+     "vessel": "MR-RG (4만~5만)",
+     "class": "PP",
+     "biz": "EX",
+     "cargo_group": "R-G",
+     "status": "PLANNED",
+     "berth": "#7",
+     "eta": "2026-11-10T09:00",
+     "etb": "2026-11-10T17:30",
+     "work_start": "2026-11-10T18:30",
+     "work_end": "2026-11-11T21:26",
+     "hose_off": "2026-11-11T21:56",
+     "etu": "2026-11-11T23:26",
+     "laytime_start": "2026-11-10T15:00",
+     "laytime_rule": "일출 06:53 < ETANR < 일몰 17:21 → ETANR + 6h",
+     "laytime_end": "2026-11-12T03:00",
+     "allowed_hours": 36.0,
+     "weather_hours": 0.0,
+     "deduction_hours": 0.0,
+     "demurrage_hours": 0.0,
+     "demurrage_usd": 0.0,
+     "wait_hours": 8.5,
+     "why_etb": "ETB 11/10 17:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 부두 제약 (기상·공사·설비))",
+     "trace": [
+      {
+       "rule": "ETB",
+       "text": "ETB 11/10 17:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 부두 제약 (기상·공사·설비))",
+       "src": "berth_sim/feasibility.py · cpsat_model.py"
+      },
+      {
+       "rule": "P9",
+       "text": "작업시작 = ETB 11/10 17:30 + 1h = 11/10 18:30",
+       "src": "after_etb/s1_work_start.py"
+      },
+      {
+       "rule": "P10",
+       "text": "작업완료 = 작업시작 + 물량 ÷ 평균 Rate 11,138.61/h = 11/11 21:26 (평균 Rate는 요청의 Rate·작업시간을 과거 실적 한 줄로 넣어 구함 — 팀원 코드는 원래 과거 Shipment에서 구한다)",
+       "src": "after_etb/s2_work_finish.py"
+      },
+      {
+       "rule": "P11",
+       "text": "호스분리 = 작업완료 + 30분 = 11/11 21:56",
+       "src": "after_etb/s4_hose_off.py"
+      },
+      {
+       "rule": "P12",
+       "text": "이안 ETU = 작업완료 + 2h = 11/11 23:26",
+       "src": "after_etb/s3_etu.py"
+      },
+      {
+       "rule": "P13",
+       "text": "ETANR = NVL(NOR, ETA) = 11/10 09:00",
+       "src": "after_etb/s5_etanr.py"
+      },
+      {
+       "rule": "P14·P15",
+       "text": "정박개시 11/10 15:00 — 일출 06:53 < ETANR < 일몰 17:21 → ETANR + 6h (Daylight 적용)",
+       "src": "after_etb/s8_laytime_start_daylight.py"
+      },
+      {
+       "rule": "P16",
+       "text": "정박종료 = 정박개시 + 허용 36h = 11/12 03:00",
+       "src": "after_etb/s9_laytime_end.py"
+      },
+      {
+       "rule": "P17",
+       "text": "기상체선 = 기상 제약 ∩ [정박종료, 호스분리] = 0h → ½ 공제",
+       "src": "after_etb/s10_weather_hours.py"
+      },
+      {
+       "rule": "P18",
+       "text": "체선시간 = max(0, 호스분리 − 정박종료 − 기상체선/2) = 0h",
+       "src": "after_etb/s11_demurrage_time.py"
+      },
+      {
+       "rule": "P19",
+       "text": "체선료 = 체선시간 × $26,252/일 ÷ 24 = $0.00",
+       "src": "after_etb/s12_demurrage_fee.py"
+      }
+     ]
+    },
+    {
+     "arrival_id": "C",
+     "vessel": "LR1-JET (7만~8만)",
+     "class": "PP",
+     "biz": "EX",
+     "cargo_group": "JET",
+     "status": "PLANNED",
+     "berth": "#8",
+     "eta": "2026-11-10T07:00",
+     "etb": "2026-11-10T08:30",
+     "work_start": "2026-11-10T09:30",
+     "work_end": "2026-11-11T22:02",
+     "hose_off": "2026-11-11T22:32",
+     "etu": "2026-11-12T00:02",
+     "laytime_start": "2026-11-10T08:30",
+     "laytime_rule": "일출 06:53 < ETANR < 일몰 17:21 → ETANR + 6h → ETB(11/10 08:30)가 더 이르므로 ETB",
+     "laytime_end": "2026-11-11T20:30",
+     "allowed_hours": 36.0,
+     "weather_hours": 0.0,
+     "deduction_hours": 0.0,
+     "demurrage_hours": 2.0333,
+     "demurrage_usd": 2059.77,
+     "wait_hours": 1.5,
+     "why_etb": "ETB 11/10 08:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 도착 전 (ETA + Direction))",
+     "trace": [
+      {
+       "rule": "ETB",
+       "text": "ETB 11/10 08:30 — 이 부두에 댈 수 있는 가장 이른 5분 칸 (바로 앞 칸: 도착 전 (ETA + Direction))",
+       "src": "berth_sim/feasibility.py · cpsat_model.py"
+      },
+      {
+       "rule": "P9",
+       "text": "작업시작 = ETB 11/10 08:30 + 1h = 11/10 09:30",
+       "src": "after_etb/s1_work_start.py"
+      },
+      {
+       "rule": "P10",
+       "text": "작업완료 = 작업시작 + 물량 ÷ 평균 Rate 12,317.52/h = 11/11 22:02 (평균 Rate는 요청의 Rate·작업시간을 과거 실적 한 줄로 넣어 구함 — 팀원 코드는 원래 과거 Shipment에서 구한다)",
+       "src": "after_etb/s2_work_finish.py"
+      },
+      {
+       "rule": "P11",
+       "text": "호스분리 = 작업완료 + 30분 = 11/11 22:32",
+       "src": "after_etb/s4_hose_off.py"
+      },
+      {
+       "rule": "P12",
+       "text": "이안 ETU = 작업완료 + 2h = 11/12 00:02",
+       "src": "after_etb/s3_etu.py"
+      },
+      {
+       "rule": "P13",
+       "text": "ETANR = NVL(NOR, ETA) = 11/10 07:00",
+       "src": "after_etb/s5_etanr.py"
+      },
+      {
+       "rule": "P14·P15",
+       "text": "정박개시 11/10 08:30 — 일출 06:53 < ETANR < 일몰 17:21 → ETANR + 6h → ETB(11/10 08:30)가 더 이르므로 ETB (Daylight 적용)",
+       "src": "after_etb/s8_laytime_start_daylight.py"
+      },
+      {
+       "rule": "P16",
+       "text": "정박종료 = 정박개시 + 허용 36h = 11/11 20:30",
+       "src": "after_etb/s9_laytime_end.py"
+      },
+      {
+       "rule": "P17",
+       "text": "기상체선 = 기상 제약 ∩ [정박종료, 호스분리] = 0h → ½ 공제",
+       "src": "after_etb/s10_weather_hours.py"
+      },
+      {
+       "rule": "P18",
+       "text": "체선시간 = max(0, 호스분리 − 정박종료 − 기상체선/2) = 2.0333h",
+       "src": "after_etb/s11_demurrage_time.py"
+      },
+      {
+       "rule": "P19",
+       "text": "체선료 = 체선시간 × $24,312/일 ÷ 24 = $2,059.77",
+       "src": "after_etb/s12_demurrage_fee.py"
+      }
+     ]
+    },
+    {
+     "arrival_id": "F",
+     "vessel": "LR1-DSL (7만~8만)",
+     "class": "PP",
+     "biz": "EX",
+     "cargo_group": "DSL",
+     "status": "FIX",
+     "berth": "#8",
+     "eta": "2026-11-11T20:00",
+     "etb": "2026-11-12T08:00",
+     "work_start": "2026-11-12T09:00",
+     "work_end": "2026-11-14T01:36",
+     "hose_off": "2026-11-14T02:06",
+     "etu": "2026-11-14T03:36",
+     "laytime_start": "2026-11-12T07:00",
+     "laytime_rule": "ETANR >= 일몰 17:20 → ETANR 다음 날 07:00",
+     "laytime_end": "2026-11-13T19:00",
+     "allowed_hours": 36.0,
+     "weather_hours": 0.0,
+     "deduction_hours": 0.0,
+     "demurrage_hours": 7.1,
+     "demurrage_usd": 7192.3,
+     "wait_hours": 12.0,
+     "why_etb": "FIX (입력값) 11/12 08:00",
+     "trace": [
+      {
+       "rule": "ETB",
+       "text": "FIX (입력값) 11/12 08:00",
+       "src": "berth_sim/feasibility.py · cpsat_model.py"
+      },
+      {
+       "rule": "P9",
+       "text": "작업시작 = ETB 11/12 08:00 + 1h = 11/12 09:00",
+       "src": "after_etb/s1_work_start.py"
+      },
+      {
+       "rule": "P10",
+       "text": "작업완료 = 작업시작 + 물량 ÷ 평균 Rate 12,315.27/h = 11/14 01:36 (평균 Rate는 요청의 Rate·작업시간을 과거 실적 한 줄로 넣어 구함 — 팀원 코드는 원래 과거 Shipment에서 구한다)",
+       "src": "after_etb/s2_work_finish.py"
+      },
+      {
+       "rule": "P11",
+       "text": "호스분리 = 작업완료 + 30분 = 11/14 02:06",
+       "src": "after_etb/s4_hose_off.py"
+      },
+      {
+       "rule": "P12",
+       "text": "이안 ETU = 작업완료 + 2h = 11/14 03:36",
+       "src": "after_etb/s3_etu.py"
+      },
+      {
+       "rule": "P13",
+       "text": "ETANR = NVL(NOR, ETA) = 11/11 20:00",
+       "src": "after_etb/s5_etanr.py"
+      },
+      {
+       "rule": "P14·P15",
+       "text": "정박개시 11/12 07:00 — ETANR >= 일몰 17:20 → ETANR 다음 날 07:00 (Daylight 적용)",
+       "src": "after_etb/s8_laytime_start_daylight.py"
+      },
+      {
+       "rule": "P16",
+       "text": "정박종료 = 정박개시 + 허용 36h = 11/13 19:00",
+       "src": "after_etb/s9_laytime_end.py"
+      },
+      {
+       "rule": "P17",
+       "text": "기상체선 = 기상 제약 ∩ [정박종료, 호스분리] = 0h → ½ 공제",
+       "src": "after_etb/s10_weather_hours.py"
+      },
+      {
+       "rule": "P18",
+       "text": "체선시간 = max(0, 호스분리 − 정박종료 − 기상체선/2) = 7.1h",
+       "src": "after_etb/s11_demurrage_time.py"
+      },
+      {
+       "rule": "P19",
+       "text": "체선료 = 체선시간 × $24,312/일 ÷ 24 = $7,192.30",
+       "src": "after_etb/s12_demurrage_fee.py"
+      }
+     ]
+    }
+   ],
+   "violations": [],
+   "changes_vs_baseline": [],
+   "delta_vs_baseline_usd": 0.0,
+   "team": {
+    "tier": 1,
+    "alt": 0,
+    "diff_from_first": 0,
+    "moves_vs_current": 3,
+    "needless_waits": 0,
+    "seconds": 0.05,
+    "proven_optimal": true,
+    "bound_usd": 9252
+   }
+  }
+ ],
+ "components": [
+  {
+   "mode": "CP-SAT 5분 칸",
+   "pairs": 7,
+   "slots": 1729,
+   "feasible_slots": 3319,
+   "constraints": {
+    "선박당 1부두": 4,
+    "같은 부두": 3,
+    "동일 화물": 2,
+    "#4 동시 접안": 0,
+    "ETU·체선료 구간": 16,
+    "대기 금지": 7
+   },
+   "per_plan_limit_s": 40.0,
+   "status": "OPTIMAL"
+  }
+ ],
+ "notes": [
+  "기준안·현행 계획은 비교용이라 기존 엔진(같은 규칙)으로 계산했다. 후보 1~N안만 팀원 코드가 찾았다."
+ ]
+}

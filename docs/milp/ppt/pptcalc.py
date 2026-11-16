@@ -214,9 +214,13 @@ class Rules:
                        for b in raw["berths"]}
         self.berth_order = [b["id"] for b in raw["berths"]]
         self.draft_biz = set(raw["eligibility"]["draft_check_biz"])
+        self.min_dwt = dict(raw["eligibility"].get("min_dwt_by_berth") or {})   # 부두별 최소 DWT (Buoy 등)
+        self.profiles = raw.get("profiles", {})
         np_ = raw["night_pilotage"]
         self.pob = np_["last_pob"]
         self.dawn = np_["dawn"]
+        if self.dawn.get("scope", "GRT") not in ("GRT", "SUBJECT"):
+            raise ValueError(f"night_pilotage.dawn.scope는 GRT·SUBJECT 중 하나: {self.dawn.get('scope')!r}")
         pr = raw["pair_rules"]
         self.fix_strict = pr["same_berth"]["fix_strict"]
         self.cargo_sets = [set(s) for s in pr["same_cargo_group"]["berth_sets"]]
@@ -255,6 +259,15 @@ class Case:
         return self.sun[d]
 
 
+def profile_patch(name, base_patch=None):
+    """규칙 해석 묶음(rules/terminal.json profiles) → 데이터의 rule_patch 위에 덮어쓴 patch. Spring Rules.withProfile과 같다."""
+    raw = json.loads((HERE / "rules" / "terminal.json").read_text(encoding="utf-8"))
+    prof = raw.get("profiles", {}).get(name)
+    if prof is None or name.startswith("_"):
+        raise ValueError(f"없는 규칙 해석: {name!r}")
+    return {**(base_patch or {}), **prof["patch"]}
+
+
 def load_case(doc, rules=None):
     """입력 JSON(= 최적화 요청 본문과 같은 모양) → Case"""
     if not isinstance(doc, dict):
@@ -287,6 +300,8 @@ def eligible(rules, a, bid):
         bad.append(f"제품 그룹 {a.cargo} 미취급")
     if b.max_dwt is not None and a.dwt > b.max_dwt:
         bad.append(f"DWT {a.dwt:,.0f} > 최대 {b.max_dwt:,.0f}")
+    if rules.min_dwt.get(bid) is not None and a.dwt < rules.min_dwt[bid]:
+        bad.append(f"DWT {a.dwt:,.0f} < 최소 {rules.min_dwt[bid]:,.0f}")
     if b.max_loa is not None and a.loa > b.max_loa:
         bad.append(f"LOA {a.loa} > 최대 {b.max_loa}")
     if b.min_loa is not None and a.loa < b.min_loa:
@@ -342,12 +357,13 @@ def night_windows(rules, case, a):
     """P4 (PPT 08쪽 ②): 이 선박이 접안할 수 없는 야간 구간 [시작, 끝). 끝은 '다가오는 오전 08시'다."""
     out = []
     rel = hm(rules.pob["release"])
-    if pob_subject(rules, a):
-        if rules.pob["compare"] == "ETA":                     # PPT 글자 그대로: '선박의 ETA >= Last POB 시간인 경우'
+    subject = pob_subject(rules, a)
+    if subject:
+        if rules.pob["compare"] in ("ETA", "ETA_DAY"):        # PPT 글자 그대로: '선박의 ETA >= Last POB 시간인 경우'
             d = day0(a.eta)
-            if a.eta < d + rel:                               # 자정~08시 도착: 전날 Last POB 뒤에 도착한 것
+            if rules.pob["compare"] == "ETA" and a.eta < d + rel:   # 자정~08시 도착: 전날 Last POB 뒤에 도착한 것
                 out.append((a.eta, d + rel, "Last POB 뒤 도착"))
-            else:
+            else:                                             # ETA_DAY(팀원 코드): 그 날짜의 Last POB와만 비교
                 pob = last_pob(rules, case, a, d)
                 if pob is not None and a.eta >= pob:
                     out.append((a.eta, d + DAY + rel, "Last POB 뒤 도착"))
@@ -358,7 +374,8 @@ def night_windows(rules, case, a):
                 if pob is not None:
                     out.append((pob, d + DAY + rel, "Last POB ~ 08시"))
                 d += DAY
-    if a.grt >= rules.dawn["grt_min"]:                        # 'GRT 3만톤 이상 … 새벽 2시 이상 오전 8시 미만'
+    dawn_ok = subject or rules.dawn.get("scope", "GRT") == "GRT"   # SUBJECT(팀원 코드)면 야간 도선 대상 선박에만
+    if dawn_ok and a.grt >= rules.dawn["grt_min"]:           # 'GRT 3만톤 이상 … 새벽 2시 이상 오전 8시 미만'
         d = day0(min(a.eta, case.start)) - DAY
         while d <= case.end + DAY:
             out.append((d + hm(rules.dawn["from"]), d + hm(rules.dawn["to"]), "새벽 02~08시"))

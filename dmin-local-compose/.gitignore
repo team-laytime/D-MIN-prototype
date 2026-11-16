@@ -1,0 +1,7 @@
+# 키·비밀번호·백업은 올리지 않는다
+.env
+runtime/
+data/inbox/*
+!data/inbox/.gitkeep
+data/out/
+__pycache__/

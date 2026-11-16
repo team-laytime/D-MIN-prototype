@@ -1,0 +1,14 @@
+# Prometheus (정의서 3.2절): Spring의 내부 전용 /actuator/prometheus를 15초마다 모은다. 보관은 3일(compose.yaml).
+# 밖(Caddy)으로는 /actuator가 열려 있지 않다 — metrics 네트워크 안에서만 닿는다.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: dmin-server
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["dmin-server:8080"]
+  - job_name: prometheus
+    static_configs:
+      - targets: ["127.0.0.1:9090"]
