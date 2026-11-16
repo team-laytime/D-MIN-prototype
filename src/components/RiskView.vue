@@ -2,14 +2,14 @@
 import { computed, ref, watch } from 'vue'
 import { risks, sensitivity } from '../lib/engine.js'
 import { money } from '../lib/time.js'
-import { activePlan, cancelPlan, fixPlan, markFieldDone, ws } from '../lib/workspace.js'
+import { activePlan, cancelPlan, fixPlan, ws } from '../lib/workspace.js'
 import ViewHead from './ViewHead.vue'
 
 const props = defineProps({
   result: Object, scen: Object, focusId: String, checks: Object,
   version: Number, current: Object,
 })
-const emit = defineEmits(['focus', 'next', 'open', 'go'])
+const emit = defineEmits(['focus', 'next', 'open'])
 
 const all = computed(() => [props.result.fcfs, ...props.result.candidates])
 const cand = computed(() => all.value.find((s) => s.id === props.focusId) ?? props.result.candidates[0])
@@ -26,8 +26,7 @@ watch(() => props.focusId, () => { confirming.value = false })
 // 확정·취소는 스케줄러만 한다(HN-092). 이 화면은 스케줄러 메뉴에만 있다.
 const fixedHere = computed(() => props.current && props.current.candId === cand.value.id && props.current.version === props.version)
 const plan = computed(() => activePlan())
-const pendingReq = computed(() => ws.requests.filter((r) => r.status === '접수').length)
-const planLog = computed(() => ws.log.filter((l) => ['계획 확정', '확정 취소', '현업 반영 완료'].includes(l.action)).reverse())
+const planLog = computed(() => ws.log.filter((l) => ['계획 확정', '확정 취소'].includes(l.action)).reverse())
 
 function fix(force) {
   if (unchecked.value.length && !force) { confirming.value = true; return }
@@ -39,7 +38,7 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
 </script>
 
 <template>
-  <ViewHead title="리스크·확정" crumb="BERTH PLANNING > 리스크·확정" :step="fixedHere ? 4 : 3" desc="계산에 반영하지 못한 변수를 확인하고 스케줄러가 계획을 확정합니다. 확정한 일정은 작업 지시·계약·정산 화면에 전달됩니다."
+  <ViewHead title="리스크·확정" crumb="BERTH PLANNING > 리스크·확정" :step="fixedHere ? 4 : 3" desc="계산에 반영하지 못한 변수를 확인하고 스케줄러가 계획을 확정합니다. 확정한 일정은 이용자 화면에 전달됩니다."
     :kpis="[
       { label: '보는 안', value: cand.id === 'FCFS' ? '기준안' : cand.label },
       { label: '확인할 리스크', value: `${needsCheck.length}건` },
@@ -115,19 +114,15 @@ const stateClass = (s) => ({ 해당: 'hit', '해당 없음': 'none', '판단 불
           <p class="small" :class="unchecked.length ? 'warn-text' : 'muted'">
             확인할 리스크 {{ needsCheck.length }}건 중 {{ needsCheck.length - unchecked.length }}건 확인
           </p>
-          <p v-if="pendingReq" class="small warn-text">
-            처리 대기 요청 {{ pendingReq }}건 · <button class="btn ghost" @click="emit('go', 'requests')">요청 처리</button>
-          </p>
 
           <template v-if="fixedHere">
             <div class="selected">
               <span class="chip none">{{ current.status }}</span>
               <span class="small muted">{{ plan.at }} · {{ plan.who }}</span>
             </div>
-            <p class="small muted">작업 지시자·계약·정산 담당은 이 확정 일정을 봅니다.</p>
+            <p class="small muted">이용자는 이 확정 일정을 봅니다.</p>
             <div class="row">
               <button class="btn" @click="cancelPlan('스케줄러 확정 취소')">확정 취소</button>
-              <button v-if="!plan.fieldDone" class="btn" @click="markFieldDone">현업 반영 완료 표시</button>
             </div>
             <button class="btn primary" @click="emit('next')">보고서 초안</button>
           </template>

@@ -2,7 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { BadgeCheck, ChevronLeft, ChevronRight, CircleAlert, ClipboardList, Columns3, Database, Factory, FileText, Inbox, Moon, Pause, Play, Receipt, ScrollText, ShieldAlert, Ship, SkipBack, Workflow } from 'lucide-vue-next'
+import { BadgeCheck, ChevronLeft, ChevronRight, CircleAlert, ClipboardList, Columns3, FileText, Moon, Pause, Play, ShieldAlert, SkipBack } from 'lucide-vue-next'
 import ViewHead from './ViewHead.vue'
 import LiveVesselCard from './LiveVesselCard.vue'
 import { fetchArrivals, fetchLive, liveColor } from '../lib/liveAis.js'
@@ -11,7 +11,6 @@ import { risks, stateAt } from '../lib/engine.js'
 import { MAP_CONTEXT } from '../lib/scenarios.js'
 import { NAV, anchorageFor, positionOf } from '../lib/vesselState.js'
 import { at, fmt, fmtDur, money } from '../lib/time.js'
-import { canUse, groupOf, ws } from '../lib/workspace.js'
 
 const props = defineProps({ result: Object, scen: Object, current: Object, version: Number })
 const emit = defineEmits(['go', 'focus', 'open'])
@@ -58,26 +57,18 @@ const notes = computed(() => {
   for (const s of states.value.filter((x) => x.ticking)) out.push({ tag: '체선', red: true, text: `${s.v.name} 체선 발생 · 누적 ${money(s.cents)}`, at: fmt(t.value).slice(6), vid: s.v.id })
   for (const r of openRisks.value) out.push({ tag: '리스크', text: `${r.label} ${r.state} · ${label(plan.value)}`, at: '확인 필요', go: 'risk' })
   out.push(props.current && props.current.version === props.version
-    ? { tag: '확정', text: `${props.current.label} ${props.current.status}`, at: '스케줄러', go: 'ops' }
+    ? { tag: '확정', text: `${props.current.label} ${props.current.status}`, at: '스케줄러', go: 'risk' }
     : { tag: '확정', text: '접안 계획 확정 전', at: '대기', go: 'risk' })
   return out
 })
-// 바로가기는 로그인한 계정이 쓸 수 있는 화면만 보여 준다.
-const ALL_TILES = [
+// 바로가기. 운영 현황은 스케줄러 화면이라 스케줄러 메뉴만 둔다.
+const TILES = [
   { id: 'input', label: '시나리오\n입력', icon: ClipboardList },
   { id: 'compare', label: '후보\n비교', icon: Columns3 },
   { id: 'risk', label: '리스크·\n확정', icon: ShieldAlert },
-  { id: 'requests', label: '요청\n처리', icon: Inbox },
-  { id: 'ops', label: '확정\n접안 일정', icon: Ship },
-  { id: 'prod', label: '탱크·\n긴급 출하', icon: Factory },
-  { id: 'contract', label: '계약 조건·\nLaytime', icon: ScrollText },
-  { id: 'settle', label: '체선료\n정산', icon: Receipt },
   { id: 'report', label: '접안계획\n보고서', icon: FileText },
   { id: 'verify', label: '계산\n검증', icon: BadgeCheck },
-  { id: 'master', label: '기준\n정보', icon: Database },
-  { id: 'workflow', label: 'Agent\n워크플로우', icon: Workflow },
 ]
-const TILES = computed(() => ALL_TILES.filter((t) => canUse(ws.roleId, groupOf(t.id))).slice(0, 6))
 function onNote(n) {
   if (n.vid) openCard(n.vid)
   else if (n.go) emit('go', n.go)

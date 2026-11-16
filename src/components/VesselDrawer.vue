@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowRight, Star, X } from 'lucide-vue-next'
 import { RULES, compatibleBerths, stateAt } from '../lib/engine.js'
 import { NAV, anchorageFor, positionOf } from '../lib/vesselState.js'
 import { fmt, fmtDur, money } from '../lib/time.js'
-import { PERMS, ws } from '../lib/workspace.js'
+import { ws } from '../lib/workspace.js'
 
 const props = defineProps({
   sim: Object, vid: String, scen: Object, fcfs: Object,
@@ -15,7 +15,7 @@ const props = defineProps({
   mode: { type: String, default: 'card' },
 })
 // 계약 단가는 권한 표의 '계약 단가 · 체선료 금액 조회' 역할만 본다(HN-095). 나머지는 '비공개'.
-const rateOk = computed(() => PERMS.find((p) => p.act.startsWith('계약 단가')).roles.includes(ws.roleId))
+const rateOk = computed(() => ws.roleId === 'scheduler') // 요율·금액은 스케줄러만(HN-095)
 const rate = (cents) => (rateOk.value ? money(cents) : '비공개')
 const emit = defineEmits(['close'])
 

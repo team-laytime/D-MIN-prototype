@@ -1,6 +1,6 @@
 <script setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { CircleAlert, CircleHelp, Layers, Minus, Network, Plus, UserRound } from 'lucide-vue-next'
+import { CircleAlert, CircleHelp, Layers, Minus, Plus } from 'lucide-vue-next'
 import { SCENARIOS } from './lib/scenarios.js'
 import { runSearch } from './lib/engine.js'
 import ScenarioInput from './components/ScenarioInput.vue'
@@ -11,15 +11,9 @@ import VerifyView from './components/VerifyView.vue'
 import VesselDrawer from './components/VesselDrawer.vue'
 import MapHome from './components/MapHome.vue'
 import Tour from './components/Tour.vue'
-import WorkflowView from './components/WorkflowView.vue'
-import RequestsView from './components/RequestsView.vue'
 import OpsView from './components/OpsView.vue'
-import ProductionView from './components/ProductionView.vue'
-import ContractView from './components/ContractView.vue'
-import SettlementView from './components/SettlementView.vue'
-import MasterView from './components/MasterView.vue'
-import LoginDialog from './components/LoginDialog.vue'
-import { NAV, ROLES, activePlan, addLog, canUse, groupOf, resetWorkspace, ws } from './lib/workspace.js'
+import LoginView from './components/LoginView.vue'
+import { NAV, ROLES, activePlan, canUse, groupOf, resetWorkspace, ws } from './lib/workspace.js'
 
 const scenarioId = ref('S1')
 const scen = ref(SCENARIOS.S1())
@@ -41,40 +35,40 @@ const drawer = ref(null)
 const openVessel = (simId, vid, opts = {}) => { drawer.value = { simId, vid, at: opts.at ?? null, mode: opts.mode ?? 'card' } }
 const drawerSim = computed(() => drawer.value && all.value.find((s) => s.id === drawer.value.simId))
 
-// 계정 · 메뉴 권한 · 업무 기록은 workspace.js 한곳에 둔다. 처음에는 스케줄러로 들어와 있다.
+// 계정 · 메뉴 권한 · 확정 기록은 workspace.js 한곳에 둔다. 로그인 전에는 로그인 화면만 나온다.
+// 역할은 로그인할 때 정해지고, 바꾸려면 로그아웃 후 다시 로그인한다.
 const role = computed(() => ROLES[ws.roleId])
-const loginOpen = ref(false)
-const loginFor = ref(null) // 흐린 메뉴를 눌렀을 때 그 메뉴를 쓸 수 있는 첫 계정을 미리 고른다
-function askLogin(g = null) { loginFor.value = g; loginOpen.value = true }
+const isScheduler = computed(() => ws.roleId === 'scheduler')
 function login(id) {
   ws.roleId = id
-  loginOpen.value = false
-  addLog('로그인', ROLES[id].title)
-  tab.value = loginFor.value && canUse(id, loginFor.value) ? loginFor.value.items[0].id : ROLES[id].home
+  tab.value = ROLES[id].home
+}
+function logout() {
+  ws.roleId = null
+  drawer.value = null
+  tourIdx.value = null
 }
 
 // 리스크 확인 체크(스케줄러). 확정 상태는 적용 중인 확정 계획에서 읽는다.
 const checks = reactive({})
 const current = computed(() => {
   const p = activePlan()
-  return p ? { candId: p.candId, label: p.label, total: p.total, reason: p.reason, version: p.version, planNo: p.no, status: p.fieldDone ? '현업 반영 완료' : `확정 v${p.no}` } : null
+  return p ? { candId: p.candId, label: p.label, total: p.total, reason: p.reason, version: p.version, planNo: p.no, status: `확정 v${p.no}` } : null
 })
 
 const canSee = (g) => canUse(ws.roleId, g)
-const pending = computed(() => ws.requests.filter((r) => r.status === '접수').length)
+const menus = computed(() => NAV.filter(canSee))
 const group = computed(() => groupOf(tab.value))
-// 계정을 바꿨는데 지금 화면을 못 쓰면 그 계정의 첫 화면으로 보낸다.
-watch(() => ws.roleId, (id) => { if (group.value && !canUse(id, group.value)) tab.value = ROLES[id].home })
-// 다른 화면의 바로가기·알림이 권한 밖 화면을 가리키면 이동하지 않고 그 메뉴를 쓰는 계정 로그인을 띄운다.
-watch(tab, (next, prev) => {
+// 바로가기·알림이 권한 밖 화면을 가리키면 그 계정의 첫 화면으로 보낸다.
+watch(tab, (next) => {
   const g = groupOf(next)
-  if (g && !canUse(ws.roleId, g)) { tab.value = prev && canUse(ws.roleId, groupOf(prev) ?? NAV[0]) ? prev : ROLES[ws.roleId].home; askLogin(g) }
+  if (ws.roleId && g && !canUse(ws.roleId, g)) tab.value = role.value.home
 })
 const open = reactive(Object.fromEntries(NAV.map((g) => [g.key, false])))
 // 화면을 옮기면 그 묶음만 펼친다(펼침 버튼으로 다른 묶음도 열 수 있다).
 watch(group, (g) => { for (const k of Object.keys(open)) open[k] = k === g?.key }, { immediate: true })
-// 시연 초기화: 업무 기록·리스크 확인·입력을 처음 값으로 되돌리고 스케줄러로 돌아간다.
-// 지도 시각·재생·선택 안은 MapHome을 새로 만들어(resetKey) 처음 값으로 돌린다. 이미 운영 현황에 있어도 적용된다.
+// 시연 초기화: 확정 기록·리스크 확인·입력을 처음 값으로 되돌리고 로그인 화면으로 돌아간다.
+// 지도 시각·재생·선택 안은 MapHome을 새로 만들어(resetKey) 처음 값으로 돌린다.
 const resetKey = ref(0)
 function resetDemo() {
   resetWorkspace()
@@ -82,7 +76,6 @@ function resetDemo() {
   scen.value = SCENARIOS[scenarioId.value]()
   drawer.value = null
   tourIdx.value = null
-  loginOpen.value = false
   focusId.value = 'A'
   resetKey.value++
   tab.value = 'home'
@@ -120,7 +113,7 @@ const TOUR = [
     body: '날씨 급변, 설비, 탱크, 긴급 출하, 현장 안전을 해당 / 해당 없음 / 판단 불가로 판정하고 대안을 붙입니다.',
     try: '「해당」 항목을 읽고 「확인」 체크' },
   { section: '리스크·확정', tab: 'risk', target: '.decide', title: '계획 확정',
-    body: '사유를 적고 확정합니다. 확인하지 않은 리스크가 있으면 한 번 더 묻습니다. 확정과 취소는 스케줄러만 할 수 있고, 확정한 일정은 작업 지시·계약·정산 화면에 그대로 전달됩니다. Agent는 계획을 확정하지 않습니다.' },
+    body: '사유를 적고 확정합니다. 확인하지 않은 리스크가 있으면 한 번 더 묻습니다. 확정과 취소는 스케줄러만 할 수 있고, 확정한 일정은 이용자 계정의 「확정 일정」에 그대로 전달됩니다. Agent는 계획을 확정하지 않습니다.' },
   { section: '보고서', tab: 'report', target: '.cols > .panel:first-child', title: '메일·보고서 초안',
     body: '선택한 후보로 초안을 만듭니다. 금액은 계산 결과를 그대로 넣고 자동 대조합니다.' },
   { section: '검증', tab: 'verify', target: '.answer-set', title: '계산 검증',
@@ -137,93 +130,82 @@ function showTourStep(i) {
   tab.value = s.tab
   s.do?.()
 }
-// 안내는 스케줄러 업무 흐름을 따라가므로 스케줄러 계정으로 돌린다.
-const startTour = () => { ws.roleId = 'scheduler'; showTourStep(0) }
+// 안내는 스케줄러 업무 흐름을 따라가므로 스케줄러 계정에만 있다.
+const startTour = () => showTourStep(0)
 const endTour = () => { tourIdx.value = null; drawer.value = null }
 const tourNext = () => (tourIdx.value < TOUR.length - 1 ? showTourStep(tourIdx.value + 1) : endTour())
 const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 </script>
 
 <template>
+  <LoginView v-if="!role" @login="login" />
+  <template v-else>
   <div class="util">
     <span><b>{{ role.name }}</b>({{ role.title }})님</span>
-    <button class="util-link" @click="askLogin()">계정 전환</button>
+    <button class="util-link" @click="logout">로그아웃</button>
     <span class="sep" />
-    <button class="util-link" title="업무 기록·입력을 처음 상태로 돌리고 스케줄러로 돌아갑니다" @click="resetDemo">시연 초기화</button>
+    <button class="util-link" title="확정 기록·입력을 처음 상태로 돌리고 로그인 화면으로 돌아갑니다" @click="resetDemo">시연 초기화</button>
     <button class="util-link" @click="tab = role.home">Home</button>
   </div>
   <header class="gnb">
     <button class="brand" @click="tab = role.home"><b>D-</b><span>MIN</span><small>체선료 비교</small></button>
     <nav class="gnb-nav" aria-label="주 메뉴">
-      <button v-for="g in NAV.filter(canSee)" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
+      <button v-for="g in menus" :key="g.key" :class="{ on: group?.key === g.key }" @click="tab = g.items[0].id">{{ g.gnb }}</button>
     </nav>
     <div class="gnb-right">
-      <button class="scen-pill who-pill" title="계정 전환 (시연용)" @click="askLogin()"><UserRound :size="14" />{{ role.title }}</button>
-      <label class="scen-pill">
-        <Layers :size="14" />
-        <select id="scen" v-model="scenarioId" aria-label="시나리오">
-          <option value="S1">S1 기상 악화일 집중</option>
-          <option value="S2">S2 평시</option>
-          <option value="S3">S3 대형선 지연</option>
-        </select>
-      </label>
-      <button class="map-btn help-btn" @click="startTour"><CircleHelp :size="14" />사용법</button>
-      <button class="map-btn" @click="tab = 'workflow'"><Network :size="14" />사이트맵</button>
+      <span class="scen-pill who-pill">{{ role.title }}</span>
+      <template v-if="isScheduler">
+        <label class="scen-pill">
+          <Layers :size="14" />
+          <select id="scen" v-model="scenarioId" aria-label="시나리오">
+            <option value="S1">S1 기상 악화일 집중</option>
+            <option value="S2">S2 평시</option>
+            <option value="S3">S3 대형선 지연</option>
+          </select>
+        </label>
+        <button class="map-btn help-btn" @click="startTour"><CircleHelp :size="14" />사용법</button>
+      </template>
     </div>
   </header>
 
   <div class="body">
     <aside class="lnb" aria-label="하위 메뉴">
-      <div v-for="g in NAV" :key="g.key" :class="['lnb-group', { on: group?.key === g.key, off: !canSee(g) }]">
-        <button v-if="!canSee(g)" class="lnb-head" :title="`${g.roles.map((r) => ROLES[r].title).join(' · ')} 계정으로 로그인해야 합니다`" @click="askLogin(g)">
-          <span>{{ g.key }}</span>
-          <span class="tog"><Plus :size="10" :stroke-width="3" /></span>
-        </button>
-        <button v-else class="lnb-head" :aria-expanded="open[g.key]" @click="open[g.key] = !open[g.key]">
+      <div v-for="g in menus" :key="g.key" :class="['lnb-group', { on: group?.key === g.key }]">
+        <button class="lnb-head" :aria-expanded="open[g.key]" @click="open[g.key] = !open[g.key]">
           <span>{{ g.key }}</span>
           <span class="tog"><Minus v-if="open[g.key]" :size="10" :stroke-width="3" /><Plus v-else :size="10" :stroke-width="3" /></span>
         </button>
-        <ul v-if="open[g.key] && canSee(g)" class="lnb-sub">
+        <ul v-if="open[g.key]" class="lnb-sub">
           <li v-for="item in g.items" :key="item.id">
-            <button :class="{ on: tab === item.id }" :aria-current="tab === item.id ? 'page' : null" @click="tab = item.id">
-              {{ item.label }}<span v-if="item.id === 'requests' && pending" class="cnt">{{ pending }}</span>
-            </button>
+            <button :class="{ on: tab === item.id }" :aria-current="tab === item.id ? 'page' : null" @click="tab = item.id">{{ item.label }}</button>
           </li>
         </ul>
       </div>
       <div class="lnb-status">
         <p class="small muted">접안 계획</p>
-        <p v-if="current" class="strong" :class="current.version !== version ? 'warn' : 'ok'">
-          {{ current.label }} {{ current.status }}<span v-if="current.version !== version" class="small"> · 입력 바뀜, 재확인</span>
+        <p v-if="current" class="strong" :class="isScheduler && current.version !== version ? 'warn' : 'ok'">
+          {{ current.label }} {{ current.status }}<span v-if="isScheduler && current.version !== version" class="small"> · 입력 바뀜, 재확인</span>
         </p>
         <p v-else class="strong muted">확정 전</p>
-        <p v-if="pending && ws.roleId === 'scheduler'" class="small warn">처리 대기 요청 {{ pending }}건</p>
       </div>
     </aside>
 
     <main class="main">
-      <!-- 후보 계산이 필요한 화면만 막는다. 확정 일정(스냅숏)·계약·정산·기준 정보·생산 화면은 계산 실패와 상관없이 열린다. -->
-      <div v-if="result.error && ['home', 'compare', 'risk', 'report', 'workflow'].includes(tab)" class="notice danger">
-        <CircleAlert class="ico" :size="18" /><span><b>후보 계산 불가</b> — {{ result.error }}<template v-if="ws.roleId === 'admin'"> · 「기준 정보」에서 부두 제원을 확인하십시오.</template></span>
+      <!-- 후보 계산이 필요한 화면만 막는다. 확정 일정은 확정 당시 스냅숏이라 계산 실패와 상관없이 열린다. -->
+      <div v-if="['home', 'compare', 'risk', 'report'].includes(tab) && result.error" class="notice danger">
+        <CircleAlert class="ico" :size="18" /><span><b>후보 계산 불가</b> — {{ result.error }}</span>
       </div>
       <MapHome v-else-if="tab === 'home'" :key="resetKey" :result="result" :scen="plain" :current="current" :version="version"
         @go="tab = $event" @focus="focusId = $event" @open="openVessel" />
-      <WorkflowView v-else-if="tab === 'workflow'" :result="result" :scen="plain" :current="current" :version="version"
-        @go="tab = $event" />
       <ScenarioInput v-else-if="tab === 'input'" :scen="scen" :result="result" @run="tab = 'compare'" />
       <CompareView v-else-if="tab === 'compare'" :result="result" :scen="plain" :focus-id="focusId"
         @focus="focusId = $event" @open="openVessel" @next="tab = 'risk'" />
       <RiskView v-else-if="tab === 'risk'" :result="result" :scen="plain" :focus-id="focusId" :checks="checks"
         :version="version" :current="current"
-        @focus="focusId = $event" @next="tab = 'report'" @open="openVessel" @go="tab = $event" />
+        @focus="focusId = $event" @next="tab = 'report'" @open="openVessel" />
       <ReportView v-else-if="tab === 'report'" :result="result" :scen="plain" :focus-id="focusId" :current="current" :version="version" />
       <VerifyView v-else-if="tab === 'verify'" />
-      <RequestsView v-else-if="tab === 'requests'" @go="tab = $event" />
       <OpsView v-else-if="tab === 'ops'" />
-      <ProductionView v-else-if="tab === 'prod'" :scen="scen" :result="result" :plain="plain" />
-      <ContractView v-else-if="tab === 'contract'" :scen="plain" />
-      <SettlementView v-else-if="tab === 'settle'" />
-      <MasterView v-else-if="tab === 'master' || tab === 'users' || tab === 'log'" :section="tab" :scen="scen" />
     </main>
   </div>
 
@@ -241,7 +223,7 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
   <VesselDrawer v-if="drawer && drawerSim" :key="`${drawer.simId}-${drawer.vid}-${drawer.mode}`" :sim="drawerSim" :vid="drawer.vid" :scen="plain" :fcfs="result.fcfs"
     :at="drawer.at" :mode="drawer.mode" @close="drawer = null" />
   <Tour v-if="tourIdx !== null" :steps="TOUR" :index="tourIdx" @next="tourNext" @prev="tourPrev" @close="endTour" />
-  <LoginDialog v-if="loginOpen" :preset="loginFor ? loginFor.roles[0] : null" :current="ws.roleId" @login="login" @close="loginOpen = false" />
+  </template>
 </template>
 
 <style scoped>
@@ -261,7 +243,6 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .gnb-right { display: flex; align-items: center; gap: 8px; }
 .scen-pill { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 6px 0 14px; border-radius: 15px; background: #888c92; color: #fff; }
 .who-pill { padding: 0 14px; font-size: 12px; border: 0; }
-.who-pill:hover { background: #6f7379; }
 .scen-pill select { border: 0; background: transparent; color: #fff; font-size: 12px; height: 28px; cursor: pointer; }
 .scen-pill select option { color: var(--text); }
 .map-btn { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #cfd2d6; background: #fff; font-size: 12px; color: #444; }
@@ -273,15 +254,11 @@ const tourPrev = () => tourIdx.value > 0 && showTourStep(tourIdx.value - 1)
 .lnb-group.on .lnb-head { color: var(--accent); }
 .tog { width: 14px; height: 14px; display: grid; place-items: center; background: #c8cbd0; color: #fff; }
 .lnb-group.on .tog { background: var(--accent); }
-.lnb-group.off .lnb-head { color: #aaa; }
-.lnb-group.off .lnb-head:hover { color: #777; }
-.lnb-group.off .tog { background: #d5d8dc; }
 .lnb-sub { list-style: none; margin: 2px 0 12px -14px; padding: 4px 0 6px 14px; background: #fff; border-left: 2px solid var(--accent); }
 .lnb-sub button { width: 100%; border: 0; background: none; text-align: left; padding: 3px 0 3px 12px; font-size: 12px; color: #777; }
 .lnb-sub button::before { content: '· '; color: #aaa; }
 .lnb-sub button.on { color: var(--text); font-weight: 700; }
 .lnb-sub button:hover { color: var(--text); }
-.cnt { display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px; margin-left: 6px; border-radius: 8px; background: var(--bad); color: #fff; font-size: 10.5px; font-weight: 700; vertical-align: 1px; }
 .lnb-status { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line-strong); }
 .lnb-status .ok { color: var(--ok); }
 .lnb-status .warn { color: var(--warn); }
